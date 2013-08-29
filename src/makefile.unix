@@ -145,6 +145,13 @@ OBJS= \
     obj/txdb.o \
     obj/checkpointsync.o
 
+OBJS_SSE2= obj/scrypt-sse2.o
+
+ifdef SSE2
+DEFS += -DUSE_SSE2
+OBJS += $(OBJS_SSE2)
+endif
+
 all: feathercoind
 
 test check: test_feathercoin FORCE
@@ -168,6 +175,13 @@ obj/build.h: FORCE
 	/bin/sh ../share/genbuild.sh obj/build.h
 version.cpp: obj/build.h
 DEFS += -DHAVE_BUILD_INFO
+
+obj/%-sse2.o: %-sse2.cpp
+	$(CXX) -c $(xCXXFLAGS) -msse2 -MMD -MF $(@:%.o=%.d) -o $@ $<
+	@cp $(@:%.o=%.d) $(@:%.o=%.P); \
+	  sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	      -e '/^$$/ d' -e 's/$$/ :/' < $(@:%.o=%.d) >> $(@:%.o=%.P); \
+	  rm -f $(@:%.o=%.d)
 
 obj/%.o: %.cpp
 	$(CXX) -c $(xCXXFLAGS) -MMD -MF $(@:%.o=%.d) -o $@ $<
