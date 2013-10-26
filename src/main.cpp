@@ -1,5 +1,8 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
+// Copyright (c) 2011-2013 PPCoin developers
+// Copyright (c) 2013 Primecoin developers
+// Copyright (c) 2013 Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -32,7 +35,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Litecoin: starting difficulty is 1 / 2^12
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Feathercoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -64,7 +67,7 @@ map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "Litecoin Signed Message:\n";
+const string strMessageMagic = "Feathercoin Signed Message:\n";
 
 double dHashesPerSec = 0.0;
 int64 nHPSTimerStart = 0;
@@ -355,7 +358,7 @@ unsigned int LimitOrphanTxSize(unsigned int nMaxOrphans)
 
 bool CTxOut::IsDust() const
 {
-    // Litecoin: IsDust() detection disabled, allows any valid dust to be relayed.
+    // Feathercoin: IsDust() detection disabled, allows any valid dust to be relayed.
     // The fees imposed on each dust txo is considered sufficient spam deterrant. 
     return false;
 }
@@ -617,7 +620,7 @@ int64 CTransaction::GetMinFee(unsigned int nBlockSize, bool fAllowFree,
         }
     }
 
-    // Litecoin
+    // Feathercoin
     // To limit dust spam, add nBaseFee for each output less than DUST_SOFT_LIMIT
     BOOST_FOREACH(const CTxOut& txout, vout)
         if (txout.nValue < DUST_SOFT_LIMIT)
@@ -1071,17 +1074,16 @@ uint256 static GetOrphanRoot(const CBlockHeader* pblock)
 
 int64 static GetBlockValue(int nHeight, int64 nFees)
 {
-    int64 nSubsidy = 50 * COIN;
+    int64 nSubsidy = 200 * COIN;
 
     // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
-    nSubsidy >>= (nHeight / 840000); // Litecoin: 840k blocks in ~4 years
+    nSubsidy >>= (nHeight / 840000); // Feathercoin: 840k blocks in ~4 years
 
     return nSubsidy + nFees;
 }
 
-static const int64 nTargetTimespan = 3.5 * 24 * 60 * 60; // Litecoin: 3.5 days
-static const int64 nTargetSpacing = 2.5 * 60; // Litecoin: 2.5 minutes
-static const int64 nInterval = nTargetTimespan / nTargetSpacing;
+int nTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
+static const int nTargetSpacing = 2.5 * 60; // 2.5 minutes
 
 //
 // minimum amount of work that could possibly be required nTime after
@@ -1098,8 +1100,8 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
     bnResult.SetCompact(nBase);
     while (nTime > 0 && bnResult < bnProofOfWorkLimit)
     {
-        // Maximum 400% adjustment...
-        bnResult *= 4;
+        // Maximum 1.0905077 aka 9% adjustment...
+        bnResult = (bnResult * 494) / 453;
         // ... in best-case exactly 4-times-normal target time
         nTime -= nTargetTimespan*4;
     }
@@ -1116,13 +1118,32 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     if (pindexLast == NULL)
         return nProofOfWorkLimit;
 
-    // Only change once per interval
-    if ((pindexLast->nHeight+1) % nInterval != 0)
-    {
+    // The next block
+    int nHeight = pindexLast->nHeight + 1;
+
+    // The 1st hard fork
+    int nForkOne = 33000;
+    if(nHeight >= nForkOne)
+      nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
+
+    // The 2nd hard fork
+    int nForkTwo = 87948;
+    if((nHeight >= nForkTwo) || (fTestNet && (nHeight >= 2016)))
+      nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
+
+    // 2016 blocks initial, 504 after the 1st and 126 after the 2nd hard fork
+    int nInterval = nTargetTimespan / nTargetSpacing;
+
+    bool fHardFork = (nHeight == nForkOne) || (nHeight == nForkTwo);
+    if(fTestNet) fHardFork = false;
+
+    // Difficulty rules regular blocks
+    if((nHeight % nInterval != 0) && !(fHardFork)) {
+
         // Special difficulty rule for testnet:
         if (fTestNet)
         {
-            // If the new block's timestamp is more than 2* 10 minutes
+            // If the new block's timestamp is more than 2* 2.5 minutes
             // then allow mining of a min-difficulty block.
             if (pblock->nTime > pindexLast->nTime + nTargetSpacing*2)
                 return nProofOfWorkLimit;
@@ -1139,25 +1160,62 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
         return pindexLast->nBits;
     }
 
-    // Litecoin: This fixes an issue where a 51% attack can change difficulty at will.
-    // Go back the full period unless it's the first retarget after genesis. Code courtesy of Art Forz
-    int blockstogoback = nInterval-1;
-    if ((pindexLast->nHeight+1) != nInterval)
-        blockstogoback = nInterval;
+    // The 1st retarget after genesis
+    if(nInterval >= nHeight) nInterval = nHeight - 1;
 
-    // Go back by what we want to be 14 days worth of blocks
+    // Go back by nInterval
     const CBlockIndex* pindexFirst = pindexLast;
-    for (int i = 0; pindexFirst && i < blockstogoback; i++)
-        pindexFirst = pindexFirst->pprev;
+    for(int i = 0; pindexFirst && i < nInterval; i++)
+      pindexFirst = pindexFirst->pprev;
     assert(pindexFirst);
 
-    // Limit adjustment step
-    int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-    printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
-    if (nActualTimespan < nTargetTimespan/4)
-        nActualTimespan = nTargetTimespan/4;
-    if (nActualTimespan > nTargetTimespan*4)
-        nActualTimespan = nTargetTimespan*4;
+    int nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
+
+    printf("RETARGET: nActualTimespan = %d before bounds\n", nActualTimespan);
+
+    // Additional averaging over 4x nInterval window
+    if((nHeight >= nForkTwo) || (fTestNet && (nHeight > 4*nInterval))) {
+        nInterval *= 4;
+
+        const CBlockIndex* pindexFirst = pindexLast;
+        for(int i = 0; pindexFirst && i < nInterval; i++)
+          pindexFirst = pindexFirst->pprev;
+
+        int nActualTimespanLong =
+          (pindexLast->GetBlockTime() - pindexFirst->GetBlockTime())/4;
+
+        // Average between short and long windows
+        int nActualTimespanAvg = (nActualTimespan + nActualTimespanLong)/2;
+
+        // Apply .25 damping
+        nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
+        nActualTimespan /= 4;
+
+        printf("RETARGET: nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",
+          nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+    }
+
+    // The initial settings (4.0 difficulty limiter)
+    int nActualTimespanMax = nTargetTimespan*4;
+    int nActualTimespanMin = nTargetTimespan/4;
+
+    // The 1st hard fork (1.4142857 aka 41% difficulty limiter)
+    if(nHeight >= nForkOne) {
+        nActualTimespanMax = nTargetTimespan*99/70;
+        nActualTimespanMin = nTargetTimespan*70/99;
+    }
+
+    // The 2nd hard fork (1.0905077 aka 9% difficulty limiter)
+    if(nHeight >= nForkTwo || fTestNet) {
+        nActualTimespanMax = nTargetTimespan*494/453;
+        nActualTimespanMin = nTargetTimespan*453/494;
+    }
+
+    if(nActualTimespan < nActualTimespanMin) nActualTimespan = nActualTimespanMin;
+    if(nActualTimespan > nActualTimespanMax) nActualTimespan = nActualTimespanMax;
+
+    printf("RETARGET: nActualTimespan = %d after bounds\n", nActualTimespan);
+    printf("RETARGET: nTargetTimespan = %d, nTargetTimespan/nActualTimespan = %.4f\n", nTargetTimespan, (float) nTargetTimespan/nActualTimespan);
 
     // Retarget
     CBigNum bnNew;
@@ -1168,10 +1226,8 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     if (bnNew > bnProofOfWorkLimit)
         bnNew = bnProofOfWorkLimit;
 
-    /// debug print
     printf("GetNextWorkRequired RETARGET\n");
-    printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
-    printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+     printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
     printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
 
     return bnNew.GetCompact();
@@ -1917,7 +1973,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
             // strMiscWarning is read by GetWarnings(), called by Qt and the JSON-RPC code to warn the user:
             strMiscWarning = _("Warning: This version is obsolete, upgrade required!");
     }
-
+	
     std::string strCmd = GetArg("-blocknotify", "");
 
     if (!fIsInitialDownload && !strCmd.empty())
@@ -2084,8 +2140,8 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return state.DoS(100, error("CheckBlock() : size limits failed"));
 
-    // Litecoin: Special short-term limits to avoid 10,000 BDB lock limit:
-    if (GetBlockTime() < 1376568000)  // stop enforcing 15 August 2013 00:00:00
+    // Feathercoin: Special short-term limits to avoid 10,000 BDB lock limit:
+    if (GetBlockTime() < 1386158400)  // stop enforcing 15 August 2013 00:00:00
     {
         // Rule is: #unique txids referenced <= 4,500
         // ... to prevent 10,000 BDB lock exhaustion on old clients
@@ -2099,7 +2155,7 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
         }
         size_t nTxids = setTxIn.size();
         if (nTxids > 4500)
-            return error("CheckBlock() : 15 August maxlocks violation");
+            return error("CheckBlock() : 4 December maxlocks violation");
     }
 
     // Check proof of work matches claimed amount
@@ -2176,6 +2232,14 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         if (GetBlockTime() <= pindexPrev->GetMedianTimePast())
             return state.Invalid(error("AcceptBlock() : block's timestamp is too early"));
 
+    // limit block in future accepted in chain to only a time window of 30 min
+    if (GetBlockTime() > GetAdjustedTime() + 30 * 60)
+        return error("AcceptBlock() : block's timestamp too far in the future");
+
+    // Check timestamp against prev it should not be more then 2 times the window
+    if ((nHeight > 87948) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 2 * 30 * 60))
+        return error("AcceptBlock() : block's timestamp is too early compare to last block");
+			
         // Check that all transactions are finalized
         BOOST_FOREACH(const CTransaction& tx, vtx)
             if (!tx.IsFinal(nHeight, GetBlockTime()))
@@ -2184,12 +2248,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         // Check that the block chain matches the known block chain up to a checkpoint
         if (!Checkpoints::CheckBlock(nHeight, hash))
             return state.DoS(100, error("AcceptBlock() : rejected by checkpoint lock-in at %d", nHeight));
-
-        // Don't accept any forks from the main chain prior to last checkpoint
-        CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(mapBlockIndex);
-        if (pcheckpoint && nHeight < pcheckpoint->nHeight)
-            return state.DoS(100, error("AcceptBlock() : forked chain older than last checkpoint (height %d)", nHeight));
-
+			
         // Reject block.nVersion=1 blocks when 95% (75% on testnet) of the network has upgraded:
         if (nVersion < 2)
         {
@@ -2246,7 +2305,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
 {
-    // Litecoin: temporarily disable v2 block lockin until we are ready for v2 transition
+    // Feathercoin: temporarily disable v2 block lockin until we are ready for v2 transition
     return false;
     unsigned int nFound = 0;
     for (unsigned int i = 0; i < nToCheck && nFound < nRequired && pstart != NULL; i++)
@@ -2289,7 +2348,6 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
             return state.DoS(100, error("ProcessBlock() : block with too little proof-of-work"));
         }
     }
-
 
     // If we don't already have its previous block, shunt it off to holding area until we get it
     if (pblock->hashPrevBlock != 0 && !mapBlockIndex.count(pblock->hashPrevBlock))
@@ -2334,6 +2392,7 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
     }
 
     printf("ProcessBlock: ACCEPTED\n");
+	
     return true;
 }
 
@@ -2601,7 +2660,7 @@ bool static LoadBlockIndexDB()
     printf("LoadBlockIndexDB(): last block file = %i\n", nLastBlockFile);
     if (pblocktree->ReadBlockFileInfo(nLastBlockFile, infoLastBlockFile))
         printf("LoadBlockIndexDB(): last block file info: %s\n", infoLastBlockFile.ToString().c_str());
-
+		
     // Load nBestInvalidWork, OK if it doesn't exist
     CBigNum bnBestInvalidWork;
     pblocktree->ReadBestInvalidWork(bnBestInvalidWork);
@@ -2807,6 +2866,7 @@ bool InitBlockIndex() {
                 return error("LoadBlockIndex() : writing genesis block to disk failed");
             if (!block.AddToBlockIndex(state, blockPos))
                 return error("LoadBlockIndex() : genesis block not accepted");
+				
         } catch(std::runtime_error &e) {
             return error("LoadBlockIndex() : failed to initialize block database: %s", e.what());
         }
@@ -2987,7 +3047,7 @@ string GetWarnings(string strFor)
 
     if (!CLIENT_VERSION_IS_RELEASE)
         strStatusBar = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
-
+		
     // Misc warnings like out of disk space and clock is wrong
     if (strMiscWarning != "")
     {
@@ -3001,7 +3061,7 @@ string GetWarnings(string strFor)
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.");
     }
-
+	
     // Alerts
     {
         LOCK(cs_mapAlerts);
@@ -3065,7 +3125,7 @@ bool static AlreadyHave(const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xfb, 0xc0, 0xb6, 0xdb }; // Litecoin: increase each by adding 2 to bitcoin's value.
+unsigned char pchMessageStart[4] = { 0xfb, 0xc0, 0xb6, 0xdb }; // Feathercoin: increase each by adding 2 to bitcoin's value.
 
 
 void static ProcessGetData(CNode* pfrom)
@@ -3092,28 +3152,11 @@ void static ProcessGetData(CNode* pfrom)
 
             if (inv.type == MSG_BLOCK || inv.type == MSG_FILTERED_BLOCK)
             {
-                bool send = true;
+                // Send block from disk
                 map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(inv.hash);
                 pfrom->nBlocksRequested++;
                 if (mi != mapBlockIndex.end())
                 {
-                    // If the requested block is at a height below our last
-                    // checkpoint, only serve it if it's in the checkpointed chain
-                    int nHeight = ((*mi).second)->nHeight;
-                    CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(mapBlockIndex);
-                    if (pcheckpoint && nHeight < pcheckpoint->nHeight) {
-                       if (!((*mi).second)->IsInMainChain())
-                       {
-                         printf("ProcessGetData(): ignoring request for old block that isn't in the main chain\n");
-                         send = false;
-                       }
-                    }
-                } else {
-                    send = false;
-                }
-                if (send)
-                {
-                    // Send block from disk
                     CBlock block;
                     block.ReadFromDisk((*mi).second);
                     if (inv.type == MSG_BLOCK)
@@ -3308,7 +3351,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             BOOST_FOREACH(PAIRTYPE(const uint256, CAlert)& item, mapAlerts)
                 item.second.RelayTo(pfrom);
         }
-
+		
         pfrom->fSuccessfullyConnected = true;
 
         printf("receive version message: version %d, blocks=%d, us=%s, them=%s, peer=%s\n", pfrom->nVersion, pfrom->nStartingHeight, addrMe.ToString().c_str(), addrFrom.ToString().c_str(), pfrom->addr.ToString().c_str());
@@ -3604,10 +3647,9 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             if (nEvicted > 0)
                 printf("mapOrphan overflow, removed %u tx\n", nEvicted);
         }
-        int nDoS = 0;
+        int nDoS;
         if (state.IsInvalid(nDoS))
-            if (nDoS > 0)
-                pfrom->Misbehaving(nDoS);
+            pfrom->Misbehaving(nDoS);
     }
 
 
@@ -3625,10 +3667,9 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         CValidationState state;
         if (ProcessBlock(state, pfrom, &block))
             mapAlreadyAskedFor.erase(inv);
-        int nDoS = 0;
+        int nDoS;
         if (state.IsInvalid(nDoS))
-            if (nDoS > 0)
-                pfrom->Misbehaving(nDoS);
+            pfrom->Misbehaving(nDoS);
     }
 
 
@@ -4076,7 +4117,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// LitecoinMiner
+// FeathercoinMiner
 //
 
 int static FormatHashBlocks(void* pbuffer, unsigned int len)
@@ -4483,7 +4524,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         return false;
 
     //// debug print
-    printf("Litecoin RPCMiner:\n");
+    printf("Feathercoin RPCMiner:\n");
     printf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex().c_str(), hashTarget.GetHex().c_str());
     pblock->print();
     printf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue).c_str());
@@ -4492,7 +4533,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     {
         LOCK(cs_main);
         if (pblock->hashPrevBlock != hashBestChain)
-            return error("LitecoinMiner : generated block is stale");
+            return error("FeathercoinMiner : generated block is stale");
 
         // Remove key from key pool
         reservekey.KeepKey();
@@ -4506,7 +4547,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         // Process this block the same as if we had received it from another node
         CValidationState state;
         if (!ProcessBlock(state, NULL, pblock))
-            return error("LitecoinMiner : ProcessBlock, block not accepted");
+            return error("FeathercoinMiner : ProcessBlock, block not accepted");
     }
 
     return true;

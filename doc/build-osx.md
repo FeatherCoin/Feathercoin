@@ -1,4 +1,4 @@
-Mac OS X litecoind build instructions
+Mac OS X feathercoind build instructions
 ====================================
 
 Authors
@@ -26,7 +26,7 @@ Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.
 Notes
 -----
 
-See `doc/readme-qt.rst` for instructions on building Litecoin-Qt, the
+See `doc/readme-qt.rst` for instructions on building Feathercoin-Qt, the
 graphical user interface.
 
 Tested on OS X 10.5 through 10.8 on Intel processors only. PPC is not
@@ -72,14 +72,14 @@ Installing the dependencies using MacPorts is very straightforward.
 
     sudo port install boost db48@+no_java openssl miniupnpc
 
-### Building `litecoind`
+### Building `feathercoind`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone git@github.com:litecoin-project/litecoin.git litecoin
-        cd litecoin
+        git clone https://github.com/FeatherCoin/FeatherCoin.git
+        cd feathercoin
 
-2.  Build litecoind:
+2.  Build feathercoind:
 
         cd src
         make -f makefile.osx
@@ -107,12 +107,12 @@ If not, you can ensure that the Brew OpenSSL is correctly linked by running
 
 Rerunning "openssl version" should now return the correct version.
 
-### Building `litecoind`
+### Building `feathercoind`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone git@github.com:litecoin-project/litecoin.git litecoin
-        cd litecoin
+        git clone https://github.com/FeatherCoin/FeatherCoin.git
+        cd feathercoin
 
 2.  Modify source in order to pick up the `openssl` library.
 
@@ -122,7 +122,7 @@ Rerunning "openssl version" should now return the correct version.
 
         patch -p1 < contrib/homebrew/makefile.osx.patch
 
-3.  Build litecoind:
+3.  Build feathercoind:
 
         cd src
         make -f makefile.osx
@@ -134,10 +134,10 @@ Rerunning "openssl version" should now return the correct version.
 Creating a release build
 ------------------------
 
-A litecoind binary is not included in the Litecoin-Qt.app bundle. You can ignore
-this section if you are building `litecoind` for your own use.
+A feathercoind binary is not included in the Feathercoin-Qt.app bundle. You can ignore
+this section if you are building `feathercoind` for your own use.
 
-If you are building `litecond` for others, your build machine should be set up
+If you are building `feathercond` for others, your build machine should be set up
 as follows for maximum compatibility:
 
 All dependencies should be compiled with these flags:
@@ -156,30 +156,30 @@ As of December 2012, the `boost` port does not obey `macosx_deployment_target`.
 Download `http://gavinandresen-bitcoin.s3.amazonaws.com/boost_macports_fix.zip`
 for a fix. Some ports also seem to obey either `build_arch` or
 `macosx_deployment_target`, but not both at the same time. For example, building
-on an OS X 10.6 64-bit machine fails. Official release builds of Litecoin-Qt are
+on an OS X 10.6 64-bit machine fails. Official release builds of Feathercoin-Qt are
 compiled on an OS X 10.6 32-bit machine to workaround that problem.
 
-Once dependencies are compiled, creating `Litecoin-Qt.app` is easy:
+Once dependencies are compiled, creating `Feathercoin-Qt.app` is easy:
 
     make -f Makefile.osx RELEASE=1
 
 Running
 -------
 
-It's now available at `./litecoind`, provided that you are still in the `src`
+It's now available at `./feathercoind`, provided that you are still in the `src`
 directory. We have to first create the RPC configuration file, though.
 
-Run `./litecoind` to get the filename where it should be put, or just try these
+Run `./feathercoind` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=litecoinrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/Litecoin/litecoin.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/Litecoin/litecoin.conf"
+    echo -e "rpcuser=feathercoinrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/Feathercoin/feathercoin.conf"
+    chmod 600 "/Users/${USER}/Library/Application Support/Feathercoin/feathercoin.conf"
 
 When next you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours.
 
 Other commands:
 
-    ./litecoind --help  # for a list of command-line options.
-    ./litecoind -daemon # to start the litecoin daemon.
-    ./litecoind help    # When the daemon is running, to get a list of RPC commands
+    ./feathercoind --help  # for a list of command-line options.
+    ./feathercoind -daemon # to start the feathercoin daemon.
+    ./feathercoind help    # When the daemon is running, to get a list of RPC commands

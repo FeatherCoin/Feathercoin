@@ -23,11 +23,11 @@ Value GetNetworkHashPS(int lookup, int height) {
     if (pb == NULL || !pb->nHeight)
         return 0;
 
-    // If lookup is -1, then use blocks since last difficulty change.
+    // If lookup is zero or negative value, then use blocks since the last retarget.
     if (lookup <= 0)
-        lookup = pb->nHeight % 2016 + 1;
+        lookup = pb->nHeight % 504 + 1;
 
-    // If lookup is larger than chain, then set it to chain length.
+    // If lookup is larger than block chain, then set it to the maximum allowed.
     if (lookup > pb->nHeight)
         lookup = pb->nHeight;
 
@@ -56,11 +56,11 @@ Value getnetworkhashps(const Array& params, bool fHelp)
     if (fHelp || params.size() > 2)
         throw runtime_error(
             "getnetworkhashps [blocks] [height]\n"
-            "Returns the estimated network hashes per second based on the last 120 blocks.\n"
+            "Returns the estimated network hashes per second based on the last 30 blocks.\n"
             "Pass in [blocks] to override # of blocks, -1 specifies since last difficulty change.\n"
             "Pass in [height] to estimate the network speed at the time when a certain block was found.");
 
-    return GetNetworkHashPS(params.size() > 0 ? params[0].get_int() : 120, params.size() > 1 ? params[1].get_int() : -1);
+    return GetNetworkHashPS(params.size() > 0 ? params[0].get_int() : 30, params.size() > 1 ? params[1].get_int() : -1);
 }
 
 Value getmininginfo(const Array& params, bool fHelp)
@@ -92,10 +92,10 @@ Value getworkex(const Array& params, bool fHelp)
         );
 
     if (vNodes.empty())
-        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Litecoin is not connected!");
+        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Feathercoin is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Litecoin is downloading blocks...");
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Feathercoin is downloading blocks...");
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;    // FIXME: thread safety
@@ -232,10 +232,10 @@ Value getwork(const Array& params, bool fHelp)
             "If [data] is specified, tries to solve the block and returns true if it was successful.");
 
     if (vNodes.empty())
-        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Litecoin is not connected!");
+        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Feathercoin is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Litecoin is downloading blocks...");
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Feathercoin is downloading blocks...");
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;    // FIXME: thread safety
@@ -373,10 +373,10 @@ Value getblocktemplate(const Array& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid mode");
 
     if (vNodes.empty())
-        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Litecoin is not connected!");
+        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Feathercoin is not connected!");
 
     if (IsInitialBlockDownload())
-        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Litecoin is downloading blocks...");
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Feathercoin is downloading blocks...");
 
     // Update block
     static unsigned int nTransactionsUpdatedLast;

@@ -20,16 +20,18 @@ CXX ?= g++
 USE_UPNP:=-
 USE_IPV6:=1
 
-DEPSDIR?=/usr/local
-BOOST_SUFFIX?=-mgw46-mt-sd-1_52
+BOOST_SUFFIX?=-mgw44-mt-sd-1_53
 
 INCLUDEPATHS= \
- -I"$(CURDIR)" \
- -I"$(DEPSDIR)/include"
+ -I"C:\boost_1_53_0" \
+ -I"C:\db-4.8.30.NC\build_unix" \
+ -I"C:\openssl-1.0.1e\include"
 
 LIBPATHS= \
  -L"$(CURDIR)/leveldb" \
- -L"$(DEPSDIR)/lib"
+ -L"C:\boost_1_53_0\stage\lib" \
+ -L"C:\db-4.8.30.NC\build_unix" \
+ -L"C:\openssl-1.0.1e"
 
 LIBS= \
  -l leveldb \
@@ -43,11 +45,11 @@ LIBS= \
  -l ssl \
  -l crypto
 
-DEFS=-D_MT -DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE
+DEFS=-DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE
 DEBUGFLAGS=-g
 CFLAGS=-mthreads -O2 -w -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter $(DEBUGFLAGS) $(DEFS) $(INCLUDEPATHS)
 # enable: ASLR, DEP and large address aware
-LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat -Wl,--large-address-aware
+LDFLAGS=-Wl,--large-address-aware
 
 TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 
@@ -55,6 +57,8 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
+ INCLUDEPATHS += -I"C:\miniupnpc-1.8"
+ LIBPATHS += -L"C:\miniupnpc-1.8"
  LIBS += -l miniupnpc -l iphlpapi
  DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
@@ -63,7 +67,7 @@ ifneq (${USE_IPV6}, -)
 	DEFS += -DUSE_IPV6=$(USE_IPV6)
 endif
 
-LIBS += -l mingwthrd -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l winmm -l shell32 -l comctl32 -l ole32 -l oleaut32 -l uuid -l rpcrt4 -l advapi32 -l ws2_32 -l mswsock -l shlwapi
+LIBS += -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l winmm -l shell32 -l comctl32 -l ole32 -l oleaut32 -l uuid -l rpcrt4 -l advapi32 -l ws2_32 -l mswsock -l shlwapi
 
 # TODO: make the mingw builds smarter about dependencies, like the linux/osx builds are
 HEADERS = $(wildcard *.h)
@@ -103,10 +107,10 @@ OBJS= \
     obj/txdb.o
 
 
-all: litecoind.exe
+all: feathercoind.exe
 
-test check: test_litecoin.exe FORCE
-	test_litecoin.exe
+test check: test_feathercoin.exe FORCE
+	test_feathercoin.exe
 
 #
 # LevelDB support
@@ -120,7 +124,7 @@ leveldb/libleveldb.a:
 obj/%.o: %.cpp $(HEADERS)
 	$(CXX) -c $(CFLAGS) -o $@ $<
 
-litecoind.exe: $(OBJS:obj/%=obj/%)
+feathercoind.exe: $(OBJS:obj/%=obj/%)
 	$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -128,11 +132,11 @@ TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
 obj-test/%.o: test/%.cpp $(HEADERS)
 	$(CXX) -c $(TESTDEFS) $(CFLAGS) -o $@ $<
 
-test_litecoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
+test_feathercoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework$(BOOST_SUFFIX) $(LIBS)
 
 clean:
-	rm -f litecoind.exe test_litecoin.exe
+	rm -f feathercoind.exe test_feathercoin.exe
 	rm -f obj/*
 	rm -f obj-test/*
 	cd leveldb && $(MAKE) TARGET_OS=NATIVE_WINDOWS clean && cd ..
