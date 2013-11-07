@@ -130,4 +130,10 @@ namespace Checkpoints
         }
         return NULL;
     }
+    
+    uint256 GetLatestHardenedCheckpoint()
+    {
+        const MapCheckpoints& checkpoints = *Checkpoints().mapCheckpoints;
+        return (checkpoints.rbegin()->second);
+    }
 }
