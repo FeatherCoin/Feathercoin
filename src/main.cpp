@@ -1975,7 +1975,8 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
             strMiscWarning = _("Warning: This version is obsolete, upgrade required!");
     }
 	
-	if (!IsSyncCheckpointEnforced()) // checkpoint advisory mode    {
+    if (!IsSyncCheckpointEnforced()) // checkpoint advisory mode
+    {
         if (pindexBest->pprev && !CheckSyncCheckpoint(pindexBest->GetBlockHash(), pindexBest->pprev))
             strCheckpointWarning = _("Warning: checkpoint on different blockchain fork, contact developers to resolve the issue");
         else
