@@ -2257,8 +2257,8 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         if (!Checkpoints::CheckBlock(nHeight, hash))
             return state.DoS(100, error("AcceptBlock() : rejected by checkpoint lock-in at %d", nHeight));
 			
-		// ppcoin: check that the block satisfies synchronized checkpoint
-		if (!IsSyncCheckpointEnforced()) // checkpoint advisory mode
+        // ppcoin: check that the block satisfies synchronized checkpoint
+        if (IsSyncCheckpointEnforced() // checkpoint enforce mode
             && !CheckSyncCheckpoint(hash, pindexPrev))
             return error("AcceptBlock() : rejected by synchronized checkpoint");
  
