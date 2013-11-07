@@ -256,6 +256,7 @@ static const CRPCCommand vRPCCommands[] =
     { "sendcheckpoint",         &sendcheckpoint,         true,      false },
     { "enforcecheckpoint",      &enforcecheckpoint,      true,      false },
     { "makekeypair",            &makekeypair,            true,     	false },
+    { "sendalert",              &sendalert,              true,      false },
     { "listunspent",            &listunspent,            false,     false },
     { "getrawtransaction",      &getrawtransaction,      false,     false },
     { "createrawtransaction",   &createrawtransaction,   false,     false },
