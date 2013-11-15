@@ -222,21 +222,21 @@ Value makekeypair(const Array& params, bool fHelp)
         strPrefix = params[0].get_str();
 
     CKey key;
+    CPubKey pubkey;
     int nCount = 0;
     do
     {
         key.MakeNewKey(false);
+        pubkey = key.GetPubKey();
         nCount++;
-    } while (nCount < 10000 && strPrefix != HexStr(key.GetPubKey().Raw()).substr(0, strPrefix.size()));
+    } while (nCount < 10000 && strPrefix != HexStr(pubkey.begin(), pubkey.end()).substr(0, strPrefix.size()));
 
-    if (strPrefix != HexStr(key.GetPubKey().Raw()).substr(0, strPrefix.size()))
+    if (strPrefix != HexStr(pubkey.begin(), pubkey.end()).substr(0, strPrefix.size()))
         return Value::null;
 
-    bool fCompressed;
-    CSecret vchSecret = key.GetSecret(fCompressed);
     Object result;
-    result.push_back(Pair("PublicKey", HexStr(key.GetPubKey().Raw())));
-    result.push_back(Pair("PrivateKey", CBitcoinSecret(vchSecret, fCompressed).ToString()));
+    result.push_back(Pair("PublicKey", HexStr(pubkey.begin(), pubkey.end())));
+    result.push_back(Pair("PrivateKey", CBitcoinSecret(key).ToString()));
     return result;
 }
 
@@ -280,10 +280,7 @@ Value sendalert(const Array& params, bool fHelp)
     CBitcoinSecret vchSecret;
     if (!vchSecret.SetString(params[1].get_str()))
         throw runtime_error("Invalid alert master key");
-    CKey key;
-    bool fCompressed;
-    CSecret secret = vchSecret.GetSecret(fCompressed);
-    key.SetSecret(secret, fCompressed); // if key is not correct openssl may crash
+    CKey key = vchSecret.GetKey(); // if key is not correct openssl may crash
     if (!key.Sign(Hash(alert.vchMsg.begin(), alert.vchMsg.end()), alert.vchSig))
         throw runtime_error(
             "Unable to sign alert, check alert master key?\n");
