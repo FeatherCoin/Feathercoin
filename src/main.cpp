@@ -2150,7 +2150,7 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
         return state.DoS(100, error("CheckBlock() : size limits failed"));
 
     // Feathercoin: Special short-term limits to avoid 10,000 BDB lock limit:
-    if (GetBlockTime() < 1386158400)  // stop enforcing 15 August 2013 00:00:00
+    if (GetBlockTime() < 1391126400)  // stop enforcing 31 January 2014 00:00:00
     {
         // Rule is: #unique txids referenced <= 4,500
         // ... to prevent 10,000 BDB lock exhaustion on old clients
