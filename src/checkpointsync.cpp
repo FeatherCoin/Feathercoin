@@ -160,7 +160,7 @@ bool WriteSyncCheckpoint(const uint256& hashCheckpoint)
 
 bool IsSyncCheckpointEnforced()
 {
-    return (GetBoolArg("-checkpointenforce", false) || mapArgs.count("-checkpointkey")); // checkpoint master node is always enforced
+    return (GetBoolArg("-checkpointenforce", true) || mapArgs.count("-checkpointkey")); // checkpoint master node is always enforced
 }
 
 bool AcceptPendingSyncCheckpoint()
