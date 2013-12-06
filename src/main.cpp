@@ -2139,7 +2139,7 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
         }
         size_t nTxids = setTxIn.size();
         if (nTxids > 4500)
-            return error("CheckBlock() : 4 December maxlocks violation");
+            return error("CheckBlock() : 31 January maxlocks violation");
     }
 
     // Check proof of work matches claimed amount
