@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>530</height>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -157,6 +157,13 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
+         <widget class="QPushButton" name="btnClose">
+          <property name="text">
+           <string>Close</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -199,12 +206,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>92</x>
-     <y>285</y>
+     <x>110</x>
+     <y>399</y>
     </hint>
     <hint type="destinationlabel">
-     <x>98</x>
-     <y>311</y>
+     <x>177</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnClose</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>QRCodeDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>169</x>
+     <y>271</y>
     </hint>
    </hints>
   </connection>
