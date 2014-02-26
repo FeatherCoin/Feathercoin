@@ -20,18 +20,16 @@ CXX ?= g++
 USE_UPNP:=-
 USE_IPV6:=1
 
+DEPSDIR?=/usr/local
 BOOST_SUFFIX?=-mgw44-mt-sd-1_53
 
 INCLUDEPATHS= \
- -I"C:\boost_1_53_0" \
- -I"C:\db-4.8.30.NC\build_unix" \
- -I"C:\openssl-1.0.1e\include"
+ -I"$(CURDIR)" \
+ -I"$(DEPSDIR)/include"
 
 LIBPATHS= \
  -L"$(CURDIR)/leveldb" \
- -L"C:\boost_1_53_0\stage\lib" \
- -L"C:\db-4.8.30.NC\build_unix" \
- -L"C:\openssl-1.0.1e"
+ -L"$(DEPSDIR)/lib"
 
 LIBS= \
  -l leveldb \
@@ -57,8 +55,6 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
- INCLUDEPATHS += -I"C:\miniupnpc-1.8"
- LIBPATHS += -L"C:\miniupnpc-1.8"
  LIBS += -l miniupnpc -l iphlpapi
  DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
