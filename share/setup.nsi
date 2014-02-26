@@ -5,7 +5,7 @@ SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.8.5.1
+!define VERSION 0.8.6
 !define COMPANY "Feathercoin project"
 !define URL http://feathercoin.com/
 
@@ -45,13 +45,13 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile feathercoin-0.8.5-win32-setup.exe
+OutFile feathercoin-0.8.6-win32-setup.exe
 InstallDir $PROGRAMFILES\Feathercoin
 CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
-VIProductVersion 0.8.5.1
+VIProductVersion 0.8.6
 VIAddVersionKey ProductName Feathercoin
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
