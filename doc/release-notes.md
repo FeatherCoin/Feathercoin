@@ -9,7 +9,7 @@ Disable Wallet - reduces memory requirements, helpful for miner or relay nodes
 
 Up to 50% faster PoW validation, faster sync and reindexing.
 
-Peers older than protocol version 70002 are disconnected.  0.8.3.7 is the oldest compatible client.
+Peers older than protocol version 60002 are disconnected.  0.6.4.4 is the oldest compatible client.
 
  Internal miner added back to Litecoin.  setgenerate now works, although it is generally a bad idea as it is significantly slower than external CPU miners.
 
