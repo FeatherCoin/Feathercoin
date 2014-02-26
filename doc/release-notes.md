@@ -1,9 +1,54 @@
-0.8.5.1 changes
+0.8.6 changes
+=============
+
+Coin Control - experts only GUI selection of inputs before you send a transaction
+
+Disable Wallet - reduces memory requirements, helpful for miner or relay nodes
+
+20x reduction in default mintxfee.
+
+Up to 50% faster PoW validation, faster sync and reindexing.
+
+Peers older than protocol version 70002 are disconnected.  0.8.3.7 is the oldest compatible client.
+
+ Internal miner added back to Litecoin.  setgenerate now works, although it is generally a bad idea as it is significantly slower than external CPU miners.
+
+New RPC commands: getbestblockhash and verifychain
+
+Improve fairness of the high priority transaction space per block
+
+OSX block chain database corruption fixes
+ - Update leveldb to 1.13
+ - Use fcntl with `F_FULLSYNC` instead of fsync on OSX
+ - Use native Darwin memory barriers
+
+Replace use of mmap in leveldb for improved reliability
+
+Fix nodes forwarding transactions with empty vins and getting banned
+
+Network code performance and robustness improvements
+
+Additional debug.log logging for diagnosis of network problems, log timestamps by default
+
+Fix rare GUI crash on send
+
+Windows only: Fixes issue where network connectivity can fail.
+
+Cleanup of SSE2 scrypt detection.
+
+Minor fixes:
+ - s/Bitcoin/Litecoin/ in the Coin Control example
+ - Fix custom build on MacOS X 10.9
+ - Fix QT5 custom build
+ - Update Debian build instructions
+ - Update Homebrew build 
+
+0.8.5 changes
 ===============
 
 Workaround negative version numbers serialization bug.
 
-Fix out-of-bounds check (Litecoin currently does not use this codepath, but we apply this
+Fix out-of-bounds check (Feathercoin currently does not use this codepath, but we apply this
 patch just to match Bitcoin 0.8.5.)
 
 0.8.4.1 changes
