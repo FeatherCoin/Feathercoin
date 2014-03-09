@@ -1193,12 +1193,9 @@ void MapPort(bool)
 // The second name should resolve to a list of seed addresses.
 static const char *strMainNetDNSSeed[][2] = {
     {"feathercoin.com", "dnsseed.feathercoin.com"},
-    {"altcointech.net", "dnsseed.fc.altcointech.net"},
     {"alltheco.in", "dnsseed.alltheco.in"},
     {"btcltcftc.com", "dnsseed.btcltcftc.com"},
-	{"feathercoin.com", "seed1.feathercoin.com"},
-	{"feathercoin.com", "seed2.feathercoin.com"},
-	{"feathercoin.com", "seed3.feathercoin.com"},
+    {"altcointech.net", "dnsseed.fc.altcointech.net"},
     {NULL, NULL}
 };
 
@@ -1249,7 +1246,15 @@ void ThreadDNSAddressSeed()
 
 
 
-unsigned int pnSeed[] = {};
+unsigned int pnSeed[] = 
+{
+	0xc49c0ed8, 0x1df9d243, 0xd9b75a40, 0xdc525e46, 0x72c321b1, 0x4eedeeb2, 0x18271787, 0xce725232,
+    0x892aafc0, 0x979f6751, 0x2210f618, 0xfb529ed8, 0x66a74b3e, 0xef5d132e, 0x3b7a116c, 0x2fe45f55,
+    0x1df9d243, 0xe41f7c70, 0x8f4cd262, 0xb5c29d62, 0x80f1f3a2, 0x47dc614d, 0x6f458b4e, 0x908caa56,
+    0x553ef762, 0x5aec0852, 0x629a4f54, 0x6a10e13c, 0x4f41c547, 0x4476fd59, 0xcaedbc5a, 0x9f806dc1,
+    0x1df9d243, 0xe41f7c70, 0x8f4cd262, 0xb5c29d62, 0x80f1f3a2, 0x47dc614d, 0x6f458b4e, 0x908caa56,
+    0x553ef762, 0x5aec0852, 0x629a4f54, 0x6a10e13c, 0x4f41c547, 0x4476fd59, 0xcaedbc5a, 0x9f806dc1
+};
 
 void DumpAddresses()
 {
