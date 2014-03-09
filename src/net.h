@@ -13,6 +13,10 @@
 #ifndef WIN32
 #include <arpa/inet.h>
 #endif
+#ifdef _MSC_VER
+#include <winsock2.h>
+#include <Windows.h>
+#endif
 
 #include "mruset.h"
 #include "limitedmap.h"

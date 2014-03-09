@@ -6,7 +6,12 @@
  */
 
 #include <QApplication>
-
+#ifdef WIN32
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
+#endif
+#endif
 #include "bitcoingui.h"
 
 #include "transactiontablemodel.h"

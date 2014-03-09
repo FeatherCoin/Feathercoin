@@ -62,15 +62,14 @@
 //
 
 #include <boost/foreach.hpp>
-
-#include "checkpoints.h"
-#include "checkpointsync.h"
-
 #include "base58.h"
 #include "bitcoinrpc.h"
 #include "main.h"
 #include "txdb.h"
 #include "uint256.h"
+#include "checkpoints.h"
+#include "checkpointsync.h"
+
 
 using namespace json_spirit;
 using namespace std;

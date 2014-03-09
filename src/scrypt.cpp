@@ -301,7 +301,7 @@ void scrypt_detect_sse2()
     // MSVC
     int x86cpuid[4];
     __cpuid(x86cpuid, 1);
-    cpuid_edx = (unsigned int)buffer[3];
+    cpuid_edx = (unsigned int)x86cpuid[3];
 #else // _MSC_VER
     // Linux or i686-w64-mingw32 (gcc-4.6.3)
     unsigned int eax, ebx, ecx;
