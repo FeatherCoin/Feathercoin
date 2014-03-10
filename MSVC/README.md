@@ -84,6 +84,6 @@ Hopefully, if you have made it this far, you will know what to do here.  Open up
 
 
 
-I've tried to make this guide as complete as possible and I hope it helps you. If you find any mistakes or omissions, please let me know by posting in my thread at [bitcointalk](https://bitcointalk.org/index.php?topic=349094).
+I've tried to make this guide as complete as possible and I hope it helps you. If you find any mistakes or omissions, please let me know by posting in my thread at the [Feathercoin forum](https://forum.feathercoin.com/index.php?/topic/6677-how-to-build-feathercoin-in-visual-studio-2013/) or my thread at [bitcointalk](https://bitcointalk.org/index.php?topic=349094).
 
 Thank you,<br/>Claire
