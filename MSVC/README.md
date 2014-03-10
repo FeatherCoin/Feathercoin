@@ -1,13 +1,13 @@
-#Build Instructions for *Coin in Visual Studio 2013
+#Build Instructions for Feathercoin in Visual Studio 2013
 
 ----------
 
-I have created a VS2013 solution and project files to build BitcoinD and Bitcoin-Qt.  To try this out, the first thing you need to do is install VS2013, along with the latest updates, and then get all the dependecies downloaded, arranged in the expected file structure, and then built.  If it all works, you will have 32 and 64 bit versions in debug and release mode of both the daemon and the Qt exe.
+I have created a VS2013 solution and project files to build FeathercoinD and Feathercoin-Qt.  To try this out, the first thing you need to do is install VS2013, along with the latest updates, and then get all the dependecies downloaded, arranged in the expected file structure, and then built.  If it all works, you will have 32 and 64 bit versions in debug and release mode of both the daemon and the Qt exe.
 
 Good Luck!
 
 
-## Building All of the Bitcoin Dependencies in Visual Studio 2013 ##
+## Building All of the Feathercoin Dependencies in Visual Studio 2013 ##
 
 To build all of the required dependencies, you first must download them.  Here they are:
 
