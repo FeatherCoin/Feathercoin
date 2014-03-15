@@ -2240,8 +2240,8 @@ Address: %4
     </message>
     <message>
         <location line="-28"/>
-        <source>Listen for connections on &lt;port&gt; (default: 9333 or testnet: 19333)</source>
-        <translation>Εισερχόμενες συνδέσεις στη θύρα &lt;port&gt; (προεπιλογή: 9333 ή στο testnet: 19333)</translation>
+        <source>Listen for connections on &lt;port&gt; (default: 9336 or testnet: 19336)</source>
+        <translation>Εισερχόμενες συνδέσεις στη θύρα &lt;port&gt; (προεπιλογή: 9336 ή στο testnet: 19336)</translation>
     </message>
     <message>
         <location line="+5"/>
