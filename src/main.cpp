@@ -1729,6 +1729,11 @@ bool CBlock::ConnectBlock(CValidationState &state, CBlockIndex* pindex, CCoinsVi
     if (vtx[0].GetValueOut() > GetBlockValue(pindex->nHeight, nFees))
         return state.DoS(100, error("ConnectBlock() : coinbase pays too much (actual=%"PRI64d" vs limit=%"PRI64d")", vtx[0].GetValueOut(), GetBlockValue(pindex->nHeight, nFees)));
 
+	// No more blocks with bogus reward accepted
+    if((fTestNet || (pindex->nHeight >= nForkThree)) &&
+	  (vtx[0].GetValueOut() != GetBlockValue(pindex->nHeight, nFees)))
+		return false;
+
     if (!control.Wait())
         return state.DoS(100, false);
     int64 nTime2 = GetTimeMicros() - nStart;
