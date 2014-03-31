@@ -1076,7 +1076,7 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 {
     int64 nSubsidy = 200 * COIN;
 	
-	if(nHeight >= nForkThree || (fTestNet && (nHeight >= 2010)))
+	if(nHeight >= nForkThree || (fTestNet && (nHeight >= 1081)))
 		nSubsidy = 80 * COIN;
 
     // Subsidy is cut in half every 2100000 blocks, which will occur approximately every 4 years
@@ -1102,10 +1102,14 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 	if (nHeight >= nForkOne)
 		nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
 
-    if ((nHeight >= nForkTwo) || (fTestNet && (nHeight >= 1008)))
+    if ((nHeight >= nForkTwo) || (fTestNet))
 		nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
 
-	if (nHeight >= nForkThree || (fTestNet && (nHeight >= 2010))) {
+	if (fTestNet && (nHeight >= 505)) {
+        nTargetTimespan = 150; // 2.5 minute timespan
+	}
+	
+	if (nHeight >= nForkThree || (fTestNet && (nHeight >= 1081))) {
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
 	}
@@ -1153,11 +1157,11 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     printf("RETARGET: nActualTimespan = %d before bounds\n", nActualTimespan);
 
     // Additional averaging over 4x nInterval window
-    if(((nHeight >= nForkTwo) && (nHeight < nForkThree)) || (fTestNet && (nHeight > 2*nInterval) && (nHeight < 2010))) {
+    if(((nHeight >= nForkTwo) && (nHeight < nForkThree)) || (fTestNet && (nHeight < 2521))) {
         nInterval *= 4;
 
         const CBlockIndex* pindexFirst = pindexLast;
-        for(int i = 0; pindexFirst && i < nInterval; i++)
+        for(int i = 0; pindexFirst && i < nInterval && i < nHeight - 1; i++)
           pindexFirst = pindexFirst->pprev;
 
         int nActualTimespanLong =
@@ -1175,7 +1179,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     }
 	
 	// Additional averaging over 120 and 480 block window
-	if((nHeight >= nForkThree) || (fTestNet && (nHeight >= 2010))) {
+	if((nHeight >= nForkThree) || (fTestNet && (nHeight >= 2521))) {
 
 		// Average over a total of 32x nInterval
         nInterval *= 480;
@@ -1203,12 +1207,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 			(pindexLast->GetBlockTime() - pindexFirstLong->GetBlockTime())/480;
 
         int nActualTimespanAvg = 0;
-		if(fTestNet && (nHeight < 3000)) {
-			// Average between short and long windows
-            nActualTimespanAvg = (nActualTimespan + nActualTimespanShort + nActualTimespanMedium + nActualTimespanLong)/4;
-		} else {
-            nActualTimespanAvg = (nActualTimespanShort + nActualTimespanMedium + nActualTimespanLong)/3;
-		}
+        nActualTimespanAvg = (nActualTimespanShort + nActualTimespanMedium + nActualTimespanLong)/3;
 
 		// Apply .25 damping
 		nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
@@ -2253,7 +2252,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
 
     // Check timestamp against prev it should not be more then 2 times the window
     if (((nHeight > nForkTwo) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 2 * 30 * 60)) ||
-	  ((nHeight >= nForkThree || (fTestNet && (nHeight >= 2010))) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60))) // or 15 minutes
+	  ((nHeight >= nForkThree || (fTestNet && (nHeight >= 2521))) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60))) // or 15 minutes
         return error("AcceptBlock() : block's timestamp is too early compare to last block");
 			
         // Check that all transactions are finalized
