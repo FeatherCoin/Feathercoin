@@ -17,6 +17,9 @@
 #include <QTextDocument>
 #include <QScrollBar>
 #include <QClipboard>
+#ifdef USE_ZXING
+#include "snapwidget.h"
+#endif
 
 SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     QDialog(parent),
@@ -24,17 +27,21 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     model(0)
 {
     ui->setupUi(this);
-
+    
 #ifdef Q_OS_MAC // Icons on push buttons are very uncommon on Mac
     ui->addButton->setIcon(QIcon());
     ui->clearButton->setIcon(QIcon());
     ui->sendButton->setIcon(QIcon());
+    ui->sendQRButton->setIcon(QIcon());
 #endif
 #if QT_VERSION >= 0x040700
     /* Do not move this to the XML file, Qt before 4.7 will choke on it */
     ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a Feathercoin address (e.g. 6nqmPL9tX4Uz3uQhbz8GrgLfXQNQEXstVu)"));
 #endif
 
+#ifndef USE_ZXING
+    this->ui->sendQRButton->hide();
+#endif
     addEntry();
 
     connect(ui->addButton, SIGNAL(clicked()), this, SLOT(addEntry()));
@@ -105,6 +112,19 @@ void SendCoinsDialog::setModel(WalletModel *model)
 SendCoinsDialog::~SendCoinsDialog()
 {
     delete ui;
+}
+
+void SendCoinsDialog::on_sendQRButton_clicked()
+{
+#ifdef USE_ZXING
+    SnapWidget* snap = new SnapWidget(this);
+    connect(snap, SIGNAL(finished(QString)), this, SLOT(onSnapClosed(QString)));
+#endif
+}
+
+void SendCoinsDialog::onSnapClosed(QString s)
+{
+    emit sendCoins(s);
 }
 
 void SendCoinsDialog::on_sendButton_clicked()

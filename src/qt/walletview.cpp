@@ -74,8 +74,11 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
     // Double-clicking on a transaction on the transaction history page shows details
     connect(transactionView, SIGNAL(doubleClicked(QModelIndex)), transactionView, SLOT(showDetails()));
 
+    connect(receiveCoinsPage, SIGNAL(importWallet(QString)), this, SLOT(importWallet(QString)));
     // Clicking on "Send Coins" in the address book sends you to the send coins tab
     connect(addressBookPage, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString)));
+    // Clicking on "Send to QR" sends you to the send coins tab after snapping and reading image
+    connect(sendCoinsPage, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString)));
     // Clicking on "Verify Message" in the address book opens the verify message tab in the Sign/Verify Message dialog
     connect(addressBookPage, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
     // Clicking on "Sign Message" in the receive coins page opens the sign message tab in the Sign/Verify Message dialog
@@ -199,6 +202,11 @@ void WalletView::gotoVerifyMessageTab(QString addr)
 
     if (!addr.isEmpty())
         signVerifyMessageDialog->setAddress_VM(addr);
+}
+
+void WalletView::importWallet(QString privateKey)
+{
+    bool b =walletModel->importPrivateKey(privateKey);   
 }
 
 bool WalletView::handleURI(const QString& strURI)

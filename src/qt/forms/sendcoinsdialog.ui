@@ -39,7 +39,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayoutCoinControl2">
       <property name="spacing">
-       <number>-1</number>
+       <number>7</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -173,7 +173,16 @@
            <string notr="true"/>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayoutCoinControl5">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -625,12 +634,21 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>830</width>
-        <height>165</height>
+        <width>826</width>
+        <height>145</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -699,6 +717,17 @@
        </property>
        <property name="autoDefault">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sendQRButton">
+       <property name="text">
+        <string>Send To &amp;QR</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../bitcoin.qrc">
+         <normaloff>:/icons/qrcode</normaloff>:/icons/qrcode</iconset>
        </property>
       </widget>
      </item>

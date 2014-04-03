@@ -41,6 +41,8 @@ public slots:
     SendCoinsEntry *addEntry();
     void updateRemoveEnabled();
     void setBalance(qint64 balance, qint64 unconfirmedBalance, qint64 immatureBalance);
+    /** Scan of QR code finished */
+    void onSnapClosed(QString s);
 
 private:
     Ui::SendCoinsDialog *ui;
@@ -49,6 +51,7 @@ private:
 
 private slots:
     void on_sendButton_clicked();
+    void on_sendQRButton_clicked();
     void removeEntry(SendCoinsEntry* entry);
     void updateDisplayUnit();
     void coinControlFeatureChanged(bool);
@@ -64,6 +67,11 @@ private slots:
     void coinControlClipboardPriority();
     void coinControlClipboardLowOutput();
     void coinControlClipboardChange();
+
+signals:
+    void signMessage(QString addr);
+    void verifyMessage(QString addr);
+    void sendCoins(QString addr);
 };
 
 #endif // SENDCOINSDIALOG_H

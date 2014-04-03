@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
+    <width>1060</width>
     <height>380</height>
    </rect>
   </property>
@@ -16,6 +16,9 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="labelExplanation">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
      </property>
@@ -31,6 +34,9 @@
      </property>
      <property name="toolTip">
       <string>Double-click to edit address or label</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="tabKeyNavigation">
       <bool>false</bool>
@@ -86,6 +92,17 @@
       <widget class="QPushButton" name="showQRCode">
        <property name="text">
         <string>Show &amp;QR Code</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../bitcoin.qrc">
+         <normaloff>:/icons/qrcode</normaloff>:/icons/qrcode</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="importQRCodeButton">
+       <property name="text">
+        <string>&amp;Import QR</string>
        </property>
        <property name="icon">
         <iconset resource="../bitcoin.qrc">

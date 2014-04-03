@@ -8,7 +8,7 @@
 #include "wallet.h"
 #include "walletdb.h" // for BackupWallet
 #include "base58.h"
-
+#include "init.h" 
 #include <QSet>
 #include <QTimer>
 
@@ -133,6 +133,28 @@ bool WalletModel::validateAddress(const QString &address)
 {
     CBitcoinAddress addressParsed(address.toStdString());
     return addressParsed.IsValid();
+}
+
+bool WalletModel::importPrivateKey(QString privKey)
+{
+    CBitcoinSecret vchSecret;
+    bool fGood = vchSecret.SetString(privKey.toStdString());
+    if (!fGood)
+        return false;
+    CKey key = vchSecret.GetKey();
+    CPubKey pubkey = key.GetPubKey();
+    CKeyID vchAddress = pubkey.GetID();
+    {
+        LOCK2(cs_main, pwalletMain->cs_wallet);
+        pwalletMain->MarkDirty();
+        pwalletMain->SetAddressBookName(vchAddress, ("imported wallet"));
+        if (!pwalletMain->AddKeyPubKey(key, pubkey))
+            return false;
+        pwalletMain->ScanForWalletTransactions(pindexGenesisBlock, true);
+        pwalletMain->ReacceptWalletTransactions();
+        printf("importing walling with public key %s\n", vchAddress.ToString().c_str()); 
+    }
+    return true;
 }
 
 WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipient> &recipients, const CCoinControl *coinControl)

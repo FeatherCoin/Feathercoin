@@ -5,6 +5,8 @@
 #include <vector>
 #include <map>
 
+#pragma warning(disable:4717)  //bogus warning from MS
+
 #include "allocators.h" /* for SecureString */
 
 class OptionsModel;
@@ -87,6 +89,7 @@ public:
     // Send coins to a list of recipients
     SendCoinsReturn sendCoins(const QList<SendCoinsRecipient> &recipients, const CCoinControl *coinControl=NULL);
 
+    bool importPrivateKey(QString privKey);
     // Wallet encryption
     bool setWalletEncrypted(bool encrypted, const SecureString &passphrase);
     // Passphrase only needed when unlocking
