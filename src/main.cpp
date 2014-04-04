@@ -1178,7 +1178,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
           nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
     }
 	
-	// Additional averaging over 120 and 480 block window
+	// Additional averaging over 15, 120 and 480 block window
 	if((nHeight >= nForkThree) || (fTestNet && (nHeight >= 2521))) {
 
 		// Average over a total of 32x nInterval
@@ -2245,7 +2245,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         if (GetBlockTime() <= pindexPrev->GetMedianTimePast())
             return state.Invalid(error("AcceptBlock() : block's timestamp is too early"));
 
-    // limit block in future accepted in chain to only a time window of 30 min
+    // limit block in future accepted in chain to only a time window of 15 min
     if (GetBlockTime() > GetAdjustedTime() + 15 * 60)
         return error("AcceptBlock() : block's timestamp too far in the future");
 
