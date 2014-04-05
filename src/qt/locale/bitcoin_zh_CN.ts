@@ -1294,10 +1294,86 @@ Address: %4
         <translation>发送货币</translation>
     </message>
     <message>
+        <location line="+10"/>
+        <source>Enter a Feathercoin address (e.g. 6nqmPL9tX4Uz3uQhbz8GrgLfXQNQEXstVu)</source>
+        <translation>输入一个羽毛币地址</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Inputs...</source>
+        <translation>输入...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>automatically selected</source>
+        <translation>自动选择</translation>
+    </message> 
+    <message>
+        <location line="+76"/>
+        <source>Coin Control Features</source>
+        <translation>交易源地址控制功能</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Insufficient funds!</source>
+        <translation>存款不足！</translation>
+    </message>
+    <message>
+        <location line="+89"/>
+        <source>Quantity:</source>
+        <translation>总量：</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Bytes:</source>
+        <translation>字节：</translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>Amount:</source>
+        <translation>金额：</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Priority:</source>
+        <translation>优先级：</translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>Fee:</source>
+        <translation>费用：</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Low Output:</source>
+        <translation>低输出</translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>After Fee:</source>
+        <translation>加上交易费用后:</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Change:</source>
+        <translation>变更 : </translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>If this is activated, but the change address is empty or invalid, change will be sent to a newly generated address.</source>
+        <translation>如果激活该选项，但是零钱地址用光或者非法，将会新生成零钱地址，转入零钱。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>custom change address</source>
+        <translation>自定义零钱地址</translation>
+    </message>
+    <message>
         <location line="+50"/>
         <source>Send to multiple recipients at once</source>
         <translation>一次发送给多个接收者</translation>
     </message>
+           
     <message>
         <location line="+3"/>
         <source>Add &amp;Recipient</source>
@@ -1387,6 +1463,298 @@ Address: %4
         <location line="+5"/>
         <source>Error: The transaction was rejected. This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation>错误: 交易被拒绝. 如果您使用的是备份钱包，可能存在两个钱包不同步的情况，另一个钱包中的羽毛币已经被使用，但本地的这个钱包尚没有记录。</translation>
+    </message>
+</context>
+<context>
+    <name>CoinControlDialog</name>
+    <message>
+        <location filename="../forms/coincontroldialog.ui" line="+14"/>
+        <source>Coin Control Address Selection</source>
+        <translation>选择交易源地址</translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>Quantity:</source>
+        <translation>总量：</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Bytes:</source>
+        <translation>字节：</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Amount:</source>
+        <translation>金额：</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>Priority:</source>
+        <translation>优先级：</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Fee:</source>
+        <translation>费用：</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Low Output:</source>
+        <translation>低输出</translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>After Fee:</source>
+        <translation>加上交易费用后:</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>Change:</source>
+        <translation>变更 : </translation>
+    </message>
+    <message>
+        <location line="+56"/>
+        <source>(un)select all</source>
+        <translation>(不)全选</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Tree mode</source>
+        <translation>树状模式</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>List mode</source>
+        <translation>列表模式</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>Amount</source>
+        <translation>金额</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Address</source>
+        <translation>地址</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Date</source>
+        <translation>日期</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Confirmations</source>
+        <translation>确认</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Confirmed</source>
+        <translation>已确认</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Priority</source>
+        <translation>优先级</translation>
+    </message>
+    <message>
+        <location filename="../coincontroldialog.cpp" line="+42"/>
+        <source>Copy address</source>
+        <translation>复制地址</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy label</source>
+        <translation>复制标签</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>Copy amount</source>
+        <translation>复制金额</translation>
+    </message>
+    <message>
+        <location line="-25"/>
+        <source>Copy transaction ID</source>
+        <translation>复制交易编号</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Lock unspent</source>
+        <translation>锁定未花费</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Unlock unspent</source>
+        <translation>解锁未花费</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Copy quantity</source>
+        <translation>复制金额</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Copy fee</source>
+        <translation>复制交易费</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy after fee</source>
+        <translation>复制含交易费的金额</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy bytes</source>
+        <translation>复制字节</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy priority</source>
+        <translation>复制优先级</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy low output</source>
+        <translation>复制低输出</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy change</source>
+        <translation>复制零钱</translation>
+    </message>
+    <message>
+        <location line="+323"/>
+        <source>highest</source>
+        <translation>最高</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>higher</source>
+        <translation>更高</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>high</source>
+        <translation>高</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>medium-high</source>
+        <translation>中高</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>medium</source>
+        <translation>中等</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>low-medium</source>
+        <translation>中低</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>low</source>
+        <translation>低</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>lower</source>
+        <translation>更低</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>lowest</source>
+        <translation>最低</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>(%1 locked)</source>
+        <translation>(%1 锁定)</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>none</source>
+        <translation>无</translation>
+    </message>
+    <message>
+        <location line="+141"/>
+        <source>Dust</source>
+        <translation>尘埃交易</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>yes</source>
+        <translation>是</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>no</source>
+        <translation>否</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>This label turns red, if the transaction size is greater than 1000 bytes.</source>
+        <translation>如果这笔交易大于1000字节，标签会变成红色。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+5"/>
+        <source>This means a fee of at least %1 per kB is required.</source>
+        <translation>这意味着将对交易收取 %1/千字节 的交易费。</translation>
+    </message>
+    <message>
+        <location line="-4"/>
+        <source>Can vary +/- 1 byte per input.</source>
+        <translation>每笔输入可能会有 正负1字节的偏差。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Transactions with higher priority are more likely to get included into a block.</source>
+        <translation>交易的优先级越高，被矿工收入数据块的速度也越快。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This label turns red, if the priority is smaller than &quot;medium&quot;.</source>
+        <translation>如果优先级小于&quot;中位数&quot; ，标签将变成红色。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>This label turns red, if any recipient receives an amount smaller than %1.</source>
+        <translation>如果收款地址收到小于%1的比特币，标签将变成红色。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+4"/>
+        <source>This means a fee of at least %1 is required.</source>
+        <translation>这意味着至少需要 %1的交易费。</translation>
+    </message>
+    <message>
+        <location line="-3"/>
+        <source>Amounts below 0.546 times the minimum relay fee are shown as dust.</source>
+        <translation>小于最小转发交易费的0.546倍的 转账金额将被视为 尘埃交易。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This label turns red, if the change is smaller than %1.</source>
+        <translation>如果零钱小于 %1，标签将变成红色。</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <location line="+66"/>
+        <source>(no label)</source>
+        <translation>(没有标签)</translation>
+    </message>
+    <message>
+        <location line="-9"/>
+        <source>change from %1 (%2)</source>
+        <translation>来自%1的零钱 (%2)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>(change)</source>
+        <translation>(零钱)</translation>
     </message>
 </context>
 <context>
@@ -1651,7 +2019,7 @@ Address: %4
     <message>
         <location filename="../splashscreen.cpp" line="+22"/>
         <source>The Feathercoin developers</source>
-        <translation>Feathercoin-qt 客户端开发团队</translation>
+        <translation>羽毛币客户端开发团队</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1825,7 +2193,7 @@ Address: %4
     <message numerus="yes">
         <location line="-35"/>
         <source>Open for %n more block(s)</source>
-        <translation><numerusform>Open for %n more block</numerusform></translation>
+        <translation><numerusform>打开 %n 块</numerusform></translation>
     </message>
     <message>
         <location line="+70"/>
@@ -2146,7 +2514,7 @@ Address: %4
     <message>
         <location filename="../walletview.cpp" line="+42"/>
         <source>&amp;Export</source>
-        <translation type="unfinished"/>
+        <translation>导出</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2266,12 +2634,12 @@ Address: %4
     <message>
         <location line="+3"/>
         <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
-        <translation>Threshold for disconnecting misbehaving peers (缺省: 100)</translation>
+        <translation>断开阀值 (缺省: 100)</translation>
     </message>
     <message>
         <location line="-134"/>
         <source>Number of seconds to keep misbehaving peers from reconnecting (default: 86400)</source>
-        <translation>Number of seconds to keep misbehaving peers from reconnecting (缺省: 86400)</translation>
+        <translation>保持重新连接的秒数(缺省: 86400)</translation>
     </message>
     <message>
         <location line="-29"/>
@@ -2540,7 +2908,7 @@ rpcpassword=%s
     <message>
         <location line="+1"/>
         <source>How thorough the block verification is (0-4, default: 3)</source>
-        <translation>How thorough the block verification is (0-4, default: 3)</translation>
+        <translation>如何彻底验证块（0-4，默认值：3）</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -2575,7 +2943,7 @@ rpcpassword=%s
     <message>
         <location line="-76"/>
         <source>Set the number of script verification threads (up to 16, 0 = auto, &lt;0 = leave that many cores free, default: 0)</source>
-        <translation type="unfinished"/>
+        <translation>设置脚本验证的线程数（最多16个，0=自动， &lt;0=不设置，默认值：0）</translation>
     </message>
     <message>
         <location line="+77"/>
@@ -2809,8 +3177,7 @@ rpcpassword=%s
     <message>
         <location line="+165"/>
         <source>This help message</source>
-        <translation>该帮助信息
-</translation>
+        <translation>该帮助信息</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2905,7 +3272,7 @@ rpcpassword=%s
     <message>
         <location line="-25"/>
         <source>Unable to bind to %s on this computer. Feathercoin is probably already running.</source>
-        <translation>无法在本机绑定 %s 端口 . 羽毛币客户端软件可能已经在运行。</translation>
+        <translation>无法在本机绑定 %s 端口，羽毛币客户端软件可能已经在运行。</translation>
     </message>
     <message>
         <location line="+64"/>
