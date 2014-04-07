@@ -118,6 +118,9 @@ TransactionView::TransactionView(QWidget *parent) :
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
     transactionView = view;
+    
+    totalWidget= new QLabel(tr("Total:"),this);
+    vlayout->addWidget(totalWidget);    
 
     // Actions
     QAction *copyAddressAction = new QAction(tr("Copy address"), this);
@@ -126,6 +129,7 @@ TransactionView::TransactionView(QWidget *parent) :
     QAction *copyTxIDAction = new QAction(tr("Copy transaction ID"), this);
     QAction *editLabelAction = new QAction(tr("Edit label"), this);
     QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
+    QAction *showTotalAction = new QAction(tr("Show transaction total"), this);
 
     contextMenu = new QMenu();
     contextMenu->addAction(copyAddressAction);
@@ -134,7 +138,8 @@ TransactionView::TransactionView(QWidget *parent) :
     contextMenu->addAction(copyTxIDAction);
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
-
+    contextMenu->addAction(showTotalAction);
+    
     // Connect actions
     connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
     connect(typeWidget, SIGNAL(activated(int)), this, SLOT(chooseType(int)));
@@ -149,7 +154,8 @@ TransactionView::TransactionView(QWidget *parent) :
     connect(copyAmountAction, SIGNAL(triggered()), this, SLOT(copyAmount()));
     connect(copyTxIDAction, SIGNAL(triggered()), this, SLOT(copyTxID()));
     connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
-    connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));
+    connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));    
+    connect(showTotalAction, SIGNAL(triggered()), this, SLOT(showTotal()));
 }
 
 void TransactionView::setModel(WalletModel *model)
@@ -182,6 +188,8 @@ void TransactionView::setModel(WalletModel *model)
         transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::ToAddress, QHeaderView::Stretch);
 #endif
         transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Amount, 100);
+        	
+        showTotal();
     }
 }
 
@@ -231,6 +239,7 @@ void TransactionView::chooseDate(int idx)
         dateRangeChanged();
         break;
     }
+    showTotal();
 }
 
 void TransactionView::chooseType(int idx)
@@ -239,6 +248,7 @@ void TransactionView::chooseType(int idx)
         return;
     transactionProxyModel->setTypeFilter(
         typeWidget->itemData(idx).toInt());
+    showTotal();
 }
 
 void TransactionView::changedPrefix(const QString &prefix)
@@ -246,6 +256,7 @@ void TransactionView::changedPrefix(const QString &prefix)
     if(!transactionProxyModel)
         return;
     transactionProxyModel->setAddressPrefix(prefix);
+    showTotal();
 }
 
 void TransactionView::changedAmount(const QString &amount)
@@ -261,6 +272,7 @@ void TransactionView::changedAmount(const QString &amount)
     {
         transactionProxyModel->setMinAmount(0);
     }
+    showTotal();
 }
 
 void TransactionView::exportClicked()
@@ -377,6 +389,16 @@ void TransactionView::showDetails()
         TransactionDescDialog dlg(selection.at(0));
         dlg.exec();
     }
+}
+
+void TransactionView::showTotal()
+{
+	  float fTotal=0;
+	  for (int i=0;i<=transactionProxyModel->rowCount();i++)
+	  {
+	  	fTotal+=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();
+	  }
+    totalWidget->setText(dateWidget->currentText()+" "+typeWidget->currentText()+":"+QObject::tr("%1").arg(fTotal)+" FTC");
 }
 
 QWidget *TransactionView::createDateRangeWidget()
