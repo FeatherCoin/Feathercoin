@@ -57,7 +57,7 @@ const int nForkOne = 33000;
 // The 2nd hard fork
 const int nForkTwo = 87948;
 // The 3rd hard fork
-const int nForkThree = 200010;
+const int nForkThree = 204639;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
 int64 CTransaction::nMinTxFee = 2000000;
@@ -1076,7 +1076,7 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 {
     int64 nSubsidy = 200 * COIN;
 	
-	if(nHeight >= nForkThree || (fTestNet && (nHeight >= 1081)))
+	if(nHeight >= nForkThree || (fTestNet))
 		nSubsidy = 80 * COIN;
 
     // Subsidy is cut in half every 2100000 blocks, which will occur approximately every 4 years
@@ -1102,14 +1102,10 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 	if (nHeight >= nForkOne)
 		nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
 
-    if ((nHeight >= nForkTwo) || (fTestNet))
+    if (nHeight >= nForkTwo)
 		nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
 
-	if (fTestNet && (nHeight >= 505)) {
-        nTargetTimespan = 150; // 2.5 minute timespan
-	}
-	
-	if (nHeight >= nForkThree || (fTestNet && (nHeight >= 1081))) {
+	if (nHeight >= nForkThree || fTestNet) {
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
 	}
@@ -1157,11 +1153,11 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     printf("RETARGET: nActualTimespan = %d before bounds\n", nActualTimespan);
 
     // Additional averaging over 4x nInterval window
-    if(((nHeight >= nForkTwo) && (nHeight < nForkThree)) || (fTestNet && (nHeight < 2521))) {
+    if((nHeight >= nForkTwo) && (nHeight < nForkThree)) {
         nInterval *= 4;
 
         const CBlockIndex* pindexFirst = pindexLast;
-        for(int i = 0; pindexFirst && i < nInterval && i < nHeight - 1; i++)
+        for(int i = 0; pindexFirst && i < nInterval; i++)
           pindexFirst = pindexFirst->pprev;
 
         int nActualTimespanLong =
@@ -1179,15 +1175,14 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     }
 	
 	// Additional averaging over 15, 120 and 480 block window
-	if((nHeight >= nForkThree) || (fTestNet && (nHeight >= 2521))) {
-
-		// Average over a total of 32x nInterval
+    if((nHeight >= nForkThree) || fTestNet) {
+	
         nInterval *= 480;
 
         int pindexFirstShortTime = 0;
         int pindexFirstMediumTime = 0;
         const CBlockIndex* pindexFirstLong = pindexLast;
-		for(int i = 0; pindexFirstLong && i < nInterval; i++) {
+		for(int i = 0; pindexFirstLong && i < nInterval && i < nHeight - 1; i++) {  // i < nHeight - 1 special rule for testnet
 			pindexFirstLong = pindexFirstLong->pprev;
 			if (i == 14) {
                 pindexFirstShortTime = pindexFirstLong->GetBlockTime();
@@ -2252,7 +2247,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
 
     // Check timestamp against prev it should not be more then 2 times the window
     if (((nHeight > nForkTwo) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 2 * 30 * 60)) ||
-	  ((nHeight >= nForkThree || (fTestNet && (nHeight >= 2521))) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60))) // or 15 minutes
+	  ((nHeight >= nForkThree || fTestNet) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60))) // or 15 minutes
         return error("AcceptBlock() : block's timestamp is too early compare to last block");
 			
         // Check that all transactions are finalized
