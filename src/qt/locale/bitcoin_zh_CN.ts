@@ -23,7 +23,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>
 这是一套试验性软件。
 
-此软件是依据 MIT/X11 软件授权条款发布，详情请见附带的 COPYING 文件，或是以下网站：http://www.opensource.org/licenses/mit-license.php。
+此软件是依据 MIT/X11 软件授权条款发布，详情请见附带的COPYING文件，或是以下网站：http://www.opensource.org/licenses/mit-license.php。
 
 本产品亦包含由 OpenSSL Project 所开发的 OpenSSL Toolkit (http://www.openssl.org) 软件，和由Eric Young (eay@cryptsoft.com) 编写加密软件，以及托马斯伯纳德开发的UPnP应用软件。</translation>
     </message>
@@ -2435,6 +2435,16 @@ Address: %4
         <source>Show transaction details</source>
         <translation>显示交易详情</translation>
     </message>
+    <message>
+        <location line="+1"/>
+        <source>Show transaction total</source>
+        <translation>显示交易合计</translation>
+    </message>   
+    <message>
+        <location line="+1"/>
+        <source>Total:</source>
+        <translation>合计：</translation>
+    </message>      
     <message>
         <location line="+139"/>
         <source>Export Transaction Data</source>
