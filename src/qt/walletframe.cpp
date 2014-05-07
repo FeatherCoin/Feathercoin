@@ -95,6 +95,11 @@ void WalletFrame::gotoAddressBookPage()
         walletStack->gotoAddressBookPage();
 }
 
+void WalletFrame::gotoAccountReportPage()
+{
+    walletStack->gotoAccountReportPage();
+}
+
 void WalletFrame::gotoReceiveCoinsPage()
 {
     walletStack->gotoReceiveCoinsPage();
@@ -158,4 +163,3 @@ WalletView *WalletFrame::currentWalletView()
 {
     return qobject_cast<WalletView*>(walletStack->currentWidget());
 }
-
