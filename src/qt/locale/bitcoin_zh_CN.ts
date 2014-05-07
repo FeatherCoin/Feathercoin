@@ -23,7 +23,7 @@ This product includes software developed by the OpenSSL Project for use in the O
         <translation>
 这是一套试验性软件。
 
-此软件是依据 MIT/X11 软件授权条款发布，详情请见附带的 COPYING 文件，或是以下网站：http://www.opensource.org/licenses/mit-license.php。
+此软件是依据 MIT/X11 软件授权条款发布，详情请见附带的COPYING文件，或是以下网站：http://www.opensource.org/licenses/mit-license.php。
 
 本产品亦包含由 OpenSSL Project 所开发的 OpenSSL Toolkit (http://www.openssl.org) 软件，和由Eric Young (eay@cryptsoft.com) 编写加密软件，以及托马斯伯纳德开发的UPnP应用软件。</translation>
     </message>
@@ -351,6 +351,16 @@ This product includes software developed by the OpenSSL Project for use in the O
         <location line="+1"/>
         <source>Browse transaction history</source>
         <translation>查看交易历史</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Report</source>
+        <translation>报表</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Get my account report</source>
+        <translation>查看账户报表</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2352,6 +2362,16 @@ Address: %4
     </message>
     <message>
         <location line="+1"/>
+        <source>Yesterday</source>
+        <translation>昨天</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Last week</source>
+        <translation>上周</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>This month</source>
         <translation>本月</translation>
     </message>
@@ -2436,6 +2456,16 @@ Address: %4
         <translation>显示交易详情</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Show transaction total</source>
+        <translation>显示交易合计</translation>
+    </message>   
+    <message>
+        <location line="+1"/>
+        <source>Total:</source>
+        <translation>合计：</translation>
+    </message>      
+    <message>
         <location line="+139"/>
         <source>Export Transaction Data</source>
         <translation>导出交易数据</translation>
@@ -2457,9 +2487,203 @@ Address: %4
     </message>
     <message>
         <location line="+1"/>
+        <source>Date:</source>
+        <translation>日期：</translation>
+    </message>    
+    <message>
+        <location line="+1"/>
         <source>Type</source>
         <translation>类别</translation>
     </message>
+    <message>
+        <location line="+1"/>
+        <source>Type:</source>
+        <translation>类别：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Total</source>
+        <translation>合计</translation>
+    </message>    
+    <message>
+        <location line="+1"/>
+        <source>Label</source>
+        <translation>标签</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Address</source>
+        <translation>地址</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Amount</source>
+        <translation>金额</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Error exporting</source>
+        <translation>导出错误</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Could not write to file %1.</source>
+        <translation>无法写入文件 %1。</translation>
+    </message>
+    <message>
+        <location line="+100"/>
+        <source>Range:</source>
+        <translation>范围：</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>to</source>
+        <translation>到</translation>
+    </message>
+</context>
+<context>
+    <name>ReportView</name>
+    <message>
+        <location filename="../reportview.cpp" line="+52"/>
+        <location line="+16"/>
+        <source>All</source>
+        <translation>全部</translation>
+    </message>
+    <message>
+        <location line="-15"/>
+        <source>Today</source>
+        <translation>今天</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This week</source>
+        <translation>本周</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Yesterday</source>
+        <translation>昨天</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Last week</source>
+        <translation>上周</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This month</source>
+        <translation>本月</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Last month</source>
+        <translation>上月</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This year</source>
+        <translation>今年</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Range...</source>
+        <translation>范围...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Received with</source>
+        <translation>接收于</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Sent to</source>
+        <translation>发送到</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>To yourself</source>
+        <translation>到自己</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Mined</source>
+        <translation>挖矿所得</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Other</source>
+        <translation>其他</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Enter address or label to search</source>
+        <translation>输入地址或标签进行搜索</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Min amount</source>
+        <translation>最小金额</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Total:</source>
+        <translation>合计：</translation>
+    </message>      
+    <message>
+        <location line="+139"/>
+        <source>Export Transaction Data</source>
+        <translation>导出交易数据</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Comma separated file (*.csv)</source>
+        <translation>逗号分隔文件(*.csv)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>AddressLabel</source>
+        <translation>地址</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>DateRange</source>
+        <translation>日期范围</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Type</source>
+        <translation>类型</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Payment amount</source>
+        <translation>交易数量</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Number of payments</source>
+        <translation>发生笔数</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Date</source>
+        <translation>日期</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Type</source>
+        <translation>类别</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Total</source>
+        <translation>合计</translation>
+    </message>    
     <message>
         <location line="+1"/>
         <source>Label</source>
