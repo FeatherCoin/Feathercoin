@@ -51,7 +51,9 @@ TransactionView::TransactionView(QWidget *parent) :
 #endif
     dateWidget->addItem(tr("All"), All);
     dateWidget->addItem(tr("Today"), Today);
+    dateWidget->addItem(tr("Yesterday"), Yesterday);
     dateWidget->addItem(tr("This week"), ThisWeek);
+    dateWidget->addItem(tr("Last week"), LastWeek);
     dateWidget->addItem(tr("This month"), ThisMonth);
     dateWidget->addItem(tr("Last month"), LastMonth);
     dateWidget->addItem(tr("This year"), ThisYear);
@@ -189,6 +191,7 @@ void TransactionView::setModel(WalletModel *model)
 #endif
         transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Amount, 100);
         	
+        connect(transactionView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(showTotal()));         
         showTotal();
     }
 }
@@ -211,6 +214,12 @@ void TransactionView::chooseDate(int idx)
                 QDateTime(current),
                 TransactionFilterProxy::MAX_DATE);
         break;
+    case Yesterday:{
+    	  QDate startOfDay = current.addDays(-1);
+        transactionProxyModel->setDateRange(
+                QDateTime(startOfDay),
+                QDateTime(current));
+        } break;
     case ThisWeek: {
         // Find last Monday
         QDate startOfWeek = current.addDays(-(current.dayOfWeek()-1));
@@ -219,6 +228,14 @@ void TransactionView::chooseDate(int idx)
                 TransactionFilterProxy::MAX_DATE);
 
         } break;
+    case LastWeek: {
+    	  //from Monday to Sunday
+        QDate startOfWeek = current.addDays(-(current.dayOfWeek()+6));
+        QDate endOfWeek = current.addDays(-(current.dayOfWeek()-1));
+        transactionProxyModel->setDateRange(
+                QDateTime(startOfWeek),
+                QDateTime(endOfWeek));
+        } break; 
     case ThisMonth:
         transactionProxyModel->setDateRange(
                 QDateTime(QDate(current.year(), current.month(), 1)),
@@ -395,10 +412,9 @@ void TransactionView::showTotal()
 {
 	  float fTotal=0;
 	  for (int i=0;i<=transactionProxyModel->rowCount();i++)
-	  {
 	  	fTotal+=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();
-	  }
-    totalWidget->setText(dateWidget->currentText()+" "+typeWidget->currentText()+":"+QObject::tr("%1").arg(fTotal)+" FTC");
+
+    totalWidget->setText(tr("Date:")+dateWidget->currentText()+" "+tr("Type:")+typeWidget->currentText()+" "+tr("Total:")+QObject::tr("%1").arg(fTotal)+" FTC");
 }
 
 QWidget *TransactionView::createDateRangeWidget()
