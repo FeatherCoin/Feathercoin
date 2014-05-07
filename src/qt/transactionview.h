@@ -34,7 +34,9 @@ public:
     {
         All,
         Today,
+        Yesterday,
         ThisWeek,
+        LastWeek,
         ThisMonth,
         LastMonth,
         ThisYear,
