@@ -1079,8 +1079,9 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 	if(nHeight >= nForkThree || (fTestNet))
 		nSubsidy = 80 * COIN;
 
-    // Subsidy is cut in half every 2100000 blocks, which will occur approximately every 4 years
-    nSubsidy >>= (nHeight / 1799985); // 200,010 blocks at 200FTC and 1,599,975 at 80FTC
+    // Halving subsidy happens every 2,100,000 blocks. The code below takes account for the
+    // fact that the first 204,639 blocks took 2.5 minutes and after changed to 1 minute.
+    nSubsidy >>= (nHeight + 306960) / 2100000;
 
     return nSubsidy + nFees;
 }
