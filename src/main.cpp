@@ -2262,6 +2262,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
 			
         // ppcoin: check that the block satisfies synchronized checkpoint
         if (IsSyncCheckpointEnforced() // checkpoint enforce mode
+             && !IsInitialBlockDownload()  // dont enforce checkpoints while blockchain is being downloaded for the first time
             && !CheckSyncCheckpoint(hash, pindexPrev))
             return error("AcceptBlock() : rejected by synchronized checkpoint");
  
