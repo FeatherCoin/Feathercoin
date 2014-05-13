@@ -34,7 +34,9 @@ public:
     {
         All,
         Today,
+        Yesterday,
         ThisWeek,
+        LastWeek,
         ThisMonth,
         LastMonth,
         ThisYear,
@@ -70,6 +72,7 @@ private slots:
     void copyAmount();
     void copyTxID();
     void showTotal();
+    void showTrans();
 
 signals:
     void doubleClicked(const QModelIndex&);
