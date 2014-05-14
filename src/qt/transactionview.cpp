@@ -51,7 +51,9 @@ TransactionView::TransactionView(QWidget *parent) :
 #endif
     dateWidget->addItem(tr("All"), All);
     dateWidget->addItem(tr("Today"), Today);
+    dateWidget->addItem(tr("Yesterday"), Yesterday);
     dateWidget->addItem(tr("This week"), ThisWeek);
+    dateWidget->addItem(tr("Last week"), LastWeek);
     dateWidget->addItem(tr("This month"), ThisMonth);
     dateWidget->addItem(tr("Last month"), LastMonth);
     dateWidget->addItem(tr("This year"), ThisYear);
@@ -130,6 +132,7 @@ TransactionView::TransactionView(QWidget *parent) :
     QAction *editLabelAction = new QAction(tr("Edit label"), this);
     QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
     QAction *showTotalAction = new QAction(tr("Show transaction total"), this);
+    QAction *showTransAction = new QAction(tr("Trading Show this address"), this);
 
     contextMenu = new QMenu();
     contextMenu->addAction(copyAddressAction);
@@ -139,6 +142,7 @@ TransactionView::TransactionView(QWidget *parent) :
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
     contextMenu->addAction(showTotalAction);
+    contextMenu->addAction(showTransAction);
     
     // Connect actions
     connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
@@ -156,6 +160,7 @@ TransactionView::TransactionView(QWidget *parent) :
     connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
     connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));    
     connect(showTotalAction, SIGNAL(triggered()), this, SLOT(showTotal()));
+    connect(showTransAction, SIGNAL(triggered()), this, SLOT(showTrans()));
 }
 
 void TransactionView::setModel(WalletModel *model)
@@ -189,6 +194,7 @@ void TransactionView::setModel(WalletModel *model)
 #endif
         transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Amount, 100);
         	
+        connect(transactionView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(showTotal()));         
         showTotal();
     }
 }
@@ -211,6 +217,12 @@ void TransactionView::chooseDate(int idx)
                 QDateTime(current),
                 TransactionFilterProxy::MAX_DATE);
         break;
+    case Yesterday:{
+    	  QDate startOfDay = current.addDays(-1);
+        transactionProxyModel->setDateRange(
+                QDateTime(startOfDay),
+                QDateTime(current));
+        } break;
     case ThisWeek: {
         // Find last Monday
         QDate startOfWeek = current.addDays(-(current.dayOfWeek()-1));
@@ -219,6 +231,14 @@ void TransactionView::chooseDate(int idx)
                 TransactionFilterProxy::MAX_DATE);
 
         } break;
+    case LastWeek: {
+    	  //from Monday to Sunday
+        QDate startOfWeek = current.addDays(-(current.dayOfWeek()+6));
+        QDate endOfWeek = current.addDays(-(current.dayOfWeek()-1));
+        transactionProxyModel->setDateRange(
+                QDateTime(startOfWeek),
+                QDateTime(endOfWeek));
+        } break; 
     case ThisMonth:
         transactionProxyModel->setDateRange(
                 QDateTime(QDate(current.year(), current.month(), 1)),
@@ -395,10 +415,23 @@ void TransactionView::showTotal()
 {
 	  float fTotal=0;
 	  for (int i=0;i<=transactionProxyModel->rowCount();i++)
-	  {
 	  	fTotal+=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();
-	  }
-    totalWidget->setText(dateWidget->currentText()+" "+typeWidget->currentText()+":"+QObject::tr("%1").arg(fTotal)+" FTC");
+
+    totalWidget->setText(tr("Date:")+dateWidget->currentText()+" "+tr("Type:")+typeWidget->currentText()+" "+tr("Total:")+QObject::tr("%1").arg(fTotal)+" FTC");
+}
+
+void TransactionView::showTrans()
+{
+    if(!transactionView->selectionModel() ||!model)
+        return;
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+    if(!selection.isEmpty())
+    {
+    	QString address = selection.at(0).data(TransactionTableModel::AddressRole).toString();
+    	addressWidget->setText(address);
+    	changedPrefix(address);
+    	showTotal();
+    }
 }
 
 QWidget *TransactionView::createDateRangeWidget()
