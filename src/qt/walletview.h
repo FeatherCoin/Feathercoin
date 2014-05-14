@@ -13,6 +13,7 @@ class BitcoinGUI;
 class ClientModel;
 class WalletModel;
 class TransactionView;
+class ReportView;
 class OverviewPage;
 class AddressBookPage;
 class SendCoinsDialog;
@@ -60,12 +61,14 @@ private:
 
     OverviewPage *overviewPage;
     QWidget *transactionsPage;
+    QWidget *accountreportPage;
     AddressBookPage *addressBookPage;
     AddressBookPage *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
     SignVerifyMessageDialog *signVerifyMessageDialog;
 
     TransactionView *transactionView;
+    ReportView *reportView;
 
 public slots:
     /** Switch to overview (home) page */
@@ -73,11 +76,13 @@ public slots:
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
     /** Switch to address book page */
-    void gotoAddressBookPage();
+    void gotoAddressBookPage(); 
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage(QString addr = "");
+    /** Switch to account report page */
+    void gotoAccountReportPage();        
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
