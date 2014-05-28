@@ -1,4 +1,4 @@
-#include "transactionview.h"
+#include "reportview.h"
 
 #include "transactionfilterproxy.h"
 #include "transactionrecord.h"
@@ -19,6 +19,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QTableView>
+#include <QStandardItemModel>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QPoint>
@@ -26,9 +27,9 @@
 #include <QLabel>
 #include <QDateTimeEdit>
 
-TransactionView::TransactionView(QWidget *parent) :
+ReportView::ReportView(QWidget *parent) :
     QWidget(parent), model(0), transactionProxyModel(0),
-    transactionView(0)
+    reportView(0)
 {
     // Build filter row
     setContentsMargins(0,0,0,0);
@@ -108,7 +109,7 @@ TransactionView::TransactionView(QWidget *parent) :
     vlayout->addWidget(view);
     vlayout->setSpacing(0);
     int width = view->verticalScrollBar()->sizeHint().width();
-    // Cover scroll bar width with spacing
+     //Cover scroll bar width with spacing
 #ifdef Q_OS_MAC
     hlayout->addSpacing(width+2);
 #else
@@ -118,31 +119,13 @@ TransactionView::TransactionView(QWidget *parent) :
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     view->setTabKeyNavigation(false);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    transactionView = view;
-    
-    totalWidget= new QLabel(tr("Total:"),this);
-    vlayout->addWidget(totalWidget);    
+    reportView = view;
 
     // Actions
-    QAction *copyAddressAction = new QAction(tr("Copy address"), this);
-    QAction *copyLabelAction = new QAction(tr("Copy label"), this);
-    QAction *copyAmountAction = new QAction(tr("Copy amount"), this);
-    QAction *copyTxIDAction = new QAction(tr("Copy transaction ID"), this);
-    QAction *editLabelAction = new QAction(tr("Edit label"), this);
-    QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
     QAction *showTotalAction = new QAction(tr("Show transaction total"), this);
-    QAction *showTransAction = new QAction(tr("Trading Show this address"), this);
 
     contextMenu = new QMenu();
-    contextMenu->addAction(copyAddressAction);
-    contextMenu->addAction(copyLabelAction);
-    contextMenu->addAction(copyAmountAction);
-    contextMenu->addAction(copyTxIDAction);
-    contextMenu->addAction(editLabelAction);
-    contextMenu->addAction(showDetailsAction);
     contextMenu->addAction(showTotalAction);
-    contextMenu->addAction(showTransAction);
     
     // Connect actions
     connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
@@ -150,20 +133,10 @@ TransactionView::TransactionView(QWidget *parent) :
     connect(addressWidget, SIGNAL(textChanged(QString)), this, SLOT(changedPrefix(QString)));
     connect(amountWidget, SIGNAL(textChanged(QString)), this, SLOT(changedAmount(QString)));
 
-    connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SIGNAL(doubleClicked(QModelIndex)));
-    connect(view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextualMenu(QPoint)));
-
-    connect(copyAddressAction, SIGNAL(triggered()), this, SLOT(copyAddress()));
-    connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(copyLabel()));
-    connect(copyAmountAction, SIGNAL(triggered()), this, SLOT(copyAmount()));
-    connect(copyTxIDAction, SIGNAL(triggered()), this, SLOT(copyTxID()));
-    connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
-    connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));    
     connect(showTotalAction, SIGNAL(triggered()), this, SLOT(showTotal()));
-    connect(showTransAction, SIGNAL(triggered()), this, SLOT(showTrans()));
 }
 
-void TransactionView::setModel(WalletModel *model)
+void ReportView::setModel(WalletModel *model)
 {
     this->model = model;
     if(model)
@@ -173,33 +146,28 @@ void TransactionView::setModel(WalletModel *model)
         transactionProxyModel->setDynamicSortFilter(true);
         transactionProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         transactionProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
         transactionProxyModel->setSortRole(Qt::EditRole);
+        
+        reportModel = new QStandardItemModel(this);
+        
+        reportView->setModel(reportModel);
+        reportView->setAlternatingRowColors(true);
+        reportView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        reportView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        reportView->verticalHeader()->hide();
+        reportView->setShowGrid(false);
+        reportView->horizontalHeader()->resizeSection(0, 250);
+        reportView->horizontalHeader()->resizeSection(1, 160);
+        reportView->horizontalHeader()->resizeSection(2, 160);
+        reportView->horizontalHeader()->resizeSection(3, 300);
+        reportView->horizontalHeader()->resizeSection(4, 400);
 
-        transactionView->setModel(transactionProxyModel);
-        transactionView->setAlternatingRowColors(true);
-        transactionView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        transactionView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-        transactionView->setSortingEnabled(true);
-        transactionView->sortByColumn(TransactionTableModel::Status, Qt::DescendingOrder);
-        transactionView->verticalHeader()->hide();
-
-        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Status, 23);
-        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Date, 120);
-        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Type, 120);
-#if QT_VERSION < 0x050000
-        transactionView->horizontalHeader()->setResizeMode(TransactionTableModel::ToAddress, QHeaderView::Stretch);
-#else
-        transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::ToAddress, QHeaderView::Stretch);
-#endif
-        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Amount, 100);
-        	
-        connect(transactionView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(showTotal()));         
+        connect(reportView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(showTotal()));         
         showTotal();
     }
 }
 
-void TransactionView::chooseDate(int idx)
+void ReportView::chooseDate(int idx)
 {
     if(!transactionProxyModel)
         return;
@@ -229,7 +197,6 @@ void TransactionView::chooseDate(int idx)
         transactionProxyModel->setDateRange(
                 QDateTime(startOfWeek),
                 TransactionFilterProxy::MAX_DATE);
-
         } break;
     case LastWeek: {
     	  //from Monday to Sunday
@@ -238,7 +205,7 @@ void TransactionView::chooseDate(int idx)
         transactionProxyModel->setDateRange(
                 QDateTime(startOfWeek),
                 QDateTime(endOfWeek));
-        } break; 
+        } break;        
     case ThisMonth:
         transactionProxyModel->setDateRange(
                 QDateTime(QDate(current.year(), current.month(), 1)),
@@ -262,7 +229,7 @@ void TransactionView::chooseDate(int idx)
     showTotal();
 }
 
-void TransactionView::chooseType(int idx)
+void ReportView::chooseType(int idx)
 {
     if(!transactionProxyModel)
         return;
@@ -271,7 +238,7 @@ void TransactionView::chooseType(int idx)
     showTotal();
 }
 
-void TransactionView::changedPrefix(const QString &prefix)
+void ReportView::changedPrefix(const QString &prefix)
 {
     if(!transactionProxyModel)
         return;
@@ -279,7 +246,7 @@ void TransactionView::changedPrefix(const QString &prefix)
     showTotal();
 }
 
-void TransactionView::changedAmount(const QString &amount)
+void ReportView::changedAmount(const QString &amount)
 {
     if(!transactionProxyModel)
         return;
@@ -295,7 +262,7 @@ void TransactionView::changedAmount(const QString &amount)
     showTotal();
 }
 
-void TransactionView::exportClicked()
+void ReportView::exportClicked()
 {
     // CSV is currently the only supported format
     QString filename = GUIUtil::getSaveFileName(
@@ -308,14 +275,12 @@ void TransactionView::exportClicked()
     CSVModelWriter writer(filename);
 
     // name, column, role
-    writer.setModel(transactionProxyModel);
-    writer.addColumn(tr("Confirmed"), 0, TransactionTableModel::ConfirmedRole);
-    writer.addColumn(tr("Date"), 0, TransactionTableModel::DateRole);
-    writer.addColumn(tr("Type"), TransactionTableModel::Type, Qt::EditRole);
-    writer.addColumn(tr("Label"), 0, TransactionTableModel::LabelRole);
-    writer.addColumn(tr("Address"), 0, TransactionTableModel::AddressRole);
-    writer.addColumn(tr("Amount"), 0, TransactionTableModel::FormattedAmountRole);
-    writer.addColumn(tr("ID"), 0, TransactionTableModel::TxIDRole);
+    writer.setModel(reportModel);
+    writer.addColumn(tr("AddressLabel"), 0, Qt::DisplayRole);
+    writer.addColumn(tr("DateRange"), 1, Qt::DisplayRole);
+    writer.addColumn(tr("Type"), 2, Qt::EditRole);
+    writer.addColumn(tr("Payment amount"), 3, Qt::EditRole);
+    writer.addColumn(tr("Number of payments"), 4, Qt::EditRole);
 
     if(!writer.write())
     {
@@ -324,117 +289,79 @@ void TransactionView::exportClicked()
     }
 }
 
-void TransactionView::contextualMenu(const QPoint &point)
-{
-    QModelIndex index = transactionView->indexAt(point);
-    if(index.isValid())
-    {
-        contextMenu->exec(QCursor::pos());
-    }
-}
-
-void TransactionView::copyAddress()
-{
-    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::AddressRole);
-}
-
-void TransactionView::copyLabel()
-{
-    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::LabelRole);
-}
-
-void TransactionView::copyAmount()
-{
-    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::FormattedAmountRole);
-}
-
-void TransactionView::copyTxID()
-{
-    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::TxIDRole);
-}
-
-void TransactionView::editLabel()
-{
-    if(!transactionView->selectionModel() ||!model)
-        return;
-    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
-    if(!selection.isEmpty())
-    {
-        AddressTableModel *addressBook = model->getAddressTableModel();
-        if(!addressBook)
-            return;
-        QString address = selection.at(0).data(TransactionTableModel::AddressRole).toString();
-        if(address.isEmpty())
-        {
-            // If this transaction has no associated address, exit
-            return;
-        }
-        // Is address in address book? Address book can miss address when a transaction is
-        // sent from outside the UI.
-        int idx = addressBook->lookupAddress(address);
-        if(idx != -1)
-        {
-            // Edit sending / receiving address
-            QModelIndex modelIdx = addressBook->index(idx, 0, QModelIndex());
-            // Determine type of address, launch appropriate editor dialog type
-            QString type = modelIdx.data(AddressTableModel::TypeRole).toString();
-
-            EditAddressDialog dlg(type==AddressTableModel::Receive
-                                         ? EditAddressDialog::EditReceivingAddress
-                                         : EditAddressDialog::EditSendingAddress,
-                                  this);
-            dlg.setModel(addressBook);
-            dlg.loadRow(idx);
-            dlg.exec();
-        }
-        else
-        {
-            // Add sending address
-            EditAddressDialog dlg(EditAddressDialog::NewSendingAddress,
-                                  this);
-            dlg.setModel(addressBook);
-            dlg.setAddress(address);
-            dlg.exec();
-        }
-    }
-}
-
-void TransactionView::showDetails()
-{
-    if(!transactionView->selectionModel())
-        return;
-    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
-    if(!selection.isEmpty())
-    {
-        TransactionDescDialog dlg(selection.at(0));
-        dlg.exec();
-    }
-}
-
-void TransactionView::showTotal()
+void ReportView::showTotal()
 {
 	  float fTotal=0;
-	  for (int i=0;i<=transactionProxyModel->rowCount();i++)
-	  	fTotal+=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();
-
-    totalWidget->setText(tr("Date:")+dateWidget->currentText()+" "+tr("Type:")+typeWidget->currentText()+" "+tr("Total:")+QObject::tr("%1").arg(fTotal)+" FTC");
-}
-
-void TransactionView::showTrans()
-{
-    if(!transactionView->selectionModel() ||!model)
-        return;
-    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
-    if(!selection.isEmpty())
-    {
-    	QString address = selection.at(0).data(TransactionTableModel::AddressRole).toString();
-    	addressWidget->setText(address);
-    	changedPrefix(address);
-    	showTotal();
+	  float iTotal=0;
+	  int i=0;
+	  QString addressname = "";
+	  QVector<QString> addresslist;
+	  QVector<float> totallist;
+	  QVector<float> inlist;
+	  QVector<float> outlist;
+	  QVector<float> timelist;
+	  //accountReport from every address
+	  for (i=0;i<=transactionProxyModel->rowCount()-1;i++)
+	  {
+	  	fTotal+=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();	
+	  	iTotal=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();	
+	  	addressname=transactionProxyModel->data(transactionProxyModel->index(i,3)).toString();
+	  	
+	  	int t = addresslist.indexOf(addressname);
+	  	if (t != -1)
+	  		{
+	  			totallist[t]=totallist.at(t)+iTotal;
+	  			timelist[t]=timelist.at(t)+1;
+	  			if (iTotal>0){
+	  				inlist[t]=inlist.at(t)+iTotal;
+	  			}
+	  			else{
+	  				outlist[t]=outlist.at(t)+iTotal;
+	  			}
+	  		}
+	  	else
+	  		{
+						addresslist.append(addressname);
+						totallist.append(iTotal);
+						timelist.append(1);
+						if (iTotal>0){
+							inlist.append(iTotal);
+							outlist.append(0);
+						}
+						else{
+							outlist.append(iTotal);
+							inlist.append(0);
+						}	  		   
+	  		}	  		
+	  }
+	  int iTimes=i;
+	  
+	  reportModel->clear();
+	  reportModel->setRowCount(addresslist.size()+1); 
+    reportModel->setHorizontalHeaderItem(0, new QStandardItem(tr("AddressLabel")));
+    reportModel->setHorizontalHeaderItem(1, new QStandardItem(tr("DateRange")));
+   	reportModel->setHorizontalHeaderItem(2, new QStandardItem(tr("Type")));
+    reportModel->setHorizontalHeaderItem(3, new QStandardItem(tr("Payment amount")));
+    reportModel->setHorizontalHeaderItem(4, new QStandardItem(tr("Number of payments")));
+ 
+		QString account = "";
+    for (i=0;i!=addresslist.size();++i)
+    { 
+    	reportModel->setItem(i,0,new QStandardItem(addresslist.at(i)));
+    	reportModel->setItem(i,1,new QStandardItem(dateWidget->currentText()));
+    	reportModel->setItem(i,2,new QStandardItem(typeWidget->currentText()));
+    	reportModel->setItem(i,3,new QStandardItem(QObject::tr("%1").arg(totallist.at(i))));
+      reportModel->setItem(i,4,new QStandardItem(QObject::tr("%1").arg(timelist.at(i))));
     }
+    //Total
+  	reportModel->setItem(i+1,0,new QStandardItem(tr("Total")));
+  	reportModel->setItem(i+1,1,new QStandardItem(dateWidget->currentText()));
+  	reportModel->setItem(i+1,2,new QStandardItem(typeWidget->currentText()));
+  	reportModel->setItem(i+1,3,new QStandardItem(QObject::tr("%1").arg(QObject::tr("%1").arg(fTotal))));
+    reportModel->setItem(i+1,4,new QStandardItem(QObject::tr("%1").arg(iTimes)));
 }
 
-QWidget *TransactionView::createDateRangeWidget()
+QWidget *ReportView::createDateRangeWidget()
 {
     dateRangeWidget = new QFrame();
     dateRangeWidget->setFrameStyle(QFrame::Panel | QFrame::Raised);
@@ -470,7 +397,7 @@ QWidget *TransactionView::createDateRangeWidget()
     return dateRangeWidget;
 }
 
-void TransactionView::dateRangeChanged()
+void ReportView::dateRangeChanged()
 {
     if(!transactionProxyModel)
         return;
@@ -479,12 +406,12 @@ void TransactionView::dateRangeChanged()
             QDateTime(dateTo->date()).addDays(1));
 }
 
-void TransactionView::focusTransaction(const QModelIndex &idx)
+void ReportView::focusTransaction(const QModelIndex &idx)
 {
     if(!transactionProxyModel)
         return;
     QModelIndex targetIdx = transactionProxyModel->mapFromSource(idx);
-    transactionView->scrollTo(targetIdx);
-    transactionView->setCurrentIndex(targetIdx);
-    transactionView->setFocus();
+    reportView->scrollTo(targetIdx);
+    reportView->setCurrentIndex(targetIdx);
+    reportView->setFocus();
 }

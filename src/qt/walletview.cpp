@@ -14,6 +14,7 @@
 #include "walletmodel.h"
 #include "optionsmodel.h"
 #include "transactionview.h"
+#include "reportview.h"
 #include "overviewpage.h"
 #include "askpassphrasedialog.h"
 #include "ui_interface.h"
@@ -43,6 +44,13 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
     QHBoxLayout *hbox_buttons = new QHBoxLayout();
     transactionView = new TransactionView(this);
     vbox->addWidget(transactionView);
+    
+    accountreportPage = new QWidget(this);
+    QVBoxLayout *vboxR = new QVBoxLayout();
+    QHBoxLayout *hboxR_buttons = new QHBoxLayout();
+    reportView = new ReportView(this);
+    vboxR->addWidget(reportView);    
+    
     QPushButton *exportButton = new QPushButton(tr("&Export"), this);
     exportButton->setToolTip(tr("Export the data in the current tab to a file"));
 #ifndef Q_OS_MAC // Icons on push buttons are very uncommon on Mac
@@ -52,6 +60,16 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
     hbox_buttons->addWidget(exportButton);
     vbox->addLayout(hbox_buttons);
     transactionsPage->setLayout(vbox);
+    
+    QPushButton *exportRButton = new QPushButton(tr("&Export"), this);
+    exportRButton->setToolTip(tr("Export the data in the current tab to a file"));
+#ifndef Q_OS_MAC // Icons on push buttons are very uncommon on Mac
+    exportRButton->setIcon(QIcon(":/icons/export"));
+#endif    
+    hboxR_buttons->addStretch();
+    hboxR_buttons->addWidget(exportRButton);
+    vboxR->addLayout(hboxR_buttons);
+    accountreportPage->setLayout(vboxR);    
 
     addressBookPage = new AddressBookPage(AddressBookPage::ForEditing, AddressBookPage::SendingTab);
 
@@ -66,6 +84,7 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
     addWidget(addressBookPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
+    addWidget(accountreportPage);
 
     // Clicking on a transaction on the overview page simply sends you to transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), this, SLOT(gotoHistoryPage()));
@@ -82,6 +101,7 @@ WalletView::WalletView(QWidget *parent, BitcoinGUI *_gui):
     connect(receiveCoinsPage, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
     // Clicking on "Export" allows to export the transaction list
     connect(exportButton, SIGNAL(clicked()), transactionView, SLOT(exportClicked()));
+    connect(exportRButton, SIGNAL(clicked()), reportView, SLOT(exportClicked()));
 
     gotoOverviewPage();
 }
@@ -116,6 +136,7 @@ void WalletView::setWalletModel(WalletModel *walletModel)
 
         // Put transaction list in tabs
         transactionView->setModel(walletModel);
+        reportView->setModel(walletModel);
         overviewPage->setWalletModel(walletModel);
         addressBookPage->setModel(walletModel->getAddressTableModel());
         receiveCoinsPage->setModel(walletModel->getAddressTableModel());
@@ -160,6 +181,12 @@ void WalletView::gotoHistoryPage()
 {
     gui->getHistoryAction()->setChecked(true);
     setCurrentWidget(transactionsPage);
+}
+
+void WalletView::gotoAccountReportPage()
+{
+    gui->getAccountReportAction()->setChecked(true);
+    setCurrentWidget(accountreportPage); 
 }
 
 void WalletView::gotoAddressBookPage()

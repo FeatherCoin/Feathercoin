@@ -1772,7 +1772,7 @@ public:
         return true; // return CheckProofOfWork(GetBlockHash(), nBits);
     }
 
-    enum { nMedianTimeSpan=13 };
+    enum { nMedianTimeSpan=11 };
 
     int64 GetMedianTimePast() const
     {
