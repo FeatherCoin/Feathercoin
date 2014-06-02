@@ -154,6 +154,8 @@ void ReportView::setModel(WalletModel *model)
         reportView->setAlternatingRowColors(true);
         reportView->setSelectionBehavior(QAbstractItemView::SelectRows);
         reportView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        reportView->setSortingEnabled(true);
+        reportView->sortByColumn(0, Qt::DescendingOrder);
         reportView->verticalHeader()->hide();
         reportView->setShowGrid(false);
         reportView->horizontalHeader()->resizeSection(0, 250);
@@ -353,12 +355,22 @@ void ReportView::showTotal()
     	reportModel->setItem(i,3,new QStandardItem(QObject::tr("%1").arg(totallist.at(i))));
       reportModel->setItem(i,4,new QStandardItem(QObject::tr("%1").arg(timelist.at(i))));
     }
-    //Total
-  	reportModel->setItem(i+1,0,new QStandardItem(tr("Total")));
-  	reportModel->setItem(i+1,1,new QStandardItem(dateWidget->currentText()));
-  	reportModel->setItem(i+1,2,new QStandardItem(typeWidget->currentText()));
-  	reportModel->setItem(i+1,3,new QStandardItem(QObject::tr("%1").arg(QObject::tr("%1").arg(fTotal))));
-    reportModel->setItem(i+1,4,new QStandardItem(QObject::tr("%1").arg(iTimes)));
+    //Total    
+  	reportModel->setItem(i,0,new QStandardItem(tr("Total")));
+  	reportModel->setItem(i,1,new QStandardItem(dateWidget->currentText()));
+  	reportModel->setItem(i,2,new QStandardItem(typeWidget->currentText()));
+  	reportModel->setItem(i,3,new QStandardItem(QObject::tr("%1").arg(QObject::tr("%1").arg(fTotal))));
+    reportModel->setItem(i,4,new QStandardItem(QObject::tr("%1").arg(iTimes)));
+    reportModel->item(i,0)->setTextAlignment(Qt::AlignCenter);
+    reportModel->item(i,1)->setTextAlignment(Qt::AlignCenter);
+    reportModel->item(i,2)->setTextAlignment(Qt::AlignCenter);
+    reportModel->item(i,3)->setTextAlignment(Qt::AlignCenter);
+    reportModel->item(i,4)->setTextAlignment(Qt::AlignCenter);
+    reportModel->item(i,0)->setFont(QFont("Times", 10, QFont::Black));
+    reportModel->item(i,1)->setFont(QFont("Times", 10, QFont::Black));
+    reportModel->item(i,2)->setFont(QFont("Times", 10, QFont::Black));
+    reportModel->item(i,3)->setFont(QFont("Times", 10, QFont::Black));
+    reportModel->item(i,4)->setFont(QFont("Times", 10, QFont::Black));
 }
 
 QWidget *ReportView::createDateRangeWidget()
