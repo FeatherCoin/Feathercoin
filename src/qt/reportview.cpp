@@ -149,6 +149,7 @@ void ReportView::setModel(WalletModel *model)
         transactionProxyModel->setSortRole(Qt::EditRole);
         
         reportModel = new QStandardItemModel(this);
+        reportModel->setSortRole(Qt::EditRole);
         
         reportView->setModel(reportModel);
         reportView->setAlternatingRowColors(true);
@@ -158,11 +159,6 @@ void ReportView::setModel(WalletModel *model)
         reportView->sortByColumn(0, Qt::DescendingOrder);
         reportView->verticalHeader()->hide();
         reportView->setShowGrid(false);
-        reportView->horizontalHeader()->resizeSection(0, 250);
-        reportView->horizontalHeader()->resizeSection(1, 160);
-        reportView->horizontalHeader()->resizeSection(2, 160);
-        reportView->horizontalHeader()->resizeSection(3, 300);
-        reportView->horizontalHeader()->resizeSection(4, 400);
 
         connect(reportView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(showTotal()));         
         showTotal();
@@ -345,7 +341,12 @@ void ReportView::showTotal()
    	reportModel->setHorizontalHeaderItem(2, new QStandardItem(tr("Type")));
     reportModel->setHorizontalHeaderItem(3, new QStandardItem(tr("Payment amount")));
     reportModel->setHorizontalHeaderItem(4, new QStandardItem(tr("Number of payments")));
- 
+    reportView->horizontalHeader()->resizeSection(0, 270);
+    reportView->horizontalHeader()->resizeSection(1, 120);
+    reportView->horizontalHeader()->resizeSection(2, 120);
+    reportView->horizontalHeader()->resizeSection(3, 140);
+    reportView->horizontalHeader()->resizeSection(4, 140);
+        
 		QString account = "";
     for (i=0;i!=addresslist.size();++i)
     { 
