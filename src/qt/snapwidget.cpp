@@ -1,5 +1,11 @@
 
 #include "snapwidget.h"
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#include <QDialog>
+#else
+#include <QDesktopWidget>
+#endif
 #include <zxing/common/GlobalHistogramBinarizer.h>
 #include <zxing/Binarizer.h>
 #include <zxing/BinaryBitmap.h>
@@ -33,10 +39,17 @@ void SnapWidget::on_snapButton_clicked()
     _y = geometry().y() + cancelButton->height();
     _w = geometry().width();
     _h = geometry().height() - cancelButton->height();
-    QScreen *screen = QGuiApplication::primaryScreen();
     QPixmap p;
-    if (screen) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    QScreen *screen = QGuiApplication::primaryScreen();
+    if (screen) {   
         p = screen->grabWindow(0, _x, _y, _w, _h);
+        }
+#else
+    p = QPixmap::grabWindow(QApplication::desktop()->winId(), _x, _y, _w, _h);
+#endif
+    
+    if (!p.isNull()) {
         QImage image = p.toImage();
         Ref<Result> r;
         MultiFormatReader* qrDecoder = new MultiFormatReader();
