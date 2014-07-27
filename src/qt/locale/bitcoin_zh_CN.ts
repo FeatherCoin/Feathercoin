@@ -35,7 +35,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <source>The Feathercoin developers</source>
-        <translation>Feathercoin-qt 客户端开发团队</translation>
+        <translation>羽毛币开发团队</translation>
     </message>
 </context>
 <context>
@@ -964,6 +964,11 @@ Address: %4
         <translation>在交易清单中&amp;显示羽毛币地址</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Display coin &amp;control features (experts only!)</source>
+        <translation>显示币控制功能（仅专家用）</translation>
+    </message>
+    <message>
         <location line="+71"/>
         <source>&amp;OK</source>
         <translation>&amp;确定</translation>
@@ -1050,6 +1055,16 @@ Address: %4
         <translation>未成熟的：</translation>
     </message>
     <message>
+        <location line="+107"/>
+        <source>Share:</source>
+        <translation>股份：</translation>
+    </message>   
+    <message>
+        <location line="+107"/>
+        <source>Total:</source>
+        <translation>总额：</translation>
+    </message>     
+    <message>
         <location line="+13"/>
         <source>Mined balance that has not yet matured</source>
         <translation>尚未成熟的挖矿收入余额</translation>
@@ -1069,6 +1084,31 @@ Address: %4
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the current balance</source>
         <translation>尚未确认的交易总额, 未计入当前余额</translation>
     </message>
+    <message>
+        <location line="+100"/>
+        <source>Overview</source>
+        <translation>总览</translation>
+    </message>
+    <message>
+        <location line="+100"/>
+        <source>Current Block :</source>
+        <translation>当前块号：</translation>
+    </message>  
+    <message>
+        <location line="+100"/>
+        <source>Current Difficulty :</source>
+        <translation>当前开采难度：</translation>
+    </message> 
+    <message>
+        <location line="+100"/>
+        <source>Current Version </source>
+        <translation>当前版本号 </translation>
+    </message>
+    <message>
+        <location line="+100"/>
+        <source>standard</source>
+        <translation>标准版</translation>
+    </message>    
     <message>
         <location filename="../overviewpage.cpp" line="+116"/>
         <location line="+1"/>
@@ -1382,8 +1422,7 @@ Address: %4
         <location line="+50"/>
         <source>Send to multiple recipients at once</source>
         <translation>一次发送给多个接收者</translation>
-    </message>
-           
+    </message>           
     <message>
         <location line="+3"/>
         <source>Add &amp;Recipient</source>
@@ -1483,6 +1522,11 @@ Address: %4
         <translation>选择交易源地址</translation>
     </message>
     <message>
+        <location filename="../coincontroldialog.cpp" line="+42"/>
+        <source>Copy address</source>
+        <translation>复制地址</translation>
+    </message>
+    <message>
         <location line="+34"/>
         <source>Quantity:</source>
         <translation>总量：</translation>
@@ -1566,12 +1610,7 @@ Address: %4
         <location line="+5"/>
         <source>Priority</source>
         <translation>优先级</translation>
-    </message>
-    <message>
-        <location filename="../coincontroldialog.cpp" line="+42"/>
-        <source>Copy address</source>
-        <translation>复制地址</translation>
-    </message>
+    </message>    
     <message>
         <location line="+1"/>
         <source>Copy label</source>
@@ -2652,7 +2691,7 @@ Address: %4
     <message>
         <location line="+1"/>
         <source>AddressLabel</source>
-        <translation>地址</translation>
+        <translation>地址标签</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2678,11 +2717,6 @@ Address: %4
         <location line="+1"/>
         <source>Date</source>
         <translation>日期</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Type</source>
-        <translation>类别</translation>
     </message>
     <message>
         <location line="+1"/>
