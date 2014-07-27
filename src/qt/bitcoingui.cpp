@@ -149,6 +149,12 @@ BitcoinGUI::BitcoinGUI(QWidget *parent) :
 
     // Initially wallet actions should be disabled
     setWalletActionsEnabled(false);
+    
+    
+    QPalette palette;
+    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/images/mainbg")));
+    this->setPalette(palette);
+    this->setAutoFillBackground(true);
 }
 
 BitcoinGUI::~BitcoinGUI()
@@ -276,24 +282,28 @@ void BitcoinGUI::createMenuBar()
 #endif
 
     // Configure the menus
-    QMenu *file = appMenuBar->addMenu(tr("&File"));
-    file->addAction(backupWalletAction);
+    QMenu *file = appMenuBar->addMenu(tr("&Start"));
     file->addAction(signMessageAction);
     file->addAction(verifyMessageAction);
     file->addSeparator();
+    file->addAction(openRPCConsoleAction);
+    file->addAction(optionsAction);
+    file->addSeparator();
     file->addAction(quitAction);
 
-    QMenu *settings = appMenuBar->addMenu(tr("&Settings"));
+    QMenu *settings = appMenuBar->addMenu(tr("&Wallet"));
+    settings->addAction(backupWalletAction);
     settings->addAction(encryptWalletAction);
     settings->addAction(changePassphraseAction);
     settings->addSeparator();
-    settings->addAction(optionsAction);
+    settings->addAction(receiveCoinsAction);
+    settings->addAction(addressBookAction);
+    settings->addSeparator();
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
-    help->addAction(openRPCConsoleAction);
-    help->addSeparator();
     help->addAction(aboutAction);
     help->addAction(aboutQtAction);
+    help->addSeparator();
 }
 
 void BitcoinGUI::createToolBars()
