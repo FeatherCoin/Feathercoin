@@ -9,6 +9,7 @@
 #include "main.h"
 #include "checkpoints.h"
 #include "ui_interface.h"
+#include "bitcoinrpc.h"
 
 #include <QDateTime>
 #include <QTimer>
@@ -42,6 +43,11 @@ int ClientModel::getNumConnections() const
 int ClientModel::getNumBlocks() const
 {
     return nBestHeight;
+}
+
+double ClientModel::getCurrDifficulty() const
+{
+    return GetDifficulty();
 }
 
 int ClientModel::getNumBlocksAtStartup()
