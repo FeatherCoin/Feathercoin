@@ -48,6 +48,8 @@ public:
     int getNumBlocksOfPeers() const;
     //! Return warnings to be displayed in status bar
     QString getStatusBarWarnings() const;
+    // Return Current Difficulty
+    double getCurrDifficulty() const;
 
     QString formatFullVersion() const;
     QString formatBuildDate() const;
@@ -60,8 +62,8 @@ private:
 
     int cachedNumBlocks;
     int cachedNumBlocksOfPeers;
-	bool cachedReindexing;
-	bool cachedImporting;
+    bool cachedReindexing;
+    bool cachedImporting;
 
     int numBlocksAtStartup;
 
