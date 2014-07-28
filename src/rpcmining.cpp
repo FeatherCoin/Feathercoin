@@ -228,14 +228,10 @@ Value getworkex(const Array& params, bool fHelp)
         static unsigned int nExtraNonce = 0;
         IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
 
-        // Save
         mapNewBlock[pblock->hashMerkleRoot] = make_pair(pblock, pblock->vtx[0].vin[0].scriptSig);
 
-        // Pre-build hash buffers
-        char pmidstate[32];
-        char pdata[128];
-        char phash1[64];
-        FormatHashBuffers(pblock, pmidstate, pdata, phash1);
+        unsigned int pdata[32];
+        FormatDataBuffer(pblock, pdata);
 
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
@@ -270,16 +266,17 @@ Value getworkex(const Array& params, bool fHelp)
         if(params.size() == 2)
             coinbase = ParseHex(params[1].get_str());
 
-        if (vchData.size() != 128)
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter");
+        if(vchData.size() < 80)
+            throw(JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter"));
             
         CBlock* pdata = (CBlock*)&vchData[0];
 
-        // Byte reverse
-        for (int i = 0; i < 128/4; i++)
-            ((unsigned int*)pdata)[i] = ByteReverse(((unsigned int*)pdata)[i]);
+        if(!fNeoScrypt) {
+            unsigned int i;
+            for(i = 9; i < 20; i++)
+                ((unsigned int *) pdata)[i] = ByteReverse(((unsigned int *) pdata)[i]);
+       }
 
-        // Get saved block
         if (!mapNewBlock.count(pdata->hashMerkleRoot))
             return false;
         CBlock* pblock = mapNewBlock[pdata->hashMerkleRoot].first;
@@ -305,11 +302,10 @@ Value getwork(const Array& params, bool fHelp)
         throw runtime_error(
             "getwork [data]\n"
             "If [data] is not specified, returns formatted hash data to work on:\n"
-            "  \"midstate\" : precomputed hash state after hashing the first half of the data (DEPRECATED)\n" // deprecated
             "  \"data\" : block data\n"
-            "  \"hash1\" : formatted hash buffer for second hash (DEPRECATED)\n" // deprecated
             "  \"target\" : little endian hash target\n"
-            "If [data] is specified, tries to solve the block and returns true if it was successful.");
+            "  \"algorithm\" : hashing algorithm expected (optional)\n"
+            "If [data] is specified, verifies the PoW hash against target and returns true if successful.");
 
     if (vNodes.empty())
         throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "Feathercoin is not connected!");
@@ -367,47 +363,61 @@ Value getwork(const Array& params, bool fHelp)
         static unsigned int nExtraNonce = 0;
         IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
 
-        // Save
+        // Save this block for the future use
         mapNewBlock[pblock->hashMerkleRoot] = make_pair(pblock, pblock->vtx[0].vin[0].scriptSig);
 
-        // Pre-build hash buffers
-        char pmidstate[32];
-        char pdata[128];
-        char phash1[64];
-        FormatHashBuffers(pblock, pmidstate, pdata, phash1);
+        // Prepare the block header for transmission
+        unsigned int pdata[32];
+        FormatDataBuffer(pblock, pdata);
 
+        // Get the current decompressed block target
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
         Object result;
-        result.push_back(Pair("midstate", HexStr(BEGIN(pmidstate), END(pmidstate)))); // deprecated
-        result.push_back(Pair("data",     HexStr(BEGIN(pdata), END(pdata))));
-        result.push_back(Pair("hash1",    HexStr(BEGIN(phash1), END(phash1)))); // deprecated
+        result.push_back(Pair("data",     HexStr(BEGIN(pdata), fNeoScrypt ? (char *) &pdata[21] : END(pdata))));
         result.push_back(Pair("target",   HexStr(BEGIN(hashTarget), END(hashTarget))));
-        return result;
+        /* Optional */
+        if(fNeoScrypt)
+          result.push_back(Pair("algorithm", "neoscrypt"));
+        else
+          result.push_back(Pair("algorithm", "scrypt:1024,1,1"));
+        return(result);
     }
     else
     {
-        // Parse parameters
+        // Data received
         vector<unsigned char> vchData = ParseHex(params[0].get_str());
-        if (vchData.size() != 128)
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter");
+
+        // Must be no less actual data than sent previously
+        if(vchData.size() < 80)
+          throw(JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter"));
+
         CBlock* pdata = (CBlock*)&vchData[0];
 
-        // Byte reverse
-        for (int i = 0; i < 128/4; i++)
-            ((unsigned int*)pdata)[i] = ByteReverse(((unsigned int*)pdata)[i]);
+        if(!fNeoScrypt) {
+            unsigned int i;
+            /* nVersion and hashPrevBlock aren't needed */
+            for(i = 9; i < 20; i++)
+              /* Convert BE to LE */
+              ((unsigned int *) pdata)[i] = ByteReverse(((unsigned int *) pdata)[i]);
+        }
 
-        // Get saved block
+        // Pick up the block contents saved previously
         if (!mapNewBlock.count(pdata->hashMerkleRoot))
             return false;
         CBlock* pblock = mapNewBlock[pdata->hashMerkleRoot].first;
 
+        // Replace with the data received
         pblock->nTime = pdata->nTime;
         pblock->nNonce = pdata->nNonce;
         pblock->vtx[0].vin[0].scriptSig = mapNewBlock[pdata->hashMerkleRoot].second;
+        
+        // Re-build the merkle root
         pblock->hashMerkleRoot = pblock->BuildMerkleTree();
 
         assert(pwalletMain != NULL);
+        
+        // Verify the resulting hash against target
         return CheckWork(pblock, *pwalletMain, *pMiningKey);
     }
 }
