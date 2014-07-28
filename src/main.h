@@ -9,7 +9,7 @@
 #include "sync.h"
 #include "net.h"
 #include "script.h"
-#include "scrypt.h"
+#include "neoscrypt.h"
 
 #include <list>
 
@@ -22,6 +22,15 @@ class CReserveKey;
 class CAddress;
 class CInv;
 class CNode;
+
+/* Maturity threshold for PoW base transactions, in blocks (confirmations) */
+extern int nBaseMaturity;
+static const int BASE_MATURITY = 100;
+static const int BASE_MATURITY_TESTNET = 100;
+/* Offset for the above to allow safe network propagation, in blocks (confirmations) */
+static const int BASE_MATURITY_OFFSET = 1;
+/* Maturity threshold for regular transactions, in blocks (confirmations) */
+static const int TX_MATURITY = 6;
 
 struct CBlockIndexWorkComparator;
 
@@ -56,8 +65,6 @@ static const int64 DUST_HARD_LIMIT = 1000;   // 0.00001 FTC mininput
 /** No amount larger than this (in satoshi) is valid */
 static const int64 MAX_MONEY = 336000000 * COIN;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
-/** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
-static const int COINBASE_MATURITY = 100;
 /** Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp. */
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 /** Maximum number of script-checking threads allowed */
@@ -68,6 +75,16 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
+// Hard and soft fork data
+const int nForkOne = 33000;
+const int nForkTwo = 87948;
+const int nForkThree = 204639;
+const int nForkFour = 400000;
+
+static const int nTestnetFork   =  600;
+
+static const unsigned int nSwitchV2            = 1409356800; // Sat, 30 Aug 2014 00:00:00 GMT
+static const unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
 
 extern CScript COINBASE_FLAGS;
 
@@ -167,13 +184,11 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey);
 /** Modify the extranonce in a block */
 void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& nExtraNonce);
 /** Do mining precalculation */
-void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash1);
+void FormatDataBuffer(CBlock *pblock, unsigned int *pdata);
 /** Check mined block */
 bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey);
 /** Check whether a block hash satisfies the proof-of-work requirement specified by nBits */
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
-/** Calculate the minimum amount of work a received block needs, without knowing its direct parent */
-unsigned int ComputeMinWork(unsigned int nBase, int64 nTime);
 /** Get the number of active peers */
 int GetNumBlocksOfPeers();
 /** Check whether we are doing an initial block download (synchronizing from disk or network) */
@@ -192,6 +207,8 @@ CBlockIndex * InsertBlockIndex(uint256 hash);
 bool VerifySignature(const CCoins& txFrom, const CTransaction& txTo, unsigned int nIn, unsigned int flags, int nHashType);
 /** Abort with a message */
 bool AbortNode(const std::string &msg);
+/* Returns number of coins plus fees for a given height and fees */
+int64 GetBlockValue(int nHeight, int64 nFees);
 
 
 
@@ -1364,11 +1381,54 @@ public:
         vMerkleTree.clear();
     }
 
-    uint256 GetPoWHash() const
-    {
-        uint256 thash;
-        scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
-        return thash;
+    /* Calculates block proof-of-work hash using either NeoScrypt or Scrypt */
+    uint256 GetPoWHash() const {
+        unsigned int profile = 0x0;
+        uint256 hash;
+
+        /* All blocks generated up to this time point are Scrypt only */
+        if((fTestNet && (nTime < nTestnetSwitchV2)) ||
+          (!fTestNet && (nTime < nSwitchV2))) {
+            profile = 0x3;
+        } else {
+            /* All these blocks must be v2+ with valid nHeight */
+            int nHeight = GetBlockHeight();
+            if(fTestNet) {
+                if(nHeight < nTestnetFork)
+                  profile = 0x3;
+            } else {
+                if(nHeight < nForkFour)
+                  profile = 0x3;
+            }
+        }
+
+        neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);
+
+        return(hash);
+    }
+
+    /* Extracts block height from v2+ coin base;
+     * ignores nVersion because it's unrealiable */
+    int GetBlockHeight() const {
+        /* Prevents a crash if called on a block header alone */
+        if(vtx.size()) {
+            /* Serialised CScript */
+            std::vector<unsigned char>::const_iterator scriptsig = vtx[0].vin[0].scriptSig.begin();
+            unsigned char i, scount = scriptsig[0];
+            /* Optimise: nTime is 4 bytes always,
+             * nHeight must be less for a long time;
+             * check against a threshold when the time comes */
+            if(scount < 4) {
+                int height = 0;
+                unsigned char *pheight = (unsigned char *) &height;
+                for(i = 0; i < scount; i++)
+                  pheight[i] = scriptsig[i + 1];
+                /* v2+ block with nHeight in coin base */
+                return(height);
+            }
+        }
+        /* Not found */
+        return(-1);
     }
 
     CBlockHeader GetBlockHeader() const
@@ -1481,10 +1541,6 @@ public:
         catch (std::exception &e) {
             return error("%s() : deserialize or I/O error", __PRETTY_FUNCTION__);
         }
-
-        // Check the header
-        if (!CheckProofOfWork(GetPoWHash(), nBits))
-            return error("CBlock::ReadFromDisk() : errors in block header");
 
         return true;
     }
