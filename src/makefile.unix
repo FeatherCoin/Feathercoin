@@ -138,7 +138,7 @@ obj/neoscrypt.o: neoscrypt.c
 	gcc -O2 -fomit-frame-pointer -DSHA256 -c -o $@ $^
 
 obj/neoscrypt_asm.o: neoscrypt_asm.S
-  	gcc -c -o $@ $^
+	gcc -c -o $@ $^
 
 obj/build.h: FORCE
 	/bin/sh ../share/genbuild.sh obj/build.h
