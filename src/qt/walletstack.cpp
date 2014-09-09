@@ -140,6 +140,12 @@ void WalletStack::changePassphrase()
     if (walletView) walletView->changePassphrase();
 }
 
+void WalletStack::lockWallet()
+{
+    WalletView *walletView = (WalletView*)currentWidget();
+    if (walletView) walletView->lockWallet();
+}
+
 void WalletStack::unlockWallet()
 {
     WalletView *walletView = (WalletView*)currentWidget();
