@@ -269,6 +269,18 @@ void WalletView::changePassphrase()
     dlg.exec();
 }
 
+void WalletView::lockWallet()
+{
+    if(!walletModel)
+        return;
+    // Lock wallet when requested by wallet model
+    if (walletModel->getEncryptionStatus() == WalletModel::Unlocked)
+    {
+        SecureString dummy;
+        walletModel->setWalletLocked(true, dummy);
+    }
+}
+
 void WalletView::unlockWallet()
 {
     if(!walletModel)
