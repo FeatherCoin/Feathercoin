@@ -38,6 +38,7 @@ static map<string, boost::shared_ptr<deadline_timer> > deadlineTimers;
 static ssl::context* rpc_ssl_context = NULL;
 static boost::thread_group* rpc_worker_group = NULL;
 static boost::asio::io_service::work *rpc_dummy_work = NULL;
+static std::vector< boost::shared_ptr<ip::tcp::acceptor> > rpc_acceptors;
 
 void RPCTypeCheck(const Array& params,
                   const list<Value_type>& typesExpected,
@@ -206,10 +207,10 @@ Value stop(const Array& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "stop\n"
-            "\nStop Bitcoin server.");
+            "\nStop Feathercoin server.");
     // Shutdown will take long enough that the response should get back
     StartShutdown();
-    return "Bitcoin server stopping";
+    return "Feathercoin server stopping";
 }
 
 
@@ -228,6 +229,7 @@ static const CRPCCommand vRPCCommands[] =
     { "stop",                   &stop,                   true,      true,       false },
 
     /* P2P networking */
+    { "getnetworkinfo",         &getnetworkinfo,         true,      false,      false },
     { "addnode",                &addnode,                true,      true,       false },
     { "getaddednodeinfo",       &getaddednodeinfo,       true,      true,       false },
     { "getconnectioncount",     &getconnectioncount,     true,      false,      false },
@@ -236,6 +238,7 @@ static const CRPCCommand vRPCCommands[] =
     { "ping",                   &ping,                   true,      false,      false },
 
     /* Block chain and UTXO */
+    { "getblockchaininfo",      &getblockchaininfo,      true,      false,      false },
     { "getbestblockhash",       &getbestblockhash,       true,      false,      false },
     { "getblockcount",          &getblockcount,          true,      false,      false },
     { "getblock",               &getblock,               false,     false,      false },
@@ -433,7 +436,7 @@ template <typename Protocol, typename SocketAcceptorService>
 static void RPCAcceptHandler(boost::shared_ptr< basic_socket_acceptor<Protocol, SocketAcceptorService> > acceptor,
                              ssl::context& context,
                              bool fUseSSL,
-                             AcceptedConnection* conn,
+                             boost::shared_ptr< AcceptedConnection > conn,
                              const boost::system::error_code& error);
 
 /**
@@ -445,7 +448,7 @@ static void RPCListen(boost::shared_ptr< basic_socket_acceptor<Protocol, SocketA
                    const bool fUseSSL)
 {
     // Accept connection
-    AcceptedConnectionImpl<Protocol>* conn = new AcceptedConnectionImpl<Protocol>(acceptor->get_io_service(), context, fUseSSL);
+    boost::shared_ptr< AcceptedConnectionImpl<Protocol> > conn(new AcceptedConnectionImpl<Protocol>(acceptor->get_io_service(), context, fUseSSL));
 
     acceptor->async_accept(
             conn->sslStream.lowest_layer(),
@@ -455,7 +458,7 @@ static void RPCListen(boost::shared_ptr< basic_socket_acceptor<Protocol, SocketA
                 boost::ref(context),
                 fUseSSL,
                 conn,
-                boost::asio::placeholders::error));
+                _1));
 }
 
 
@@ -466,21 +469,20 @@ template <typename Protocol, typename SocketAcceptorService>
 static void RPCAcceptHandler(boost::shared_ptr< basic_socket_acceptor<Protocol, SocketAcceptorService> > acceptor,
                              ssl::context& context,
                              const bool fUseSSL,
-                             AcceptedConnection* conn,
+                             boost::shared_ptr< AcceptedConnection > conn,
                              const boost::system::error_code& error)
 {
     // Immediately start accepting new connections, except when we're cancelled or our socket is closed.
     if (error != asio::error::operation_aborted && acceptor->is_open())
         RPCListen(acceptor, context, fUseSSL);
 
-    AcceptedConnectionImpl<ip::tcp>* tcp_conn = dynamic_cast< AcceptedConnectionImpl<ip::tcp>* >(conn);
+    AcceptedConnectionImpl<ip::tcp>* tcp_conn = dynamic_cast< AcceptedConnectionImpl<ip::tcp>* >(conn.get());
 
-    // TODO: Actually handle errors
     if (error)
     {
-        delete conn;
+        // TODO: Actually handle errors
+        LogPrintf("%s: Error: %s\n", __func__, error.message());
     }
-
     // Restrict callers by IP.  It is important to
     // do this before starting client thread, to filter out
     // certain DoS and misbehaving clients.
@@ -489,12 +491,11 @@ static void RPCAcceptHandler(boost::shared_ptr< basic_socket_acceptor<Protocol, 
         // Only send a 403 if we're not using SSL to prevent a DoS during the SSL handshake.
         if (!fUseSSL)
             conn->stream() << HTTPReply(HTTP_FORBIDDEN, "", false) << std::flush;
-        delete conn;
+        conn->close();
     }
     else {
-        ServiceConnection(conn);
+        ServiceConnection(conn.get());
         conn->close();
-        delete conn;
     }
 }
 
@@ -506,7 +507,7 @@ void StartRPCThreads()
     {
         unsigned char rand_pwd[32];
         RAND_bytes(rand_pwd, 32);
-        string strWhatAmI = "To use bitcoind";
+        string strWhatAmI = "To use feathercoind";
         if (mapArgs.count("-server"))
             strWhatAmI = strprintf(_("To use the %s option"), "\"-server\"");
         else if (mapArgs.count("-daemon"))
@@ -515,13 +516,13 @@ void StartRPCThreads()
             _("%s, you must set a rpcpassword in the configuration file:\n"
               "%s\n"
               "It is recommended you use the following random password:\n"
-              "rpcuser=bitcoinrpc\n"
+              "rpcuser=feathercoinrpc\n"
               "rpcpassword=%s\n"
               "(you do not need to remember this password)\n"
               "The username and password MUST NOT be the same.\n"
               "If the file does not exist, create it with owner-readable-only file permissions.\n"
               "It is also recommended to set alertnotify so you are notified of problems;\n"
-              "for example: alertnotify=echo %%s | mail -s \"Bitcoin Alert\" admin@foo.com\n"),
+              "for example: alertnotify=echo %%s | mail -s \"Feathercoin Alert\" admin@foo.com\n"),
                 strWhatAmI,
                 GetConfigFile().string(),
                 EncodeBase58(&rand_pwd[0],&rand_pwd[0]+32)),
@@ -559,12 +560,12 @@ void StartRPCThreads()
     asio::ip::address bindAddress = loopback ? asio::ip::address_v6::loopback() : asio::ip::address_v6::any();
     ip::tcp::endpoint endpoint(bindAddress, GetArg("-rpcport", Params().RPCPort()));
     boost::system::error_code v6_only_error;
-    boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(*rpc_io_service));
 
     bool fListening = false;
     std::string strerr;
     try
     {
+        boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(*rpc_io_service));
         acceptor->open(endpoint.protocol());
         acceptor->set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 
@@ -576,13 +577,13 @@ void StartRPCThreads()
 
         RPCListen(acceptor, *rpc_ssl_context, fUseSSL);
 
+        rpc_acceptors.push_back(acceptor);
         fListening = true;
     }
     catch(boost::system::system_error &e)
     {
         strerr = strprintf(_("An error occurred while setting up the RPC port %u for listening on IPv6, falling back to IPv4: %s"), endpoint.port(), e.what());
     }
-
     try {
         // If dual IPv6/IPv4 failed (or we're opening loopback interfaces only), open IPv4 separately
         if (!fListening || loopback || v6_only_error)
@@ -590,7 +591,7 @@ void StartRPCThreads()
             bindAddress = loopback ? asio::ip::address_v4::loopback() : asio::ip::address_v4::any();
             endpoint.address(bindAddress);
 
-            acceptor.reset(new ip::tcp::acceptor(*rpc_io_service));
+            boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(*rpc_io_service));
             acceptor->open(endpoint.protocol());
             acceptor->set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
             acceptor->bind(endpoint);
@@ -598,6 +599,7 @@ void StartRPCThreads()
 
             RPCListen(acceptor, *rpc_ssl_context, fUseSSL);
 
+            rpc_acceptors.push_back(acceptor);
             fListening = true;
         }
     }
@@ -634,7 +636,25 @@ void StopRPCThreads()
 {
     if (rpc_io_service == NULL) return;
 
+    // First, cancel all timers and acceptors
+    // This is not done automatically by ->stop(), and in some cases the destructor of
+    // asio::io_service can hang if this is skipped.
+    boost::system::error_code ec;
+    BOOST_FOREACH(const boost::shared_ptr<ip::tcp::acceptor> &acceptor, rpc_acceptors)
+    {
+        acceptor->cancel(ec);
+        if (ec)
+            LogPrintf("%s: Warning: %s when cancelling acceptor", __func__, ec.message());
+    }
+    rpc_acceptors.clear();
+    BOOST_FOREACH(const PAIRTYPE(std::string, boost::shared_ptr<deadline_timer>) &timer, deadlineTimers)
+    {
+        timer.second->cancel(ec);
+        if (ec)
+            LogPrintf("%s: Warning: %s when cancelling timer", __func__, ec.message());
+    }
     deadlineTimers.clear();
+
     rpc_io_service->stop();
     if (rpc_worker_group != NULL)
         rpc_worker_group->join_all();
@@ -868,12 +888,12 @@ json_spirit::Value CRPCTable::execute(const std::string &strMethod, const json_s
 }
 
 std::string HelpExampleCli(string methodname, string args){
-    return "> bitcoin-cli " + methodname + " " + args + "\n";
+    return "> feathercoin-cli " + methodname + " " + args + "\n";
 }
 
 std::string HelpExampleRpc(string methodname, string args){
     return "> curl --user myusername --data-binary '{\"jsonrpc\": \"1.0\", \"id\":\"curltest\", "
-        "\"method\": \"" + methodname + "\", \"params\": [" + args + "] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/\n";
+        "\"method\": \"" + methodname + "\", \"params\": [" + args + "] }' -H 'content-type: text/plain;' http://127.0.0.1:9337/\n";
 }
 
 const CRPCTable tableRPC;
