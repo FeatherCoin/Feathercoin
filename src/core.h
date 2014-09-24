@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2013 The Bitcoin developers
+// Copyright (c) 2009-2013 The Bitcoin developers 
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,15 +7,38 @@
 #define BITCOIN_CORE_H
 
 #include "script.h"
+#include "scrypt.h"
 #include "serialize.h"
 #include "uint256.h"
 
 #include <stdint.h>
 
 class CTransaction;
+class CAuxPow;
+
+template <typename Stream>
+int ReadWriteAuxPow(Stream& s, const boost::shared_ptr<CAuxPow>& auxpow, int nType, int nVersion, CSerActionSerialize ser_action);
+
+template <typename Stream>
+int ReadWriteAuxPow(Stream& s, boost::shared_ptr<CAuxPow>& auxpow, int nType, int nVersion, CSerActionUnserialize ser_action);
+
+template <typename Stream>
+int ReadWriteAuxPow(Stream& s, const boost::shared_ptr<CAuxPow>& auxpow, int nType, int nVersion, CSerActionGetSerializeSize ser_action);
+
+// primary version, Feathercoin unuse
+static const int BLOCK_VERSION_DEFAULT = (1 << 0);
+static const int BLOCK_VERSION_AUXPOW = (1 << 8);
+static const int BLOCK_VERSION_CHAIN_START = (1 << 16);
+static const int BLOCK_VERSION_CHAIN_END = (1 << 30);
+
+// DogeCoin aux chain ID = 0x0062 (98), Feathercoin unuse
+static const int AUXPOW_CHAIN_ID = 0x0062;
+static const int AUXPOW_START_MAINNET = 371337;
+static const int AUXPOW_START_TESTNET = 158100;
+
 
 /** No amount larger than this (in satoshi) is valid */
-static const int64_t MAX_MONEY = 21000000 * COIN;
+static const int64_t MAX_MONEY = 336000000 * COIN;
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 
 /** An outpoint - a combination of a transaction hash and an index n into its vout */
@@ -158,7 +181,10 @@ public:
         // need a CTxIn of at least 148 bytes to spend,
         // so dust is a txout less than 546 satoshis 
         // with default nMinRelayTxFee.
-        return ((nValue*1000)/(3*((int)GetSerializeSize(SER_DISK,0)+148)) < nMinRelayTxFee);
+        //return ((nValue*1000)/(3*((int)GetSerializeSize(SER_DISK,0)+148)) < nMinRelayTxFee);
+        
+        //Feathercoin IsDust() detection disabled
+        return false;
     }
 
     friend bool operator==(const CTxOut& a, const CTxOut& b)
@@ -172,7 +198,7 @@ public:
         return !(a == b);
     }
 
-    std::string ToString() const;
+    std::string ToString() const;    
     void print() const;
 };
 
@@ -369,6 +395,13 @@ public:
         READWRITE(nNonce);
     )
 
+    int GetChainID() const
+    {
+        return nVersion / BLOCK_VERSION_CHAIN_START;
+    }
+
+    void SetAuxPow(CAuxPow* pow);
+    
     void SetNull()
     {
         nVersion = CBlockHeader::CURRENT_VERSION;
@@ -385,11 +418,20 @@ public:
     }
 
     uint256 GetHash() const;
+    
+    uint256 GetPoWHash() const
+    {
+        uint256 thash;
+        scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+        return thash;
+    }
 
     int64_t GetBlockTime() const
     {
         return (int64_t)nTime;
     }
+
+		bool CheckProofOfWork(int nHeight) const;
 };
 
 
@@ -426,6 +468,13 @@ public:
         vMerkleTree.clear();
     }
 
+    uint256 GetPoWHash() const
+    {
+        uint256 thash;
+        scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+        return thash;
+    }
+    
     CBlockHeader GetBlockHeader() const
     {
         CBlockHeader block;
