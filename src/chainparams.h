@@ -38,7 +38,6 @@ public:
         MAIN,
         TESTNET,
         REGTEST,
-
         MAX_NETWORK_TYPES
     };
 
@@ -48,7 +47,6 @@ public:
         SECRET_KEY,
         EXT_PUBLIC_KEY,
         EXT_SECRET_KEY,
-
         MAX_BASE58_TYPES
     };
 
