@@ -8,6 +8,8 @@
 #include "core.h"
 #include "main.h"
 #include "net.h"
+#include "scrypt.h"
+#include "auxpow.h"
 #ifdef ENABLE_WALLET
 #include "wallet.h"
 #endif
@@ -355,7 +357,7 @@ void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& 
     }
     ++nExtraNonce;
     unsigned int nHeight = pindexPrev->nHeight+1; // Height first in coinbase required for block.version=2
-    pblock->vtx[0].vin[0].scriptSig = (CScript() << nHeight << CBigNum(nExtraNonce)) + COINBASE_FLAGS;
+    pblock->vtx[0].vin[0].scriptSig = (CScript() << nHeight << CScriptNum(nExtraNonce)) + COINBASE_FLAGS;
     assert(pblock->vtx[0].vin[0].scriptSig.size() <= 100);
 
     pblock->hashMerkleRoot = pblock->BuildMerkleTree();
@@ -462,14 +464,14 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey)
 
 bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 {
-    uint256 hash = pblock->GetHash();
+    uint256 hash = pblock->GetPoWHash();
     uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
     if (hash > hashTarget)
         return false;
 
     //// debug print
-    LogPrintf("BitcoinMiner:\n");
+    LogPrintf("FeathercoinMiner:\n");
     LogPrintf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex(), hashTarget.GetHex());
     pblock->print();
     LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
@@ -478,7 +480,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     {
         LOCK(cs_main);
         if (pblock->hashPrevBlock != chainActive.Tip()->GetBlockHash())
-            return error("BitcoinMiner : generated block is stale");
+            return error("FeathercoinMiner : generated block is stale");
 
         // Remove key from key pool
         reservekey.KeepKey();
@@ -492,17 +494,17 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         // Process this block the same as if we had received it from another node
         CValidationState state;
         if (!ProcessBlock(state, NULL, pblock))
-            return error("BitcoinMiner : ProcessBlock, block not accepted");
+            return error("FeathercoinMiner : ProcessBlock, block not accepted");
     }
 
     return true;
 }
 
-void static BitcoinMiner(CWallet *pwallet)
+void static FeathercoinMiner(CWallet *pwallet)
 {
-    LogPrintf("BitcoinMiner started\n");
+    LogPrintf("FeathercoinMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    RenameThread("bitcoin-miner");
+    RenameThread("feathercoin-miner");
 
     // Each thread has its own key and counter
     CReserveKey reservekey(pwallet);
@@ -528,7 +530,7 @@ void static BitcoinMiner(CWallet *pwallet)
         CBlock *pblock = &pblocktemplate->block;
         IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
 
-        LogPrintf("Running BitcoinMiner with %"PRIszu" transactions in block (%u bytes)\n", pblock->vtx.size(),
+        LogPrintf("Running FeathercoinMiner with %u transactions in block (%u bytes)\n", pblock->vtx.size(),
                ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
         //
@@ -555,36 +557,34 @@ void static BitcoinMiner(CWallet *pwallet)
         while (true)
         {
             unsigned int nHashesDone = 0;
-            unsigned int nNonceFound;
 
-            // Crypto++ SHA256
-            nNonceFound = ScanHash_CryptoPP(pmidstate, pdata + 64, phash1,
-                                            (char*)&hash, nHashesDone);
-
-            // Check if something found
-            if (nNonceFound != (unsigned int) -1)
+            uint256 thash;
+            char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+            while (true)
             {
-                for (unsigned int i = 0; i < sizeof(hash)/4; i++)
-                    ((unsigned int*)&hash)[i] = ByteReverse(((unsigned int*)&hash)[i]);
 
-                if (hash <= hashTarget)
+                scrypt_1024_1_1_256_sp(BEGIN(pblock->nVersion), BEGIN(thash), scratchpad);
+
+                if (thash <= hashTarget)
                 {
                     // Found a solution
-                    pblock->nNonce = ByteReverse(nNonceFound);
-                    assert(hash == pblock->GetHash());
-
                     SetThreadPriority(THREAD_PRIORITY_NORMAL);
                     CheckWork(pblock, *pwallet, reservekey);
                     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-
+                    
                     // In regression test mode, stop mining after a block is found. This
                     // allows developers to controllably generate a block on demand.
                     if (Params().NetworkID() == CChainParams::REGTEST)
                         throw boost::thread_interrupted();
-
+                    
                     break;
                 }
+                pblock->nNonce += 1;
+                nHashesDone += 1;
+                if ((pblock->nNonce & 0xFF) == 0)
+                    break;
             }
+
 
             // Meter hashes/sec
             static int64_t nHashCounter;
@@ -639,7 +639,7 @@ void static BitcoinMiner(CWallet *pwallet)
     } }
     catch (boost::thread_interrupted)
     {
-        LogPrintf("BitcoinMiner terminated\n");
+        LogPrintf("FeathercoinMiner terminated\n");
         throw;
     }
 }
@@ -667,7 +667,7 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet, int nThreads)
 
     minerThreads = new boost::thread_group();
     for (int i = 0; i < nThreads; i++)
-        minerThreads->create_thread(boost::bind(&BitcoinMiner, pwallet));
+        minerThreads->create_thread(boost::bind(&FeathercoinMiner, pwallet));
 }
 
 #endif
