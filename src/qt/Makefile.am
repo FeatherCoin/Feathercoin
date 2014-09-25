@@ -5,12 +5,12 @@ AM_CPPFLAGS += -I$(top_srcdir)/src \
   -I$(top_builddir)/src/qt/forms \
   $(PROTOBUF_CFLAGS) \
   $(QR_CFLAGS)
-bin_PROGRAMS = bitcoin-qt
+bin_PROGRAMS = feathercoin-qt
 noinst_LIBRARIES = libbitcoinqt.a
 SUBDIRS = . $(BUILD_TEST_QT)
 DIST_SUBDIRS = . test
 
-# bitcoin qt core #
+# feathercoin qt core #
 QT_TS = \
   locale/bitcoin_ach.ts \
   locale/bitcoin_af_ZA.ts \
@@ -25,7 +25,6 @@ QT_TS = \
   locale/bitcoin_cs.ts \
   locale/bitcoin_cy.ts \
   locale/bitcoin_da.ts \
-  locale/bitcoin_de_AT.ts \
   locale/bitcoin_de.ts \
   locale/bitcoin_el_GR.ts \
   locale/bitcoin_en.ts \
@@ -58,6 +57,7 @@ QT_TS = \
   locale/bitcoin_la.ts \
   locale/bitcoin_lt.ts \
   locale/bitcoin_lv_LV.ts \
+  locale/bitcoin_mn.ts \
   locale/bitcoin_ms_MY.ts \
   locale/bitcoin_nb.ts \
   locale/bitcoin_nl.ts \
@@ -148,7 +148,7 @@ QT_MOC_CPP = \
   moc_walletmodel.cpp \
   moc_walletview.cpp
 
-BITCOIN_MM = \
+FEATHERCOIN_MM = \
   macdockiconhandler.mm \
   macnotificationhandler.mm
 
@@ -158,8 +158,8 @@ QT_MOC = \
   overviewpage.moc \
   rpcconsole.moc
 
-QT_QRC_CPP = qrc_bitcoin.cpp
-QT_QRC = bitcoin.qrc
+QT_QRC_CPP = qrc_feathercoin.cpp
+QT_QRC = feathercoin.qrc
 
 PROTOBUF_CC = paymentrequest.pb.cc
 PROTOBUF_H = paymentrequest.pb.h
@@ -212,7 +212,8 @@ BITCOIN_QT_H = \
   walletframe.h \
   walletmodel.h \
   walletmodeltransaction.h \
-  walletview.h
+  walletview.h \
+  winshutdownmonitor.h
 
 RES_ICONS = \
   res/icons/add.png \
@@ -278,7 +279,8 @@ BITCOIN_QT_CPP = \
   rpcconsole.cpp \
   splashscreen.cpp \
   trafficgraphwidget.cpp \
-  utilitydialog.cpp
+  utilitydialog.cpp \
+  winshutdownmonitor.cpp
 
 if ENABLE_WALLET
 BITCOIN_QT_CPP += \
@@ -317,7 +319,7 @@ RES_IMAGES = \
 
 RES_MOVIES = $(wildcard res/movies/spinner-*.png)
 
-BITCOIN_RC = res/bitcoin-qt-res.rc
+FEATHERCOIN_RC = res/feathercoin-qt-res.rc
 
 libbitcoinqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(QT_INCLUDES) \
   -I$(top_srcdir)/src/qt/forms $(QT_DBUS_INCLUDES)
@@ -334,23 +336,23 @@ BUILT_SOURCES = $(nodist_libbitcoinqt_a_SOURCES)
 $(QT_MOC): $(PROTOBUF_H)
 $(QT_MOC_CPP): $(PROTOBUF_H)
 
-# bitcoin-qt binary #
-bitcoin_qt_CPPFLAGS = $(AM_CPPFLAGS) $(QT_INCLUDES) \
+# feathercoin-qt binary #
+feathercoin_qt_CPPFLAGS = $(AM_CPPFLAGS) $(QT_INCLUDES) \
   -I$(top_srcdir)/src/qt/forms
-bitcoin_qt_SOURCES = bitcoin.cpp
+feathercoin_qt_SOURCES = bitcoin.cpp
 if TARGET_DARWIN
-  bitcoin_qt_SOURCES += $(BITCOIN_MM)
+  feathercoin_qt_SOURCES += $(FEATHERCOIN_MM)
 endif
 if TARGET_WINDOWS
-  bitcoin_qt_SOURCES += $(BITCOIN_RC)
+  feathercoin_qt_SOURCES += $(FEATHERCOIN_RC)
 endif
-bitcoin_qt_LDADD = libbitcoinqt.a $(LIBBITCOIN_SERVER)
+feathercoin_qt_LDADD = libbitcoinqt.a $(LIBBITCOIN_SERVER)
 if ENABLE_WALLET
-bitcoin_qt_LDADD += $(LIBBITCOIN_WALLET)
+feathercoin_qt_LDADD += $(LIBBITCOIN_WALLET)
 endif
-bitcoin_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBLEVELDB) $(LIBMEMENV) \
+feathercoin_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBLEVELDB) $(LIBMEMENV) \
   $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(BDB_LIBS)
-bitcoin_qt_LDFLAGS = $(QT_LDFLAGS)
+feathercoin_qt_LDFLAGS = $(QT_LDFLAGS)
 
 # forms/foo.h -> forms/ui_foo.h
 QT_FORMS_H=$(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:.ui=.h))))
@@ -364,14 +366,14 @@ QT_QM=$(QT_TS:.ts=.qm)
 bitcoinstrings.cpp: FORCE
 	$(MAKE) -C $(top_srcdir)/src qt/bitcoinstrings.cpp
 
-translate: bitcoinstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
+translate: bitcoinstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(FEATHERCOIN_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
 	@QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts locale/bitcoin_en.ts
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_QM) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_MOVIES) $(PROTOBUF_H)
 	@cd $(abs_srcdir); test -f $(RCC) && QT_SELECT=$(QT_SELECT) $(RCC) -name bitcoin -o $(abs_builddir)/$@ $< || \
 	  echo error: could not build $@
-	$(SED) -i.bak -e '/^\*\*.*Created:/d' $@ && rm $@.bak
-	$(SED) -i.bak -e '/^\*\*.*by:/d' $@ && rm $@.bak
+	$(SED) -e '/^\*\*.*Created:/d' $@ > $@.n && mv $@{.n,}
+	$(SED) -e '/^\*\*.*by:/d' $@  > $@.n && mv $@{.n,}
 
 CLEANFILES = $(BUILT_SOURCES) $(QT_QM) $(QT_FORMS_H) *.gcda *.gcno
