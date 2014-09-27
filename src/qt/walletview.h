@@ -14,6 +14,7 @@ class ReceiveCoinsDialog;
 class SendCoinsDialog;
 class SendCoinsRecipient;
 class TransactionView;
+class ReportView;
 class WalletModel;
 
 QT_BEGIN_NAMESPACE
@@ -56,11 +57,12 @@ private:
 
     OverviewPage *overviewPage;
     QWidget *transactionsPage;
+    QWidget *accountreportPage;
     ReceiveCoinsDialog *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
 
     TransactionView *transactionView;
-
+		ReportView *reportView;
     QProgressDialog *progressDialog;
 
 public slots:
@@ -77,7 +79,9 @@ public slots:
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
-
+    /** Switch to account report page */
+    void gotoAccountReportPage(); 
+    
     /** Show incoming transaction notification for new transactions.
 
         The new items are those between start and end inclusive, under the given parent item.

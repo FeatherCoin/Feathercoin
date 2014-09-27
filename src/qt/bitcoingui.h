@@ -94,6 +94,7 @@ private:
     QAction *openRPCConsoleAction;
     QAction *openAction;
     QAction *showHelpMessageAction;
+    QAction *accountReportAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -130,7 +131,7 @@ public slots:
     /** Set number of connections shown in the UI */
     void setNumConnections(int count);
     /** Set number of blocks shown in the UI */
-    void setNumBlocks(int count, int nTotalBlocks);
+    void setNumBlocks(int count);
 
     /** Notify the user of an event from the core network or transaction handling code.
        @param[in] title     the message box / notification title
@@ -169,7 +170,9 @@ private slots:
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
-
+    /** Switch to account report page */
+    void gotoAccountReportPage();
+    
     /** Show open dialog */
     void openClicked();
 #endif

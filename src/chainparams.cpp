@@ -80,7 +80,8 @@ public:
         vSeeds.push_back(CDNSSeedData("bitnodes.io", "seed.bitnodes.io"));
         vSeeds.push_back(CDNSSeedData("xf2.org", "bitseed.xf2.org"));*/
 
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(0);
+        //how to do feathercoin ?
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(14); // FeatherCoin addresses start with F
         base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
         base58Prefixes[SECRET_KEY] =     list_of(128);
         base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E);
@@ -148,7 +149,7 @@ public:
 
         // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
         
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(111);
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(65);
         base58Prefixes[SCRIPT_ADDRESS] = list_of(196);
         base58Prefixes[SECRET_KEY]     = list_of(239);
         base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x35)(0x87)(0xCF);
