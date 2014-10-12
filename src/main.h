@@ -79,11 +79,11 @@ static const int fHaveUPnP = false;
 const int nForkOne = 33000;
 const int nForkTwo = 87948;
 const int nForkThree = 204639;
-const int nForkFour = 400000;
+const int nForkFour = 432000;
 
 static const int nTestnetFork   =  600;
 
-static const unsigned int nSwitchV2            = 1409356800; // Sat, 30 Aug 2014 00:00:00 GMT
+static const unsigned int nSwitchV2            = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
 static const unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
 
 extern CScript COINBASE_FLAGS;
