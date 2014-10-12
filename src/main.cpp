@@ -1106,7 +1106,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     if((nHeight >= nForkFour) || (fTestNet && (nHeight >= nTestnetFork))) {
         if(!fNeoScrypt) fNeoScrypt = true;
         /* Difficulty reset after the switch */
-        if((nHeight == nForkFour) || (fTestNet && (nHeight >= nTestnetFork)))
+        if((nHeight == nForkFour) || (fTestNet && (nHeight == nTestnetFork)))
           return(bnNeoScryptSwitch.GetCompact());
     }
 
