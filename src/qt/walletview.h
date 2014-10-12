@@ -15,6 +15,7 @@ class SendCoinsDialog;
 class SendCoinsRecipient;
 class TransactionView;
 class ReportView;
+class MerchantListView;
 class WalletModel;
 
 QT_BEGIN_NAMESPACE
@@ -56,6 +57,7 @@ private:
     WalletModel *walletModel;
 
     OverviewPage *overviewPage;
+    MerchantListView *merchantlistPage;
     QWidget *transactionsPage;
     QWidget *accountreportPage;
     ReceiveCoinsDialog *receiveCoinsPage;
@@ -81,6 +83,8 @@ public slots:
     void gotoVerifyMessageTab(QString addr = "");
     /** Switch to account report page */
     void gotoAccountReportPage(); 
+    /** Switch to merchant list page */
+    void gotoMerchantListPage();
     
     /** Show incoming transaction notification for new transactions.
 

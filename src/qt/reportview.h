@@ -1,3 +1,4 @@
+// Copyright (c) 2013-2014 The Feathercoin developers
 #ifndef REPORTVIEW_H
 #define REPORTVIEW_H
 

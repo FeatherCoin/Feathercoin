@@ -19,6 +19,7 @@ class QFrame;
 class QLineEdit;
 class QMenu;
 class QModelIndex;
+class QSignalMapper;
 class QTableView;
 QT_END_NAMESPACE
 
@@ -39,7 +40,9 @@ public:
     {
         All,
         Today,
+        Yesterday,
         ThisWeek,
+        LastWeek,
         ThisMonth,
         LastMonth,
         ThisYear,
@@ -63,8 +66,10 @@ private:
     QComboBox *typeWidget;
     QLineEdit *addressWidget;
     QLineEdit *amountWidget;
+    QLabel *totalWidget;
 
     QMenu *contextMenu;
+    QSignalMapper *mapperThirdPartyTxUrls;
 
     QFrame *dateRangeWidget;
     QDateTimeEdit *dateFrom;
@@ -85,7 +90,9 @@ private slots:
     void copyLabel();
     void copyAmount();
     void copyTxID();
-
+    void openThirdPartyTxUrl(QString url);
+    void showTotal();
+    
 signals:
     void doubleClicked(const QModelIndex&);
 

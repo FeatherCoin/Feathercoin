@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
+// Copyright (c) 2013-2014 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -95,6 +96,7 @@ private:
     QAction *openAction;
     QAction *showHelpMessageAction;
     QAction *accountReportAction;
+    QAction *merchantListAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -172,7 +174,9 @@ private slots:
     void gotoVerifyMessageTab(QString addr = "");
     /** Switch to account report page */
     void gotoAccountReportPage();
-    
+    /** Switch to merchant list page */
+    void gotoMerchantListPage();
+        
     /** Show open dialog */
     void openClicked();
 #endif

@@ -20,6 +20,7 @@
 
 #include <QComboBox>
 #include <QDateTimeEdit>
+#include <QDesktopServices>
 #include <QDoubleValidator>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -28,7 +29,9 @@
 #include <QMenu>
 #include <QPoint>
 #include <QScrollBar>
+#include <QSignalMapper>
 #include <QTableView>
+#include <QUrl>
 #include <QVBoxLayout>
 
 TransactionView::TransactionView(QWidget *parent) :
@@ -56,7 +59,9 @@ TransactionView::TransactionView(QWidget *parent) :
 #endif
     dateWidget->addItem(tr("All"), All);
     dateWidget->addItem(tr("Today"), Today);
+    dateWidget->addItem(tr("Yesterday"), Yesterday);
     dateWidget->addItem(tr("This week"), ThisWeek);
+    dateWidget->addItem(tr("Last week"), LastWeek);
     dateWidget->addItem(tr("This month"), ThisMonth);
     dateWidget->addItem(tr("Last month"), LastMonth);
     dateWidget->addItem(tr("This year"), ThisYear);
@@ -121,7 +126,10 @@ TransactionView::TransactionView(QWidget *parent) :
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
     transactionView = view;
-
+    
+    totalWidget= new QLabel(tr("Total:"),this);
+    vlayout->addWidget(totalWidget); 
+    
     // Actions
     QAction *copyAddressAction = new QAction(tr("Copy address"), this);
     QAction *copyLabelAction = new QAction(tr("Copy label"), this);
@@ -129,6 +137,7 @@ TransactionView::TransactionView(QWidget *parent) :
     QAction *copyTxIDAction = new QAction(tr("Copy transaction ID"), this);
     QAction *editLabelAction = new QAction(tr("Edit label"), this);
     QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
+    QAction *showTotalAction = new QAction(tr("Show transaction total"), this);
 
     contextMenu = new QMenu();
     contextMenu->addAction(copyAddressAction);
@@ -137,8 +146,13 @@ TransactionView::TransactionView(QWidget *parent) :
     contextMenu->addAction(copyTxIDAction);
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
+    contextMenu->addAction(showTotalAction);
+
+    mapperThirdPartyTxUrls = new QSignalMapper(this);
 
     // Connect actions
+    connect(mapperThirdPartyTxUrls, SIGNAL(mapped(QString)), this, SLOT(openThirdPartyTxUrl(QString)));
+
     connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
     connect(typeWidget, SIGNAL(activated(int)), this, SLOT(chooseType(int)));
     connect(addressWidget, SIGNAL(textChanged(QString)), this, SLOT(changedPrefix(QString)));
@@ -153,6 +167,7 @@ TransactionView::TransactionView(QWidget *parent) :
     connect(copyTxIDAction, SIGNAL(triggered()), this, SLOT(copyTxID()));
     connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
     connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));
+    connect(showTotalAction, SIGNAL(triggered()), this, SLOT(showTotal()));
 }
 
 void TransactionView::setModel(WalletModel *model)
@@ -183,6 +198,28 @@ void TransactionView::setModel(WalletModel *model)
         transactionView->setColumnWidth(TransactionTableModel::Amount, AMOUNT_MINIMUM_COLUMN_WIDTH);
 
         columnResizingFixer = new GUIUtil::TableViewLastColumnResizingFixer(transactionView, AMOUNT_MINIMUM_COLUMN_WIDTH, MINIMUM_COLUMN_WIDTH);
+
+        if (model->getOptionsModel())
+        {
+            // Add third party transaction URLs to context menu
+            QStringList listUrls = model->getOptionsModel()->getThirdPartyTxUrls().split("|", QString::SkipEmptyParts);
+            for (int i = 0; i < listUrls.size(); ++i)
+            {
+                QString host = QUrl(listUrls[i].trimmed(), QUrl::StrictMode).host();
+                if (!host.isEmpty())
+                {
+                    QAction *thirdPartyTxUrlAction = new QAction(host, this); // use host as menu item label
+                    if (i == 0)
+                        contextMenu->addSeparator();
+                    contextMenu->addAction(thirdPartyTxUrlAction);
+                    connect(thirdPartyTxUrlAction, SIGNAL(triggered()), mapperThirdPartyTxUrls, SLOT(map()));
+                    mapperThirdPartyTxUrls->setMapping(thirdPartyTxUrlAction, listUrls[i].trimmed());
+                }
+            }
+        }
+        
+        connect(transactionView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(showTotal()));         
+        showTotal();        
     }
 }
 
@@ -204,6 +241,12 @@ void TransactionView::chooseDate(int idx)
                 QDateTime(current),
                 TransactionFilterProxy::MAX_DATE);
         break;
+    case Yesterday:{
+    	  QDate startOfDay = current.addDays(-1);
+        transactionProxyModel->setDateRange(
+                QDateTime(startOfDay),
+                QDateTime(current));
+        } break;
     case ThisWeek: {
         // Find last Monday
         QDate startOfWeek = current.addDays(-(current.dayOfWeek()-1));
@@ -212,6 +255,14 @@ void TransactionView::chooseDate(int idx)
                 TransactionFilterProxy::MAX_DATE);
 
         } break;
+    case LastWeek: {
+    	  //from Monday to Sunday
+        QDate startOfWeek = current.addDays(-(current.dayOfWeek()+6));
+        QDate endOfWeek = current.addDays(-(current.dayOfWeek()-1));
+        transactionProxyModel->setDateRange(
+                QDateTime(startOfWeek),
+                QDateTime(endOfWeek));
+        } break;        
     case ThisMonth:
         transactionProxyModel->setDateRange(
                 QDateTime(QDate(current.year(), current.month(), 1)),
@@ -232,6 +283,7 @@ void TransactionView::chooseDate(int idx)
         dateRangeChanged();
         break;
     }
+    showTotal();   
 }
 
 void TransactionView::chooseType(int idx)
@@ -240,6 +292,7 @@ void TransactionView::chooseType(int idx)
         return;
     transactionProxyModel->setTypeFilter(
         typeWidget->itemData(idx).toInt());
+    showTotal();        
 }
 
 void TransactionView::changedPrefix(const QString &prefix)
@@ -247,6 +300,7 @@ void TransactionView::changedPrefix(const QString &prefix)
     if(!transactionProxyModel)
         return;
     transactionProxyModel->setAddressPrefix(prefix);
+    showTotal();    
 }
 
 void TransactionView::changedAmount(const QString &amount)
@@ -262,6 +316,7 @@ void TransactionView::changedAmount(const QString &amount)
     {
         transactionProxyModel->setMinAmount(0);
     }
+    showTotal();
 }
 
 void TransactionView::exportClicked()
@@ -381,6 +436,24 @@ void TransactionView::showDetails()
         TransactionDescDialog dlg(selection.at(0));
         dlg.exec();
     }
+}
+
+void TransactionView::showTotal()
+{
+	  float fTotal=0;
+	  for (int i=0;i<=transactionProxyModel->rowCount();i++)
+	  	fTotal+=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();
+
+    totalWidget->setText(tr("Date:")+dateWidget->currentText()+" "+tr("Type:")+typeWidget->currentText()+" "+tr("Total:")+QObject::tr("%1").arg(fTotal)+" FTC");
+}
+
+void TransactionView::openThirdPartyTxUrl(QString url)
+{
+    if(!transactionView || !transactionView->selectionModel())
+        return;
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows(0);
+    if(!selection.isEmpty())
+         QDesktopServices::openUrl(QUrl::fromUserInput(url.replace("%s", selection.at(0).data(TransactionTableModel::TxHashRole).toString())));
 }
 
 QWidget *TransactionView::createDateRangeWidget()
