@@ -13,11 +13,11 @@ endif
 bin_PROGRAMS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += bitcoind
+  bin_PROGRAMS += feathercoind
 endif
 
 if BUILD_BITCOIN_CLI
-  bin_PROGRAMS += bitcoin-cli
+  bin_PROGRAMS += feathercoin-cli
 endif
 
 SUBDIRS = . $(BUILD_QT) $(BUILD_TEST)
@@ -27,11 +27,13 @@ DIST_SUBDIRS = . qt test
 BITCOIN_CORE_H = \
   addrman.h \
   alert.h \
+  auxpow.h \
   allocators.h \
   base58.h bignum.h \
   bloom.h \
   chainparams.h \
   checkpoints.h \
+  checkpointsync.h \
   checkqueue.h \
   clientversion.h \
   coincontrol.h \
@@ -57,6 +59,8 @@ BITCOIN_CORE_H = \
   rpcprotocol.h \
   rpcserver.h \
   script.h \
+  scrypt.h \
+  neoscrypt.h \
   serialize.h \
   sync.h \
   threadsafety.h \
@@ -90,8 +94,10 @@ version.o: obj/build.h
 libbitcoin_server_a_SOURCES = \
   addrman.cpp \
   alert.cpp \
+  auxpow.cpp \
   bloom.cpp \
   checkpoints.cpp \
+  checkpointsync.cpp \
   coins.cpp \
   init.cpp \
   keystore.cpp \
@@ -121,6 +127,7 @@ libbitcoin_wallet_a_SOURCES = \
   $(BITCOIN_CORE_H)
 
 libbitcoin_common_a_SOURCES = \
+  base58.cpp \
   allocators.cpp \
   chainparams.cpp \
   core.cpp \
@@ -130,10 +137,18 @@ libbitcoin_common_a_SOURCES = \
   protocol.cpp \
   rpcprotocol.cpp \
   script.cpp \
+  scrypt.cpp \
+  neoscrypt.c \
+  neoscrypt_asm.S \
   sync.cpp \
   util.cpp \
   version.cpp \
   $(BITCOIN_CORE_H)
+
+if GLIBC_BACK_COMPAT
+libbitcoin_common_a_SOURCES += compat/glibc_compat.cpp
+libbitcoin_common_a_SOURCES += compat/glibcxx_compat.cpp
+endif
 
 libbitcoin_cli_a_SOURCES = \
   rpcclient.cpp \
@@ -142,36 +157,36 @@ libbitcoin_cli_a_SOURCES = \
 nodist_libbitcoin_common_a_SOURCES = $(top_srcdir)/src/obj/build.h
 #
 
-# bitcoind binary #
-bitcoind_LDADD = \
+# feathercoind binary #
+feathercoind_LDADD = \
   libbitcoin_server.a \
   libbitcoin_cli.a \
   libbitcoin_common.a \
   $(LIBLEVELDB) \
   $(LIBMEMENV)
 if ENABLE_WALLET
-bitcoind_LDADD += libbitcoin_wallet.a
+feathercoind_LDADD += libbitcoin_wallet.a
 endif
-bitcoind_SOURCES = bitcoind.cpp
+feathercoind_SOURCES = feathercoind.cpp
 #
 
 if TARGET_WINDOWS
-bitcoind_SOURCES += bitcoind-res.rc
+feathercoind_SOURCES += feathercoind-res.rc
 endif
 
 AM_CPPFLAGS += $(BDB_CPPFLAGS)
-bitcoind_LDADD += $(BOOST_LIBS) $(BDB_LIBS)
+feathercoind_LDADD += $(BOOST_LIBS) $(BDB_LIBS)
 
-# bitcoin-cli binary #
-bitcoin_cli_LDADD = \
+# feathercoin-cli binary #
+feathercoin_cli_LDADD = \
   libbitcoin_cli.a \
   libbitcoin_common.a \
   $(BOOST_LIBS)
-bitcoin_cli_SOURCES = bitcoin-cli.cpp
+feathercoin_cli_SOURCES = feathercoin-cli.cpp
 #
 
 if TARGET_WINDOWS
-bitcoin_cli_SOURCES += bitcoin-cli-res.rc
+feathercoin_cli_SOURCES += feathercoin-cli-res.rc
 endif
 
 # NOTE: This dependency is not strictly necessary, but without it make may try to build both in parallel, which breaks the LevelDB build system in a race

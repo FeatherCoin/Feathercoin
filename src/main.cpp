@@ -10,6 +10,7 @@
 #include "alert.h"
 #include "chainparams.h"
 #include "checkpoints.h"
+#include "checkpointsync.h"
 #include "checkqueue.h"
 #include "init.h"
 #include "auxpow.h"
@@ -39,8 +40,16 @@ using namespace boost;
 CCriticalSection cs_main;
 
 CTxMemPool mempool;
+unsigned int nTransactionsUpdated = 0;
+
+int nBaseMaturity = BASE_MATURITY;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
+int nBestHeight = -1;
+uint256 nBestChainWork = 0;
+uint256 nBestInvalidWork = 0;
+uint256 hashBestChain = 0;
+CBlockIndex* pindexBest = NULL;
 CChain chainActive;
 CChain chainMostWork;
 int64_t nTimeBestReceived = 0;
@@ -51,17 +60,18 @@ bool fBenchmark = false;
 bool fTxIndex = false;
 unsigned int nCoinCacheSize = 5000;
 
-// The 1st hard fork
-const int nForkOne = 33000;
-// The 2nd hard fork
-const int nForkTwo = 87948;
-// The 3rd hard fork
-const int nForkThree = 204639;
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Feathercoin: starting difficulty is 1 / 2^12
+/* The difficulty after switching to NeoScrypt (0.015625) */
+static CBigNum bnNeoScryptSwitch(~uint256(0) >> 26);
+
+
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
 int64_t CTransaction::nMinTxFee = 2000000;  // Override with -mintxfee
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying and mining) */
 int64_t CTransaction::nMinRelayTxFee = 2000000;
+
+map<uint256, CBlock*> mapOrphanBlocksA;
 
 struct COrphanBlock {
     uint256 hashBlock;
@@ -1109,7 +1119,7 @@ bool GetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock
 //
 // CBlock and CBlockIndex
 //
-
+static CBlockIndex* pblockindexFBBHLast;
 bool WriteBlockToDisk(CBlock& block, CDiskBlockPos& pos)
 {
     // Open history file to append
@@ -1214,21 +1224,21 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 {    
     int64_t nSubsidy = 200 * COIN;
 	
-    if(nHeight >= nForkThree || (TestNet()))
+		if(nHeight >= nForkThree || (TestNet()))
 			nSubsidy = 80 * COIN;
 
-    // Subsidy is cut in half every 2100000 blocks, which will occur approximately every 4 years
-    nSubsidy >>= (nHeight / 1799985); // 200,010 blocks at 200FTC and 1,599,975 at 80FTC
+    // Halving subsidy happens every 2,100,000 blocks. The code below takes account for the
+    // fact that the first 204,639 blocks took 2.5 minutes and after changed to 1 minute.
+    nSubsidy >>= (nHeight + 306960) / 2100000;
 
-    return nSubsidy + nFees;    
+    return nSubsidy + nFees;
 }
 
-// Feathercoin: eHRC
+// Feathercoin: eHRC at 3rd hard fork
 int64_t nTargetTimespan = 60; // Feathercoin: 1 minute 
-static const int64_t nTargetTimespanNEW = 60 ; // Feathercoin: unused
 int64_t nTargetSpacing = 60; // Feathercoin: 1 minute
+static const int64_t nTargetTimespanNEW = 60 ; // Feathercoin: unused
 static const int64_t nInterval = nTargetTimespan / nTargetSpacing;
-
 static const int64_t nDiffChangeTarget = 145000; // Feathercoin: unused ,Patch effective @ block 145000
 static const int64_t nTestnetResetTargetFix = 157500; // Feathercoin: unused ,Testnet enables target reset at block 157500
 
@@ -1268,7 +1278,15 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     // The next block
     int nHeight = pindexLast->nHeight + 1;
-    
+
+    /* The 4th hard fork and testnet hard fork */
+    if((nHeight >= nForkFour) || (TestNet && (nHeight >= nTestnetFork))) {
+        if(!fNeoScrypt) fNeoScrypt = true;
+        /* Difficulty reset after the switch */
+        if((nHeight == nForkFour) || (TestNet() && (nHeight == nTestnetFork)))
+          return(bnNeoScryptSwitch.GetCompact());
+    }
+        
     if (nHeight >= nForkOne)
 			nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
 
@@ -1283,11 +1301,16 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     // 2016 blocks initial, 504 after the 1st, 126 after the 2nd hard fork, 15 after the 3rd hard fork
     int nInterval = nTargetTimespan / nTargetSpacing;
 
-    bool fHardFork = (nHeight == nForkOne) || (nHeight == nForkTwo) || (nHeight == nForkThree);
-    if (TestNet()) fHardFork = false;
+    bool fHardFork = (nHeight == nForkOne) || (nHeight == nForkTwo) || (nHeight == nForkThree) || (nHeight == nForkFour);
+    if(TestNet()) {
+        if (nHeight == nTestnetFork) {
+            fHardFork = true;
+        } else {
+            fHardFork = false;
+        }
+    }    	
     	
     	
-    // Only change once per interval
     // Difficulty rules regular blocks
     if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < nForkThree))
     {
@@ -1322,6 +1345,28 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     // Limit adjustment step
     int64_t nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
     LogPrintf("  nActualTimespan = %d  before bounds\n", nActualTimespan);
+    
+    // Additional averaging over 4x nInterval window
+    if((nHeight >= nForkTwo) && (nHeight < nForkThree)) {
+        nInterval *= 4;
+
+        const CBlockIndex* pindexFirst = pindexLast;
+        for(int i = 0; pindexFirst && i < nInterval; i++)
+          pindexFirst = pindexFirst->pprev;
+
+        int nActualTimespanLong =
+          (pindexLast->GetBlockTime() - pindexFirst->GetBlockTime())/4;
+
+        // Average between short and long windows
+        int nActualTimespanAvg = (nActualTimespan + nActualTimespanLong)/2;
+
+        // Apply .25 damping
+        nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
+        nActualTimespan /= 4;
+
+        LogPrintf("RETARGET: nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",
+          nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+    }
     
   //eHRC  
 	// Additional averaging over 15, 120 and 480 block window
@@ -1732,6 +1777,8 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, CCoinsViewCach
 bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex, CCoinsViewCache& view, bool* pfClean)
 {
     assert(pindex->GetBlockHash() == view.GetBestBlock());
+    LogPrintf("pindex->GetBlockHash()=%s \n",pindex->GetBlockHash().ToString());
+    LogPrintf("view.GetBestBlock()=%s \n",view.GetBestBlock().ToString());
 
     if (pfClean)
         *pfClean = false;
@@ -1859,6 +1906,9 @@ bool ConnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex, C
     // verify that the view's current state corresponds to the previous block
     uint256 hashPrevBlock = pindex->pprev == NULL ? uint256(0) : pindex->pprev->GetBlockHash();
     assert(hashPrevBlock == view.GetBestBlock());
+    LogPrintf("ConnectBlock hashPrevBlock=%s \n",hashPrevBlock.ToString());
+    LogPrintf("ConnectBlock view.GetBestBlock()=%s \n",view.GetBestBlock().ToString());
+    
 
     // Special case for the genesis block, skipping connection of its transactions
     // (its coinbase is unspendable)
@@ -2065,6 +2115,14 @@ void static UpdateTip(CBlockIndex *pindexNew) {
             // strMiscWarning is read by GetWarnings(), called by Qt and the JSON-RPC code to warn the user:
             strMiscWarning = _("Warning: This version is obsolete, upgrade required!");
     }
+    
+    if (!IsSyncCheckpointEnforced()) // checkpoint advisory mode    
+    {
+    	if (pindexBest->pprev && !CheckSyncCheckpoint(pindexBest->GetBlockHash(), pindexBest->pprev))
+    		strCheckpointWarning = _("Warning: checkpoint on different blockchain fork, contact developers to resolve the issue");
+    	else
+    		strCheckpointWarning = "";
+    }
 }
 
 // Disconnect chainActive's tip.
@@ -2106,6 +2164,12 @@ bool static DisconnectTip(CValidationState &state) {
     BOOST_FOREACH(const CTransaction &tx, block.vtx) {
         SyncWithWallets(tx.GetHash(), tx, NULL);
     }
+    return true;
+}
+
+//0.8.7 ACP code have some problem in 0.9.3,so I delete them. 
+bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
+{
     return true;
 }
 
@@ -2588,6 +2652,11 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
         if (!Checkpoints::CheckBlock(nHeight, hash))
             return state.DoS(100, error("AcceptBlock() : rejected by checkpoint lock-in at %d", nHeight),
                              REJECT_CHECKPOINT, "checkpoint mismatch");
+                             
+        // ppcoin: check that the block satisfies synchronized checkpoint
+        // checkpoint advisory mode
+        if (!IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
+        	return error("checkpoint AcceptBlock() : rejected by synchronized checkpoint");
 
         // Don't accept any forks from the main chain prior to last checkpoint
         CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(mapBlockIndex);
@@ -2686,6 +2755,9 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
             if (chainActive.Height() > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : nBlockEstimate))
                 pnode->PushInventory(CInv(MSG_BLOCK, hash));
     }
+    
+    // ppcoin: check pending sync-checkpoint
+    AcceptPendingSyncCheckpoint();
 
     return true;
 }
@@ -2791,6 +2863,10 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
             mapAlreadyAskedFor.erase(CInv(MSG_BLOCK, hash));
         return error("ProcessBlock() : CheckBlock FAILED");
     }
+    
+    // ppcoin: ask for pending sync-checkpoint if any
+    if (!IsInitialBlockDownload())
+    	AskForPendingSyncCheckpoint(pfrom);
 
     // If we don't already have its previous block (with full data), shunt it off to holding area until we get it
     std::map<uint256, CBlockIndex*>::iterator it = mapBlockIndex.find(pblock->hashPrevBlock);
@@ -2852,6 +2928,12 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
     }
 
     LogPrintf("ProcessBlock: ACCEPTED\n");
+    
+    // ppcoin: if responsible for sync-checkpoint send it
+    if (pfrom && !CSyncCheckpoint::strMasterPrivKey.empty() &&
+    	(int)GetArg("-checkpointdepth", -1) >= 0)
+    	SendSyncCheckpoint(AutoSelectSyncCheckpoint());
+    
     return true;
 }
 
@@ -3117,6 +3199,12 @@ bool static LoadBlockIndexDB()
     LogPrintf("LoadBlockIndexDB(): last block file = %i\n", nLastBlockFile);
     if (pblocktree->ReadBlockFileInfo(nLastBlockFile, infoLastBlockFile))
         LogPrintf("LoadBlockIndexDB(): last block file info: %s\n", infoLastBlockFile.ToString());
+        
+    // ppcoin: load hashSyncCheckpoint
+    if (!pblocktree->ReadSyncCheckpoint(hashSyncCheckpoint))
+    	 LogPrintf("LoadBlockIndexDB(): synchronized checkpoint not read\n");
+    else
+    	 LogPrintf("LoadBlockIndexDB(): synchronized checkpoint %s\n", hashSyncCheckpoint.ToString().c_str());
 
     // Check whether we need to continue reindexing
     bool fReindexing = false;
@@ -3257,10 +3345,17 @@ bool InitBlockIndex() {
             CBlockIndex *pindex = AddToBlockIndex(block);
             if (!ReceivedBlockTransactions(block, state, pindex, blockPos))
                 return error("LoadBlockIndex() : genesis block not accepted");
+                
+            // ppcoin: initialize synchronized checkpoint
+            if (!WriteSyncCheckpoint(Params().HashGenesisBlock()))
+            	return error("LoadBlockIndex() : failed to init sync checkpoint");
         } catch(std::runtime_error &e) {
             return error("LoadBlockIndex() : failed to initialize block database: %s", e.what());
         }
     }
+    // ppcoin: if checkpoint master key changed must reset sync-checkpoint
+    if (!CheckCheckpointPubKey())
+    	return error("LoadBlockIndex() : failed to reset checkpoint master pubkey");
 
     return true;
 }
@@ -3433,6 +3528,12 @@ string GetWarnings(string strFor)
 
     if (!CLIENT_VERSION_IS_RELEASE)
         strStatusBar = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
+    // Checkpoint warning
+    if (strCheckpointWarning != "")
+    {
+    	nPriority = 900;
+    	strStatusBar = strCheckpointWarning;
+    }
 
     // Misc warnings like out of disk space and clock is wrong
     if (strMiscWarning != "")
@@ -3450,6 +3551,13 @@ string GetWarnings(string strFor)
     {
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
+    }
+    
+    // ppcoin: if detected invalid checkpoint enter safe mode
+    if (hashInvalidCheckpoint != 0)
+    {
+    		nPriority = 3000;
+    		strStatusBar = strRPC = _("WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.");
     }
 
     // Alerts
@@ -3750,12 +3858,23 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             BOOST_FOREACH(PAIRTYPE(const uint256, CAlert)& item, mapAlerts)
                 item.second.RelayTo(pfrom);
         }
+        
+        // ppcoin: relay sync-checkpoint
+        {
+            LOCK(cs_hashSyncCheckpoint);
+            if (!checkpointMessage.IsNull())
+                checkpointMessage.RelayTo(pfrom);
+        }
 
         pfrom->fSuccessfullyConnected = true;
 
         LogPrintf("receive version message: %s: version %d, blocks=%d, us=%s, them=%s, peer=%s\n", pfrom->cleanSubVer, pfrom->nVersion, pfrom->nStartingHeight, addrMe.ToString(), addrFrom.ToString(), pfrom->addr.ToString());
 
         AddTimeData(pfrom->addr, nTime);
+        
+        // ppcoin: ask for pending sync-checkpoint if any
+        if (!IsInitialBlockDownload())
+        	AskForPendingSyncCheckpoint(pfrom);
     }
 
 
@@ -4247,6 +4366,20 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         }
     }
 
+    else if (strCommand == "checkpoint") // ppcoin synchronized checkpoint
+    {
+        CSyncCheckpoint checkpoint;
+        vRecv >> checkpoint;
+
+        if (checkpoint.ProcessSyncCheckpoint(pfrom))
+        {
+            // Relay
+            pfrom->hashCheckpointKnown = checkpoint.hashCheckpoint;
+            LOCK(cs_vNodes);
+            BOOST_FOREACH(CNode* pnode, vNodes)
+                checkpoint.RelayTo(pnode);
+        }
+    }
 
     else if (strCommand == "filterload")
     {

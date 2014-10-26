@@ -12,6 +12,9 @@
 #include <string.h>
 #include <vector>
 
+typedef long long  int64;
+typedef unsigned long long  uint64;
+
 extern const signed char p_util_hexdigit[256]; // defined in util.cpp
 
 inline signed char HexDigit(char c)

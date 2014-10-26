@@ -20,6 +20,7 @@
 #include "net.h"
 #include "script.h"
 #include "scrypt.h"
+#include "neoscrypt.h"
 #include "sync.h"
 #include "txmempool.h"
 #include "uint256.h"
@@ -36,6 +37,10 @@
 class CBlockIndex;
 class CBloomFilter;
 class CInv;
+
+/* Maturity threshold for PoW base transactions, in blocks (confirmations) */
+extern int nBaseMaturity;
+static const int BASE_MATURITY = 100;
 
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
@@ -93,6 +98,21 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
+// The 1st hard fork
+const int nForkOne = 33000;
+// The 2nd hard fork
+const int nForkTwo = 87948;
+// The 3rd hard fork
+const int nForkThree = 204639;
+// The 4th hard fork
+const int nForkFour = 432000;
+
+static const int nTestnetFork   =  600;
+
+static const unsigned int nSwitchV2            = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
+static const unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
+
+
 /** "reject" message codes **/
 static const unsigned char REJECT_MALFORMED = 0x01;
 static const unsigned char REJECT_INVALID = 0x10;
@@ -103,13 +123,19 @@ static const unsigned char REJECT_DUST = 0x41;
 static const unsigned char REJECT_INSUFFICIENTFEE = 0x42;
 static const unsigned char REJECT_CHECKPOINT = 0x43;
 
-
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
 extern CTxMemPool mempool;
 extern std::map<uint256, CBlockIndex*> mapBlockIndex;
+extern int nBestHeight;
+extern uint256 nBestChainWork;
+extern uint256 nBestInvalidWork;
+extern uint256 hashBestChain;
+extern CBlockIndex* pindexBest;
+extern unsigned int nTransactionsUpdated;
 extern uint64_t nLastBlockTx;
 extern uint64_t nLastBlockSize;
+extern std::map<uint256, CBlock*> mapOrphanBlocksA;  //for checkpointsync.cpp
 extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;
 extern bool fImporting;
@@ -186,6 +212,8 @@ bool IsInitialBlockDownload();
 std::string GetWarnings(std::string strFor);
 /** Retrieve a transaction (from memory pool, or from disk, if possible) */
 bool GetTransaction(const uint256 &hash, CTransaction &tx, uint256 &hashBlock, bool fAllowSlow = false);
+/** Connect/disconnect blocks until pindexNew is the new tip of the active block chain */
+bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew);
 /** Find the best known block, and make it the tip of the block chain */
 bool ActivateBestChain(CValidationState &state);
 int64_t GetBlockValue(int nHeight, int64_t nFees);
@@ -727,6 +755,9 @@ public:
     // pointer to the index of the predecessor of this block
     CBlockIndex* pprev;
 
+    // (memory only) pointer to the index of the *active* successor of this block
+    CBlockIndex* pnext;
+    
     // height of the entry in the chain. The genesis block has height 0
     int nHeight;
 
@@ -766,6 +797,7 @@ public:
     {
         phashBlock = NULL;
         pprev = NULL;
+        pnext = NULL;
         nHeight = 0;
         nFile = 0;
         nDataPos = 0;
@@ -787,6 +819,7 @@ public:
     {
         phashBlock = NULL;
         pprev = NULL;
+        pnext = NULL;
         nHeight = 0;
         nFile = 0;
         nDataPos = 0;
@@ -841,6 +874,11 @@ public:
         if (bnTarget <= 0)
             return 0;
         return (CBigNum(1)<<256) / (bnTarget+1);
+    }
+    
+    bool IsInMainChain() const
+    {
+        return (pnext || this == pindexBest);
     }
 
     bool CheckIndex() const

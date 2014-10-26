@@ -101,7 +101,8 @@ QT_FORMS_UI = \
   forms/sendcoinsdialog.ui \
   forms/sendcoinsentry.ui \
   forms/signverifymessagedialog.ui \
-  forms/transactiondescdialog.ui
+  forms/transactiondescdialog.ui \
+  forms/merchantlist.ui
 
 QT_MOC_CPP = \
   moc_addressbookpage.cpp \
@@ -146,7 +147,9 @@ QT_MOC_CPP = \
   moc_utilitydialog.cpp \
   moc_walletframe.cpp \
   moc_walletmodel.cpp \
-  moc_walletview.cpp
+  moc_walletview.cpp \
+  moc_reportview.cpp \
+  moc_merchantlist.cpp
 
 FEATHERCOIN_MM = \
   macdockiconhandler.mm \
@@ -156,6 +159,7 @@ QT_MOC = \
   bitcoin.moc \
   intro.moc \
   overviewpage.moc \
+  merchantlist.moc \
   rpcconsole.moc
 
 QT_QRC_CPP = qrc_feathercoin.cpp
@@ -213,7 +217,9 @@ BITCOIN_QT_H = \
   walletmodel.h \
   walletmodeltransaction.h \
   walletview.h \
-  winshutdownmonitor.h
+  winshutdownmonitor.h \
+  reportview.h \
+  merchantlist.h
 
 RES_ICONS = \
   res/icons/add.png \
@@ -258,7 +264,10 @@ RES_ICONS = \
   res/icons/tx_inout.png \
   res/icons/tx_input.png \
   res/icons/tx_output.png \
-  res/icons/tx_mined.png
+  res/icons/tx_mined.png \
+  res/icons/merchantList.png \
+  res/icons/openurl.png \
+  res/icons/account-report.png
 
 BITCOIN_QT_CPP = \
   bitcoin.cpp \
@@ -309,13 +318,28 @@ BITCOIN_QT_CPP += \
   walletframe.cpp \
   walletmodel.cpp \
   walletmodeltransaction.cpp \
-  walletview.cpp
+  walletview.cpp \
+  reportview.cpp \
+  merchantlist.cpp
 endif
 
 RES_IMAGES = \
   res/images/about.png \
   res/images/splash.png \
-  res/images/splash_testnet.png
+  res/images/splash_testnet.png \
+  res/images/LOGO.png \
+  res/images/mainbg.png \
+  res/images/about_bitcoin.png \
+  res/images/about.png \
+  res/images/feathercoinmap.png \
+  res/images/bitcoinbazaar.co.uk.png \
+  res/images/pockio.png \
+  res/images/btc-e.png \
+  res/images/bter.png \
+  res/images/cm.png \
+  res/images/cryptsy.png \
+  res/images/ct.png \
+  res/images/mc.png
 
 RES_MOVIES = $(wildcard res/movies/spinner-*.png)
 

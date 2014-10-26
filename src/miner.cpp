@@ -9,6 +9,7 @@
 #include "main.h"
 #include "net.h"
 #include "scrypt.h"
+#include "neoscrypt.h"
 #include "auxpow.h"
 #ifdef ENABLE_WALLET
 #include "wallet.h"
@@ -557,13 +558,14 @@ void static FeathercoinMiner(CWallet *pwallet)
         while (true)
         {
             unsigned int nHashesDone = 0;
-
+						unsigned int profile = fNeoScrypt ? 0x0 : 0x3;
             uint256 thash;
-            char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+            //char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
             while (true)
             {
 
-                scrypt_1024_1_1_256_sp(BEGIN(pblock->nVersion), BEGIN(thash), scratchpad);
+                //scrypt_1024_1_1_256_sp(BEGIN(pblock->nVersion), BEGIN(thash), scratchpad);
+                neoscrypt((unsigned char *) &pblock->nVersion, (unsigned char *) &hash, profile);
 
                 if (thash <= hashTarget)
                 {

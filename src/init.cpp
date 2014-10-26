@@ -20,6 +20,7 @@
 #include "txdb.h"
 #include "ui_interface.h"
 #include "util.h"
+#include "checkpointsync.h"
 #ifdef ENABLE_WALLET
 #include "db.h"
 #include "wallet.h"
@@ -608,10 +609,17 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     strWalletFile = GetArg("-wallet", "wallet.dat");
 #endif
+
+		if (mapArgs.count("-checkpointkey")) // ppcoin: checkpoint master priv key
+		{
+			if (!SetCheckpointPrivKey(GetArg("-checkpointkey", "")))
+				return InitError(_("Unable to sign checkpoint, wrong checkpointkey?"));
+		}
+			
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
     // Sanity check
     if (!InitSanityCheck())
-        return InitError(_("Initialization sanity check failed. Bitcoin Core is shutting down."));
+        return InitError(_("Initialization sanity check failed. Feathercoin Core is shutting down."));
 
     std::string strDataDir = GetDataDir().string();
 #ifdef ENABLE_WALLET

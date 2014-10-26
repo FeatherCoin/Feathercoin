@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2013 The Bitcoin developers 
+// Copyright (c) 2009-2013 The Bitcoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -8,8 +8,10 @@
 
 #include "script.h"
 #include "scrypt.h"
+#include "neoscrypt.h"
 #include "serialize.h"
 #include "uint256.h"
+#include "chainparams.h"
 
 #include <stdint.h>
 
@@ -31,11 +33,10 @@ static const int BLOCK_VERSION_AUXPOW = (1 << 8);
 static const int BLOCK_VERSION_CHAIN_START = (1 << 16);
 static const int BLOCK_VERSION_CHAIN_END = (1 << 30);
 
-// DogeCoin aux chain ID = 0x0062 (98), Feathercoin unuse
+// DogeCoin aux chain ID = 0x0062 (98), Feathercoin unused
 static const int AUXPOW_CHAIN_ID = 0x0062;
 static const int AUXPOW_START_MAINNET = 371337;
 static const int AUXPOW_START_TESTNET = 158100;
-
 
 /** No amount larger than this (in satoshi) is valid */
 static const int64_t MAX_MONEY = 336000000 * COIN;
@@ -468,12 +469,69 @@ public:
         vMerkleTree.clear();
     }
 
-    uint256 GetPoWHash() const
-    {
-        uint256 thash;
-        scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
-        return thash;
+		/* Calculates block proof-of-work hash using either NeoScrypt or Scrypt */
+    uint256 GetPoWHash() const {
+				//from 0.8.7 main.h
+				int nForkFour = 432000;
+				int nTestnetFork   =  600;
+				unsigned int nSwitchV2            = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
+				unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
+    	
+        unsigned int profile = 0x0;
+        uint256 hash;
+
+        /* All blocks generated up to this time point are Scrypt only */
+        if((TestNet() && (nTime < nTestnetSwitchV2)) ||
+          (!TestNet() && (nTime < nSwitchV2))) {
+            profile = 0x3;
+        } else {
+            /* All these blocks must be v2+ with valid nHeight */
+            int nHeight = GetBlockHeight();
+            if(TestNet()) {
+                if(nHeight < nTestnetFork)
+                  profile = 0x3;
+            } else {
+                if(nHeight < nForkFour)
+                  profile = 0x3;
+            }
+        }
+				
+				if (profile==0x0)
+					{
+						neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);
+					}
+				if (profile==0x3)
+					{
+        		scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(hash));
+					}
+				//scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(hash));
+					
+        return(hash);
     }
+    
+    /* Extracts block height from v2+ coin base;
+     * ignores nVersion because it's unrealiable */
+    int GetBlockHeight() const {
+        /* Prevents a crash if called on a block header alone */
+        if(vtx.size()) {
+            /* Serialised CScript */
+            std::vector<unsigned char>::const_iterator scriptsig = vtx[0].vin[0].scriptSig.begin();
+            unsigned char i, scount = scriptsig[0];
+            /* Optimise: nTime is 4 bytes always,
+             * nHeight must be less for a long time;
+             * check against a threshold when the time comes */
+            if(scount < 4) {
+                int height = 0;
+                unsigned char *pheight = (unsigned char *) &height;
+                for(i = 0; i < scount; i++)
+                  pheight[i] = scriptsig[i + 1];
+                /* v2+ block with nHeight in coin base */
+                return(height);
+            }
+        }
+        /* Not found */
+        return(-1);
+    }    
     
     CBlockHeader GetBlockHeader() const
     {
@@ -497,7 +555,7 @@ public:
 
     std::vector<uint256> GetMerkleBranch(int nIndex) const;
     static uint256 CheckMerkleBranch(uint256 hash, const std::vector<uint256>& vMerkleBranch, int nIndex);
-    void print() const;
+    void print() const;  
 };
 
 
