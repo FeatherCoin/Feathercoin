@@ -65,11 +65,10 @@ static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Feathercoin: starting d
 static CBigNum bnNeoScryptSwitch(~uint256(0) >> 26);
 
 
-
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
-int64_t CTransaction::nMinTxFee = 2000000;  // Override with -mintxfee
+int64_t CTransaction::nMinTxFee = 1000000;  // Override with -mintxfee
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying and mining) */
-int64_t CTransaction::nMinRelayTxFee = 2000000;
+int64_t CTransaction::nMinRelayTxFee = 1000000;
 
 map<uint256, CBlock*> mapOrphanBlocksA;
 

@@ -423,7 +423,9 @@ public:
     uint256 GetPoWHash() const
     {
         uint256 thash;
-        scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+        //scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+        unsigned int profile = 0x0;
+        neoscrypt((unsigned char *) &nVersion, (unsigned char *) &thash, profile);
         return thash;
     }
 
@@ -470,42 +472,10 @@ public:
     }
 
 		/* Calculates block proof-of-work hash using either NeoScrypt or Scrypt */
-    uint256 GetPoWHash() const {
-				//from 0.8.7 main.h
-				int nForkFour = 432000;
-				int nTestnetFork   =  600;
-				unsigned int nSwitchV2            = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
-				unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
-    	
+    uint256 GetPoWHash() const {   	
         unsigned int profile = 0x0;
         uint256 hash;
-
-        /* All blocks generated up to this time point are Scrypt only */
-        if((TestNet() && (nTime < nTestnetSwitchV2)) ||
-          (!TestNet() && (nTime < nSwitchV2))) {
-            profile = 0x3;
-        } else {
-            /* All these blocks must be v2+ with valid nHeight */
-            int nHeight = GetBlockHeight();
-            if(TestNet()) {
-                if(nHeight < nTestnetFork)
-                  profile = 0x3;
-            } else {
-                if(nHeight < nForkFour)
-                  profile = 0x3;
-            }
-        }
-				
-				if (profile==0x0)
-					{
-						neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);
-					}
-				if (profile==0x3)
-					{
-        		scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(hash));
-					}
-				//scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(hash));
-					
+        neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);				
         return(hash);
     }
     
