@@ -5,7 +5,7 @@ SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.8.7.0
+!define VERSION 0.8.7.1
 !define COMPANY "Feathercoin project"
 !define URL http://feathercoin.com/
 
