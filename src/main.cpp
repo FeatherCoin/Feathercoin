@@ -833,18 +833,27 @@ int64_t GetMinFee(const CTransaction& tx, unsigned int nBytes, bool fAllowFree, 
 
     int64_t nMinFee = (1 + (int64_t)nBytes / 1000) * nBaseFee;
 
-    if (fAllowFree && mode != GMF_SEND)
+    if (fAllowFree)
     {
-            // Free transaction area
-            if (nBytes < 26000)
-                nMinFee = 0;
+        // There is a free transaction area in blocks created by most miners,
+        // * If we are relaying we allow transactions up to DEFAULT_BLOCK_PRIORITY_SIZE - 1000
+        //   to be considered to fall into this category. We don't want to encourage sending
+        //   multiple transactions instead of one big transaction to avoid fees.
+        // * If we are creating a transaction we allow transactions up to 5,000 bytes
+        //   to be considered safe and assume they can likely make it into this section.
+        if (nBytes < (mode == GMF_SEND ? 5000 : (DEFAULT_BLOCK_PRIORITY_SIZE - 1000)))
+            nMinFee = 0;
     }
 
-    // Feathercoin
-    // To limit dust spam, add nBaseFee for each output less than DUST_SOFT_LIMIT
-    BOOST_FOREACH(const CTxOut& txout, tx.vout)
-        if (txout.nValue < DUST_SOFT_LIMIT)
-            nMinFee += nBaseFee;
+    // This code can be removed after enough miners have upgraded to version 0.9.
+    // Until then, be safe when sending and require a fee if any output
+    // is less than CENT:
+    if (nMinFee < nBaseFee && mode == GMF_SEND)
+    {
+        BOOST_FOREACH(const CTxOut& txout, tx.vout)
+            if (txout.nValue < CENT)
+                nMinFee = nBaseFee;
+    }
 
     if (!MoneyRange(nMinFee))
         nMinFee = MAX_MONEY;
@@ -1164,8 +1173,9 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos)
 
     // Check the header
     //if (!CheckProofOfWork(block.GetHash(), block.nBits))
+    //if (!CheckProofOfWork(block.GetPoWHash(), block.nBits))
     if (!block.CheckProofOfWork(mapBlockIndex[block.GetHash()]->nHeight))
-        return error("ReadBlockFromDisk : Errors in block header");
+        return error("Check the header ReadBlockFromDisk : Errors in block header");
 
     return true;
 }
@@ -1234,8 +1244,10 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 }
 
 // Feathercoin: eHRC at 3rd hard fork
-int64_t nTargetTimespan = 60; // Feathercoin: 1 minute 
-int64_t nTargetSpacing = 60; // Feathercoin: 1 minute
+//int64_t nTargetTimespan = 60; // Feathercoin: 1 minute 
+//int64_t nTargetSpacing = 60; // Feathercoin: 1 minute
+int nTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
+int nTargetSpacing = 2.5 * 60; // 2.5 minutes
 static const int64_t nTargetTimespanNEW = 60 ; // Feathercoin: unused
 static const int64_t nInterval = nTargetTimespan / nTargetSpacing;
 static const int64_t nDiffChangeTarget = 145000; // Feathercoin: unused ,Patch effective @ block 145000
@@ -1277,15 +1289,18 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     // The next block
     int nHeight = pindexLast->nHeight + 1;
+    LogPrintf("GetNextWorkRequired pindexLast block Height=%d,nBits=%d \n",pindexLast->nHeight,pindexLast->nBits);
+    LogPrintf("GetNextWorkRequired the next block Height=%d \n",nHeight);
 
     /* The 4th hard fork and testnet hard fork */
-    if((nHeight >= nForkFour) || (TestNet && (nHeight >= nTestnetFork))) {
+    if((nHeight >= nForkFour) || (TestNet() && (nHeight >= nTestnetFork))) {
         if(!fNeoScrypt) fNeoScrypt = true;
         /* Difficulty reset after the switch */
         if((nHeight == nForkFour) || (TestNet() && (nHeight == nTestnetFork)))
           return(bnNeoScryptSwitch.GetCompact());
     }
-        
+    LogPrintf("GetNextWorkRequired fork\n");
+    
     if (nHeight >= nForkOne)
 			nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
 
@@ -1331,19 +1346,20 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         }
         return pindexLast->nBits;
     }
+    LogPrintf("Difficulty rules regular blocks \n");
     
     // The 1st retarget after genesis
     if(nInterval >= nHeight) nInterval = nHeight - 1;    
 
     // Go back by nInterval
     const CBlockIndex* pindexFirst = pindexLast;
-    for (int i = 0; pindexFirst && i < nInterval-1; i++)
+    for (int i = 0; pindexFirst && i < nInterval; i++)
         pindexFirst = pindexFirst->pprev;
     assert(pindexFirst);
 
     // Limit adjustment step
     int64_t nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-    LogPrintf("  nActualTimespan = %d  before bounds\n", nActualTimespan);
+    LogPrintf("GetNextWorkRequired(), nActualTimespan = %d  before bounds\n", nActualTimespan);
     
     // Additional averaging over 4x nInterval window
     if((nHeight >= nForkTwo) && (nHeight < nForkThree)) {
@@ -1402,7 +1418,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 		nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
 		nActualTimespan /= 4;
 
-		printf("RETARGET: nActualTimespanShort = %d, nActualTimespanMedium = %d, nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",
+		LogPrintf("RETARGET: nActualTimespanShort = %d, nActualTimespanMedium = %d, nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",
 		nActualTimespanShort, nActualTimespanMedium, nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
     }
 
@@ -1425,13 +1441,14 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if(nActualTimespan < nActualTimespanMin) nActualTimespan = nActualTimespanMin;
     if(nActualTimespan > nActualTimespanMax) nActualTimespan = nActualTimespanMax;
 
-    printf("RETARGET: nActualTimespan = %d after bounds\n", nActualTimespan);
-    printf("RETARGET: nTargetTimespan = %d, nTargetTimespan/nActualTimespan = %.4f\n", nTargetTimespan, (float) nTargetTimespan/nActualTimespan);
+    LogPrintf("RETARGET: nActualTimespan = %d after bounds\n", nActualTimespan);
+    LogPrintf("RETARGET: nTargetTimespan = %d, nTargetTimespan/nActualTimespan = %.4f\n", nTargetTimespan, (float) nTargetTimespan/nActualTimespan);
 
 
     // Retarget
     CBigNum bnNew;
     bnNew.SetCompact(pindexLast->nBits);
+    //watch
     bnNew *= nActualTimespan;
     bnNew /= nTargetTimespan;
 
@@ -1454,11 +1471,14 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
 
     // Check range
     if (bnTarget <= 0 || bnTarget > Params().ProofOfWorkLimit())
-        return error("CheckProofOfWork() : nBits below minimum work");
+        return error("Check range CheckProofOfWork() : nBits below minimum work");
 
     // Check proof of work matches claimed amount
+    LogPrintf("CheckProofOfWork() hash=%s \n",hash.ToString().c_str());
+    LogPrintf("CheckProofOfWork() nBits=%i \n",nBits);
+    LogPrintf("CheckProofOfWork() bnTarget.getuint256=%s \n",bnTarget.getuint256().ToString().c_str());
     if (hash > bnTarget.getuint256())
-        return error("CheckProofOfWork() : hash doesn't match nBits");
+        return error("matches claimed amount, CheckProofOfWork() : hash doesn't match nBits");
 
     return true;
 }
@@ -2132,7 +2152,7 @@ bool static DisconnectTip(CValidationState &state) {
     // Read block from disk.
     CBlock block;
     if (!ReadBlockFromDisk(block, pindexDelete))
-        return state.Abort(_("Failed to read block"));
+        return state.Abort(_("DisconnectTip,Failed to read block"));
     // Apply the block atomically to the chain state.
     int64_t nStart = GetTimeMicros();
     {
@@ -2179,7 +2199,7 @@ bool static ConnectTip(CValidationState &state, CBlockIndex *pindexNew) {
     // Read block from disk.
     CBlock block;
     if (!ReadBlockFromDisk(block, pindexNew))
-        return state.Abort(_("Failed to read block"));
+        return state.Abort(_("Connect a new block to chainActive,Failed to read block."));
     // Apply the block atomically to the chain state.
     int64_t nStart = GetTimeMicros();
     {
@@ -2322,6 +2342,63 @@ bool ActivateBestChain(CValidationState &state) {
     return true;
 }
 
+bool AddToBlockIndex(CBlock& block, CValidationState& state, const CDiskBlockPos& pos)
+{
+    // Check for duplicate
+    uint256 hash = block.GetHash();
+    if (mapBlockIndex.count(hash))
+        return state.Invalid(error("AddToBlockIndex() : %s already exists", hash.ToString()), 0, "duplicate");
+
+    // Construct new block index object
+    CBlockIndex* pindexNew = new CBlockIndex(block);
+    assert(pindexNew);
+    {
+         LOCK(cs_nBlockSequenceId);
+         pindexNew->nSequenceId = nBlockSequenceId++;
+    }
+    map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.insert(make_pair(hash, pindexNew)).first;
+    pindexNew->phashBlock = &((*mi).first);
+    map<uint256, CBlockIndex*>::iterator miPrev = mapBlockIndex.find(block.hashPrevBlock);
+    if (miPrev != mapBlockIndex.end())
+    {
+        pindexNew->pprev = (*miPrev).second;
+        pindexNew->nHeight = pindexNew->pprev->nHeight + 1;
+    }
+    pindexNew->nTx = block.vtx.size();
+    pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + pindexNew->GetBlockWork().getuint256();
+    pindexNew->nChainTx = (pindexNew->pprev ? pindexNew->pprev->nChainTx : 0) + pindexNew->nTx;
+    pindexNew->nFile = pos.nFile;
+    pindexNew->nDataPos = pos.nPos;
+    pindexNew->nUndoPos = 0;
+    pindexNew->nStatus = BLOCK_VALID_TRANSACTIONS | BLOCK_HAVE_DATA;
+    setBlockIndexValid.insert(pindexNew);
+
+    if (!pblocktree->WriteBlockIndex(CDiskBlockIndex(pindexNew)))
+        return state.Abort(_("Failed to write block index"));
+
+    // New best?
+    if (!ActivateBestChain(state))
+        return false;
+
+    LOCK(cs_main);
+    if (pindexNew == chainActive.Tip())
+    {
+        // Clear fork warning if its no longer applicable
+        CheckForkWarningConditions();
+        // Notify UI to display prev block's coinbase if it was ours
+        static uint256 hashPrevBestCoinBase;
+        g_signals.UpdatedTransaction(hashPrevBestCoinBase);
+        hashPrevBestCoinBase = block.GetTxHash(0);
+    } else
+        CheckForkWarningConditionsOnNewFork(pindexNew);
+
+    if (!pblocktree->Flush())
+        return state.Abort(_("Failed to sync block index"));
+
+    uiInterface.NotifyBlocksChanged();
+    return true;
+}
+
 CBlockIndex* AddToBlockIndex(CBlockHeader& block)
 {
     // Check for duplicate
@@ -2378,7 +2455,8 @@ bool ReceivedBlockTransactions(const CBlock &block, CValidationState& state, CBl
         setBlockIndexValid.insert(pindexNew);
 
     /* write both the immutible data (CDiskBlockIndex) and the mutable data (BlockIndex) */
-    //if (!pblocktree->WriteDiskBlockIndex(CDiskBlockIndex(pindexNew, block.auxpow)) || !pblocktree->WriteBlockIndex(*pindexNew))
+    //if (!pblocktree->WriteDiskBlockIndex(CDiskBlockIndex(pindexNew)) || !pblocktree->WriteBlockIndex(*pindexNew))
+    //if (!pblocktree->WriteBlockIndex(CDiskBlockIndex(pindexNew)))
     if (!pblocktree->WriteBlockIndex(CDiskBlockIndex(pindexNew)))
         return state.Abort(_("Failed to write block index"));
 
@@ -2408,7 +2486,6 @@ bool ReceivedBlockTransactions(const CBlock &block, CValidationState& state, CBl
 // to enable merged mining:
 // - set a block from which it will be enabled
 // - set a unique chain ID
-//   each merged minable scrypt_1024_1_1_256 coin should have a different one
 //   (if two have the same ID, they can't be merge mined together)
 int GetAuxPowStartBlock()
 {
@@ -2420,8 +2497,37 @@ int GetAuxPowStartBlock()
 
 bool CBlockHeader::CheckProofOfWork(int nHeight) const
 {	
-        if (!::CheckProofOfWork(GetPoWHash(), nBits))
-            return error("CheckProofOfWork() : proof of work failed");	
+	LogPrintf("CBlockHeader::CheckProofOfWork(), nHeight=%i \n",nHeight);
+	if (nHeight==INT_MAX)
+	{
+			if (!::CheckProofOfWork(GetPoWHashS(), nBits))
+			{
+					if (!::CheckProofOfWork(GetPoWHash(), nBits))
+					{
+							LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
+					    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: INT_MAX proof of work failed.");	
+					}
+			}
+			return true;
+	}
+	
+	if (nHeight>=nForkFour)
+	{
+		if (!::CheckProofOfWork(GetPoWHash(), nBits))
+		{
+				LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
+		    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: proof of work failed.");	
+		}
+	}
+	else
+	{
+		if (!::CheckProofOfWork(GetPoWHashS(), nBits))
+		{
+				LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS, nHeight=%i \n",nHeight);
+		    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS: proof of work failed.");	
+		}
+	}		
+	return true;
 }
 
 bool FindBlockPos(CValidationState &state, CDiskBlockPos &pos, unsigned int nAddSize, unsigned int nHeight, uint64_t nTime, bool fKnown = false)
@@ -2519,11 +2625,16 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 }
 
 bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nHeight, bool fCheckPOW)
-{
+{   
     // Check proof of work matches claimed amount
+    //if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(), block.nBits))
+    //if (fCheckPOW && !CheckProofOfWork(GetPoWHash(), nBits))
     if (fCheckPOW && !block.CheckProofOfWork(nHeight))
-        return state.DoS(50, error("CheckBlockHeader() : proof of work failed"),
+    	{
+    		LogPrintf("CheckBlockHeader(),block.CheckProofOfWork, nHeight=%d \n",nHeight);
+        return state.DoS(50, error("CheckBlockHeader(),block.CheckProofOfWork : proof of work failed."),
                          REJECT_INVALID, "high-hash");
+      }
 
     // Check timestamp
     if (block.GetBlockTime() > GetAdjustedTime() + 2 * 60 * 60)
@@ -2558,9 +2669,9 @@ bool CheckBlock(const CBlock& block, CValidationState& state, int nHeight, bool 
 {
     // These are checks that are independent of context
     // that can be verified before saving an orphan block.
-
     if (!CheckBlockHeader(block, state, nHeight, fCheckPOW))
         return false;
+    
         
     // Size limits
     if (block.vtx.empty() || block.vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(block, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
@@ -2636,11 +2747,23 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
             return state.DoS(10, error("AcceptBlock() : prev block not found"), 0, "bad-prevblk");
         pindexPrev = (*mi).second;
         nHeight = pindexPrev->nHeight+1;
+        LogPrintf("AcceptBlockHeader,nHeight=%d \n",nHeight);
 
+       
+        /* Don't accept blocks with bogus nVersion numbers after this point */
+        if (nHeight >= nForkFour)  {
+            if(block.nVersion != 2)
+                return(state.DoS(100, error("AcceptBlock() : incorrect block version")));
+        }
+        
         // Check proof of work
-        if (block.nBits != GetNextWorkRequired(pindexPrev, &block))
-            return state.DoS(100, error("AcceptBlock() : incorrect proof of work"),
+        unsigned int uiBits=GetNextWorkRequired(pindexPrev, &block);
+        if (block.nBits !=uiBits )
+        {
+        		LogPrintf("AcceptBlockHeader,GetNextWorkRequired, uiBits=%d ,block.nBits=%d \n",uiBits,block.nBits);
+            return state.DoS(100, error("AcceptBlock(),Check proof of work : incorrect proof of work"),
                              REJECT_INVALID, "bad-diffbits");
+        }
 
         // Check timestamp against prev
         if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast())
@@ -2675,7 +2798,8 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
     }
 
     if (pindex == NULL)
-        pindex = AddToBlockIndex(block);
+        pindex = AddToBlockIndex(block);//from dogecoin
+        //pindex = pindexNew;
 
     if (ppindex)
         *ppindex = pindex;
@@ -2856,13 +2980,19 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
     if (mapOrphanBlocks.count(hash))
         return state.Invalid(error("ProcessBlock() : already have block (orphan) %s", hash.ToString()), 0, "duplicate");
 
-    // Preliminary checks
-    if (!CheckBlock(*pblock, state, INT_MAX)) {
+    //Preliminary checks
+    LogPrintf("ProcessBlock: Preliminary checks \n");
+    //from dogecoin
+    /*if (!CheckBlock(*pblock, state, INT_MAX)) {  
         if (state.CorruptionPossible())
             mapAlreadyAskedFor.erase(CInv(MSG_BLOCK, hash));
         return error("ProcessBlock() : CheckBlock FAILED");
-    }
-    
+    }*/
+    //if (!CheckBlock(*pblock, state,nForkFour-1))
+    //if (!CheckBlock(*pblock, state,1))
+    if (!CheckBlock(*pblock, state, INT_MAX)) 
+    	  return error("ProcessBlock() : CheckBlock FAILED");
+        	
     // ppcoin: ask for pending sync-checkpoint if any
     if (!IsInitialBlockDownload())
     	AskForPendingSyncCheckpoint(pfrom);
@@ -2871,7 +3001,7 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
     std::map<uint256, CBlockIndex*>::iterator it = mapBlockIndex.find(pblock->hashPrevBlock);
     if (pblock->hashPrevBlock != 0 && (it == mapBlockIndex.end() || !(it->second->nStatus & BLOCK_HAVE_DATA)))
     {
-        LogPrintf("ProcessBlock: ORPHAN BLOCK %lu, prev=%s\n", (unsigned long)mapOrphanBlocks.size(), pblock->hashPrevBlock.ToString());
+        LogPrintf("ProcessBlock() ProcessBlock: ORPHAN BLOCK %lu, prev=%s\n", (unsigned long)mapOrphanBlocks.size(), pblock->hashPrevBlock.ToString());
 
         // Accept orphans as long as there is a node to request its parents from
         if (pfrom) {
@@ -3341,9 +3471,13 @@ bool InitBlockIndex() {
                 return error("LoadBlockIndex() : FindBlockPos failed");
             if (!WriteBlockToDisk(block, blockPos))
                 return error("LoadBlockIndex() : writing genesis block to disk failed");
+            //from bitcoin
+            //if (!AddToBlockIndex(block, state, blockPos))
+            //    return error("InitBlockIndex AddToBlockIndex() : genesis block not accepted");
+            //from dogecoin                    
             CBlockIndex *pindex = AddToBlockIndex(block);
-            if (!ReceivedBlockTransactions(block, state, pindex, blockPos))
-                return error("LoadBlockIndex() : genesis block not accepted");
+            if (!ReceivedBlockTransactions(block, state, pindex, blockPos)) 
+                return error("InitBlockIndex  ReceivedBlockTransactions() : genesis block not accepted");
                 
             // ppcoin: initialize synchronized checkpoint
             if (!WriteSyncCheckpoint(Params().HashGenesisBlock()))
