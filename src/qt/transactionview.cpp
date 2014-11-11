@@ -33,6 +33,7 @@
 #include <QTableView>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QProcess>
 
 TransactionView::TransactionView(QWidget *parent) :
     QWidget(parent), model(0), transactionProxyModel(0),
@@ -138,6 +139,7 @@ TransactionView::TransactionView(QWidget *parent) :
     QAction *editLabelAction = new QAction(tr("Edit label"), this);
     QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
     QAction *showTotalAction = new QAction(tr("Show transaction total"), this);
+    QAction *sendMesslAction = new QAction(tr("Send transaction to Bitmessage"), this);
 
     contextMenu = new QMenu();
     contextMenu->addAction(copyAddressAction);
@@ -147,6 +149,7 @@ TransactionView::TransactionView(QWidget *parent) :
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
     contextMenu->addAction(showTotalAction);
+    contextMenu->addAction(sendMesslAction);
 
     mapperThirdPartyTxUrls = new QSignalMapper(this);
 
@@ -168,6 +171,7 @@ TransactionView::TransactionView(QWidget *parent) :
     connect(editLabelAction, SIGNAL(triggered()), this, SLOT(editLabel()));
     connect(showDetailsAction, SIGNAL(triggered()), this, SLOT(showDetails()));
     connect(showTotalAction, SIGNAL(triggered()), this, SLOT(showTotal()));
+    connect(sendMesslAction, SIGNAL(triggered()), this, SLOT(sendMess()));
 }
 
 void TransactionView::setModel(WalletModel *model)
@@ -445,6 +449,26 @@ void TransactionView::showTotal()
 	  	fTotal+=transactionProxyModel->data(transactionProxyModel->index(i,4)).toFloat();
 
     totalWidget->setText(tr("Date:")+dateWidget->currentText()+" "+tr("Type:")+typeWidget->currentText()+" "+tr("Total:")+QObject::tr("%1").arg(fTotal)+" FTC");
+}
+
+void TransactionView::sendMess()
+{
+    if(!transactionView->selectionModel())
+        return;
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+    if(!selection.isEmpty())
+    {
+    		QString address = selection.at(0).data(TransactionTableModel::AddressRole).toString();
+    		QString amount = selection.at(0).data(TransactionTableModel::FormattedAmountRole).toString();
+    		QString txid = selection.at(0).data(TransactionTableModel::TxIDRole).toString();
+    		QString txDesc="Sent "+amount+" FTC to you, TransactionID="+txid;
+    		
+        QProcess *process = new QProcess;
+        QString program="./bitmessagemain ";
+        QStringList arguments;
+        arguments << amount << txid << txDesc;
+        process->start(program,arguments);
+    }
 }
 
 void TransactionView::openThirdPartyTxUrl(QString url)

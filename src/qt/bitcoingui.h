@@ -97,6 +97,7 @@ private:
     QAction *showHelpMessageAction;
     QAction *accountReportAction;
     QAction *merchantListAction;
+    QAction *bitmessageAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -179,6 +180,8 @@ private slots:
         
     /** Show open dialog */
     void openClicked();
+    /** Start Bitmessage Process */
+    void openBitmessageClicked();
 #endif
     /** Show configuration dialog */
     void optionsClicked();

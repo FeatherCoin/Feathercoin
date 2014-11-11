@@ -1,6 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/bitcoin.png</file>
+        <file alias="bitmessage">res/icons/bitmessage.png</file>
         <file alias="openurl">res/icons/openurl.png</file>
         <file alias="account-report">res/icons/account-report.png</file>
         <file alias="merchantList">res/icons/merchantList.png</file>

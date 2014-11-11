@@ -92,6 +92,7 @@ private slots:
     void copyTxID();
     void openThirdPartyTxUrl(QString url);
     void showTotal();
+    void sendMess();
     
 signals:
     void doubleClicked(const QModelIndex&);

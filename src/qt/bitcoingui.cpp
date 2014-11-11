@@ -48,6 +48,7 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QVBoxLayout>
+#include <QProcess>
 
 #if QT_VERSION < 0x050000
 #include <QUrl>
@@ -330,6 +331,10 @@ void BitcoinGUI::createActions(bool fIsTestnet)
 
     openAction = new QAction(QIcon(":/icons/openurl"), tr("Open &URI..."), this);
     openAction->setStatusTip(tr("Open a feathercoin: URI or payment request"));
+    
+    bitmessageAction = new QAction(QIcon(":/icons/bitmessage"), tr("Run B&itmessage..."), this);
+    bitmessageAction->setStatusTip(tr("Start Bitmessage from feathercoin wallett"));
+    bitmessageAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
 
     showHelpMessageAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Command-line options"), this);
     showHelpMessageAction->setStatusTip(tr("Show the Feathercoin Core help message to get a list with possible Feathercoin command-line options"));
@@ -351,6 +356,7 @@ void BitcoinGUI::createActions(bool fIsTestnet)
         connect(usedSendingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedSendingAddresses()));
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
+        connect(bitmessageAction, SIGNAL(triggered()), this, SLOT(openBitmessageClicked()));
     }
 #endif
 }
@@ -396,8 +402,9 @@ void BitcoinGUI::createMenuBar()
     if(walletFrame)
     {
         advanced->addAction(accountReportAction);
-        advanced->addSeparator();
         advanced->addAction(merchantListAction);
+        advanced->addSeparator();
+        advanced->addAction(bitmessageAction);
     }
     
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
@@ -493,6 +500,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     openAction->setEnabled(enabled);
     accountReportAction->setEnabled(enabled);
     merchantListAction->setEnabled(enabled);
+    bitmessageAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(bool fIsTestnet)
@@ -600,6 +608,15 @@ void BitcoinGUI::openClicked()
     {
         emit receivedURI(dlg.getURI());
     }
+}
+
+void BitcoinGUI::openBitmessageClicked()
+{
+    QProcess *process = new QProcess;
+    QString program="./bitmessagemain";
+    QStringList arguments;
+    arguments << "";
+    process->start(program,arguments);
 }
 
 void BitcoinGUI::gotoOverviewPage()
