@@ -98,6 +98,7 @@ private:
     QAction *accountReportAction;
     QAction *merchantListAction;
     QAction *bitmessageAction;
+    QAction *shapeshiftAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -182,6 +183,9 @@ private slots:
     void openClicked();
     /** Start Bitmessage Process */
     void openBitmessageClicked();
+    /** Visit Shapeshift' API */
+    void openShapeshiftClicked();
+        
 #endif
     /** Show configuration dialog */
     void optionsClicked();

@@ -2,6 +2,7 @@
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/bitcoin.png</file>
         <file alias="bitmessage">res/icons/bitmessage.png</file>
+        <file alias="shapeshift">res/icons/shapeshift.png</file>
         <file alias="openurl">res/icons/openurl.png</file>
         <file alias="account-report">res/icons/account-report.png</file>
         <file alias="merchantList">res/icons/merchantList.png</file>
@@ -61,6 +62,9 @@
         <file alias="merchant_mc">res/images/mc.png</file>
         <file alias="merchant_bitcoinbazaar">res/images/bitcoinbazaar.co.uk.png</file>
         <file alias="merchant_pockio">res/images/pockio.png</file>
+        <file alias="merchant_shapeshift">res/images/shapeshift.png</file>
+        <file alias="merchant_bitbooks">res/images/bitbooks.png</file>
+        <file alias="merchant_coinverted">res/images/coinverted.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="spinner-000">res/movies/spinner-000.png</file>

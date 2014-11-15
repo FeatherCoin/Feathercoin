@@ -112,12 +112,15 @@ MerchantListView::MerchantListView(QWidget *parent) :
     ui->label_Map->installEventFilter(this);
     ui->label_left_1->installEventFilter(this);
     ui->label_left_2->installEventFilter(this);
+    ui->label_left_3->installEventFilter(this);
+    ui->label_left_4->installEventFilter(this);
     ui->label_right_1->installEventFilter(this);
     ui->label_right_2->installEventFilter(this);
     ui->label_right_3->installEventFilter(this);
     ui->label_right_4->installEventFilter(this);
     ui->label_right_5->installEventFilter(this);
     ui->label_right_6->installEventFilter(this);
+    ui->label_right_7->installEventFilter(this);
     
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
@@ -144,6 +147,14 @@ bool MerchantListView::eventFilter(QObject *obj, QEvent *event)
 	 	 	  QDesktopServices::openUrl(QUrl("https://pock.io"));
 	 			return true; 
 	 		}
+	 	 	if (obj == ui->label_left_3) { 
+	 	 	  QDesktopServices::openUrl(QUrl("http://bitbooks.co"));
+	 			return true; 
+	 		}
+	 	 	if (obj == ui->label_left_4) { 
+	 	 	  QDesktopServices::openUrl(QUrl("http://coinverted.com"));
+	 			return true; 
+	 		}
 	 	 	if (obj == ui->label_right_1) { 
 	 	 	  QDesktopServices::openUrl(QUrl("https://crypto-trade.com/currencies/trade/ftc_usd"));
 	 			return true; 
@@ -166,6 +177,10 @@ bool MerchantListView::eventFilter(QObject *obj, QEvent *event)
 	 		}
 	 		if (obj == ui->label_right_6) { 
 	 	 	  QDesktopServices::openUrl(QUrl("https://mcxnow.com/exchange/FTC"));
+	 			return true; 
+	 		}
+	 		if (obj == ui->label_right_7) { 
+	 	 	  QDesktopServices::openUrl(QUrl("http://shapeshift.io"));
 	 			return true; 
 	 		}
  		}

@@ -12,6 +12,7 @@
 #include "notificator.h"
 #include "openuridialog.h"
 #include "optionsdialog.h"
+#include "shiftdialog.h"
 #include "optionsmodel.h"
 #include "rpcconsole.h"
 #include "utilitydialog.h"
@@ -332,9 +333,13 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     openAction = new QAction(QIcon(":/icons/openurl"), tr("Open &URI..."), this);
     openAction->setStatusTip(tr("Open a feathercoin: URI or payment request"));
     
-    bitmessageAction = new QAction(QIcon(":/icons/bitmessage"), tr("Run B&itmessage..."), this);
-    bitmessageAction->setStatusTip(tr("Start Bitmessage from feathercoin wallett"));
+    bitmessageAction = new QAction(QIcon(":/icons/bitmessage"), tr("B&itmessage..."), this);
+    bitmessageAction->setStatusTip(tr("Start Bitmessage from feathercoin wallet"));
     bitmessageAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
+    	
+    shapeshiftAction = new QAction(QIcon(":/icons/shapeshift"), tr("Shapeshift..."), this);
+    shapeshiftAction->setStatusTip(tr("Exchange other coins whit your feathercoin on Shapeshift"));
+    shapeshiftAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_8));
 
     showHelpMessageAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Command-line options"), this);
     showHelpMessageAction->setStatusTip(tr("Show the Feathercoin Core help message to get a list with possible Feathercoin command-line options"));
@@ -357,6 +362,7 @@ void BitcoinGUI::createActions(bool fIsTestnet)
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
         connect(bitmessageAction, SIGNAL(triggered()), this, SLOT(openBitmessageClicked()));
+        connect(shapeshiftAction, SIGNAL(triggered()), this, SLOT(openShapeshiftClicked()));        
     }
 #endif
 }
@@ -402,9 +408,16 @@ void BitcoinGUI::createMenuBar()
     if(walletFrame)
     {
         advanced->addAction(accountReportAction);
-        advanced->addAction(merchantListAction);
         advanced->addSeparator();
-        advanced->addAction(bitmessageAction);
+        advanced->addAction(merchantListAction);
+    }
+    
+    QMenu *plugins = appMenuBar->addMenu(tr("&Plugins"));
+    if(walletFrame)
+    { 
+        plugins->addAction(bitmessageAction);
+        plugins->addSeparator();
+        plugins->addAction(shapeshiftAction);
     }
     
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
@@ -501,6 +514,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     accountReportAction->setEnabled(enabled);
     merchantListAction->setEnabled(enabled);
     bitmessageAction->setEnabled(enabled);
+    shapeshiftAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(bool fIsTestnet)
@@ -590,6 +604,16 @@ void BitcoinGUI::aboutClicked()
 
     AboutDialog dlg(this);
     dlg.setModel(clientModel);
+    dlg.exec();
+}
+
+void BitcoinGUI::openShapeshiftClicked()
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+
+    ShiftDialog dlg(this);
+    dlg.setModel(clientModel->getOptionsModel());
     dlg.exec();
 }
 
