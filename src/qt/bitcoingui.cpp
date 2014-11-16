@@ -322,6 +322,14 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
     verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Feathercoin addresses"));
 
+    lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock wallet"), this);
+    lockWalletAction->setToolTip(tr("Lock wallet"));
+    lockWalletAction->setCheckable(true);
+
+    unlockWalletAction = new QAction(QIcon(":/icons/lock_open"), tr("Unlo&ck wallet"), this);
+    unlockWalletAction->setToolTip(tr("Unlock wallet"));
+    unlockWalletAction->setCheckable(true);
+
     openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
 
@@ -354,6 +362,8 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     if(walletFrame)
     {
         connect(encryptWalletAction, SIGNAL(triggered(bool)), walletFrame, SLOT(encryptWallet(bool)));
+        connect(lockWalletAction, SIGNAL(triggered(bool)), walletFrame, SLOT(lockWallet()));
+        connect(unlockWalletAction, SIGNAL(triggered(bool)), walletFrame, SLOT(unlockWallet()));
         connect(backupWalletAction, SIGNAL(triggered()), walletFrame, SLOT(backupWallet()));
         connect(changePassphraseAction, SIGNAL(triggered()), walletFrame, SLOT(changePassphrase()));
         connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
@@ -386,6 +396,9 @@ void BitcoinGUI::createMenuBar()
         file->addSeparator();        
         file->addAction(encryptWalletAction);
         file->addAction(changePassphraseAction);
+        file->addSeparator();
+        file->addAction(lockWalletAction);
+        file->addAction(unlockWalletAction);
         file->addSeparator();
         file->addAction(usedSendingAddressesAction);
         file->addAction(usedReceivingAddressesAction);
@@ -979,6 +992,8 @@ void BitcoinGUI::setEncryptionStatus(int status)
         labelEncryptionIcon->hide();
         encryptWalletAction->setChecked(false);
         changePassphraseAction->setEnabled(false);
+        lockWalletAction->setEnabled(false);
+        unlockWalletAction->setEnabled(false);
         encryptWalletAction->setEnabled(true);
         break;
     case WalletModel::Unlocked:
@@ -988,6 +1003,10 @@ void BitcoinGUI::setEncryptionStatus(int status)
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        lockWalletAction->setEnabled(true);
+        lockWalletAction->setChecked(false);
+        unlockWalletAction->setEnabled(false);
+        unlockWalletAction->setChecked(true);        
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
@@ -996,6 +1015,10 @@ void BitcoinGUI::setEncryptionStatus(int status)
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        lockWalletAction->setChecked(true);
+        lockWalletAction->setEnabled(false);
+        unlockWalletAction->setChecked(false);
+        unlockWalletAction->setEnabled(true);        
         break;
     }
 }

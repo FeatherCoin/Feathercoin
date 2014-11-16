@@ -97,6 +97,8 @@ public slots:
     void backupWallet();
     /** Change encrypted wallet passphrase */
     void changePassphrase();
+    /** Lock the wallet */
+    void lockWallet();
     /** Ask for passphrase to unlock wallet temporarily */
     void unlockWallet();
 

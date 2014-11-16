@@ -67,7 +67,8 @@ protected:
 
 private:
     ClientModel *clientModel;
-    WalletFrame *walletFrame;
+    WalletModel *walletModel;
+    WalletFrame *walletFrame;    
 
     QLabel *labelEncryptionIcon;
     QLabel *labelConnectionsIcon;
@@ -99,6 +100,8 @@ private:
     QAction *merchantListAction;
     QAction *bitmessageAction;
     QAction *shapeshiftAction;
+    QAction *lockWalletAction;
+    QAction *unlockWalletAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
