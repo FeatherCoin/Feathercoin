@@ -60,7 +60,7 @@
         <string>&amp;New</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
        </property>
       </widget>
@@ -74,8 +74,30 @@
         <string>&amp;Copy</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/editcopy</normaloff>:/icons/editcopy</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="showQRCode">
+       <property name="text">
+        <string>Show &amp;QR Code</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../feathercoin.qrc">
+         <normaloff>:/icons/qrcode</normaloff>:/icons/qrcode</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="importQRCodeButton">
+       <property name="text">
+        <string>&amp;Import QR</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../feathercoin.qrc">
+         <normaloff>:/icons/qrcode</normaloff>:/icons/qrcode</iconset>
        </property>
       </widget>
      </item>
@@ -88,7 +110,7 @@
         <string>&amp;Delete</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
        </property>
       </widget>
@@ -115,7 +137,7 @@
         <string>&amp;Export</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/export</normaloff>:/icons/export</iconset>
        </property>
       </widget>
@@ -138,7 +160,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../bitcoin.qrc"/>
+  <include location="../feathercoin.qrc"/>
  </resources>
  <connections/>
 </ui>

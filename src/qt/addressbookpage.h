@@ -43,6 +43,7 @@ public:
     ~AddressBookPage();
 
     void setModel(AddressTableModel *model);
+    void setOptionsModel(OptionsModel *optionsModel);
     const QString &getReturnValue() const { return returnValue; }
 
 public slots:
@@ -51,6 +52,7 @@ public slots:
 private:
     Ui::AddressBookPage *ui;
     AddressTableModel *model;
+    OptionsModel *optionsModel;
     Mode mode;
     Tabs tab;
     QString returnValue;
@@ -72,6 +74,10 @@ private slots:
     void onEditAction();
     /** Export button clicked */
     void on_exportButton_clicked();
+    /** Generate a QR Code from the currently selected address */
+    void on_showQRCode_clicked();
+    /** Import from a QR Code into your wallet */
+    void on_importQRCodeButton_clicked();
 
     /** Set button states based on selected tab and selection */
     void selectionChanged();
