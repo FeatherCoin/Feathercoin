@@ -103,6 +103,8 @@ QT_FORMS_UI = \
   forms/sendcoinsentry.ui \
   forms/signverifymessagedialog.ui \
   forms/transactiondescdialog.ui \
+  forms/qrcodedialog.ui \
+  forms/snapwidget.ui \
   forms/merchantlist.ui
 
 QT_MOC_CPP = \
@@ -150,6 +152,8 @@ QT_MOC_CPP = \
   moc_walletframe.cpp \
   moc_walletmodel.cpp \
   moc_walletview.cpp \
+  moc_qrcodedialog.cpp \
+  moc_snapwidget.cpp \
   moc_reportview.cpp \
   moc_merchantlist.cpp
 
@@ -221,6 +225,9 @@ BITCOIN_QT_H = \
   walletmodeltransaction.h \
   walletview.h \
   winshutdownmonitor.h \
+  qrcodedialog.h \
+  snapwidget.h \
+  qimagesource.h \
   reportview.h \
   merchantlist.h
 
@@ -286,6 +293,7 @@ BITCOIN_QT_CPP = \
   notificator.cpp \
   optionsdialog.cpp \
   shiftdialog.cpp \
+  qrcodedialog.cpp \
   optionsmodel.cpp \
   qvalidatedlineedit.cpp \
   qvaluecombobox.cpp \
@@ -324,6 +332,8 @@ BITCOIN_QT_CPP += \
   walletmodeltransaction.cpp \
   walletview.cpp \
   reportview.cpp \
+  snapwidget.cpp \
+  qimagesource.cpp \
   merchantlist.cpp
 endif
 

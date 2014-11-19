@@ -20,7 +20,12 @@
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QTextDocument>
+#include <QClipboard>
 
+#ifdef USE_ZXING
+#include "snapwidget.h"
+#endif
+ 
 SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SendCoinsDialog),
@@ -32,9 +37,14 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     ui->addButton->setIcon(QIcon());
     ui->clearButton->setIcon(QIcon());
     ui->sendButton->setIcon(QIcon());
+    ui->sendQRButton->setIcon(QIcon());
 #endif
 
     GUIUtil::setupAddressWidget(ui->lineEditCoinControlChange, this);
+
+#ifndef USE_ZXING
+    this->ui->sendQRButton->hide();
+#endif
 
     addEntry();
 
@@ -106,6 +116,19 @@ void SendCoinsDialog::setModel(WalletModel *model)
 SendCoinsDialog::~SendCoinsDialog()
 {
     delete ui;
+}
+
+void SendCoinsDialog::on_sendQRButton_clicked()
+{
+#ifdef USE_ZXING
+    SnapWidget* snap = new SnapWidget(this);
+    connect(snap, SIGNAL(finished(QString)), this, SLOT(onSnapClosed(QString)));
+#endif
+}
+
+void SendCoinsDialog::onSnapClosed(QString s)
+{
+    emit sendCoins(s);
 }
 
 void SendCoinsDialog::on_sendButton_clicked()

@@ -101,6 +101,8 @@ public slots:
     void lockWallet();
     /** Ask for passphrase to unlock wallet temporarily */
     void unlockWallet();
+    /** Import a wallet from a string */
+    void importWallet(QString privateKey);
 
     /** Show used sending addresses */
     void usedSendingAddresses();

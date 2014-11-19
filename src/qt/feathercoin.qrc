@@ -65,6 +65,7 @@
         <file alias="merchant_shapeshift">res/images/shapeshift.png</file>
         <file alias="merchant_bitbooks">res/images/bitbooks.png</file>
         <file alias="merchant_coinverted">res/images/coinverted.png</file>
+        <file alias="merchant_bit">res/images/bittrex.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="spinner-000">res/movies/spinner-000.png</file>

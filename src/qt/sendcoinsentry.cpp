@@ -205,7 +205,20 @@ void SendCoinsEntry::setValue(const SendCoinsRecipient &value)
 
 void SendCoinsEntry::setAddress(const QString &address)
 {
-    ui->payTo->setText(address);
+    //may have been scanned in so it must be parsed first
+    if (address.size() > 34) {
+        QString _address;
+        QString _label;
+        QString _amount;     
+        int x = address.indexOf(":", 0, Qt::CaseInsensitive);
+        if (x) 
+            _address = address.mid(x+1, 34); 
+        //Todo: parse out label and amount from incoming string
+        ui->payTo->setText(_address);
+    }
+    else {
+        ui->payTo->setText(address);
+    }
     ui->payAmount->setFocus();
 }
 

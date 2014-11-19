@@ -114,6 +114,8 @@ MerchantListView::MerchantListView(QWidget *parent) :
     ui->label_left_2->installEventFilter(this);
     ui->label_left_3->installEventFilter(this);
     ui->label_left_4->installEventFilter(this);
+    ui->label_left_5->installEventFilter(this);
+    ui->label_left_6->installEventFilter(this);
     ui->label_right_1->installEventFilter(this);
     ui->label_right_2->installEventFilter(this);
     ui->label_right_3->installEventFilter(this);
@@ -153,6 +155,10 @@ bool MerchantListView::eventFilter(QObject *obj, QEvent *event)
 	 		}
 	 	 	if (obj == ui->label_left_4) { 
 	 	 	  QDesktopServices::openUrl(QUrl("http://coinverted.com"));
+	 			return true; 
+	 		}
+	 	 	if (obj == ui->label_left_5) { 
+	 	 	  QDesktopServices::openUrl(QUrl("https://bittrex.com/Market/?MarketName=BTC-FTC"));
 	 			return true; 
 	 		}
 	 	 	if (obj == ui->label_right_1) { 

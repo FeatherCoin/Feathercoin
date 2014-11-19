@@ -8,6 +8,8 @@
 #include "paymentrequestplus.h"
 #include "walletmodeltransaction.h"
 
+#pragma warning(disable:4717)  //bogus warning from MS
+
 #include "allocators.h" /* for SecureString */
 
 #include <map>
@@ -148,6 +150,8 @@ public:
     // Send coins to a list of recipients
     SendCoinsReturn sendCoins(WalletModelTransaction &transaction);
 
+		bool importPrivateKey(QString privKey);
+		
     // Wallet encryption
     bool setWalletEncrypted(bool encrypted, const SecureString &passphrase);
     // Passphrase only needed when unlocking

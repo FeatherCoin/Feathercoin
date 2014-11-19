@@ -86,7 +86,11 @@ WalletView::WalletView(QWidget *parent):
 
     // Double-clicking on a transaction on the transaction history page shows details
     connect(transactionView, SIGNAL(doubleClicked(QModelIndex)), transactionView, SLOT(showDetails()));
-
+    
+    connect(receiveCoinsPage, SIGNAL(importWallet(QString)), this, SLOT(importWallet(QString)));
+    // Clicking on "Send to QR" sends you to the send coins tab after snapping and reading image
+    connect(sendCoinsPage, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString)));
+    
     // Clicking on "Export" allows to export the transaction list
     connect(exportButton, SIGNAL(clicked()), transactionView, SLOT(exportClicked()));
     connect(exportRButton, SIGNAL(clicked()), reportView, SLOT(exportClicked())); 
@@ -155,7 +159,7 @@ void WalletView::setWalletModel(WalletModel *walletModel)
         connect(walletModel, SIGNAL(requireUnlock()), this, SLOT(unlockWallet()));
 
         // Show progress dialog
-        connect(walletModel, SIGNAL(showProgress(QString,int)), this, SLOT(showProgress(QString,int)));
+        connect(walletModel, SIGNAL(showProgress(QString,int)), this, SLOT(showProgress(QString,int)));    
     }
 }
 
@@ -307,6 +311,14 @@ void WalletView::unlockWallet()
         dlg.setModel(walletModel);
         dlg.exec();
     }
+}
+
+void WalletView::importWallet(QString privateKey)
+{
+    if(!walletModel)
+        return;
+        
+    bool b =walletModel->importPrivateKey(privateKey);   
 }
 
 void WalletView::usedSendingAddresses()
