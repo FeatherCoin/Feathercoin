@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>790</width>
+    <width>805</width>
     <height>461</height>
    </rect>
   </property>
@@ -73,10 +73,32 @@
          </item>
          <item>
           <widget class="QLabel" name="label_left_6">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="toolTip">
+            <string>a altcoin currency exchange</string>
+           </property>
            <property name="text">
             <string/>
            </property>
+           <property name="pixmap">
+            <pixmap resource="../feathercoin.qrc">:/images/merchant_vircurex</pixmap>
+           </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
@@ -320,9 +342,35 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../feathercoin.qrc">:/images/merchant_mc</pixmap>
+            <pixmap resource="../feathercoin.qrc">:/images/merchant_bittylicious</pixmap>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <spacer name="horizontalSpacer">
@@ -353,6 +401,19 @@
             <pixmap resource="../feathercoin.qrc">:/images/merchant_shapeshift</pixmap>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>

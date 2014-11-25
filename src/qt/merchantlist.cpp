@@ -161,6 +161,10 @@ bool MerchantListView::eventFilter(QObject *obj, QEvent *event)
 	 	 	  QDesktopServices::openUrl(QUrl("https://bittrex.com/Market/?MarketName=BTC-FTC"));
 	 			return true; 
 	 		}
+	 		if (obj == ui->label_left_6) { 
+	 	 	  QDesktopServices::openUrl(QUrl("https://vircurex.com/welcome/index?alt=btc&base=ftc"));
+	 			return true; 
+	 		}
 	 	 	if (obj == ui->label_right_1) { 
 	 	 	  QDesktopServices::openUrl(QUrl("https://crypto-trade.com/currencies/trade/ftc_usd"));
 	 			return true; 
@@ -182,7 +186,7 @@ bool MerchantListView::eventFilter(QObject *obj, QEvent *event)
 	 			return true; 
 	 		}
 	 		if (obj == ui->label_right_6) { 
-	 	 	  QDesktopServices::openUrl(QUrl("https://mcxnow.com/exchange/FTC"));
+	 	 	  QDesktopServices::openUrl(QUrl("https://bittylicious.com/"));
 	 			return true; 
 	 		}
 	 		if (obj == ui->label_right_7) { 
