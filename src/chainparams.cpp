@@ -88,10 +88,12 @@ public:
 
         //how to do feathercoin ?
         base58Prefixes[PUBKEY_ADDRESS] = list_of(14); // FeatherCoin addresses start with F
-        base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
+        //base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
+        base58Prefixes[SCRIPT_ADDRESS] = list_of(96);
         base58Prefixes[SECRET_KEY] =     list_of(142);// 14+128
         base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xBC)(0x26);
         base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xDA)(0xEE);
+        //base58Prefixes[EXT_SCRIPT_ADDRESS] = list_of(96);
         
         // Convert the pnSeeds array into usable address objects.
         for (unsigned int i = 0; i < ARRAYLEN(pnSeed); i++)
