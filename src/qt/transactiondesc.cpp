@@ -224,6 +224,14 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx, int vout, int u
         if (wtx.mapValue.count("comment") && !wtx.mapValue["comment"].empty())
             strHTML += "<br><b>" + tr("Comment") + ":</b><br>" + GUIUtil::HtmlEscape(wtx.mapValue["comment"], true) + "<br>";
 
+        char cbuf[256];
+        for (int k = 0; k < wtx.vout.size(); ++k)
+        {
+            snprintf(cbuf, sizeof(cbuf), "n_%d", k);
+            if (wtx.mapValue.count(cbuf) && !wtx.mapValue[cbuf].empty())
+                strHTML += "<br><b>" + tr(cbuf) + ":</b> " + GUIUtil::HtmlEscape(wtx.mapValue[cbuf], true) + "<br>";
+        }
+        
         strHTML += "<b>" + tr("Transaction ID") + ":</b> " + TransactionRecord::formatSubTxId(wtx.GetHash(), vout) + "<br>";
 
         // Message from normal bitcoin:URI (bitcoin:123...?message=example)

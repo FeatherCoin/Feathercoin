@@ -423,6 +423,39 @@ CPubKey CKey::GetPubKey() const {
     return pubkey;
 }
 
+bool CKey::SetSecret(const CSecret& vchSecret, bool fCompressedIn)
+{
+    if (vchSecret.size() != 32)
+        return false;
+        
+		CECKey key;       
+		key.SetSecretBytes(&vchSecret[0]);
+    
+    fCompressed = fCompressedIn;
+    fValid = true;
+		return true;
+		
+    /*EC_KEY_free(pkey);
+    pkey = EC_KEY_new_by_curve_name(NID_secp256k1);
+    if (pkey == NULL)
+        return false;
+    if (vchSecret.size() != 32)
+        return false;
+    BIGNUM *bn = BN_bin2bn(&vchSecret[0],32,BN_new());
+    if (bn == NULL)
+        return false;
+    if (!EC_KEY_regenerate_key(pkey,bn))
+    {
+        BN_clear_free(bn);
+        return false;
+    }
+    BN_clear_free(bn);
+    fValid = true;
+    if (fCompressed )
+        SetCompressedPubKey();
+    return true;*/
+}
+
 bool CKey::Sign(const uint256 &hash, std::vector<unsigned char>& vchSig) const {
     if (!fValid)
         return false;

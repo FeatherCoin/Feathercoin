@@ -8,6 +8,7 @@
 
 #include "key.h"
 #include "util.h"
+#include "stealth.h"
 
 #include <stdexcept>
 #include <stdint.h>
@@ -16,6 +17,8 @@
 
 #include <boost/foreach.hpp>
 #include <boost/variant.hpp>
+
+typedef std::vector<unsigned char> valtype;
 
 class CCoins;
 class CKeyStore;
@@ -216,7 +219,8 @@ public:
  *  * CScriptID: TX_SCRIPTHASH destination
  *  A CTxDestination is the internal data type encoded in a CBitcoinAddress
  */
-typedef boost::variant<CNoDestination, CKeyID, CScriptID> CTxDestination;
+typedef boost::variant<CNoDestination, CKeyID, CScriptID, CStealthAddress> CTxDestination;
+//typedef boost::variant<CNoDestination, CKeyID, CScriptID> CTxDestination;
 
 const char* GetTxnOutputType(txnouttype t);
 

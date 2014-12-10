@@ -152,6 +152,11 @@ public:
         return size() == 33;
     }
 
+    std::vector<unsigned char> Raw() const {
+    		std::vector<unsigned char> vchPubKey(begin(),end());  
+        return vchPubKey;
+    }
+    
     // Verify a DER signature (~72 bytes).
     // If this public key is not fully valid, the return value will be false.
     bool Verify(const uint256 &hash, const std::vector<unsigned char>& vchSig) const;
@@ -174,6 +179,8 @@ public:
 // secure_allocator is defined in allocators.h
 // CPrivKey is a serialized private key, with all parameters included (279 bytes)
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CPrivKey;
+// CSecret is a serialization of just the secret parameter (32 bytes)
+typedef std::vector<unsigned char, secure_allocator<unsigned char> > CSecret;
 
 /** An encapsulated private key. */
 class CKey {
@@ -263,7 +270,8 @@ public:
     //                  0x1D = second key with even y, 0x1E = second key with odd y,
     //                  add 0x04 for compressed keys.
     bool SignCompact(const uint256 &hash, std::vector<unsigned char>& vchSig) const;
-
+		bool SetSecret(const CSecret& vchSecret, bool fCompressed = false);
+		
     // Derive BIP32 child key.
     bool Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const;
 

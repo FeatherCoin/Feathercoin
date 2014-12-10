@@ -13,6 +13,7 @@
 #include "ui_interface.h"
 #include "util.h"
 #include "walletdb.h"
+#include "stealth.h"
 
 #include <algorithm>
 #include <map>
@@ -31,6 +32,9 @@ extern bool bSpendZeroConfChange;
 static const int64_t DEFAULT_TRANSACTION_FEE = 0;
 // -paytxfee will warn if called with a higher fee than this amount (in satoshis) per KB
 static const int nHighTransactionFeeWarning = 0.05 * COIN;
+
+typedef std::map<CKeyID, CStealthKeyMetadata> StealthKeyMetaMap;
+typedef std::map<std::string, std::string> mapValue_t;
 
 class CAccountingEntry;
 class CCoinControl;
@@ -137,6 +141,10 @@ public:
     std::set<int64_t> setKeyPool;
     std::map<CKeyID, CKeyMetadata> mapKeyMetadata;
 
+    std::set<CStealthAddress> stealthAddresses;
+    StealthKeyMetaMap mapStealthKeyMeta;
+    uint32_t nStealth, nFoundStealth; // for reporting, zero before use
+    
     typedef std::map<unsigned int, CMasterKey> MasterKeyMap;
     MasterKeyMap mapMasterKeys;
     unsigned int nMasterKeyMaxID;
@@ -222,6 +230,7 @@ public:
     /// Look up a destination data tuple in the store, return true if found false otherwise
     bool GetDestData(const CTxDestination &dest, const std::string &key, std::string *value) const;
 
+    bool Lock();
     bool Unlock(const SecureString& strWalletPassphrase);
     bool ChangeWalletPassphrase(const SecureString& strOldWalletPassphrase, const SecureString& strNewWalletPassphrase);
     bool EncryptWallet(const SecureString& strWalletPassphrase);
@@ -253,14 +262,32 @@ public:
     int64_t GetBalance() const;
     int64_t GetUnconfirmedBalance() const;
     int64_t GetImmatureBalance() const;
-    bool CreateTransaction(const std::vector<std::pair<CScript, int64_t> >& vecSend,
-                           CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl *coinControl = NULL);
-    bool CreateTransaction(CScript scriptPubKey, int64_t nValue,
-                           CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl *coinControl = NULL);
+    /*bool CreateTransaction(const std::vector<std::pair<CScript, int64_t> >& vecSend,
+                           CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl *coinControl = NULL);*/
+    bool CreateTransaction(const std::vector<std::pair<CScript, int64> >& vecSend,
+                           CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, int32_t& nChangePos, std::string& strFailReason, const CCoinControl *coinControl=NULL);                           	
+    /*bool CreateTransaction(CScript scriptPubKey, int64_t nValue,
+                           CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl *coinControl = NULL);*/
+    bool CreateTransaction(CScript scriptPubKey, int64 nValue,
+                           CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, std::string& strFailReason, const CCoinControl *coinControl = NULL);
+    	
     bool CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey);
-    std::string SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew);
-    std::string SendMoneyToDestination(const CTxDestination &address, int64_t nValue, CWalletTx& wtxNew);
-
+  //std::string SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew);
+    std::string SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew, bool fAskFee=false);  	
+  //std::string SendMoneyToDestination(const CTxDestination &address, int64_t nValue, CWalletTx& wtxNew);
+    std::string SendMoneyToDestination(const CTxDestination& address, int64_t nValue, CWalletTx& wtxNew, bool fAskFee=false);
+	
+    bool NewStealthAddress(std::string& sError, std::string& sLabel, CStealthAddress& sxAddr);
+    bool AddStealthAddress(CStealthAddress& sxAddr);
+    bool UnlockStealthAddresses(const CKeyingMaterial& vMasterKeyIn);
+    bool UpdateStealthAddress(std::string &addr, std::string &label, bool addIfNotExist);
+    
+    bool CreateStealthTransaction(CScript scriptPubKey, int64_t nValue, std::vector<uint8_t>& P, CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, const CCoinControl* coinControl=NULL);
+    std::string SendStealthMoney(CScript scriptPubKey, int64_t nValue, std::vector<uint8_t>& P, CWalletTx& wtxNew, bool fAskFee=false);
+    bool SendStealthMoneyToDestination(CStealthAddress& sxAddress, int64_t nValue, CWalletTx& wtxNew, std::string& sError, bool fAskFee=false);
+    bool FindStealthTransactions(const CTransaction& tx);
+    
+    
     bool NewKeyPool();
     bool TopUpKeyPool(unsigned int kpSize = 0);
     int64_t AddReserveKey(const CKeyPool& keypool);
@@ -423,7 +450,7 @@ public:
 };
 
 
-typedef std::map<std::string, std::string> mapValue_t;
+//typedef std::map<std::string, std::string> mapValue_t;
 
 
 static void ReadOrderPos(int64_t& nOrderPos, mapValue_t& mapValue)

@@ -199,7 +199,6 @@ void SendCoinsDialog::on_sendButton_clicked()
 
     fNewRecipientAllowed = false;
 
-
     WalletModel::UnlockContext ctx(model->requestUnlock());
     if(!ctx.isValid())
     {
@@ -266,7 +265,7 @@ void SendCoinsDialog::on_sendButton_clicked()
     WalletModel::SendCoinsReturn sendStatus = model->sendCoins(currentTransaction);
     // process sendStatus and on error generate message shown to user
     processSendCoinsReturn(sendStatus);
-
+		//QMessageBox::information(NULL, "Info1", "Click_SendButton", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     if (sendStatus.status == WalletModel::OK)
     {
         accept();

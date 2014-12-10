@@ -49,6 +49,7 @@ public:
     // Todo: This is a hack, should be replaced with a cleaner solution!
     QString address;
     QString label;
+    int typeInd;
     qint64 amount;
     // If from a payment request, this is used for storing the memo
     QString message;
@@ -112,7 +113,8 @@ public:
         AmountWithFeeExceedsBalance,
         DuplicateAddress,
         TransactionCreationFailed, // Error returned when wallet is still locked
-        TransactionCommitFailed
+        TransactionCommitFailed,
+        Aborted
     };
 
     enum EncryptionStatus

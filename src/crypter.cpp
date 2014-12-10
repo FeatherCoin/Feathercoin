@@ -131,7 +131,7 @@ bool CCryptoKeyStore::SetCrypted()
     return true;
 }
 
-bool CCryptoKeyStore::Lock()
+bool CCryptoKeyStore::LockKeyStore()
 {
     if (!SetCrypted())
         return false;

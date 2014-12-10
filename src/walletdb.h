@@ -7,6 +7,7 @@
 
 #include "db.h"
 #include "key.h"
+#include "stealth.h"
 
 #include <list>
 #include <stdint.h>
@@ -34,6 +35,29 @@ enum DBErrors
     DB_TOO_NEW,
     DB_LOAD_FAIL,
     DB_NEED_REWRITE
+};
+
+class CStealthKeyMetadata
+{
+// -- used to get secret for keys created by stealth transaction with wallet locked
+public:
+    CStealthKeyMetadata() {};
+    
+    CStealthKeyMetadata(CPubKey pkEphem_, CPubKey pkScan_)
+    {
+        pkEphem = pkEphem_;
+        pkScan = pkScan_;
+    };
+    
+    CPubKey pkEphem;
+    CPubKey pkScan;
+
+    IMPLEMENT_SERIALIZE
+    (
+        READWRITE(pkEphem);
+        READWRITE(pkScan);
+    )
+
 };
 
 class CKeyMetadata
@@ -78,6 +102,30 @@ private:
     CWalletDB(const CWalletDB&);
     void operator=(const CWalletDB&);
 public:
+    Dbc* GetAtCursor()
+    {
+        return GetCursor();
+    }
+    
+    Dbc* GetTxnCursor()
+    {
+        if (!pdb)
+            return NULL;
+        
+        DbTxn* ptxnid = activeTxn; // call TxnBegin first
+        
+        Dbc* pcursor = NULL;
+        int ret = pdb->cursor(ptxnid, &pcursor, 0);
+        if (ret != 0)
+            return NULL;
+        return pcursor;
+    }
+    
+    DbTxn* GetAtActiveTxn()
+    {
+        return activeTxn;
+    }
+    
     bool WriteName(const std::string& strAddress, const std::string& strName);
     bool EraseName(const std::string& strAddress);
 
@@ -87,6 +135,31 @@ public:
     bool WriteTx(uint256 hash, const CWalletTx& wtx);
     bool EraseTx(uint256 hash);
 
+    bool WriteStealthKeyMeta(const CKeyID& keyId, const CStealthKeyMetadata& sxKeyMeta)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("sxKeyMeta"), keyId), sxKeyMeta, true);
+    }
+    
+    bool EraseStealthKeyMeta(const CKeyID& keyId)
+    {
+        nWalletDBUpdated++;
+        return Erase(std::make_pair(std::string("sxKeyMeta"), keyId));
+    }
+    
+    bool WriteStealthAddress(const CStealthAddress& sxAddr)
+    {
+        nWalletDBUpdated++;
+
+        return Write(std::make_pair(std::string("sxAddr"), sxAddr.scan_pubkey), sxAddr, true);
+    }
+    
+    bool ReadStealthAddress(CStealthAddress& sxAddr)
+    {
+        // -- set scan_pubkey before reading
+        return Read(std::make_pair(std::string("sxAddr"), sxAddr.scan_pubkey), sxAddr);
+    }
+    
     bool WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, const CKeyMetadata &keyMeta);
     bool WriteCryptedKey(const CPubKey& vchPubKey, const std::vector<unsigned char>& vchCryptedSecret, const CKeyMetadata &keyMeta);
     bool WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey);

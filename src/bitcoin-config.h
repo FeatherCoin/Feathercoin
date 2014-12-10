@@ -239,6 +239,9 @@
    default state */
 #define USE_UPNP 0
 
+/* Define to 1 libzxing must be available for support */
+#define USE_ZXING 1
+
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined AC_APPLE_UNIVERSAL_BUILD

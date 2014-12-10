@@ -59,10 +59,19 @@
 #endif
 
 const QString BitcoinGUI::DEFAULT_WALLET = "~Default";
+	
+ActiveLabel::ActiveLabel(const QString & text, QWidget * parent):
+    QLabel(parent){}
+
+void ActiveLabel::mouseReleaseEvent(QMouseEvent * event)
+{
+    emit clicked();
+}
 
 BitcoinGUI::BitcoinGUI(bool fIsTestnet, QWidget *parent) :
     QMainWindow(parent),
     clientModel(0),
+    walletModel(0),
     walletFrame(0),
     encryptWalletAction(0),
     changePassphraseAction(0),
@@ -158,7 +167,7 @@ BitcoinGUI::BitcoinGUI(bool fIsTestnet, QWidget *parent) :
     QHBoxLayout *frameBlocksLayout = new QHBoxLayout(frameBlocks);
     frameBlocksLayout->setContentsMargins(3,0,3,0);
     frameBlocksLayout->setSpacing(3);
-    labelEncryptionIcon = new QLabel();
+    labelEncryptionIcon = new ActiveLabel();
     labelConnectionsIcon = new QLabel();
     labelBlocksIcon = new QLabel();
     frameBlocksLayout->addStretch();
@@ -168,6 +177,8 @@ BitcoinGUI::BitcoinGUI(bool fIsTestnet, QWidget *parent) :
     frameBlocksLayout->addStretch();
     frameBlocksLayout->addWidget(labelBlocksIcon);
     frameBlocksLayout->addStretch();
+    
+    connect(labelEncryptionIcon, SIGNAL(clicked()), unlockWalletAction, SLOT(trigger()));
 
     // Progress bar and label for blocks download
     progressBarLabel = new QLabel();
@@ -997,6 +1008,9 @@ void BitcoinGUI::setEncryptionStatus(int status)
         encryptWalletAction->setEnabled(true);
         break;
     case WalletModel::Unlocked:
+        disconnect(labelEncryptionIcon, SIGNAL(clicked()), unlockWalletAction, SLOT(trigger()));
+        disconnect(labelEncryptionIcon, SIGNAL(clicked()),   lockWalletAction, SLOT(trigger()));
+        connect   (labelEncryptionIcon, SIGNAL(clicked()),   lockWalletAction, SLOT(trigger()));
         labelEncryptionIcon->show();
         labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
@@ -1009,6 +1023,9 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setChecked(true);        
         break;
     case WalletModel::Locked:
+        disconnect(labelEncryptionIcon, SIGNAL(clicked()), unlockWalletAction, SLOT(trigger()));
+        disconnect(labelEncryptionIcon, SIGNAL(clicked()),   lockWalletAction, SLOT(trigger()));
+        connect   (labelEncryptionIcon, SIGNAL(clicked()), unlockWalletAction, SLOT(trigger()));
         labelEncryptionIcon->show();
         labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));

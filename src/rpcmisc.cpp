@@ -123,6 +123,11 @@ public:
             obj.push_back(Pair("sigsrequired", nRequired));
         return obj;
     }
+    Object operator()(const CStealthAddress &stxAddr) const {
+        Object obj;
+        obj.push_back(Pair("todo", true));
+        return obj;
+    }
 };
 #endif
 

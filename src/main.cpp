@@ -580,6 +580,8 @@ bool IsStandardTx(const CTransaction& tx, string& reason)
     }
 
     unsigned int nDataOut = 0;
+    unsigned int nTxnOut = 0;
+    
     txnouttype whichType;
     BOOST_FOREACH(const CTxOut& txout, tx.vout) {
         if (!::IsStandard(txout.scriptPubKey, whichType)) {
@@ -587,7 +589,9 @@ bool IsStandardTx(const CTransaction& tx, string& reason)
             return false;
         }
         if (whichType == TX_NULL_DATA)
+        {
             nDataOut++;
+        } 
         else if (txout.IsDust(CTransaction::nMinRelayTxFee)) {
             reason = "dust";
             return false;
