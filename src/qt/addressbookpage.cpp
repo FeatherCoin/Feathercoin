@@ -159,8 +159,8 @@ void AddressBookPage::setModel(AddressTableModel *model)
     ui->tableView->horizontalHeader()->setSectionResizeMode(AddressTableModel::Label, QHeaderView::Stretch);
     ui->tableView->horizontalHeader()->setSectionResizeMode(AddressTableModel::Address, QHeaderView::ResizeToContents);
 #endif
-		ui->tableView->horizontalHeader()->resizeSection(0, 140);
-		ui->tableView->horizontalHeader()->resizeSection(1, 600);
+		ui->tableView->horizontalHeader()->resizeSection(0, 150);
+		ui->tableView->horizontalHeader()->resizeSection(1, 900);
 
     connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
         this, SLOT(selectionChanged()));
