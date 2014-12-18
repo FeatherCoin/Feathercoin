@@ -21,17 +21,17 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f, bool isTest
     setAutoFillBackground(true);
 
     // set reference point, paddings
-    int paddingRight            = 50;
-    int paddingTop              = 50;
-    int titleVersionVSpace      = 17;
-    int titleCopyrightVSpace    = 40;
+    int paddingRight            = 230;
+    int paddingTop              = 300;
+    int titleVersionVSpace      = 13;
+    int titleCopyrightVSpace    = 26;
 
     float fontFactor            = 1.0;
 
     // define text to place
     QString titleText       = tr("Feathercoin Core");
     QString versionText     = QString("Version %1").arg(QString::fromStdString(FormatFullVersion()));
-    QString copyrightText   = QChar(0xA9)+QString(" 2013-%1 ").arg(COPYRIGHT_YEAR) + QString(tr("The Feathercoin Core developers"));
+    QString copyrightText   = QChar(0xA9)+QString(" 2013-%1 ").arg(COPYRIGHT_YEAR) + QString(tr("The Feathercoin developers"));
     QString testnetAddText  = QString(tr("[testnet]")); // define text to place as single text object
 
     QString font            = "Arial";
@@ -46,40 +46,24 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f, bool isTest
     }
 
     QPainter pixPaint(&newPixmap);
-    pixPaint.setPen(QColor(100,100,100));
+    pixPaint.setPen(QColor(70,70,70));
 
-    // check font size and drawing with
-    pixPaint.setFont(QFont(font, 33*fontFactor));
+
+    pixPaint.setFont(QFont(font, 9*fontFactor));
     QFontMetrics fm = pixPaint.fontMetrics();
     int titleTextWidth  = fm.width(titleText);
-    if(titleTextWidth > 160) {
-        // strange font rendering, Arial probably not found
-        fontFactor = 0.75;
-    }
-
-    pixPaint.setFont(QFont(font, 33*fontFactor));
     fm = pixPaint.fontMetrics();
     titleTextWidth  = fm.width(titleText);
-    pixPaint.drawText(newPixmap.width()-titleTextWidth-paddingRight+44,paddingTop,titleText);
+    pixPaint.drawText(newPixmap.width()-titleTextWidth-paddingRight,paddingTop,titleText);
 
-    pixPaint.setFont(QFont(font, 15*fontFactor));
-
-    // if the version string is to long, reduce size
     fm = pixPaint.fontMetrics();
-    int versionTextWidth  = fm.width(versionText);
-    if(versionTextWidth > titleTextWidth+paddingRight-10) {
-        pixPaint.setFont(QFont(font, 10*fontFactor));
-        titleVersionVSpace -= 5;
-    }
-    pixPaint.drawText(newPixmap.width()-titleTextWidth-paddingRight+2+58,paddingTop+titleVersionVSpace,versionText);
+    pixPaint.drawText(newPixmap.width()-titleTextWidth-paddingRight,paddingTop+titleVersionVSpace,versionText);
 
-    // draw copyright stuff
-    pixPaint.setFont(QFont(font, 10*fontFactor));
-    pixPaint.drawText(newPixmap.width()-titleTextWidth-paddingRight+64,paddingTop+titleCopyrightVSpace,copyrightText);
+    pixPaint.drawText(newPixmap.width()-titleTextWidth-paddingRight,paddingTop+titleCopyrightVSpace,copyrightText);
 
     // draw testnet string if testnet is on
     if(isTestNet) {
-        QFont boldFont = QFont(font, 10*fontFactor);
+        QFont boldFont = QFont(font, 9*fontFactor);
         boldFont.setWeight(QFont::Bold);
         pixPaint.setFont(boldFont);
         fm = pixPaint.fontMetrics();
