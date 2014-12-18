@@ -63,9 +63,6 @@ public slots:
     void gotoVerifyMessageTab(QString addr = "");
     /** Switch to account report page */
     void gotoAccountReportPage();
-    /** Switch to merchant list page */
-    void gotoMerchantListPage();
-    
     /** Encrypt the wallet */
     void encryptWallet(bool status);
     /** Backup the wallet */

@@ -104,8 +104,7 @@ QT_FORMS_UI = \
   forms/signverifymessagedialog.ui \
   forms/transactiondescdialog.ui \
   forms/qrcodedialog.ui \
-  forms/snapwidget.ui \
-  forms/merchantlist.ui
+  forms/snapwidget.ui
 
 QT_MOC_CPP = \
   moc_addressbookpage.cpp \
@@ -154,8 +153,7 @@ QT_MOC_CPP = \
   moc_walletview.cpp \
   moc_qrcodedialog.cpp \
   moc_snapwidget.cpp \
-  moc_reportview.cpp \
-  moc_merchantlist.cpp
+  moc_reportview.cpp
 
 FEATHERCOIN_MM = \
   macdockiconhandler.mm \
@@ -165,7 +163,6 @@ QT_MOC = \
   bitcoin.moc \
   intro.moc \
   overviewpage.moc \
-  merchantlist.moc \
   rpcconsole.moc
 
 QT_QRC_CPP = qrc_feathercoin.cpp
@@ -228,8 +225,7 @@ BITCOIN_QT_H = \
   qrcodedialog.h \
   snapwidget.h \
   qimagesource.h \
-  reportview.h \
-  merchantlist.h
+  reportview.h
 
 RES_ICONS = \
   res/icons/add.png \
@@ -275,7 +271,6 @@ RES_ICONS = \
   res/icons/tx_input.png \
   res/icons/tx_output.png \
   res/icons/tx_mined.png \
-  res/icons/merchantList.png \
   res/icons/openurl.png \
   res/icons/account-report.png
 
@@ -333,8 +328,7 @@ BITCOIN_QT_CPP += \
   walletview.cpp \
   reportview.cpp \
   snapwidget.cpp \
-  qimagesource.cpp \
-  merchantlist.cpp
+  qimagesource.cpp
 endif
 
 RES_IMAGES = \
@@ -344,16 +338,7 @@ RES_IMAGES = \
   res/images/LOGO.png \
   res/images/mainbg.png \
   res/images/about_bitcoin.png \
-  res/images/about.png \
-  res/images/feathercoinmap.png \
-  res/images/bitcoinbazaar.co.uk.png \
-  res/images/pockio.png \
-  res/images/btc-e.png \
-  res/images/bter.png \
-  res/images/cm.png \
-  res/images/cryptsy.png \
-  res/images/ct.png \
-  res/images/mc.png
+  res/images/about.png
 
 RES_MOVIES = $(wildcard res/movies/spinner-*.png)
 

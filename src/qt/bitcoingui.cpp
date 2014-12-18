@@ -272,13 +272,6 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     accountReportAction->setCheckable(true);
     accountReportAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(accountReportAction);
-    
-    merchantListAction = new QAction(QIcon(":/icons/merchantList"), tr("&MerchantList"), this);
-    merchantListAction->setStatusTip(tr("Print merchant list"));
-    merchantListAction->setToolTip(merchantListAction->statusTip());
-    merchantListAction->setCheckable(true);
-    merchantListAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
-    tabGroup->addAction(merchantListAction); 
 
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
     // can be triggered from the tray menu, and need to show the GUI to be useful.
@@ -291,9 +284,7 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(accountReportAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(accountReportAction, SIGNAL(triggered()), this, SLOT(gotoAccountReportPage()));    
-    connect(merchantListAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(merchantListAction, SIGNAL(triggered()), this, SLOT(gotoMerchantListPage()));
+    connect(accountReportAction, SIGNAL(triggered()), this, SLOT(gotoAccountReportPage()));
     
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setStatusTip(tr("Quit application"));
@@ -432,8 +423,6 @@ void BitcoinGUI::createMenuBar()
     if(walletFrame)
     {
         advanced->addAction(accountReportAction);
-        advanced->addSeparator();
-        advanced->addAction(merchantListAction);
     }
     
     QMenu *plugins = appMenuBar->addMenu(tr("&Plugins"));
@@ -462,7 +451,6 @@ void BitcoinGUI::createToolBars()
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
         toolbar->addAction(accountReportAction);
-        toolbar->addAction(merchantListAction);
         overviewAction->setChecked(true);
     }
 }
@@ -536,7 +524,6 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     usedReceivingAddressesAction->setEnabled(enabled);
     openAction->setEnabled(enabled);
     accountReportAction->setEnabled(enabled);
-    merchantListAction->setEnabled(enabled);
     bitmessageAction->setEnabled(enabled);
     shapeshiftAction->setEnabled(enabled);
 }
@@ -695,12 +682,6 @@ void BitcoinGUI::gotoAccountReportPage()
 {
 		accountReportAction->setChecked(true);
     if (walletFrame) walletFrame->gotoAccountReportPage();
-}
-
-void BitcoinGUI::gotoMerchantListPage()
-{
-		merchantListAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoMerchantListPage();
 }
 
 void BitcoinGUI::gotoSignMessageTab(QString addr)

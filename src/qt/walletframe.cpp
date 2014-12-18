@@ -126,13 +126,6 @@ void WalletFrame::gotoAccountReportPage()
         i.value()->gotoAccountReportPage();
 }
 
-void WalletFrame::gotoMerchantListPage()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->gotoMerchantListPage();
-}
-
 void WalletFrame::gotoReceiveCoinsPage()
 {
     QMap<QString, WalletView*>::const_iterator i;

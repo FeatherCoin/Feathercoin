@@ -5,7 +5,6 @@
         <file alias="shapeshift">res/icons/shapeshift.png</file>
         <file alias="openurl">res/icons/openurl.png</file>
         <file alias="account-report">res/icons/account-report.png</file>
-        <file alias="merchantList">res/icons/merchantList.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
         <file alias="quit">res/icons/quit.png</file>
         <file alias="send">res/icons/send.png</file>
@@ -53,21 +52,6 @@
         <file alias="splash_testnet">res/images/splash_testnet.png</file>
         <file alias="mainlogo">res/images/LOGO.png</file>
         <file alias="mainbg">res/images/mainbg.png</file>
-        <file alias="merchant_map">res/images/feathercoinmap.png</file>
-        <file alias="merchant_e">res/images/btc-e.png</file>
-        <file alias="merchant_c">res/images/cryptsy.png</file>
-        <file alias="merchant_bter">res/images/bter.png</file>
-        <file alias="merchant_ct">res/images/ct.png</file>
-        <file alias="merchant_cm">res/images/cm.png</file>
-        <file alias="merchant_mc">res/images/mc.png</file>
-        <file alias="merchant_bitcoinbazaar">res/images/bitcoinbazaar.co.uk.png</file>
-        <file alias="merchant_pockio">res/images/pockio.png</file>
-        <file alias="merchant_shapeshift">res/images/shapeshift.png</file>
-        <file alias="merchant_bitbooks">res/images/bitbooks.png</file>
-        <file alias="merchant_coinverted">res/images/coinverted.png</file>
-        <file alias="merchant_bit">res/images/bittrex.png</file>
-        <file alias="merchant_bittylicious">res/images/bittylicious.png</file>
-        <file alias="merchant_vircurex">res/images/vircurex.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="spinner-000">res/movies/spinner-000.png</file>

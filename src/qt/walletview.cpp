@@ -17,7 +17,6 @@
 #include "transactiontablemodel.h"
 #include "transactionview.h"
 #include "reportview.h"
-#include "merchantlist.h"
 #include "walletmodel.h"
 
 #include "ui_interface.h"
@@ -37,7 +36,6 @@ WalletView::WalletView(QWidget *parent):
 {
     // Create tabs
     overviewPage = new OverviewPage();
-    merchantlistPage = new MerchantListView();
 
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();
@@ -79,7 +77,6 @@ WalletView::WalletView(QWidget *parent):
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
     addWidget(accountreportPage);
-    addWidget(merchantlistPage);
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), transactionView, SLOT(focusTransaction(QModelIndex)));
@@ -136,7 +133,6 @@ void WalletView::setWalletModel(WalletModel *walletModel)
 
     // Put transaction list in tabs
     overviewPage->setWalletModel(walletModel);
-    merchantlistPage->setWalletModel(walletModel);
     transactionView->setModel(walletModel);
     reportView->setModel(walletModel);
     receiveCoinsPage->setModel(walletModel);
@@ -197,11 +193,6 @@ void WalletView::gotoReceiveCoinsPage()
 void WalletView::gotoAccountReportPage()
 {
     setCurrentWidget(accountreportPage); 
-}
-
-void WalletView::gotoMerchantListPage()
-{
-    setCurrentWidget(merchantlistPage); 
 }
 
 void WalletView::gotoSendCoinsPage(QString addr)

@@ -113,7 +113,6 @@ private:
     QAction *openAction;
     QAction *showHelpMessageAction;
     QAction *accountReportAction;
-    QAction *merchantListAction;
     QAction *bitmessageAction;
     QAction *shapeshiftAction;
     QAction *lockWalletAction;
@@ -195,8 +194,6 @@ private slots:
     void gotoVerifyMessageTab(QString addr = "");
     /** Switch to account report page */
     void gotoAccountReportPage();
-    /** Switch to merchant list page */
-    void gotoMerchantListPage();
         
     /** Show open dialog */
     void openClicked();
