@@ -53,10 +53,14 @@ ShiftDialog::ShiftDialog(QWidget *parent) :
 
 		manager = new QNetworkAccessManager(this); 
 		connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(replyFinished(QNetworkReply*)));
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/rate/ftc_btc")));
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/rate/ftc_doge")));
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/limit/ftc_btc")));
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/limit/ftc_doge")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_btc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_doge")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_ltc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_bc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_btc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_doge")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_ltc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_bc")));
 		
 
     /* Widget-to-option mapper */
@@ -94,7 +98,15 @@ void ShiftDialog::replyFinished(QNetworkReply *reply)
 					if(name_value.toString()=="ftc_doge")
 			    {
 			        sw=2;
-			    }			    
+			    }		
+					if(name_value.toString()=="ftc_ltc")
+			    {
+			        sw=11;
+			    }
+					if(name_value.toString()=="ftc_bc")
+			    {
+			        sw=12;
+			    }	    
 				}
 				
 				if(obj.contains("rate"))  
@@ -108,6 +120,14 @@ void ShiftDialog::replyFinished(QNetworkReply *reply)
 			    {
 			        ui->label_7->setText(name_value.toString());
 			    }
+					if(sw==11)
+			    {
+			        ui->label_38->setText(name_value.toString());
+			    }
+					if(sw==12)
+			    {
+			        ui->label_42->setText(name_value.toString());
+			    }
 				}
 				if(obj.contains("limit"))  
 				{
@@ -119,6 +139,14 @@ void ShiftDialog::replyFinished(QNetworkReply *reply)
 					if(sw==2)
 			    {
 			        ui->label_8->setText(name_value.toString());
+			    }
+					if(sw==11)
+			    {
+			        ui->label_39->setText(name_value.toString());
+			    }
+					if(sw==12)
+			    {
+			        ui->label_43->setText(name_value.toString());
 			    }
 				}
 				
@@ -359,7 +387,7 @@ void ShiftDialog::on_resetButton_clicked()
 
 void ShiftDialog::on_txStatButton_clicked()
 {
-	QString strURL="http://shapeshift.io/txStat/"+ui->txAddress->text();
+	QString strURL="https://shapeshift.io/txStat/"+ui->txAddress->text();
 	manager->get(QNetworkRequest(QUrl(strURL)));
 }
 
@@ -373,7 +401,7 @@ void ShiftDialog::on_postTransButton_clicked()
 	QNetworkRequest network_request;
 	network_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json;charset=utf-8");
 	network_request.setHeader(QNetworkRequest::ContentLengthHeader, post_data.length());
-	network_request.setUrl(QUrl("http://shapeshift.io/shift"));
+	network_request.setUrl(QUrl("https://shapeshift.io/shift"));
 	
 	manager->post(network_request, post_data);
 	
@@ -389,7 +417,7 @@ void ShiftDialog::on_postFixButton_clicked()
 	QNetworkRequest network_request;
 	network_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json;charset=utf-8");
 	network_request.setHeader(QNetworkRequest::ContentLengthHeader, post_data.length());
-	network_request.setUrl(QUrl("http://shapeshift.io/sendamount"));
+	network_request.setUrl(QUrl("https://shapeshift.io/sendamount"));
 	
 	manager->post(network_request, post_data);
 }
@@ -397,10 +425,14 @@ void ShiftDialog::on_postFixButton_clicked()
 void ShiftDialog::on_okButton_clicked()
 {
     /* Refresh API Button */
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/rate/ftc_btc")));
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/rate/ftc_doge")));
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/limit/ftc_btc")));
-		manager->get(QNetworkRequest(QUrl("http://shapeshift.io/limit/ftc_doge")));   
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_btc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_doge")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_ltc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_bc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_btc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_doge")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_ltc")));
+		manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_bc")));		
 }
 
 void ShiftDialog::on_cancelButton_clicked()
@@ -435,19 +467,35 @@ bool ShiftDialog::eventFilter(QObject *object, QEvent *event)
     {	   		
 		    if (object == ui->label_5)
 		    {
-						manager->get(QNetworkRequest(QUrl("http://shapeshift.io/rate/ftc_btc")));
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_btc")));
 		    }
 		    if (object == ui->label_7)
 		    {
-						manager->get(QNetworkRequest(QUrl("http://shapeshift.io/rate/ftc_doge")));
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_doge")));
+		    }
+		    if (object == ui->label_38)
+		    {
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_ltc")));
+		    }
+		    if (object == ui->label_42)
+		    {
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/rate/ftc_bc")));
 		    }
 		    if (object == ui->label_9)
 		    {
-						manager->get(QNetworkRequest(QUrl("http://shapeshift.io/limit/ftc_btc")));
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_btc")));
 		    }
 		    if (object == ui->label_8)
 		    {
-						manager->get(QNetworkRequest(QUrl("http://shapeshift.io/limit/ftc_doge")));   
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_doge")));   
+		    }
+		    if (object == ui->label_39)
+		    {
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_ltc")));
+		    }
+		    if (object == ui->label_43)
+		    {
+						manager->get(QNetworkRequest(QUrl("https://shapeshift.io/limit/ftc_bc")));   
 		    }
   	}
     return QDialog::eventFilter(object, event);
