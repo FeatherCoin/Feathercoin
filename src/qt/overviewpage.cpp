@@ -146,17 +146,11 @@ void OverviewPage::setBalance(qint64 balance, qint64 unconfirmedBalance, qint64 
     ui->labelImmature->setText(BitcoinUnits::formatWithUnit(unit, immatureBalance));
     ui->labelTotal->setText(BitcoinUnits::formatWithUnit(unit, balance + unconfirmedBalance + immatureBalance));
 
-    bool showImmature =true; 
+    // only show immature (newly mined) balance if it's non-zero, so as not to complicate things
+    // for the non-mining users
+    bool showImmature = immatureBalance != 0;
     ui->labelImmature->setVisible(showImmature);
     ui->labelImmatureText->setVisible(showImmature);
-    
-		setOverview();
-}
-
-void OverviewPage::setOverview()
-{
-    ui->labelOverview1->setText(tr("Current Block :")+tr(" %1 ").arg(clientModel->getNumBlocks()));
-    ui->labelOverview2->setText(tr("Current Difficulty :")+tr(" %1").arg(clientModel->getCurrDifficulty()));
 }
 
 void OverviewPage::setClientModel(ClientModel *model)
@@ -167,8 +161,6 @@ void OverviewPage::setClientModel(ClientModel *model)
         // Show warning if this is a prerelease version
         connect(model, SIGNAL(alertsChanged(QString)), this, SLOT(updateAlerts(QString)));
         updateAlerts(model->getStatusBarWarnings());
-        // Show RPC information when blocks had changed
-        connect(model, SIGNAL(numBlocksChanged(int)), this, SLOT(setOverview()));
     }
 }
 
