@@ -108,7 +108,12 @@ ReportView::ReportView(QWidget *parent) :
     QTableView *view = new QTableView(this);
     vlayout->addLayout(hlayout);
     vlayout->addWidget(createDateRangeWidget());
+    //view->setFixedHeight(360);
     vlayout->addWidget(view);
+    
+    QTableView *viewT = new QTableView(this);
+    viewT->setFixedHeight(26);
+		vlayout->addWidget(viewT);
     vlayout->setSpacing(0);
     int width = view->verticalScrollBar()->sizeHint().width();
      //Cover scroll bar width with spacing
@@ -122,6 +127,7 @@ ReportView::ReportView(QWidget *parent) :
     view->setTabKeyNavigation(false);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
     reportView = view;
+    reportViewT=viewT;
 
     // Actions
     QAction *showTotalAction = new QAction(tr("Show transaction total"), this);
@@ -160,8 +166,16 @@ void ReportView::setModel(WalletModel *model)
         reportView->setSortingEnabled(true);
         reportView->sortByColumn(0, Qt::DescendingOrder);
         reportView->verticalHeader()->hide();
-        reportView->setShowGrid(false);
-
+        reportView->setShowGrid(false);        
+        	
+        reportModelT = new QStandardItemModel(this);
+        reportViewT->setModel(reportModelT);
+        reportViewT->setAlternatingRowColors(true);
+        reportViewT->setSelectionBehavior(QAbstractItemView::SelectRows);
+        reportViewT->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        reportViewT->verticalHeader()->hide();
+        reportViewT->setShowGrid(false);  
+        
         connect(reportView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(showTotal()));         
         showTotal();
     }
@@ -339,7 +353,7 @@ void ReportView::showTotal()
 	  int iTimes=i;
 	  
 	  reportModel->clear();
-	  reportModel->setRowCount(addresslist.size()+1); 
+	  reportModel->setRowCount(addresslist.size());
     reportModel->setHorizontalHeaderItem(0, new QStandardItem(tr("AddressLabel")));
     reportModel->setHorizontalHeaderItem(1, new QStandardItem(tr("DateRange")));
    	reportModel->setHorizontalHeaderItem(2, new QStandardItem(tr("Type")));
@@ -350,7 +364,6 @@ void ReportView::showTotal()
     reportView->horizontalHeader()->resizeSection(2, 120);
     reportView->horizontalHeader()->resizeSection(3, 140);
     reportView->horizontalHeader()->resizeSection(4, 140);
-        
 		QString account = "";
     for (i=0;i!=addresslist.size();++i)
     { 
@@ -360,22 +373,35 @@ void ReportView::showTotal()
     	reportModel->setItem(i,3,new QStandardItem(QObject::tr("%1").arg(totallist.at(i))));
       reportModel->setItem(i,4,new QStandardItem(QObject::tr("%1").arg(timelist.at(i))));
     }
-    //Total    
-  	reportModel->setItem(i,0,new QStandardItem(tr("Total")));
-  	reportModel->setItem(i,1,new QStandardItem(dateWidget->currentText()));
-  	reportModel->setItem(i,2,new QStandardItem(typeWidget->currentText()));
-  	reportModel->setItem(i,3,new QStandardItem(QObject::tr("%1").arg(QObject::tr("%1").arg(fTotal))));
-    reportModel->setItem(i,4,new QStandardItem(QObject::tr("%1").arg(iTimes)));
-    reportModel->item(i,0)->setTextAlignment(Qt::AlignCenter);
-    reportModel->item(i,1)->setTextAlignment(Qt::AlignCenter);
-    reportModel->item(i,2)->setTextAlignment(Qt::AlignCenter);
-    reportModel->item(i,3)->setTextAlignment(Qt::AlignCenter);
-    reportModel->item(i,4)->setTextAlignment(Qt::AlignCenter);
-    reportModel->item(i,0)->setFont(QFont("Times", 10, QFont::Black));
-    reportModel->item(i,1)->setFont(QFont("Times", 10, QFont::Black));
-    reportModel->item(i,2)->setFont(QFont("Times", 10, QFont::Black));
-    reportModel->item(i,3)->setFont(QFont("Times", 10, QFont::Black));
-    reportModel->item(i,4)->setFont(QFont("Times", 10, QFont::Black));
+    //Total Line
+    reportModelT->clear();
+    reportModelT->setRowCount(1); 
+    reportModelT->setHorizontalHeaderItem(0, new QStandardItem(tr("AddressLabel")));
+    reportModelT->setHorizontalHeaderItem(1, new QStandardItem(tr("DateRange")));
+   	reportModelT->setHorizontalHeaderItem(2, new QStandardItem(tr("Type")));
+    reportModelT->setHorizontalHeaderItem(3, new QStandardItem(tr("Payment amount")));
+    reportModelT->setHorizontalHeaderItem(4, new QStandardItem(tr("Number of payments")));
+    reportViewT->horizontalHeader()->resizeSection(0, 270);
+    reportViewT->horizontalHeader()->resizeSection(1, 120);
+    reportViewT->horizontalHeader()->resizeSection(2, 120);
+    reportViewT->horizontalHeader()->resizeSection(3, 140);
+    reportViewT->horizontalHeader()->resizeSection(4, 140);
+  	reportModelT->setItem(0,0,new QStandardItem(tr("Total")));
+  	reportModelT->setItem(0,1,new QStandardItem(dateWidget->currentText()));
+  	reportModelT->setItem(0,2,new QStandardItem(typeWidget->currentText()));
+  	reportModelT->setItem(0,3,new QStandardItem(QObject::tr("%1").arg(QObject::tr("%1").arg(fTotal))));
+    reportModelT->setItem(0,4,new QStandardItem(QObject::tr("%1").arg(iTimes)));
+    reportModelT->item(0,0)->setTextAlignment(Qt::AlignCenter);
+    reportModelT->item(0,1)->setTextAlignment(Qt::AlignCenter);
+    reportModelT->item(0,2)->setTextAlignment(Qt::AlignCenter);
+    reportModelT->item(0,3)->setTextAlignment(Qt::AlignCenter);
+    reportModelT->item(0,4)->setTextAlignment(Qt::AlignCenter);
+    reportModelT->item(0,0)->setFont(QFont("Times", 10, QFont::Black));
+    reportModelT->item(0,1)->setFont(QFont("Times", 10, QFont::Black));
+    reportModelT->item(0,2)->setFont(QFont("Times", 10, QFont::Black));
+    reportModelT->item(0,3)->setFont(QFont("Times", 10, QFont::Black));
+    reportModelT->item(0,4)->setFont(QFont("Times", 10, QFont::Black));
+    reportViewT->horizontalHeader()->hide();
 }
 
 QWidget *ReportView::createDateRangeWidget()
