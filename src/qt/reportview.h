@@ -51,7 +51,9 @@ private:
     WalletModel *model;
     TransactionFilterProxy *transactionProxyModel;
     QTableView *reportView;
+    QTableView *reportViewT;
     QStandardItemModel *reportModel;
+    QStandardItemModel *reportModelT;
 
     QComboBox *dateWidget;
     QComboBox *typeWidget;
