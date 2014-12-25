@@ -83,8 +83,11 @@ if BUILD_BITCOIND
   bin_PROGRAMS += feathercoind
 endif
 
-if BUILD_BITCOIN_UTILS
-  bin_PROGRAMS += feathercoin-cli feathercoin-tx
+if BUILD_BITCOIN_CLI
+  bin_PROGRAMS += feathercoin-cli
+endif
+if BUILD_BITCOIN_TX
+  bin_PROGRAMS += feathercoin-tx
 endif
 
 .PHONY: FORCE check-symbols check-security
