@@ -45,6 +45,7 @@
         <file alias="filesave">res/icons/filesave.png</file>
         <file alias="qrcode">res/icons/qrcode.png</file>
         <file alias="debugwindow">res/icons/debugwindow.png</file>
+        <file alias="print">res/icons/print.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
@@ -52,6 +53,7 @@
         <file alias="splash_testnet">res/images/splash_testnet.png</file>
         <file alias="mainlogo">res/images/LOGO.png</file>
         <file alias="mainbg">res/images/mainbg.png</file>
+        <file alias="paper_wallet">res/images/paper_wallet.png</file>
     </qresource>
     <qresource prefix="/movies">
         <file alias="spinner-000">res/movies/spinner-000.png</file>
@@ -162,5 +164,13 @@
         <file alias="zh_CN">locale/bitcoin_zh_CN.qm</file>
         <file alias="zh_HK">locale/bitcoin_zh_HK.qm</file>
         <file alias="zh_TW">locale/bitcoin_zh_TW.qm</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file alias="ComicNeue-Bold">res/fonts/ComicNeue-Bold.ttf</file>
+        <file alias="ComicNeue-Bold-Oblique">res/fonts/ComicNeue-Bold-Oblique.ttf</file>
+        <file alias="ComicNeue-Light">res/fonts/ComicNeue-Light.ttf</file>
+        <file alias="ComicNeue-Light-Oblique">res/fonts/ComicNeue-Light-Oblique.ttf</file>
+        <file alias="ComicNeue-Regular">res/fonts/ComicNeue-Regular.ttf</file>
+        <file alias="ComicNeue-Regular-Oblique">res/fonts/ComicNeue-Regular-Oblique.ttf</file>
     </qresource>
 </RCC>

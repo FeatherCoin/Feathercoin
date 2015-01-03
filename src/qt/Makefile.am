@@ -104,6 +104,7 @@ QT_FORMS_UI = \
   forms/signverifymessagedialog.ui \
   forms/transactiondescdialog.ui \
   forms/qrcodedialog.ui \
+  forms/paperwalletdialog.ui \
   forms/snapwidget.ui
 
 QT_MOC_CPP = \
@@ -153,6 +154,7 @@ QT_MOC_CPP = \
   moc_walletview.cpp \
   moc_qrcodedialog.cpp \
   moc_snapwidget.cpp \
+  moc_verticallabel.cpp \
   moc_reportview.cpp
 
 FEATHERCOIN_MM = \
@@ -225,6 +227,7 @@ BITCOIN_QT_H = \
   qrcodedialog.h \
   snapwidget.h \
   qimagesource.h \
+  verticallabel.h \
   reportview.h
 
 RES_ICONS = \
@@ -272,7 +275,16 @@ RES_ICONS = \
   res/icons/tx_output.png \
   res/icons/tx_mined.png \
   res/icons/openurl.png \
+  res/icons/print.png \
   res/icons/account-report.png
+
+RES_FONTS = \
+  res/fonts/ComicNeue-Bold.ttf \
+  res/fonts/ComicNeue-Bold-Oblique.ttf \
+  res/fonts/ComicNeue-Light.ttf \
+  res/fonts/ComicNeue-Light-Oblique.ttf \
+  res/fonts/ComicNeue-Regular.ttf \
+  res/fonts/ComicNeue-Regular-Oblique.ttf
 
 BITCOIN_QT_CPP = \
   bitcoin.cpp \
@@ -296,6 +308,7 @@ BITCOIN_QT_CPP = \
   splashscreen.cpp \
   trafficgraphwidget.cpp \
   utilitydialog.cpp \
+  verticallabel.cpp \
   winshutdownmonitor.cpp
 
 if ENABLE_WALLET
@@ -328,6 +341,7 @@ BITCOIN_QT_CPP += \
   walletview.cpp \
   reportview.cpp \
   snapwidget.cpp \
+  verticallabel.cpp \
   qimagesource.cpp
 endif
 
@@ -338,6 +352,7 @@ RES_IMAGES = \
   res/images/LOGO.png \
   res/images/mainbg.png \
   res/images/about_bitcoin.png \
+  res/images/paper_wallet.png \
   res/images/about.png
 
 RES_MOVIES = $(wildcard res/movies/spinner-*.png)
@@ -347,7 +362,7 @@ FEATHERCOIN_RC = res/feathercoin-qt-res.rc
 libbitcoinqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(QT_INCLUDES) \
   -I$(top_srcdir)/src/qt/forms $(QT_DBUS_INCLUDES)
 libbitcoinqt_a_SOURCES = $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(QT_FORMS_UI) \
-  $(QT_QRC) $(QT_TS) $(PROTOBUF_PROTO) $(RES_ICONS) $(RES_IMAGES) $(RES_MOVIES)
+  $(QT_QRC) $(QT_TS) $(PROTOBUF_PROTO) $(RES_ICONS) $(RES_IMAGES) $(RES_MOVIES) $(RES_FONTS)
 
 nodist_libbitcoinqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(PROTOBUF_CC) \
   $(PROTOBUF_H) $(QT_QRC_CPP)

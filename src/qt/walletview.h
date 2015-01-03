@@ -99,6 +99,8 @@ public slots:
     void unlockWallet();
     /** Import a wallet from a string */
     void importWallet(QString privateKey);
+    /** Open the print paper wallets dialog **/
+    void printPaperWallets();
 
     /** Show used sending addresses */
     void usedSendingAddresses();

@@ -323,7 +323,9 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     signMessageAction->setStatusTip(tr("Sign messages with your Feathercoin addresses to prove you own them"));
     verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
     verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Feathercoin addresses"));
-
+    paperWalletAction = new QAction(QIcon(":/icons/print"), tr("&Print paper wallets"), this);
+    paperWalletAction->setStatusTip(tr("Print paper wallets"));
+    
     lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock wallet"), this);
     lockWalletAction->setToolTip(tr("Lock wallet"));
     lockWalletAction->setCheckable(true);
@@ -374,7 +376,8 @@ void BitcoinGUI::createActions(bool fIsTestnet)
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
         connect(bitmessageAction, SIGNAL(triggered()), this, SLOT(openBitmessageClicked()));
-        connect(shapeshiftAction, SIGNAL(triggered()), this, SLOT(openShapeshiftClicked()));        
+        connect(shapeshiftAction, SIGNAL(triggered()), this, SLOT(openShapeshiftClicked()));
+        connect(paperWalletAction, SIGNAL(triggered()), walletFrame, SLOT(printPaperWallets()));
     }
 #endif
 }
@@ -395,6 +398,7 @@ void BitcoinGUI::createMenuBar()
     {
         file->addAction(openAction);
         file->addAction(backupWalletAction);
+        file->addAction(paperWalletAction);
         file->addSeparator();        
         file->addAction(encryptWalletAction);
         file->addAction(changePassphraseAction);
@@ -526,6 +530,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     accountReportAction->setEnabled(enabled);
     bitmessageAction->setEnabled(enabled);
     shapeshiftAction->setEnabled(enabled);
+    paperWalletAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(bool fIsTestnet)

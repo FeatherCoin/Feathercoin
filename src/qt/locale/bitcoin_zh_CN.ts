@@ -14,6 +14,10 @@
         <translation>这不是一场实验，这是真实的生活和伟大的历史。</translation>
     </message>
     <message>
+        <source>This is experimental software.</source>
+        <translation>这是一个实验性软件。</translation>
+    </message>
+    <message>
         <source>Our goal is to let you have a good time.</source>
         <translation>我们的目标是让你拥有快乐时光。</translation>
     </message>
@@ -174,6 +178,10 @@
     <message>
         <source>(no label)</source>
         <translation>(没有标签)</translation>
+    </message>
+    <message>
+        <source>Stealth Address</source>
+        <translation>隐身地址</translation>
     </message>
 </context>
 <context>
@@ -344,6 +352,10 @@
     <message>
         <source>&amp;Backup Wallet...</source>
         <translation>备份钱包(&amp;B)...</translation>
+    </message>
+    <message>
+        <source>&amp;Print paper wallets</source>
+        <translation>打印纸钱包(&amp;P)</translation>
     </message>
     <message>
         <source>&amp;Change Passphrase...</source>
@@ -910,6 +922,10 @@ Address: %4
         <source>New key generation failed.</source>
         <translation>新的密钥生成失败。</translation>
     </message>
+    <message>
+        <source>Stealth Address</source>
+        <translation>隐身地址</translation>
+    </message>
 </context>
 <context>
     <name>FreespaceChecker</name>
@@ -932,6 +948,41 @@ Address: %4
     <message>
         <source>Cannot create data directory here.</source>
         <translation>无法在此创建数据目录。</translation>
+    </message>
+</context>
+<context>
+    <name>PaperWalletDialog</name>
+    <message>
+        <source>Warning: Network Activity Detected</source>
+        <translation>警告：网络活动检测</translation>
+    </message>
+    <message>
+        <source>It is recommended to disconnect from the internet before printing paper wallets. Even though paper wallets are generated on your local computer, it is still possible to unknowingly have malware that transmits your screen to a remote location. It is also recommended to print to a local printer vs a network printer since that network traffic can be monitored. Some advanced printers also store copies of each printed document. Proceed with caution relative to the amount of value you plan to store on each address.</source>
+        <translation>建议打印纸钱包之前从网上断开。尽管纸钱包是在您的本地计算机生成的，恶意软件仍有可能在不知不觉中将你的屏幕发送到远程。还建议打印到本地打印机和网络打印机之后，可以对网络流量进行监控。此外一些先进的打印机会存储每个打印文档的副本。因此，请对你的计划谨慎行事。</translation>
+    </message>
+    <message>
+        <source>Print Your Paper Wallets</source>
+        <translation>打印你的纸钱包</translation>
+    </message>
+    <message>
+        <source>Very New Address</source>
+        <translation>最新地址</translation>
+    </message>
+    <message>
+        <source>Public Key:</source>
+        <translation>公匙：</translation>
+    </message>
+    <message>
+        <source>Many Wallets?</source>
+        <translation>钱包个数？</translation>
+    </message>
+    <message>
+        <source>So Print</source>
+        <translation>开始打印</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -2120,6 +2171,10 @@ Address: %4
     <message>
         <source>&amp;Verify Message</source>
         <translation>验证消息(&amp;V)</translation>
+    </message>
+    <message>
+        <source>&amp;Print paper wallets</source>
+        <translation>打印纸钱包(&amp;P)</translation>
     </message>
     <message>
         <source>Enter the signing address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack.</source>

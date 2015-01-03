@@ -23,3 +23,6 @@ FORMS += \
 RESOURCES += \
     ../src/qt/bitcoin.qrc \
     ../src/qt/feathercoin.qrc
+    
+QT += \
+    printsupport
