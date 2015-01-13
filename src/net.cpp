@@ -43,7 +43,7 @@ struct LocalServiceInfo {
 bool fDiscover = true;
 uint64 nLocalServices = NODE_NETWORK;
 static CCriticalSection cs_mapLocalHost;
-static map<CNetAddr, LocalServiceInfo> mapLocalHost;
+static std::map<CNetAddr, LocalServiceInfo> mapLocalHost;
 static bool vfReachable[NET_MAX] = {};
 static bool vfLimited[NET_MAX] = {};
 static CNode* pnodeLocalHost = NULL;
@@ -55,7 +55,7 @@ int nMaxConnections = 125;
 
 vector<CNode*> vNodes;
 CCriticalSection cs_vNodes;
-map<CInv, CDataStream> mapRelay;
+std::map<CInv, CDataStream> mapRelay;
 deque<pair<int64, CInv> > vRelayExpiration;
 CCriticalSection cs_mapRelay;
 limitedmap<CInv, int64> mapAlreadyAskedFor(MAX_INV_SZ);
@@ -103,7 +103,7 @@ bool GetLocal(CService& addr, const CNetAddr *paddrPeer)
     int nBestReachability = -1;
     {
         LOCK(cs_mapLocalHost);
-        for (map<CNetAddr, LocalServiceInfo>::iterator it = mapLocalHost.begin(); it != mapLocalHost.end(); it++)
+        for (std::map<CNetAddr, LocalServiceInfo>::iterator it = mapLocalHost.begin(); it != mapLocalHost.end(); it++)
         {
             int nScore = (*it).second.nScore;
             int nReachability = (*it).first.GetReachabilityFrom(paddrPeer);

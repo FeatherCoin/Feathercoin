@@ -116,7 +116,7 @@ void TxToJSON(const CTransaction& tx, const uint256 hashBlock, Object& entry)
     if (hashBlock != 0)
     {
         entry.push_back(Pair("blockhash", hashBlock.GetHex()));
-        map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashBlock);
+        std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashBlock);
         if (mi != mapBlockIndex.end() && (*mi).second)
         {
             CBlockIndex* pindex = (*mi).second;
@@ -474,7 +474,7 @@ Value signrawtransaction(const Array& params, bool fHelp)
     int nHashType = SIGHASH_ALL;
     if (params.size() > 3 && params[3].type() != null_type)
     {
-        static map<string, int> mapSigHashValues =
+        static std::map<string, int> mapSigHashValues =
             boost::assign::map_list_of
             (string("ALL"), int(SIGHASH_ALL))
             (string("ALL|ANYONECANPAY"), int(SIGHASH_ALL|SIGHASH_ANYONECANPAY))

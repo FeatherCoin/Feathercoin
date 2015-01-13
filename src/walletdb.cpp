@@ -121,7 +121,7 @@ CWalletDB::ReorderTransactions(CWallet* pwallet)
     typedef multimap<int64, TxPair > TxItems;
     TxItems txByTime;
 
-    for (map<uint256, CWalletTx>::iterator it = pwallet->mapWallet.begin(); it != pwallet->mapWallet.end(); ++it)
+    for (std::map<uint256, CWalletTx>::iterator it = pwallet->mapWallet.begin(); it != pwallet->mapWallet.end(); ++it)
     {
         CWalletTx* wtx = &((*it).second);
         txByTime.insert(make_pair(wtx->nTimeReceived, TxPair(wtx, (CAccountingEntry*)0)));
@@ -498,7 +498,7 @@ void ThreadFlushWalletDB(const string& strFile)
             {
                 // Don't do this if any databases are in use
                 int nRefCount = 0;
-                map<string, int>::iterator mi = bitdb.mapFileUseCount.begin();
+                std::map<string, int>::iterator mi = bitdb.mapFileUseCount.begin();
                 while (mi != bitdb.mapFileUseCount.end())
                 {
                     nRefCount += (*mi).second;
@@ -508,7 +508,7 @@ void ThreadFlushWalletDB(const string& strFile)
                 if (nRefCount == 0)
                 {
                     boost::this_thread::interruption_point();
-                    map<string, int>::iterator mi = bitdb.mapFileUseCount.find(strFile);
+                    std::map<string, int>::iterator mi = bitdb.mapFileUseCount.find(strFile);
                     if (mi != bitdb.mapFileUseCount.end())
                     {
                         printf("Flushing wallet.dat\n");
@@ -550,10 +550,10 @@ bool BackupWallet(const CWallet& wallet, const string& strDest)
                     pathDest /= wallet.strWalletFile;
 
                 try {
-#if BOOST_VERSION >= 104000
+#if BOOST_VERSION >= 104000 && !defined(sun)
                     filesystem::copy_file(pathSrc, pathDest, filesystem::copy_option::overwrite_if_exists);
 #else
-                    filesystem::copy_file(pathSrc, pathDest);
+                    filesystem::copy(pathSrc, pathDest);
 #endif
                     printf("copied wallet.dat to %s\n", pathDest.string().c_str());
                     return true;

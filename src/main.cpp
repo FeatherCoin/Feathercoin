@@ -38,7 +38,7 @@ unsigned int nTransactionsUpdated = 0;
 
 int nBaseMaturity = BASE_MATURITY;
 
-map<uint256, CBlockIndex*> mapBlockIndex;
+std::map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Feathercoin: starting difficulty is 1 / 2^12
 /* The difficulty after switching to NeoScrypt (0.015625) */
@@ -65,11 +65,11 @@ int64 CTransaction::nMinRelayTxFee = 2000000;
 
 CMedianFilter<int> cPeerBlockCounts(8, 0); // Amount of blocks that other nodes claim to have
 
-map<uint256, CBlock*> mapOrphanBlocks;
+std::map<uint256, CBlock*> mapOrphanBlocks;
 multimap<uint256, CBlock*> mapOrphanBlocksByPrev;
 
-map<uint256, CTransaction> mapOrphanTransactions;
-map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
+std::map<uint256, CTransaction> mapOrphanTransactions;
+std::map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
@@ -343,7 +343,7 @@ unsigned int LimitOrphanTxSize(unsigned int nMaxOrphans)
     {
         // Evict a random orphan:
         uint256 randomhash = GetRandHash();
-        map<uint256, CTransaction>::iterator it = mapOrphanTransactions.lower_bound(randomhash);
+        std::map<uint256, CTransaction>::iterator it = mapOrphanTransactions.lower_bound(randomhash);
         if (it == mapOrphanTransactions.end())
             it = mapOrphanTransactions.begin();
         EraseOrphanTx(it->first);
@@ -536,7 +536,7 @@ int CMerkleTx::SetMerkleBranch(const CBlock* pblock)
     }
 
     // Is the tx in a block that's in the main chain
-    map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashBlock);
+    std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashBlock);
     if (mi == mapBlockIndex.end())
         return 0;
     CBlockIndex* pindex = (*mi).second;
@@ -894,7 +894,7 @@ void CTxMemPool::queryHashes(std::vector<uint256>& vtxid)
 
     LOCK(cs);
     vtxid.reserve(mapTx.size());
-    for (map<uint256, CTransaction>::iterator mi = mapTx.begin(); mi != mapTx.end(); ++mi)
+    for (std::map<uint256, CTransaction>::iterator mi = mapTx.begin(); mi != mapTx.end(); ++mi)
         vtxid.push_back((*mi).first);
 }
 
@@ -911,7 +911,7 @@ int CMerkleTx::GetDepthInMainChain(CBlockIndex* &pindexRet) const
         return(fTxMempool ? 0 : -1);
 
     // Find the block it claims to be in
-    map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashBlock);
+    std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashBlock);
     if (mi == mapBlockIndex.end())
         return(fTxMempool ? 0 : -1);
     CBlockIndex* pindex = (*mi).second;
@@ -2030,9 +2030,9 @@ bool CBlock::AddToBlockIndex(CValidationState &state, const CDiskBlockPos &pos)
     // Construct new block index object
     CBlockIndex* pindexNew = new CBlockIndex(*this);
     assert(pindexNew);
-    map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.insert(make_pair(hash, pindexNew)).first;
+    std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.insert(make_pair(hash, pindexNew)).first;
     pindexNew->phashBlock = &((*mi).first);
-    map<uint256, CBlockIndex*>::iterator miPrev = mapBlockIndex.find(hashPrevBlock);
+    std::map<uint256, CBlockIndex*>::iterator miPrev = mapBlockIndex.find(hashPrevBlock);
     if (miPrev != mapBlockIndex.end())
     {
         pindexNew->pprev = (*miPrev).second;
@@ -2230,7 +2230,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
     CBlockIndex* pindexPrev = NULL;
     int nHeight = 0;
     if (hash != hashGenesisBlock) {
-        map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashPrevBlock);
+        std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashPrevBlock);
         if (mi == mapBlockIndex.end())
             return state.DoS(10, error("AcceptBlock() : prev block not found"));
         pindexPrev = (*mi).second;
@@ -2656,7 +2656,7 @@ CBlockIndex * InsertBlockIndex(uint256 hash)
         return NULL;
 
     // Return existing
-    map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hash);
+    std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hash);
     if (mi != mapBlockIndex.end())
         return (*mi).second;
 
@@ -2932,8 +2932,8 @@ bool InitBlockIndex() {
 void PrintBlockTree()
 {
     // pre-compute tree structure
-    map<CBlockIndex*, vector<CBlockIndex*> > mapNext;
-    for (map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.begin(); mi != mapBlockIndex.end(); ++mi)
+    std::map<CBlockIndex*, vector<CBlockIndex*> > mapNext;
+    for (std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.begin(); mi != mapBlockIndex.end(); ++mi)
     {
         CBlockIndex* pindex = (*mi).second;
         mapNext[pindex->pprev].push_back(pindex);
@@ -3085,7 +3085,7 @@ bool LoadExternalBlockFile(FILE* fileIn, CDiskBlockPos *dbp)
 // CAlert
 //
 
-extern map<uint256, CAlert> mapAlerts;
+extern std::map<uint256, CAlert> mapAlerts;
 extern CCriticalSection cs_mapAlerts;
 
 string GetWarnings(string strFor)
@@ -3219,7 +3219,7 @@ void static ProcessGetData(CNode* pfrom)
             if (inv.type == MSG_BLOCK || inv.type == MSG_FILTERED_BLOCK)
             {
                 // Send block from disk
-                map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(inv.hash);
+                std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(inv.hash);
                 pfrom->nBlocksRequested++;
                 if (mi != mapBlockIndex.end())
                 {
@@ -3268,7 +3268,7 @@ void static ProcessGetData(CNode* pfrom)
                 bool pushed = false;
                 {
                     LOCK(cs_mapRelay);
-                    map<CInv, CDataStream>::iterator mi = mapRelay.find(inv);
+                    std::map<CInv, CDataStream>::iterator mi = mapRelay.find(inv);
                     if (mi != mapRelay.end()) {
                         pfrom->PushMessage(inv.GetCommand(), (*mi).second);
                         pushed = true;
@@ -3636,7 +3636,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         if (locator.IsNull())
         {
             // If locator is null, return the hashStop block
-            map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashStop);
+            std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashStop);
             if (mi == mapBlockIndex.end())
                 return true;
             pindex = (*mi).second;
@@ -4343,13 +4343,13 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
 
         // Priority order to process transactions
         list<COrphan> vOrphan; // list memory doesn't move
-        map<uint256, vector<COrphan*> > mapDependers;
+        std::map<uint256, vector<COrphan*> > mapDependers;
         bool fPrintPriority = GetBoolArg("-printpriority");
 
         // This vector will be sorted into a priority queue:
         vector<TxPriority> vecPriority;
         vecPriority.reserve(mempool.mapTx.size());
-        for (map<uint256, CTransaction>::iterator mi = mempool.mapTx.begin(); mi != mempool.mapTx.end(); ++mi)
+        for (std::map<uint256, CTransaction>::iterator mi = mempool.mapTx.begin(); mi != mempool.mapTx.end(); ++mi)
         {
             CTransaction& tx = (*mi).second;
             if (tx.IsCoinBase() || !tx.IsFinal())

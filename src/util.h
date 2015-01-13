@@ -19,6 +19,10 @@
 #include <utility>
 #include <vector>
 #include <string>
+#if defined(sun)
+#include <unistd.h>
+#endif
+
 
 #include <boost/version.hpp>
 #include <boost/thread.hpp>

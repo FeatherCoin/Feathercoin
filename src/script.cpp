@@ -2,12 +2,6 @@
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#include <boost/foreach.hpp>
-#include <boost/tuple/tuple.hpp>
-
-using namespace std;
-using namespace boost;
-
 #include "script.h"
 #include "keystore.h"
 #include "bignum.h"
@@ -15,6 +9,12 @@ using namespace boost;
 #include "main.h"
 #include "sync.h"
 #include "util.h"
+
+#include <boost/foreach.hpp>
+#include <boost/tuple/tuple.hpp>
+
+using namespace std;
+using namespace boost;
 
 bool CheckSig(vector<unsigned char> vchSig, const vector<unsigned char> &vchPubKey, const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, int flags);
 
@@ -1127,7 +1127,7 @@ bool CheckSig(vector<unsigned char> vchSig, const vector<unsigned char> &vchPubK
 bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsigned char> >& vSolutionsRet)
 {
     // Templates
-    static map<txnouttype, CScript> mTemplates;
+    static std::map<txnouttype, CScript> mTemplates;
     if (mTemplates.empty())
     {
         // Standard tx, sender provides pubkey, receiver adds signature
@@ -1590,7 +1590,7 @@ static CScript CombineMultisig(CScript scriptPubKey, const CTransaction& txTo, u
     assert(vSolutions.size() > 1);
     unsigned int nSigsRequired = vSolutions.front()[0];
     unsigned int nPubKeys = vSolutions.size()-2;
-    map<valtype, valtype> sigs;
+    std::map<valtype, valtype> sigs;
     BOOST_FOREACH(const valtype& sig, allsigs)
     {
         for (unsigned int i = 0; i < nPubKeys; i++)
