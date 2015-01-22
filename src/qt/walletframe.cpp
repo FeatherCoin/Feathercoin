@@ -197,6 +197,13 @@ void WalletFrame::printPaperWallets()
         walletView->printPaperWallets();
 }
 
+void WalletFrame::inertBlockChain()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->inertBlockChain();
+}
+
 void WalletFrame::usedSendingAddresses()
 {
     WalletView *walletView = currentWalletView();

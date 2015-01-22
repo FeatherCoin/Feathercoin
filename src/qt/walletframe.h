@@ -75,6 +75,8 @@ public slots:
     void unlockWallet();
     /** Open the print paper wallets dialog **/
     void printPaperWallets();
+    /** Open comment dialog **/
+    void inertBlockChain();
 
     /** Show used sending addresses */
     void usedSendingAddresses();

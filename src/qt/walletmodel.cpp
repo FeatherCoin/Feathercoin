@@ -313,8 +313,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                     
                     CScript scriptPubKey;
                     scriptPubKey.SetDestination(addrTo.Get());
-                    LogPrintf("scriptPubKey= %s \n", scriptPubKey.ToString());
-                    
+                    LogPrintf("scriptPubKey= %s \n", scriptPubKey.ToString());                    
                     vecSend.push_back(make_pair(scriptPubKey, rcp.amount));
                     
                     CScript scriptP = CScript() << OP_RETURN << ephem_pubkey;
@@ -323,12 +322,22 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                     continue;
                 }; // else drop through to normal
             }
-        
+
             CScript scriptPubKey;
             //scriptPubKey.SetDestination(CBitcoinAddress(rcp.address.toStdString()).Get());
             scriptPubKey.SetDestination(CBitcoinAddress(sAddr).Get());
             vecSend.push_back(std::pair<CScript, int64_t>(scriptPubKey, rcp.amount));
 
+						//insert message into blockchain
+						if (rcp.message.length()>=1)
+						{				
+								std::string strMess = rcp.message.toStdString();
+								const char* pszMess =strMess.c_str();
+                CScript scriptP = CScript() << OP_RETURN << vector<unsigned char>((const unsigned char*)pszMess, (const unsigned char*)pszMess + strlen(pszMess));                
+                vecSend.push_back(std::pair<CScript, int64_t>(scriptP, 0));
+             }
+            //normal
+            
             total += rcp.amount;
         }
     }

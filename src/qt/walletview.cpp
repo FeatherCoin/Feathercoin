@@ -365,3 +365,13 @@ void WalletView::printPaperWallets()
     dlg.setModel(walletModel);
     dlg.exec();
 }
+
+void WalletView::inertBlockChain()
+{
+    if(!walletModel)
+        return;
+
+    CommentDialog dlg(this);
+    dlg.setModel(walletModel);
+    dlg.exec();
+}

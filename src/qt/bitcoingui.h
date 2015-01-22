@@ -118,6 +118,7 @@ private:
     QAction *shapeshiftAction;
     QAction *lockWalletAction;
     QAction *unlockWalletAction;
+    QAction *inertBlockChainAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;

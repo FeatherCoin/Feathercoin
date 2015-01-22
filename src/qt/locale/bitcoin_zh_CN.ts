@@ -486,6 +486,14 @@
         <translation>报表</translation>
     </message>
     <message>
+        <source>&amp;Comments</source>
+        <translation>留言</translation>
+    </message>
+    <message>
+        <source>Insert your comments into blockchain</source>
+        <translation>向区块链内写入留言</translation>
+    </message>
+    <message>
         <source>&amp;MerchantList</source>
         <translation>商业列表</translation>
     </message>
@@ -983,6 +991,57 @@ Address: %4
     <message>
         <source>Close</source>
         <translation>关闭</translation>
+    </message>
+</context>
+<context>
+    <name>CommentDialog</name>
+    <message>
+        <source>Insert your comments into blockchain</source>
+        <translation>向区块链插入你的留言</translation>
+    </message>
+    <message>
+        <source>Pay to:</source>
+        <translation>付款给：</translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation>请留言</translation>
+    </message>
+    <message>
+        <source>Insert into BlockChain</source>
+        <translation>插入区块链</translation>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation>退出</translation>
+    </message>
+    <message>
+        <source>The comment length can not be above 35 charset !</source>
+        <translation>留言文字长度不能超过35个字符！</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to send?</source>
+        <translation>你同意发出吗？</translation>
+    </message>
+    <message>
+        <source>Insert into blockchain ,Yes!!!</source>
+        <translation>写入块链完成！</translation>
+    </message>
+    <message>
+        <source>Wallet Message</source>
+        <translation>钱包信息</translation>
+    </message>
+    <message>
+        <source>Wallet WARNING</source>
+        <translation>钱包警告</translation>
+    </message>
+    <message>
+        <source>Send Coins Failed:</source>
+        <translation>发送羽毛币失败：</translation>
+    </message>
+    <message>
+        <source>Send Coins</source>
+        <translation>发送羽毛币</translation>
     </message>
 </context>
 <context>

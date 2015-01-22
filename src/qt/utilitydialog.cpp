@@ -6,8 +6,10 @@
 
 #include "ui_aboutdialog.h"
 #include "ui_paperwalletdialog.h"
+#include "ui_commentdialog.h"
 #include "ui_helpmessagedialog.h"
 
+#include "ui_interface.h"
 #include "bitcoinunits.h"
 
 #ifdef ENABLE_WALLET
@@ -15,6 +17,7 @@
 #include "sendcoinsentry.h"
 #include "coincontrol.h"
 #include "coincontroldialog.h"
+#include "walletmodel.h"
 #endif
 
 #include "optionsmodel.h"
@@ -22,10 +25,13 @@
 #include "clientmodel.h"
 #include "guiutil.h"
 
+#include "addresstablemodel.h"
+
 #include "clientversion.h"
 #include "init.h"
 #include "util.h"
 #include "net.h"
+#include "main.h"
 
 #include <QLabel>
 #include <QFont>
@@ -81,6 +87,198 @@ void AboutDialog::on_buttonBox_accepted()
 {
     close();
 }
+
+/** "comment" dialog box */
+CommentDialog::CommentDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::CommentDialog)
+{
+    ui->setupUi(this);
+    //ui->buttonBox->addButton(tr("Close"), QDialogButtonBox::RejectRole);
+
+}
+
+void CommentDialog::setModel(WalletModel *model)
+{
+
+    this->model = model;
+    //this->on_insertButton_clicked();
+    
+}
+
+CommentDialog::~CommentDialog()
+{
+    delete ui;
+}
+
+void CommentDialog::on_insertButton_clicked()
+{
+    if(!model || !model->getOptionsModel())
+        return;
+        
+    QString addrOP=ui->addrEdit->text();
+    QString textOP=ui->txtComment->text();
+    if (textOP.length()>35)
+    {
+        QMessageBox::information(NULL, tr("Wallet Message"), tr("The comment length can not be above 35 charset !"), QMessageBox::Yes , QMessageBox::Yes);
+        return;
+    }
+    
+    QList<SendCoinsRecipient> recipients;
+    SendCoinsRecipient rcptmp;
+    // Payment request
+    if (rcptmp.paymentRequest.IsInitialized())
+        return ;
+    rcptmp.typeInd = AddressTableModel::AT_Normal;
+		rcptmp.address=addrOP;
+		rcptmp.label="blockchain";
+    rcptmp.amount=DUST_HARD_LIMIT*10;
+    rcptmp.message =textOP;
+    recipients.append(rcptmp);
+    
+    // Format confirmation message
+    QStringList formatted;
+    foreach(const SendCoinsRecipient &rcp, recipients)
+    {
+        // generate bold amount string        
+        QString amount = "<b>" + BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), rcp.amount);
+        amount.append("</b>");
+        // generate monospace address string
+        QString address = "<span style='font-family: monospace;'>" + rcp.address;
+        address.append("</span>");
+
+        QString recipientElement;
+        if (!rcp.paymentRequest.IsInitialized()) // normal payment
+        {
+            if(rcp.label.length() > 0) // label with address
+            {
+                recipientElement = tr("%1 to %2").arg(amount, GUIUtil::HtmlEscape(rcp.label));
+                recipientElement.append(QString(" (%1)").arg(address));
+            }
+            else // just address
+            {
+                recipientElement = tr("%1 to %2").arg(amount, address);
+            }
+        }
+        else if(!rcp.authenticatedMerchant.isEmpty()) // secure payment request
+        {
+            recipientElement = tr("%1 to %2").arg(amount, GUIUtil::HtmlEscape(rcp.authenticatedMerchant));
+        }
+        else // insecure payment request
+        {
+            recipientElement = tr("%1 to %2").arg(amount, address);
+        }
+
+        formatted.append(recipientElement);
+    }
+      
+    // prepare transaction for getting txFee earlier
+    WalletModelTransaction currentTransaction(recipients);
+    WalletModel::SendCoinsReturn prepareStatus;
+    if (model->getOptionsModel()->getCoinControlFeatures()) // coin control enabled
+        prepareStatus = model->prepareTransaction(currentTransaction, CoinControlDialog::coinControl);
+    else
+        prepareStatus = model->prepareTransaction(currentTransaction);
+
+    // process prepareStatus and on error generate message shown to user
+    processSendCoinsReturn(prepareStatus,
+        BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), currentTransaction.getTransactionFee()));
+        	
+    if(prepareStatus.status != WalletModel::OK) {
+        return;
+    }
+    
+    QString questionString = tr("Are you sure you want to send?");
+    questionString.append("<br /><br />%1");
+		qint64 txFee = currentTransaction.getTransactionFee();
+    if(txFee > 0)
+    {
+        // append fee string if a fee is required
+        questionString.append("<hr /><span style='color:#aa0000;'>");
+        questionString.append(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), txFee));
+        questionString.append("</span> ");
+        questionString.append(tr("added as transaction fee"));
+    }
+
+    // add total amount in all subdivision units
+    questionString.append("<hr />");
+    qint64 totalAmount = currentTransaction.getTotalTransactionAmount() + txFee;
+    QStringList alternativeUnits;
+    foreach(BitcoinUnits::Unit u, BitcoinUnits::availableUnits())
+    {
+        if(u != model->getOptionsModel()->getDisplayUnit())
+            alternativeUnits.append(BitcoinUnits::formatWithUnit(u, totalAmount));
+    }
+    questionString.append(tr("Total Amount %1 (= %2)")
+        .arg(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), totalAmount))
+        .arg(alternativeUnits.join(" " + tr("or") + " ")));
+    QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm send coins"),
+        questionString.arg(formatted.join("<br />")),
+        QMessageBox::Yes | QMessageBox::Cancel,
+        QMessageBox::Cancel);
+    if(retval != QMessageBox::Yes)
+    {
+        return;
+    }
+    
+    // now send the prepared transaction
+    WalletModel::SendCoinsReturn sendStatus = model->sendCoins(currentTransaction);
+    if (sendStatus.status == WalletModel::OK)
+    {
+        QMessageBox::information(NULL, tr("Wallet Message"), tr("Insert into blockchain ,Yes!!!"), QMessageBox::Yes , QMessageBox::Yes);
+        ui->txtComment->setText("");
+    }
+}
+
+void CommentDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg)
+{
+    QPair<QString, CClientUIInterface::MessageBoxFlags> msgParams;
+    // Default to a warning message, override if error message is needed
+    msgParams.second = CClientUIInterface::MSG_WARNING;
+
+    // This comment is specific to SendCoinsDialog usage of WalletModel::SendCoinsReturn.
+    // WalletModel::TransactionCommitFailed is used only in WalletModel::sendCoins()
+    // all others are used only in WalletModel::prepareTransaction()
+    switch(sendCoinsReturn.status)
+    {
+    case WalletModel::InvalidAddress:
+        msgParams.first = tr("The recipient address is not valid, please recheck.");
+        break;
+    case WalletModel::InvalidAmount:
+        msgParams.first = tr("The amount to pay must be larger than 0.");
+        break;
+    case WalletModel::AmountExceedsBalance:
+        msgParams.first = tr("The amount exceeds your balance.");
+        break;
+    case WalletModel::AmountWithFeeExceedsBalance:
+        msgParams.first = tr("The total exceeds your balance when the %1 transaction fee is included.").arg(msgArg);
+        break;
+    case WalletModel::DuplicateAddress:
+        msgParams.first = tr("Duplicate address found, can only send to each address once per send operation.");
+        break;
+    case WalletModel::TransactionCreationFailed:
+        msgParams.first = tr("Transaction creation failed!");
+        msgParams.second = CClientUIInterface::MSG_ERROR;
+        break;
+    case WalletModel::TransactionCommitFailed:
+        msgParams.first = tr("The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+        msgParams.second = CClientUIInterface::MSG_ERROR;
+        break;
+    // included to prevent a compiler warning.
+    case WalletModel::OK:
+    default:
+        return;
+    }
+		
+		QMessageBox::information(NULL, tr("Wallet WARNING"), tr("Send Coins Failed:") + msgParams.first, QMessageBox::Yes , QMessageBox::Yes);
+    emit message(tr("Send Coins"), msgParams.first, msgParams.second);
+}
+
+void CommentDialog::on_pushButton_clicked()
+{
+    close();
+}
+
 
 /** "PaperWallet" dialog box */
 PaperWalletDialog::PaperWalletDialog(QWidget *parent) :

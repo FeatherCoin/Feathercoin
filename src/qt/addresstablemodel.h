@@ -26,7 +26,7 @@ public:
 
     enum AddressType {
         AT_Unknown = 0, /**< User specified label */
-        AT_Normal = 1,  /**< Bitcoin address */
+        AT_Normal = 1,  /**< Feathercoin address */
         AT_Stealth = 2  /**< Stealth address */
     };
     

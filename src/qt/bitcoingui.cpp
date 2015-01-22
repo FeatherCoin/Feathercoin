@@ -325,6 +325,8 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Feathercoin addresses"));
     paperWalletAction = new QAction(QIcon(":/icons/print"), tr("&Print paper wallets"), this);
     paperWalletAction->setStatusTip(tr("Print paper wallets"));
+    inertBlockChainAction = new QAction(QIcon(":/icons/comment"), tr("&Comments"), this);
+    inertBlockChainAction->setStatusTip(tr("Insert your comments into blockchain"));
     
     lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock wallet"), this);
     lockWalletAction->setToolTip(tr("Lock wallet"));
@@ -378,6 +380,7 @@ void BitcoinGUI::createActions(bool fIsTestnet)
         connect(bitmessageAction, SIGNAL(triggered()), this, SLOT(openBitmessageClicked()));
         connect(shapeshiftAction, SIGNAL(triggered()), this, SLOT(openShapeshiftClicked()));
         connect(paperWalletAction, SIGNAL(triggered()), walletFrame, SLOT(printPaperWallets()));
+        connect(inertBlockChainAction, SIGNAL(triggered()), walletFrame, SLOT(inertBlockChain()));
     }
 #endif
 }
@@ -427,6 +430,8 @@ void BitcoinGUI::createMenuBar()
     if(walletFrame)
     {
         advanced->addAction(accountReportAction);
+        advanced->addSeparator();
+        advanced->addAction(inertBlockChainAction);
     }
     
     QMenu *plugins = appMenuBar->addMenu(tr("&Plugins"));
@@ -531,6 +536,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     bitmessageAction->setEnabled(enabled);
     shapeshiftAction->setEnabled(enabled);
     paperWalletAction->setEnabled(enabled);
+    inertBlockChainAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(bool fIsTestnet)

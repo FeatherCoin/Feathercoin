@@ -11,10 +11,12 @@
 
 class BitcoinGUI;
 class ClientModel;
+class SendCoinsRecipient;
 
 namespace Ui {
     class AboutDialog;
     class PaperWalletDialog;
+    class CommentDialog;
     class HelpMessageDialog;
 }
 
@@ -56,6 +58,30 @@ private:
 private slots:
     void on_getNewAddress_clicked();
     void on_printButton_clicked();
+};
+
+/** "Comment" dialog box */
+class CommentDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit CommentDialog(QWidget *parent);
+    ~CommentDialog();
+
+    void setModel(WalletModel *model);
+
+private:
+    Ui::CommentDialog *ui;
+    WalletModel *model;
+    void processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg = QString());
+
+private slots:
+    void on_insertButton_clicked();
+    void on_pushButton_clicked();
+    
+signals:
+    void message(const QString &title, const QString &message, unsigned int style);
 };
 
 /** "Help message" dialog box */

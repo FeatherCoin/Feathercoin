@@ -101,7 +101,9 @@ public slots:
     void importWallet(QString privateKey);
     /** Open the print paper wallets dialog **/
     void printPaperWallets();
-
+    /** Open comment dialog **/
+    void inertBlockChain();
+    
     /** Show used sending addresses */
     void usedSendingAddresses();
     /** Show used receiving addresses */
