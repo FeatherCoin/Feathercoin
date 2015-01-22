@@ -105,6 +105,7 @@ QT_FORMS_UI = \
   forms/transactiondescdialog.ui \
   forms/qrcodedialog.ui \
   forms/paperwalletdialog.ui \
+  forms/commentdialog.ui \
   forms/snapwidget.ui
 
 QT_MOC_CPP = \

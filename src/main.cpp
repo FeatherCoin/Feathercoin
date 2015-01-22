@@ -1176,8 +1176,6 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos)
     }
 
     // Check the header
-    //if (!CheckProofOfWork(block.GetHash(), block.nBits))
-    //if (!CheckProofOfWork(block.GetPoWHash(), block.nBits))
     if (!block.CheckProofOfWork(mapBlockIndex[block.GetHash()]->nHeight))
         return error("Check the header ReadBlockFromDisk : Errors in block header");
 
@@ -1248,14 +1246,9 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 }
 
 // Feathercoin: eHRC at 3rd hard fork
-//int64_t nTargetTimespan = 60; // Feathercoin: 1 minute 
-//int64_t nTargetSpacing = 60; // Feathercoin: 1 minute
 int nTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
 int nTargetSpacing = 2.5 * 60; // 2.5 minutes
-static const int64_t nTargetTimespanNEW = 60 ; // Feathercoin: unused
 static const int64_t nInterval = nTargetTimespan / nTargetSpacing;
-static const int64_t nDiffChangeTarget = 145000; // Feathercoin: unused ,Patch effective @ block 145000
-static const int64_t nTestnetResetTargetFix = 157500; // Feathercoin: unused ,Testnet enables target reset at block 157500
 
 //
 // minimum amount of work that could possibly be required nTime after
@@ -2190,7 +2183,7 @@ bool static DisconnectTip(CValidationState &state) {
     return true;
 }
 
-//0.8.7 ACP code have some problem in 0.9.3,so I delete them. 
+//0.8.7 ACP code
 bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 {
     return true;
@@ -2459,8 +2452,6 @@ bool ReceivedBlockTransactions(const CBlock &block, CValidationState& state, CBl
         setBlockIndexValid.insert(pindexNew);
 
     /* write both the immutible data (CDiskBlockIndex) and the mutable data (BlockIndex) */
-    //if (!pblocktree->WriteDiskBlockIndex(CDiskBlockIndex(pindexNew)) || !pblocktree->WriteBlockIndex(*pindexNew))
-    //if (!pblocktree->WriteBlockIndex(CDiskBlockIndex(pindexNew)))
     if (!pblocktree->WriteBlockIndex(CDiskBlockIndex(pindexNew)))
         return state.Abort(_("Failed to write block index"));
 
@@ -2501,7 +2492,7 @@ int GetAuxPowStartBlock()
 
 bool CBlockHeader::CheckProofOfWork(int nHeight) const
 {	
-	LogPrintf("CBlockHeader::CheckProofOfWork(), nHeight=%i \n",nHeight);
+	//LogPrintf("CBlockHeader::CheckProofOfWork(), nHeight=%i \n",nHeight);
 	if (nHeight==INT_MAX)
 	{
 			if (!::CheckProofOfWork(GetPoWHashS(), nBits))
@@ -2631,8 +2622,6 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nHeight, bool fCheckPOW)
 {   
     // Check proof of work matches claimed amount
-    //if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(), block.nBits))
-    //if (fCheckPOW && !CheckProofOfWork(GetPoWHash(), nBits))
     if (fCheckPOW && !block.CheckProofOfWork(nHeight))
     	{
     		LogPrintf("CheckBlockHeader(),block.CheckProofOfWork, nHeight=%d \n",nHeight);
@@ -2943,12 +2932,6 @@ CBlockHeader CBlockIndex::GetBlockHeader() const
 
     if (nVersion & BLOCK_VERSION_AUXPOW) {
         CDiskBlockIndex diskblockindex;
-        // auxpow is not in memory, load CDiskBlockHeader
-        // from database to get it
-
-        //Feathercoin unused
-        //pblocktree->ReadDiskBlockIndex(*phashBlock, diskblockindex);
-        //block.auxpow = diskblockindex.auxpow;
     }
 
     block.nVersion       = nVersion;
@@ -2986,14 +2969,6 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
 
     //Preliminary checks
     LogPrintf("ProcessBlock: Preliminary checks \n");
-    //from dogecoin
-    /*if (!CheckBlock(*pblock, state, INT_MAX)) {  
-        if (state.CorruptionPossible())
-            mapAlreadyAskedFor.erase(CInv(MSG_BLOCK, hash));
-        return error("ProcessBlock() : CheckBlock FAILED");
-    }*/
-    //if (!CheckBlock(*pblock, state,nForkFour-1))
-    //if (!CheckBlock(*pblock, state,1))
     if (!CheckBlock(*pblock, state, INT_MAX)) 
     	  return error("ProcessBlock() : CheckBlock FAILED");
         	
