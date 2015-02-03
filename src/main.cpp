@@ -3450,10 +3450,7 @@ bool InitBlockIndex() {
                 return error("LoadBlockIndex() : FindBlockPos failed");
             if (!WriteBlockToDisk(block, blockPos))
                 return error("LoadBlockIndex() : writing genesis block to disk failed");
-            //from bitcoin
-            //if (!AddToBlockIndex(block, state, blockPos))
-            //    return error("InitBlockIndex AddToBlockIndex() : genesis block not accepted");
-            //from dogecoin                    
+                 
             CBlockIndex *pindex = AddToBlockIndex(block);
             if (!ReceivedBlockTransactions(block, state, pindex, blockPos)) 
                 return error("InitBlockIndex  ReceivedBlockTransactions() : genesis block not accepted");

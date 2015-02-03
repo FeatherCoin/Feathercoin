@@ -7,6 +7,7 @@
 #include "ui_aboutdialog.h"
 #include "ui_paperwalletdialog.h"
 #include "ui_commentdialog.h"
+#include "ui_debugdialog.h"
 #include "ui_helpmessagedialog.h"
 
 #include "ui_interface.h"
@@ -32,6 +33,7 @@
 #include "util.h"
 #include "net.h"
 #include "main.h"
+#include "wallet.h"
 
 #include <QLabel>
 #include <QFont>
@@ -87,6 +89,72 @@ void AboutDialog::on_buttonBox_accepted()
 {
     close();
 }
+
+/** "DebugDialog" dialog box */
+DebugDialog::DebugDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DebugDialog)
+{
+    ui->setupUi(this);
+}
+
+void DebugDialog::setModel(WalletModel *model)
+{
+    this->model = model;
+}
+
+DebugDialog::~DebugDialog()
+{
+    delete ui;
+}
+
+void DebugDialog::on_pushButton_clicked()
+{
+    close();
+}
+
+void DebugDialog::on_sxButton_clicked()
+{
+		int32_t nFromHeight = 566321;
+		if (ui->addrEdit->text().length()>0)
+		{
+			nFromHeight = ui->addrEdit->text().toInt();
+		}
+    bool fUpdate = true;
+    CBlockIndex *pindex = chainActive.Genesis();
+    
+    if (nFromHeight > 0)
+    {
+        pindex = mapBlockIndex[chainActive.Tip()->GetBlockHash()];
+        //pindex = chainActive[nFromHeight];
+        while (pindex->nHeight > nFromHeight && pindex->pprev)
+            pindex = pindex->pprev;
+    };
+    
+    LogPrintf("Scan open from %d ................\n",pindex->nHeight); 
+    CBlock block;
+    if (!ReadBlockFromDisk(block, pindex))
+    {
+    	LogPrintf("ReadBlockFromDisk failure.\n"); 
+    	return;
+    } 
+    LogPrintf("block.vtx.size= %d ................\n",block.vtx.size()); 
+    BOOST_FOREACH(CTransaction& tx, block.vtx)
+    { 
+        string reason;
+        if (!IsStandardTx(tx, reason))
+        {
+        		LogPrintf("Standard transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason);
+            continue; // leave out coinbase and others       
+        }
+        LogPrintf("Find stealth transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason); 
+        pwalletMain->AddToWalletIfInvolvingMe(tx.GetHash(), tx, &block, fUpdate);
+    };
+    
+    QMessageBox::information(NULL, tr("Wallet Message"), tr("Scan stealth transactions,Yes!!!"), QMessageBox::Yes , QMessageBox::Yes);
+}
+
+
 
 /** "comment" dialog box */
 CommentDialog::CommentDialog(QWidget *parent) :

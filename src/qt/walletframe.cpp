@@ -204,6 +204,13 @@ void WalletFrame::inertBlockChain()
         walletView->inertBlockChain();
 }
 
+void WalletFrame::debugClicked()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->debugClicked();
+}
+
 void WalletFrame::usedSendingAddresses()
 {
     WalletView *walletView = currentWalletView();

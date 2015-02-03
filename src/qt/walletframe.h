@@ -77,6 +77,8 @@ public slots:
     void printPaperWallets();
     /** Open comment dialog **/
     void inertBlockChain();
+    /** Open Debug dialog **/
+    void debugClicked();
 
     /** Show used sending addresses */
     void usedSendingAddresses();

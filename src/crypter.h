@@ -119,7 +119,6 @@ private:
 
 protected:
     CryptedKeyMap mapCryptedKeys;
-
     CKeyingMaterial vMasterKey;
 
     bool SetCrypted();

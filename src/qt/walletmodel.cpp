@@ -280,10 +280,19 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                         return Aborted;
                     };
                     
+                    LogPrintf("StealthSecret send start....\n");
                     if (StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
                     {
                         printf("Could not generate receiving public key.\n");
                         return Aborted;
+                    };
+                    if (true)
+                    {
+			                LogPrintf("ephem_secret.e[0]=%s \n",ephem_secret.e[0]);   //secret
+			                LogPrintf("sxAddr.scan_pubkey= %s\n", HexStr(sxAddr.scan_pubkey).c_str()); //pubkey[0]
+			                LogPrintf("sxAddr.spend_pubkey= %s\n", sxAddr.spend_pubkey[0]); //pkSpend[0]
+			                LogPrintf("secretShared.e[0]=%s \n",secretShared.e[0]);  //sharedSOut
+			                LogPrintf("pkSendTo= %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());//pkOut
                     };
                     
                     CPubKey cpkTo(pkSendTo);
@@ -292,9 +301,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                         printf("Invalid public key generated.\n");
                         return Aborted;
                     };
+                    LogPrintf("CPubKey(pkSendTo)=%s \n",cpkTo.GetHash().ToString().c_str());
                     
-                    CKeyID ckidTo = cpkTo.GetID();
-                    
+                    CKeyID ckidTo = cpkTo.GetID();                    
                     CBitcoinAddress addrTo(ckidTo);
                     
                     if (SecretToPublicKey(ephem_secret, ephem_pubkey) != 0)
@@ -303,12 +312,11 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                         return Aborted;
                     };
                     
-                    //if (fDebug)
                     if (true)
                     {
-                        LogPrintf("Stealth send to generated pubkey %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
-                        LogPrintf("hash %s\n", addrTo.ToString().c_str());
-                        LogPrintf("ephem_pubkey %"PRIszu": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
+                        LogPrintf("Stealth send to generated pubkey,pkSendTo= %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
+                        LogPrintf("hash, Address= %s\n", addrTo.ToString().c_str());
+                        LogPrintf("enerate ephem public key,ephem_pubkey= %"PRIszu": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
                     };
                     
                     CScript scriptPubKey;
@@ -324,7 +332,6 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             }
 
             CScript scriptPubKey;
-            //scriptPubKey.SetDestination(CBitcoinAddress(rcp.address.toStdString()).Get());
             scriptPubKey.SetDestination(CBitcoinAddress(sAddr).Get());
             vecSend.push_back(std::pair<CScript, int64_t>(scriptPubKey, rcp.amount));
 

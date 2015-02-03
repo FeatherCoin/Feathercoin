@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DebugDialog</class>
+ <widget class="QDialog" name="DebugDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>556</width>
+    <height>208</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Debug Dialog (experts only!)</string>
+  </property>
+  <widget class="QPushButton" name="sxButton">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>20</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Debug Info</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../feathercoin.qrc">
+     <normaloff>:/icons/comment</normaloff>:/icons/comment</iconset>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>415</y>
+     <width>81</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::NoButton</set>
+   </property>
+   <property name="centerButtons">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="addrEdit">
+   <property name="geometry">
+    <rect>
+     <x>102</x>
+     <y>25</y>
+     <width>121</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Recipient address</string>
+   </property>
+   <property name="statusTip">
+    <string>Recipient address</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>27</x>
+     <y>27</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>nFromHeight:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>160</y>
+     <width>81</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16177186</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../feathercoin.qrc">
+     <normaloff>:/icons/quit</normaloff>:/icons/quit</iconset>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../feathercoin.qrc"/>
+ </resources>
+ <connections/>
+</ui>

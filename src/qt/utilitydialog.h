@@ -13,10 +13,12 @@ class BitcoinGUI;
 class ClientModel;
 class SendCoinsRecipient;
 
+
 namespace Ui {
     class AboutDialog;
     class PaperWalletDialog;
     class CommentDialog;
+    class DebugDialog;
     class HelpMessageDialog;
 }
 
@@ -78,6 +80,29 @@ private:
 
 private slots:
     void on_insertButton_clicked();
+    void on_pushButton_clicked();
+    
+signals:
+    void message(const QString &title, const QString &message, unsigned int style);
+};
+
+/** "DebugDialog" dialog box */
+class DebugDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit DebugDialog(QWidget *parent);
+    ~DebugDialog();
+
+    void setModel(WalletModel *model);
+
+private:
+    Ui::DebugDialog *ui;
+    WalletModel *model;
+
+private slots:
+    void on_sxButton_clicked();
     void on_pushButton_clicked();
     
 signals:

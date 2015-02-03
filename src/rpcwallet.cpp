@@ -2120,7 +2120,7 @@ Value sendtostealthaddress(const Array& params, bool fHelp)
     
     if (!sxAddr.SetEncoded(sEncoded))
     {
-        result.push_back(Pair("result", "Invalid Deepcoin stealth address."));
+        result.push_back(Pair("result", "Invalid Feathercoin stealth address."));
         return result;
     };
     
@@ -2329,7 +2329,7 @@ Value scanforstealthtxns(const Array& params, bool fHelp)
     
     if (nFromHeight > 0)
     {
-        pindex = mapBlockIndex[hashBestChain];
+        pindex = mapBlockIndex[chainActive.Tip()->GetBlockHash()];//[hashBestChain];
         while (pindex->nHeight > nFromHeight
             && pindex->pprev)
             pindex = pindex->pprev;
@@ -2345,11 +2345,13 @@ Value scanforstealthtxns(const Array& params, bool fHelp)
     pwalletMain->nStealth = 0;
     pwalletMain->nFoundStealth = 0;
     
+    printf("Scan open from %d ................\n",nFromHeight); 
     while (pindex)
     {
         nBlocks++;
         CBlock block;
-        ReadBlockFromDisk(block, pindex); //block.ReadFromDisk(pindex);
+        ReadBlockFromDisk(block, pindex);  //block.ReadFromDisk(pindex);
+        printf("pindex->nHeight=%d \n",pindex->nHeight); 
         
         BOOST_FOREACH(CTransaction& tx, block.vtx)
         {

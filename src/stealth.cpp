@@ -228,7 +228,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     R = public spend key
     f = private spend key
 
-    Q = dG
+    Q = dG  //单次使用的私钥
     R = fG
     
     Sender (has Q and R, not d or f):
@@ -270,28 +270,28 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     if (!(bnCtx = BN_CTX_new()))
     {
         printf("StealthSecret(): BN_CTX_new failed.\n");
-        rv = 1;
+        rv = 2;
         goto End;
     };
     
     if (!(bnEphem = BN_bin2bn(&secret.e[0], ec_secret_size, BN_new())))
     {
         printf("StealthSecret(): bnEphem BN_bin2bn failed.\n");
-        rv = 1;
+        rv = 3;
         goto End;
     };
     
     if (!(bnQ = BN_bin2bn(&pubkey[0], pubkey.size(), BN_new())))
     {
         printf("StealthSecret(): bnQ BN_bin2bn failed\n");
-        rv = 1;
+        rv = 4;
         goto End;
     };
     
     if (!(Q = EC_POINT_bn2point(ecgrp, bnQ, NULL, bnCtx)))
     {
         printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
-        rv = 1;
+        rv = 5;
         goto End;
     };
     
@@ -301,14 +301,14 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     if (!EC_POINT_mul(ecgrp, Q, NULL, Q, bnEphem, bnCtx))
     {
         printf("StealthSecret(): eQ EC_POINT_mul failed\n");
-        rv = 1;
+        rv = 6;
         goto End;
     };
     
     if (!(bnOutQ = EC_POINT_point2bn(ecgrp, Q, POINT_CONVERSION_COMPRESSED, BN_new(), bnCtx)))
     {
         printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
-        rv = 1;
+        rv = 7;
         goto End;
     };
     
@@ -318,7 +318,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
         || BN_bn2bin(bnOutQ, &vchOutQ[0]) != (int) ec_compressed_size)
     {
         printf("StealthSecret(): bnOutQ incorrect length.\n");
-        rv = 1;
+        rv = 8;
         goto End;
     };
     
@@ -327,7 +327,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     if (!(bnc = BN_bin2bn(&sharedSOut.e[0], ec_secret_size, BN_new())))
     {
         printf("StealthSecret(): BN_bin2bn failed\n");
-        rv = 1;
+        rv = 9;
         goto End;
     };
     
@@ -335,21 +335,21 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     if (!(C = EC_POINT_new(ecgrp)))
     {
         printf("StealthSecret(): C EC_POINT_new failed\n");
-        rv = 1;
+        rv = 10;
         goto End;
     };
     
     if (!EC_POINT_mul(ecgrp, C, bnc, NULL, NULL, bnCtx))
     {
         printf("StealthSecret(): C EC_POINT_mul failed\n");
-        rv = 1;
+        rv = 11;
         goto End;
     };
     
     if (!(bnR = BN_bin2bn(&pkSpend[0], pkSpend.size(), BN_new())))
     {
         printf("StealthSecret(): bnR BN_bin2bn failed\n");
-        rv = 1;
+        rv = 12;
         goto End;
     };
     
@@ -357,35 +357,35 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     if (!(R = EC_POINT_bn2point(ecgrp, bnR, NULL, bnCtx)))
     {
         printf("StealthSecret(): R EC_POINT_bn2point failed\n");
-        rv = 1;
+        rv = 13;
         goto End;
     };
     
     if (!EC_POINT_mul(ecgrp, C, bnc, NULL, NULL, bnCtx))
     {
         printf("StealthSecret(): C EC_POINT_mul failed\n");
-        rv = 1;
+        rv = 14;
         goto End;
     };
     
     if (!(Rout = EC_POINT_new(ecgrp)))
     {
         printf("StealthSecret(): Rout EC_POINT_new failed\n");
-        rv = 1;
+        rv = 15;
         goto End;
     };
     
     if (!EC_POINT_add(ecgrp, Rout, R, C, bnCtx))
     {
         printf("StealthSecret(): Rout EC_POINT_add failed\n");
-        rv = 1;
+        rv = 16;
         goto End;
     };
     
     if (!(bnOutR = EC_POINT_point2bn(ecgrp, Rout, POINT_CONVERSION_COMPRESSED, BN_new(), bnCtx)))
     {
         printf("StealthSecret(): Rout EC_POINT_bn2point failed\n");
-        rv = 1;
+        rv = 17;
         goto End;
     };
     
@@ -395,7 +395,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
         || BN_bn2bin(bnOutR, &pkOut[0]) != (int) ec_compressed_size)
     {
         printf("StealthSecret(): pkOut incorrect length.\n");
-        rv = 1;
+        rv = 18;
         goto End;
     };
     
