@@ -7,6 +7,11 @@
 
 #include "addresstablemodel.h"
 #include "guiutil.h"
+#include "stealth.h"
+#include "base58.h"
+#include "wallet.h"
+#include "walletmodel.h"
+#include "init.h"
 
 #include <QDataWidgetMapper>
 #include <QMessageBox>
@@ -72,6 +77,57 @@ void EditAddressDialog::setModel(AddressTableModel *model)
 void EditAddressDialog::loadRow(int row)
 {
     mapper->setCurrentIndex(row);
+    
+    if (ui->addressEdit->text().length()>=75)
+    {
+	    CStealthAddress sxAddr;
+	    if (sxAddr.SetEncoded(ui->addressEdit->text().toStdString()))
+	    {
+	    	ui->lblPubkey->setText("");
+	    	ui->lblPrikey->setText("");
+	    	ui->lblScanPubkey->setText(HexStr(sxAddr.scan_pubkey).c_str());
+	    	ui->lblScanSecret->setText(HexStr(sxAddr.scan_secret).c_str());
+	    	ui->lblSpendPubkey->setText(HexStr(sxAddr.spend_pubkey).c_str());
+	    	ui->lblSpendSecret->setText(HexStr(sxAddr.spend_secret).c_str());
+	    }
+  	}
+  	else
+  	{
+  		CBitcoinAddress address(ui->addressEdit->text().toStdString());
+      CKeyID keyID;
+      if ( !address.GetKeyID(keyID) )
+      {
+          QMessageBox::warning(this, windowTitle(),
+              tr("Address \"%1\" doesn't have public key ").arg(ui->addressEdit->text()),
+              QMessageBox::Ok, QMessageBox::Ok);
+          return;
+      }
+      CPubKey vchPubKey;
+      if ( !pwalletMain->GetPubKey(keyID, vchPubKey))
+      {
+          QMessageBox::warning(this, windowTitle(),
+              tr("Address \"%1\" doesn't have public key ").arg(ui->addressEdit->text()),
+              QMessageBox::Ok, QMessageBox::Ok);
+          return;
+      }
+      CSecret vchSecret;
+      bool fCompressed;
+      if (!pwalletMain->GetSecret(keyID, vchSecret, fCompressed))
+      {
+          QMessageBox::warning(this, windowTitle(),
+              tr("Address \"%1\" doesn't have private key ").arg(ui->addressEdit->text()),
+              QMessageBox::Ok, QMessageBox::Ok);
+          return;
+      }
+      ui->lblPubkey->setText(HexStr(vchPubKey).c_str());
+      ui->lblPrikey->setText(CBitcoinSecret(vchSecret, fCompressed).ToString().c_str());
+      GUIUtil::setClipboard(QString::fromStdString(HexStr(vchPubKey)));
+      
+    	ui->lblScanPubkey->setText("");
+    	ui->lblScanSecret->setText("");
+    	ui->lblSpendPubkey->setText("");
+    	ui->lblSpendSecret->setText("");
+  	}
 }
 
 bool EditAddressDialog::saveCurrentRow()

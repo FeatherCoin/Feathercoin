@@ -605,7 +605,11 @@ Value signrawtransaction(const Array& params, bool fHelp)
             bool fGood = vchSecret.SetString(k.get_str());
             if (!fGood)
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key");
-            CKey key = vchSecret.GetKey();
+            //CKey key = vchSecret.GetKey();
+            CKey key;
+            bool fCompressed;
+            CSecret secret = vchSecret.GetSecret(fCompressed);
+            key.SetSecret(secret, fCompressed);
             tempKeystore.AddKey(key);
         }
     }

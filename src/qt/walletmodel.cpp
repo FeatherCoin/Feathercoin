@@ -197,14 +197,20 @@ bool WalletModel::importPrivateKey(QString privKey)
     bool fGood = vchSecret.SetString(privKey.toStdString());
     if (!fGood)
         return false;
-    CKey key = vchSecret.GetKey();
-    CPubKey pubkey = key.GetPubKey();
-    CKeyID vchAddress = pubkey.GetID();
+    //CKey key = vchSecret.GetKey();
+    //CPubKey pubkey = key.GetPubKey();
+    //CKeyID vchAddress = pubkey.GetID();
+    CKey key;
+    bool fCompressed;
+    CSecret secret = vchSecret.GetSecret(fCompressed);
+    key.SetSecret(secret, fCompressed);
+    CKeyID vchAddress = key.GetPubKey().GetID();
     {
         LOCK2(cs_main, pwalletMain->cs_wallet);
         pwalletMain->MarkDirty();
         pwalletMain->SetAddressBook(vchAddress, ("imported wallet"),"send");
-        if (!pwalletMain->AddKeyPubKey(key, pubkey))
+        //if (!pwalletMain->AddKeyPubKey(key, pubkey))
+        if (!pwalletMain->AddKey(key))
             return false;
         pwalletMain->ScanForWalletTransactions(chainActive.Genesis(), true);
         pwalletMain->ReacceptWalletTransactions();
@@ -281,6 +287,18 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                     };
                     
                     LogPrintf("StealthSecret send start....\n");
+                    if (true)
+                    {
+			                LogPrintf("ephem_secret.e=%s \n",HexStr(&ephem_secret.e[0],&ephem_secret.e[32]).c_str());   //secret
+			                LogPrintf("sxAddr.scan_secret= %s\n", HexStr(sxAddr.scan_secret).c_str()); //
+			                LogPrintf("sxAddr.scan_pubkey= %s\n", HexStr(sxAddr.scan_pubkey).c_str()); //pubkey[0]
+			                LogPrintf("sxAddr.spend_secret= %s\n", HexStr(sxAddr.spend_secret).c_str()); //
+			                LogPrintf("sxAddr.spend_pubkey= %s\n",HexStr(sxAddr.spend_pubkey).c_str()); //pkSpend[0]
+			                LogPrintf("secretShared.e=%s \n",HexStr(&secretShared.e[0],&secretShared.e[32]).c_str());  //sharedSOut
+			                LogPrintf("pkSendTo= %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());//pkOut
+			                LogPrintf("send:  secret = ephem_secret, pubkey = scan_pubkey....\n");
+                    };
+                    
                     if (StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
                     {
                         printf("Could not generate receiving public key.\n");
@@ -288,10 +306,12 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                     };
                     if (true)
                     {
-			                LogPrintf("ephem_secret.e[0]=%s \n",ephem_secret.e[0]);   //secret
+			                LogPrintf("ephem_secret.e=%s \n",HexStr(&ephem_secret.e[0],&ephem_secret.e[32]).c_str());   //secret
+			                LogPrintf("sxAddr.scan_secret= %s\n", HexStr(sxAddr.scan_secret).c_str()); //
 			                LogPrintf("sxAddr.scan_pubkey= %s\n", HexStr(sxAddr.scan_pubkey).c_str()); //pubkey[0]
-			                LogPrintf("sxAddr.spend_pubkey= %s\n", sxAddr.spend_pubkey[0]); //pkSpend[0]
-			                LogPrintf("secretShared.e[0]=%s \n",secretShared.e[0]);  //sharedSOut
+			                LogPrintf("sxAddr.spend_secret= %s\n", HexStr(sxAddr.spend_secret).c_str()); //
+			                LogPrintf("sxAddr.spend_pubkey= %s\n",HexStr(sxAddr.spend_pubkey).c_str()); //pkSpend[0]
+			                LogPrintf("secretShared.e=%s \n",HexStr(&secretShared.e[0],&secretShared.e[32]).c_str());  //sharedSOut
 			                LogPrintf("pkSendTo= %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());//pkOut
                     };
                     

@@ -100,17 +100,20 @@ bool CCrypter::Decrypt(const std::vector<unsigned char>& vchCiphertext, CKeyingM
 }
 
 
-bool EncryptSecret(const CKeyingMaterial& vMasterKey, const CKeyingMaterial &vchPlaintext, const uint256& nIV, std::vector<unsigned char> &vchCiphertext)
+//bool EncryptSecret(const CKeyingMaterial& vMasterKey, const CKeyingMaterial &vchPlaintext, const uint256& nIV, std::vector<unsigned char> &vchCiphertext)
+bool EncryptSecret(CKeyingMaterial& vMasterKey, const CSecret &vchPlaintext, const uint256& nIV, std::vector<unsigned char> &vchCiphertext)
 {
     CCrypter cKeyCrypter;
     std::vector<unsigned char> chIV(WALLET_CRYPTO_KEY_SIZE);
     memcpy(&chIV[0], &nIV, WALLET_CRYPTO_KEY_SIZE);
     if(!cKeyCrypter.SetKey(vMasterKey, chIV))
         return false;
-    return cKeyCrypter.Encrypt(*((const CKeyingMaterial*)&vchPlaintext), vchCiphertext);
+    //return cKeyCrypter.Encrypt(*((const CKeyingMaterial*)&vchPlaintext), vchCiphertext);
+    return cKeyCrypter.Encrypt((CKeyingMaterial)vchPlaintext, vchCiphertext);
 }
 
-bool DecryptSecret(const CKeyingMaterial& vMasterKey, const std::vector<unsigned char>& vchCiphertext, const uint256& nIV, CKeyingMaterial& vchPlaintext)
+//bool DecryptSecret(const CKeyingMaterial& vMasterKey, const std::vector<unsigned char>& vchCiphertext, const uint256& nIV, CKeyingMaterial& vchPlaintext)
+bool DecryptSecret(const CKeyingMaterial& vMasterKey, const std::vector<unsigned char>& vchCiphertext, const uint256& nIV, CSecret& vchPlaintext)
 {
     CCrypter cKeyCrypter;
     std::vector<unsigned char> chIV(WALLET_CRYPTO_KEY_SIZE);
@@ -122,12 +125,14 @@ bool DecryptSecret(const CKeyingMaterial& vMasterKey, const std::vector<unsigned
 
 bool CCryptoKeyStore::SetCrypted()
 {
-    LOCK(cs_KeyStore);
-    if (fUseCrypto)
-        return true;
-    if (!mapKeys.empty())
-        return false;
-    fUseCrypto = true;
+    {
+        LOCK(cs_KeyStore);
+        if (fUseCrypto)
+            return true;
+        if (!mapKeys.empty())
+            return false;
+        fUseCrypto = true;
+    }
     return true;
 }
 
@@ -157,13 +162,16 @@ bool CCryptoKeyStore::Unlock(const CKeyingMaterial& vMasterKeyIn)
         {
             const CPubKey &vchPubKey = (*mi).second.first;
             const std::vector<unsigned char> &vchCryptedSecret = (*mi).second.second;
-            CKeyingMaterial vchSecret;
+            //CKeyingMaterial vchSecret;
+            CSecret vchSecret;
             if(!DecryptSecret(vMasterKeyIn, vchCryptedSecret, vchPubKey.GetHash(), vchSecret))
                 return false;
             if (vchSecret.size() != 32)
                 return false;
             CKey key;
-            key.Set(vchSecret.begin(), vchSecret.end(), vchPubKey.IsCompressed());
+            //key.Set(vchSecret.begin(), vchSecret.end(), vchPubKey.IsCompressed());
+            key.SetPubKey(vchPubKey);
+            key.SetSecret(vchSecret);
             if (key.GetPubKey() == vchPubKey)
                 break;
             return false;
@@ -174,22 +182,28 @@ bool CCryptoKeyStore::Unlock(const CKeyingMaterial& vMasterKeyIn)
     return true;
 }
 
-bool CCryptoKeyStore::AddKeyPubKey(const CKey& key, const CPubKey &pubkey)
+//bool CCryptoKeyStore::AddKeyPubKey(const CKey& key, const CPubKey &pubkey)
+bool CCryptoKeyStore::AddKey(const CKey& key)
 {
     {
         LOCK(cs_KeyStore);
         if (!IsCrypted())
-            return CBasicKeyStore::AddKeyPubKey(key, pubkey);
+            //return CBasicKeyStore::AddKeyPubKey(key, pubkey);
+            return CBasicKeyStore::AddKey(key);
 
         if (IsLocked())
             return false;
 
         std::vector<unsigned char> vchCryptedSecret;
-        CKeyingMaterial vchSecret(key.begin(), key.end());
-        if (!EncryptSecret(vMasterKey, vchSecret, pubkey.GetHash(), vchCryptedSecret))
+        //CKeyingMaterial vchSecret(key.begin(), key.end());
+        CPubKey vchPubKey = key.GetPubKey();
+        bool fCompressed;
+        //if (!EncryptSecret(vMasterKey, vchSecret, pubkey.GetHash(), vchCryptedSecret))
+        if (!EncryptSecret(vMasterKey, key.GetSecret(fCompressed), vchPubKey.GetHash(), vchCryptedSecret))
             return false;
 
-        if (!AddCryptedKey(pubkey, vchCryptedSecret))
+        //if (!AddCryptedKey(pubkey, vchCryptedSecret))
+        if (!AddCryptedKey(key.GetPubKey(), vchCryptedSecret))
             return false;
     }
     return true;
@@ -220,12 +234,15 @@ bool CCryptoKeyStore::GetKey(const CKeyID &address, CKey& keyOut) const
         {
             const CPubKey &vchPubKey = (*mi).second.first;
             const std::vector<unsigned char> &vchCryptedSecret = (*mi).second.second;
-            CKeyingMaterial vchSecret;
+            //CKeyingMaterial vchSecret;
+            CSecret vchSecret;
             if (!DecryptSecret(vMasterKey, vchCryptedSecret, vchPubKey.GetHash(), vchSecret))
                 return false;
             if (vchSecret.size() != 32)
                 return false;
-            keyOut.Set(vchSecret.begin(), vchSecret.end(), vchPubKey.IsCompressed());
+            //keyOut.Set(vchSecret.begin(), vchSecret.end(), vchPubKey.IsCompressed());
+            keyOut.SetPubKey(vchPubKey);
+            keyOut.SetSecret(vchSecret);
             return true;
         }
     }
@@ -259,11 +276,17 @@ bool CCryptoKeyStore::EncryptKeys(CKeyingMaterial& vMasterKeyIn)
         fUseCrypto = true;
         BOOST_FOREACH(KeyMap::value_type& mKey, mapKeys)
         {
-            const CKey &key = mKey.second;
-            CPubKey vchPubKey = key.GetPubKey();
-            CKeyingMaterial vchSecret(key.begin(), key.end());
+            //const CKey &key = mKey.second;
+            //CPubKey vchPubKey = key.GetPubKey();
+            //CKeyingMaterial vchSecret(key.begin(), key.end());
+            CKey key;
+            if (!key.SetSecret(mKey.second.first, mKey.second.second))
+                return false;
+            const CPubKey vchPubKey = key.GetPubKey();
             std::vector<unsigned char> vchCryptedSecret;
-            if (!EncryptSecret(vMasterKeyIn, vchSecret, vchPubKey.GetHash(), vchCryptedSecret))
+            //if (!EncryptSecret(vMasterKeyIn, vchSecret, vchPubKey.GetHash(), vchCryptedSecret))
+            bool fCompressed;
+            if (!EncryptSecret(vMasterKeyIn, key.GetSecret(fCompressed), vchPubKey.GetHash(), vchCryptedSecret))
                 return false;
             if (!AddCryptedKey(vchPubKey, vchCryptedSecret))
                 return false;

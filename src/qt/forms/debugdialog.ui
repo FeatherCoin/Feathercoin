@@ -11,23 +11,23 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Debug Dialog (experts only!)</string>
+   <string>Stealth Transaction Tool (experts only!)</string>
   </property>
   <widget class="QPushButton" name="sxButton">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>20</y>
-     <width>101</width>
+     <x>150</x>
+     <y>100</y>
+     <width>191</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Debug Info</string>
+    <string>Scan Stealth Transactions</string>
    </property>
    <property name="icon">
     <iconset resource="../feathercoin.qrc">
-     <normaloff>:/icons/comment</normaloff>:/icons/comment</iconset>
+     <normaloff>:/icons/sx</normaloff>:/icons/sx</iconset>
    </property>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
@@ -49,30 +49,30 @@
   <widget class="QLineEdit" name="addrEdit">
    <property name="geometry">
     <rect>
-     <x>102</x>
-     <y>25</y>
-     <width>121</width>
+     <x>260</x>
+     <y>27</y>
+     <width>101</width>
      <height>20</height>
     </rect>
    </property>
    <property name="toolTip">
-    <string>Recipient address</string>
+    <string>Block Number</string>
    </property>
    <property name="statusTip">
-    <string>Recipient address</string>
+    <string>Block Number</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>27</x>
+     <x>10</x>
      <y>27</y>
-     <width>81</width>
+     <width>251</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>nFromHeight:</string>
+    <string>Find My Stealth Transactions From Height:</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
@@ -96,6 +96,35 @@
    <property name="icon">
     <iconset resource="../feathercoin.qrc">
      <normaloff>:/icons/quit</normaloff>:/icons/quit</iconset>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>30</y>
+     <width>21</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>To</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="addrEdit2">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>27</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Block Number</string>
+   </property>
+   <property name="statusTip">
+    <string>Block Number</string>
    </property>
   </widget>
  </widget>

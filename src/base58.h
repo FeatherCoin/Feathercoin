@@ -121,13 +121,19 @@ public:
 class CBitcoinSecret : public CBase58Data
 {
 public:
-    void SetKey(const CKey& vchSecret);
-    CKey GetKey();
+    //void SetKey(const CKey& vchSecret);
+    void SetSecret(const CSecret& vchSecret, bool fCompressed);
+    //CKey GetKey();
+    CSecret GetSecret(bool &fCompressedOut);
     bool IsValid() const;
     bool SetString(const char* pszSecret);
     bool SetString(const std::string& strSecret);
 
-    CBitcoinSecret(const CKey& vchSecret) { SetKey(vchSecret); }
+    //CBitcoinSecret(const CKey& vchSecret) { SetKey(vchSecret); }
+    CBitcoinSecret(const CSecret& vchSecret, bool fCompressed)
+    {
+        SetSecret(vchSecret, fCompressed);
+     }
     CBitcoinSecret() {}
 };
 
@@ -153,7 +159,7 @@ public:
     CBitcoinExtKeyBase() {}
 };
 
-typedef CBitcoinExtKeyBase<CExtKey, 74, CChainParams::EXT_SECRET_KEY> CBitcoinExtKey;
-typedef CBitcoinExtKeyBase<CExtPubKey, 74, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
+//typedef CBitcoinExtKeyBase<CExtKey, 74, CChainParams::EXT_SECRET_KEY> CBitcoinExtKey;
+//typedef CBitcoinExtKeyBase<CExtPubKey, 74, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
 
 #endif // BITCOIN_BASE58_H

@@ -217,8 +217,10 @@ void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
     ss << strMessageMagic;
     ss << ui->messageIn_VM->document()->toPlainText().toStdString();
 
-    CPubKey pubkey;
-    if (!pubkey.RecoverCompact(Hash(ss.begin(), ss.end()), vchSig))
+    //CPubKey pubkey;
+    CKey key;
+    //if (!pubkey.RecoverCompact(Hash(ss.begin(), ss.end()), vchSig))
+    if (!key.SetCompactSignature(Hash(ss.begin(), ss.end()), vchSig))
     {
         ui->signatureIn_VM->setValid(false);
         ui->statusLabel_VM->setStyleSheet("QLabel { color: red; }");
@@ -226,7 +228,8 @@ void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
         return;
     }
 
-    if (!(CBitcoinAddress(pubkey.GetID()) == addr))
+    //if (!(CBitcoinAddress(pubkey.GetID()) == addr))
+    if (!(CBitcoinAddress(key.GetPubKey().GetID()) == addr))
     {
         ui->statusLabel_VM->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel_VM->setText(QString("<nobr>") + tr("Message verification failed.") + QString("</nobr>"));

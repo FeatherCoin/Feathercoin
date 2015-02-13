@@ -102,11 +102,15 @@ Value importprivkey(const Array& params, bool fHelp)
 
     if (!fGood) throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key encoding");
 
-    CKey key = vchSecret.GetKey();
-    if (!key.IsValid()) throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Private key outside allowed range");
-
-    CPubKey pubkey = key.GetPubKey();
-    CKeyID vchAddress = pubkey.GetID();
+    //CKey key = vchSecret.GetKey();
+    CKey key;
+    bool fCompressed;
+    CSecret secret = vchSecret.GetSecret(fCompressed);
+    key.SetSecret(secret, fCompressed);
+    CKeyID vchAddress = key.GetPubKey().GetID();
+    //if (!key.IsValid()) throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Private key outside allowed range");
+    //CPubKey pubkey = key.GetPubKey();
+    //CKeyID vchAddress = pubkey.GetID();
     {
         LOCK2(cs_main, pwalletMain->cs_wallet);
 
@@ -119,7 +123,8 @@ Value importprivkey(const Array& params, bool fHelp)
 
         pwalletMain->mapKeyMetadata[vchAddress].nCreateTime = 1;
 
-        if (!pwalletMain->AddKeyPubKey(key, pubkey))
+        //if (!pwalletMain->AddKeyPubKey(key, pubkey))
+        if (!pwalletMain->AddKey(key))
             throw JSONRPCError(RPC_WALLET_ERROR, "Error adding key to wallet");
 
         // whenever a key is imported, we need to scan the whole chain
@@ -174,9 +179,14 @@ Value importwallet(const Array& params, bool fHelp)
         CBitcoinSecret vchSecret;
         if (!vchSecret.SetString(vstr[0]))
             continue;
-        CKey key = vchSecret.GetKey();
-        CPubKey pubkey = key.GetPubKey();
-        CKeyID keyid = pubkey.GetID();
+        //CKey key = vchSecret.GetKey();
+        //CPubKey pubkey = key.GetPubKey();
+        //CKeyID keyid = pubkey.GetID();
+        CKey key;
+        bool fCompressed;
+        CSecret secret = vchSecret.GetSecret(fCompressed);
+        key.SetSecret(secret, fCompressed);
+        CKeyID keyid = key.GetPubKey().GetID();
         if (pwalletMain->HaveKey(keyid)) {
             LogPrintf("Skipping import of %s (key already present)\n", CBitcoinAddress(keyid).ToString());
             continue;
@@ -197,7 +207,8 @@ Value importwallet(const Array& params, bool fHelp)
             }
         }
         LogPrintf("Importing %s...\n", CBitcoinAddress(keyid).ToString());
-        if (!pwalletMain->AddKeyPubKey(key, pubkey)) {
+        //if (!pwalletMain->AddKeyPubKey(key, pubkey)) {
+        if (!pwalletMain->AddKey(key)) {
             fGood = false;
             continue;
         }
@@ -251,10 +262,14 @@ Value dumpprivkey(const Array& params, bool fHelp)
     CKeyID keyID;
     if (!address.GetKeyID(keyID))
         throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to a key");
-    CKey vchSecret;
-    if (!pwalletMain->GetKey(keyID, vchSecret))
+    //CKey vchSecret;
+    CSecret vchSecret;
+    bool fCompressed;
+    //if (!pwalletMain->GetKey(keyID, vchSecret))
+    if (!pwalletMain->GetSecret(keyID, vchSecret, fCompressed))
         throw JSONRPCError(RPC_WALLET_ERROR, "Private key for address " + strAddress + " is not known");
-    return CBitcoinSecret(vchSecret).ToString();
+    //return CBitcoinSecret(vchSecret).ToString();
+    return CBitcoinSecret(vchSecret, fCompressed).ToString();
 }
 
 
@@ -301,14 +316,20 @@ Value dumpwallet(const Array& params, bool fHelp)
         const CKeyID &keyid = it->second;
         std::string strTime = EncodeDumpTime(it->first);
         std::string strAddr = CBitcoinAddress(keyid).ToString();
-        CKey key;
-        if (pwalletMain->GetKey(keyid, key)) {
+        //CKey key;
+        CSecret key;
+        bool fCompressed;
+        //if (pwalletMain->GetKey(keyid, key)) {
+        if (!pwalletMain->GetSecret(keyid, key, fCompressed)) {
             if (pwalletMain->mapAddressBook.count(keyid)) {
-                file << strprintf("%s %s label=%s # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, EncodeDumpString(pwalletMain->mapAddressBook[keyid].name), strAddr);
+                //file << strprintf("%s %s label=%s # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, EncodeDumpString(pwalletMain->mapAddressBook[keyid].name), strAddr);
+                file << strprintf("%s %s label=%s # addr=%s\n", CBitcoinSecret(key, fCompressed).ToString(), strTime, EncodeDumpString(pwalletMain->mapAddressBook[keyid].name), strAddr);
             } else if (setKeyPool.count(keyid)) {
-                file << strprintf("%s %s reserve=1 # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, strAddr);
+                //file << strprintf("%s %s reserve=1 # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, strAddr);
+                file << strprintf("%s %s reserve=1 # addr=%s\n", CBitcoinSecret(key, fCompressed).ToString(), strTime, strAddr);
             } else {
-                file << strprintf("%s %s change=1 # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, strAddr);
+                //file << strprintf("%s %s change=1 # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, strAddr);
+                file << strprintf("%s %s change=1 # addr=%s\n", CBitcoinSecret(key, fCompressed).ToString(), strTime, strAddr);
             }
         }
     }

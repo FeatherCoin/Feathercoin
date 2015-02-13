@@ -68,14 +68,17 @@ CPubKey CWallet::GenerateNewKey()
     bool fCompressed = CanSupportFeature(FEATURE_COMPRPUBKEY); // default to compressed public keys if we want 0.6.0 wallets
 
     RandAddSeedPerfmon();
-    CKey secret;
-    secret.MakeNewKey(fCompressed);
+    //CKey secret;
+    //secret.MakeNewKey(fCompressed);
+    CKey key;
+    key.MakeNewKey(fCompressed);
 
     // Compressed public keys were introduced in version 0.6.0
     if (fCompressed)
         SetMinVersion(FEATURE_COMPRPUBKEY);
 
-    CPubKey pubkey = secret.GetPubKey();
+    //CPubKey pubkey = secret.GetPubKey();
+    CPubKey pubkey = key.GetPubKey();
 
     // Create new metadata
     int64_t nCreationTime = GetTime();
@@ -83,22 +86,27 @@ CPubKey CWallet::GenerateNewKey()
     if (!nTimeFirstKey || nCreationTime < nTimeFirstKey)
         nTimeFirstKey = nCreationTime;
 
-    if (!AddKeyPubKey(secret, pubkey))
+    //if (!AddKeyPubKey(secret, pubkey))
+    if (!AddKey(key))
         throw std::runtime_error("CWallet::GenerateNewKey() : AddKey failed");
-    return pubkey;
+    //return pubkey;
+    return key.GetPubKey();
 }
 
-bool CWallet::AddKeyPubKey(const CKey& secret, const CPubKey &pubkey)
+//bool CWallet::AddKeyPubKey(const CKey& secret, const CPubKey &pubkey)
+bool CWallet::AddKey(const CKey& key)
 {
     AssertLockHeld(cs_wallet); // mapKeyMetadata
-    if (!CCryptoKeyStore::AddKeyPubKey(secret, pubkey))
+    //if (!CCryptoKeyStore::AddKeyPubKey(secret, pubkey))
+    if (!CCryptoKeyStore::AddKey(key))
         return false;
     if (!fFileBacked)
         return true;
     if (!IsCrypted()) {
-        return CWalletDB(strWalletFile).WriteKey(pubkey,
+       /* return CWalletDB(strWalletFile).WriteKey(pubkey,
                                                  secret.GetPrivKey(),
-                                                 mapKeyMetadata[pubkey.GetID()]);
+                                                 mapKeyMetadata[pubkey.GetID()]);*/
+      return CWalletDB(strWalletFile).WriteKey(key.GetPubKey(), key.GetPrivKey(),mapKeyMetadata[key.GetPubKey().GetID()]);
     }
     return true;
 }
@@ -1949,11 +1957,11 @@ bool CWallet::SendStealthMoneyToDestination(CStealthAddress& sxAddress, int64_t 
 bool CWallet::FindStealthTransactions(const CTransaction& tx)
 {
     LogPrintf("FindStealthTransactions() tx:%s,", tx.GetHash().GetHex().c_str());    
-    if (tx.GetHash().GetHex().compare("85568ae1dacfdc6730b0d2ddeb2c4d7d07b0ac702e6d9a7f408293e2cd628d57")==1)
+    /*if (tx.GetHash().GetHex().compare("85568ae1dacfdc6730b0d2ddeb2c4d7d07b0ac702e6d9a7f408293e2cd628d57")==1)
    	{
    		LogPrintf("no debug.\n");
     	return false;
-    }
+    }*/
     
     LOCK(cs_wallet);
     ec_secret sSpendR;
@@ -1962,6 +1970,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
     ec_secret sShared;    
     ec_point pkExtracted;    
     std::vector<uint8_t> vchEphemPK;
+    std::vector<uint8_t> vchEphemPKtt;
     opcodetype opCode;
     
     int32_t nOutputIdOuter = -1;
@@ -1973,11 +1982,18 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
         LogPrintf("BOOST_FOREACH nOutputIdOuter=%d ,find txout...\n", nOutputIdOuter);
         LogPrintf("txout scriptPubKey= %s\n",  txout.scriptPubKey.ToString().c_str()); //OP_RETURN 02fe58a19a83c9ce0fc129bfa0a6a53b3440b6f9eac357143b23be38b7779c53d2
         LogPrintf("txout hash = %s\n",  txout.GetHash().GetHex().c_str());  //5bada4eca0588e4dbb33ec37bd658dfdd7b9bce1e3ad3aa68461151f2e835597
-        CScript::const_iterator itTxA = txout.scriptPubKey.begin();
+        CScript::const_iterator itTxA = txout.scriptPubKey.begin();//迭代器，第一个元素
         
         if (!txout.scriptPubKey.GetOp(itTxA, opCode, vchEphemPK) || opCode != OP_RETURN)
             continue;
-        LogPrintf("in txout.scriptPubKey,check vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //
+        LogPrintf("Note: txout.scriptPubKey,check vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //这个输出不能是空，应该是ephem_pubkey
+        LogPrintf("Note: opCode=%i\n", (int)opCode);//=106
+        LogPrintf("Note: itTxA=%s\n", HexStr(itTxA,itTxA).c_str());//使用迭代器
+        *itTxA++;//跨过操作符
+        vchEphemPKtt.assign(itTxA, itTxA + 33);
+        vchEphemPK.assign(itTxA, itTxA + 33);
+        LogPrintf("Note: txout.scriptPubKey,again vchEphemPKtt=%s\n", HexStr(vchEphemPKtt).c_str());
+        LogPrintf("Note: txout.scriptPubKey,again vchEphemPK=%s\n", HexStr(vchEphemPK).c_str());
         
         int32_t nOutputId = -1;
         nStealth++;
@@ -2017,23 +2033,26 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
                     continue; // stealth address is not owned
                 LogPrintf("it->scan_secret.size() %d\n",  it->scan_secret.size());
                 LogPrintf("it->Encodeded() %s\n",  it->Encoded().c_str());  //找到收款人隐身公匙地址
-                memcpy(&sScan.e[0], &it->scan_secret[0], ec_secret_size); 
+                memcpy(&sScan.e[0], &it->scan_secret[0], ec_secret_size);  //??? 33u
                 
-                LogPrintf("StealthAddress Label=%s \n",it->label);
-                LogPrintf("StealthAddress Address=%s \n",it->Encoded());
-                LogPrintf("StealthAddress Scan Secret=%s \n",HexStr(it->scan_secret.begin(), it->scan_secret.end()));//f1e76e169c05b00ad755ef6128a1fe2ccc1f2351383f5a5969f4040994d3f25e
-                LogPrintf("StealthAddress Scan Pubkey=%s \n",HexStr(it->scan_pubkey.begin(), it->scan_pubkey.end()));//038cf92caa6f1fe56b19e09cca0bdc52a81e46007bc12622688c0feda804f9d073
-                LogPrintf("StealthAddress Spend Secret=%s \n",HexStr(it->spend_secret.begin(), it->spend_secret.end()));//117a9e4a428e7549eeeaa1dc3deb5cab2696518e2af0849fc6b7d675fe0a10ee
-                LogPrintf("StealthAddress Spend Pubkey=%s \n",HexStr(it->spend_pubkey.begin(), it->spend_pubkey.end()));
+                LogPrintf("StealthAddress Label=%s\n",it->label);
+                LogPrintf("StealthAddress Address=%s\n",it->Encoded());
+                LogPrintf("StealthAddress Scan Secret=%s\n",HexStr(it->scan_secret.begin(), it->scan_secret.end()));//f1e76e169c05b00ad755ef6128a1fe2ccc1f2351383f5a5969f4040994d3f25e
+                LogPrintf("StealthAddress Scan Pubkey=%s\n",HexStr(it->scan_pubkey.begin(), it->scan_pubkey.end()));//038cf92caa6f1fe56b19e09cca0bdc52a81e46007bc12622688c0feda804f9d073
+                LogPrintf("StealthAddress Spend Secret=%s\n",HexStr(it->spend_secret.begin(), it->spend_secret.end()));//117a9e4a428e7549eeeaa1dc3deb5cab2696518e2af0849fc6b7d675fe0a10ee
+                LogPrintf("StealthAddress Spend Pubkey=%s\n",HexStr(it->spend_pubkey.begin(), it->spend_pubkey.end()));
                     //02ffae1e8fda48c5ff6824ac0d497ea3c3b1ef3a438832bd5e5edc0bf4f93172d6,与OP_RETURN不匹配
                 
-                LogPrintf("sScan.e=%s\n",sScan.e);   //收款人隐身公匙地址,secret
-                LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //pubkey[0],可能是个问题
-                LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //pkSpend[0] 02ffae1e8fda48c5ff6824ac0d497ea3c3b1ef3a438832bd5e5edc0bf4f93172d6
-                LogPrintf("sShared.e=%s\n",sShared.e);  //sharedSOut
-                LogPrintf("pkExtracted=%"PRIszu":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//pkOut
+                LogPrintf("StealthSecret.....");
+                LogPrintf("sScan.e=%s\n",HexStr(&sScan.e[0],&sScan.e[32]).c_str());   //收款人隐身公匙地址,Scan Secret:scan_secret
+                LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? 为空，pubkey是个问题
+                LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //
+                LogPrintf("sShared.e=%s\n",HexStr(&sShared.e[0],&sShared.e[32]).c_str());  //为空
+                LogPrintf("pkExtracted=%"PRIszu":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//为空
                  
                 int rv=StealthSecret(sScan, vchEphemPK, it->spend_pubkey, sShared, pkExtracted);
+                     //StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
+                     //receive:secret = scan_secret, pubkey = ephem_pubkey(vchEphemPK)
                 if (rv!= 0)
                 {
                     LogPrintf("StealthSecret failed.rv=%d \n",rv);

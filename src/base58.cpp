@@ -245,18 +245,35 @@ bool CBitcoinAddress::GetKeyID(CKeyID &keyID) const {
 bool CBitcoinAddress::IsScript() const {
     return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
 }
-
+/*
 void CBitcoinSecret::SetKey(const CKey& vchSecret) {
     assert(vchSecret.IsValid());
     SetData(Params().Base58Prefix(CChainParams::SECRET_KEY), vchSecret.begin(), vchSecret.size());
     if (vchSecret.IsCompressed())
         vchData.push_back(1);
-}
+}*/
 
+void CBitcoinSecret::SetSecret(const CSecret& vchSecret, bool fCompressed)
+{
+    assert(vchSecret.size() == 32);
+    SetData(Params().Base58Prefix(CChainParams::SECRET_KEY), &vchSecret[0], vchSecret.size());
+    if (fCompressed)
+        vchData.push_back(1);
+}
+/*
 CKey CBitcoinSecret::GetKey() {
     CKey ret;
     ret.Set(&vchData[0], &vchData[32], vchData.size() > 32 && vchData[32] == 1);
     return ret;
+}*/
+
+CSecret CBitcoinSecret::GetSecret(bool &fCompressedOut)
+{
+    CSecret vchSecret;
+    vchSecret.resize(32);
+    memcpy(&vchSecret[0], &vchData[0], 32);
+    fCompressedOut = vchData.size() == 33;
+    return vchSecret;
 }
 
 bool CBitcoinSecret::IsValid() const {

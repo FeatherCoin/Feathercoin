@@ -193,7 +193,8 @@ CScript _createmultisig_redeemScript(const Array& params)
         throw runtime_error(
             strprintf("not enough keys supplied "
                       "(got %u keys, but need at least %d to redeem)", keys.size(), nRequired));
-    std::vector<CPubKey> pubkeys;
+    //std::vector<CPubKey> pubkeys;
+    std::vector<CKey> pubkeys;
     pubkeys.resize(keys.size());
     for (unsigned int i = 0; i < keys.size(); i++)
     {
@@ -211,9 +212,11 @@ CScript _createmultisig_redeemScript(const Array& params)
             if (!pwalletMain->GetPubKey(keyID, vchPubKey))
                 throw runtime_error(
                     strprintf("no full public key for address %s",ks));
-            if (!vchPubKey.IsFullyValid())
+            /*if (!vchPubKey.IsFullyValid())
                 throw runtime_error(" Invalid public key: "+ks);
-            pubkeys[i] = vchPubKey;
+            pubkeys[i] = vchPubKey;*/
+            if (!vchPubKey.IsValid() || !pubkeys[i].SetPubKey(vchPubKey))
+            	throw runtime_error(" Invalid public key: "+ks);
         }
 
         // Case 2: hex public key
@@ -222,9 +225,11 @@ CScript _createmultisig_redeemScript(const Array& params)
         if (IsHex(ks))
         {
             CPubKey vchPubKey(ParseHex(ks));
-            if (!vchPubKey.IsFullyValid())
+            /*if (!vchPubKey.IsFullyValid())
                 throw runtime_error(" Invalid public key: "+ks);
-            pubkeys[i] = vchPubKey;
+            pubkeys[i] = vchPubKey;*/
+            if (!vchPubKey.IsValid() || !pubkeys[i].SetPubKey(vchPubKey))
+            	throw runtime_error(" Invalid public key: "+ks);
         }
         else
         {
@@ -329,9 +334,12 @@ Value verifymessage(const Array& params, bool fHelp)
     ss << strMessageMagic;
     ss << strMessage;
 
-    CPubKey pubkey;
-    if (!pubkey.RecoverCompact(ss.GetHash(), vchSig))
+    //CPubKey pubkey;
+    CKey key;
+    //if (!pubkey.RecoverCompact(ss.GetHash(), vchSig))
+    if (!key.SetCompactSignature(ss.GetHash(), vchSig))
         return false;
 
-    return (pubkey.GetID() == keyID);
+    //return (pubkey.GetID() == keyID);
+    return (key.GetPubKey().GetID() == keyID);
 }

@@ -327,8 +327,8 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     paperWalletAction->setStatusTip(tr("Print paper wallets"));
     inertBlockChainAction = new QAction(QIcon(":/icons/comment"), tr("&Comments"), this);
     inertBlockChainAction->setStatusTip(tr("Insert your comments into blockchain"));
-    debugAction = new QAction(QIcon(":/icons/comment"), tr("&Debug"), this);
-    debugAction->setStatusTip(tr("Debug Feathercoin"));
+    debugAction = new QAction(QIcon(":/icons/sx"), tr("&SX Tool"), this);
+    debugAction->setStatusTip(tr("SX Tool"));
     
     lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock wallet"), this);
     lockWalletAction->setToolTip(tr("Lock wallet"));

@@ -206,9 +206,11 @@ public:
     // Generate a new key
     CPubKey GenerateNewKey();
     // Adds a key to the store, and saves it to disk.
-    bool AddKeyPubKey(const CKey& key, const CPubKey &pubkey);
+    //bool AddKeyPubKey(const CKey& key, const CPubKey &pubkey);
+    bool AddKey(const CKey& key);
     // Adds a key to the store, without saving it to disk (used by LoadWallet)
-    bool LoadKey(const CKey& key, const CPubKey &pubkey) { return CCryptoKeyStore::AddKeyPubKey(key, pubkey); }
+    //bool LoadKey(const CKey& key, const CPubKey &pubkey) { return CCryptoKeyStore::AddKeyPubKey(key, pubkey); }
+    bool LoadKey(const CKey& key) { return CCryptoKeyStore::AddKey(key); }
     // Load metadata (used by LoadWallet)
     bool LoadKeyMetadata(const CPubKey &pubkey, const CKeyMetadata &metadata);
 

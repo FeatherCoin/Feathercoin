@@ -66,7 +66,7 @@ bool CWalletDB::WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, c
 {
     nWalletDBUpdated++;
 
-    if (!Write(std::make_pair(std::string("keymeta"), vchPubKey),
+    if (!Write(std::make_pair(std::string("keymeta"), vchPubKey.Raw()),
                keyMeta, false))
         return false;
 
@@ -76,7 +76,8 @@ bool CWalletDB::WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, c
     vchKey.insert(vchKey.end(), vchPubKey.begin(), vchPubKey.end());
     vchKey.insert(vchKey.end(), vchPrivKey.begin(), vchPrivKey.end());
 
-    return Write(std::make_pair(std::string("key"), vchPubKey), std::make_pair(vchPrivKey, Hash(vchKey.begin(), vchKey.end())), false);
+    //return Write(std::make_pair(std::string("key"), vchPubKey), std::make_pair(vchPrivKey, Hash(vchKey.begin(), vchKey.end())), false);
+    return Write(std::make_pair(std::string("key"), vchPubKey.Raw()), std::make_pair(vchPrivKey, Hash(vchKey.begin(), vchKey.end())), false);
 }
 
 bool CWalletDB::WriteCryptedKey(const CPubKey& vchPubKey,
@@ -86,16 +87,16 @@ bool CWalletDB::WriteCryptedKey(const CPubKey& vchPubKey,
     const bool fEraseUnencryptedKey = true;
     nWalletDBUpdated++;
 
-    if (!Write(std::make_pair(std::string("keymeta"), vchPubKey),
+    if (!Write(std::make_pair(std::string("keymeta"), vchPubKey.Raw()),
             keyMeta))
         return false;
 
-    if (!Write(std::make_pair(std::string("ckey"), vchPubKey), vchCryptedSecret, false))
+    if (!Write(std::make_pair(std::string("ckey"), vchPubKey.Raw()), vchCryptedSecret, false))
         return false;
     if (fEraseUnencryptedKey)
     {
-        Erase(std::make_pair(std::string("key"), vchPubKey));
-        Erase(std::make_pair(std::string("wkey"), vchPubKey));
+        Erase(std::make_pair(std::string("key"), vchPubKey.Raw()));
+        Erase(std::make_pair(std::string("wkey"), vchPubKey.Raw()));
     }
     return true;
 }
@@ -132,7 +133,7 @@ bool CWalletDB::WriteOrderPosNext(int64_t nOrderPosNext)
 bool CWalletDB::WriteDefaultKey(const CPubKey& vchPubKey)
 {
     nWalletDBUpdated++;
-    return Write(std::string("defaultkey"), vchPubKey);
+    return Write(std::string("defaultkey"), vchPubKey.Raw());
 }
 
 bool CWalletDB::ReadPool(int64_t nPool, CKeyPool& keypool)
@@ -394,25 +395,62 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         }
         else if (strType == "key" || strType == "wkey")
         {
-            CPubKey vchPubKey;
+            //CPubKey vchPubKey;
+            vector<unsigned char> vchPubKey;
             ssKey >> vchPubKey;
-            if (!vchPubKey.IsValid())
+            /*if (!vchPubKey.IsValid())
             {
                 strErr = "Error reading wallet database: CPubKey corrupt";
                 return false;
-            }
+            }*/
             CKey key;
-            CPrivKey pkey;
-            uint256 hash = 0;
+            //CPrivKey pkey;
+            //uint256 hash = 0;
 
             if (strType == "key")
             {
-                wss.nKeys++;
+                //wss.nKeys++;
+                //ssValue >> pkey;
+                CPrivKey pkey;
                 ssValue >> pkey;
+                key.SetPubKey(vchPubKey);
+                if (!key.SetPrivKey(pkey))
+                {
+                    strErr = "Error reading wallet database: CPrivKey corrupt";
+                    return false;
+                }
+                if (key.GetPubKey() != vchPubKey)
+                {
+                    strErr = "Error reading wallet database: CPrivKey pubkey inconsistency";
+                    return false;
+                }
+                if (!key.IsValid())
+                {
+                    strErr = "Error reading wallet database: invalid CPrivKey";
+                    return false;
+                }
             } else {
+                //CWalletKey wkey;
+                //ssValue >> wkey;
+                //pkey = wkey.vchPrivKey;
                 CWalletKey wkey;
                 ssValue >> wkey;
-                pkey = wkey.vchPrivKey;
+                key.SetPubKey(vchPubKey);
+                if (!key.SetPrivKey(wkey.vchPrivKey))
+                {
+                    strErr = "Error reading wallet database: CPrivKey corrupt";
+                    return false;
+                }
+                if (key.GetPubKey() != vchPubKey)
+                {
+                    strErr = "Error reading wallet database: CWalletKey pubkey inconsistency";
+                    return false;
+                }
+                if (!key.IsValid())
+                {
+                    strErr = "Error reading wallet database: invalid CWalletKey";
+                    return false;
+                }
             }
 
             // Old wallets store keys as "key" [pubkey] => [privkey]
@@ -420,7 +458,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             // using EC operations as a checksum.
             // Newer wallets store keys as "key"[pubkey] => [privkey][hash(pubkey,privkey)], which is much faster while
             // remaining backwards-compatible.
-            try
+            /*try
             {
                 ssValue >> hash;
             }
@@ -449,8 +487,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             {
                 strErr = "Error reading wallet database: CPrivKey corrupt";
                 return false;
-            }
-            if (!pwallet->LoadKey(key, vchPubKey))
+            }*/
+            //if (!pwallet->LoadKey(key, vchPubKey))
+            if (!pwallet->LoadKey(key))
             {
                 strErr = "Error reading wallet database: LoadKey failed";
                 return false;

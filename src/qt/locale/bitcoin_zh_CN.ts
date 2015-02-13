@@ -494,6 +494,10 @@
         <translation>向区块链内写入留言</translation>
     </message>
     <message>
+        <source>&amp;SX Tool</source>
+        <translation>隐身交易助手</translation>
+    </message>
+    <message>
         <source>&amp;MerchantList</source>
         <translation>商业列表</translation>
     </message>
@@ -991,6 +995,49 @@ Address: %4
     <message>
         <source>Close</source>
         <translation>关闭</translation>
+    </message>
+</context>
+<context>
+    <name>DebugDialog</name>
+    <message>
+        <source>Exit</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Stealth Transaction Tool (experts only!)</source>
+        <translation>隐身交易助手（仅专家）</translation>
+    </message>
+    <message>
+        <source>Find My Stealth Transactions From Height:</source>
+        <translation>在块链中查找我的隐身交易，从开始块号</translation>
+    </message>
+    <message>
+        <source>To</source>
+        <translation>到</translation>
+    </message>
+    <message>
+        <source>Ending Height must be greater than beginning Height !</source>
+        <translation>结束块号必须大于开始块号</translation>
+    </message>
+    <message>
+        <source>Beginning Height must be greater than 556535.</source>
+        <translation>开始块号必须大于556535。</translation>
+    </message>
+    <message>
+        <source>Scan stealth transactions on blockchain,Yes!!!</source>
+        <translation>从块链中扫描隐身交易，完毕！</translation>
+    </message>
+    <message>
+        <source>Wallet Message</source>
+        <translation>钱包信息</translation>
+    </message>
+    <message>
+        <source>Block Number</source>
+        <translation>块编号</translation>
+    </message>
+    <message>
+        <source>Scan Stealth Transactions</source>
+        <translation>开始扫描隐身交易</translation>
     </message>
 </context>
 <context>
