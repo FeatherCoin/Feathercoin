@@ -120,6 +120,7 @@ private:
     QAction *unlockWalletAction;
     QAction *inertBlockChainAction;
     QAction *debugAction;
+    QAction *multiSigAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -197,7 +198,9 @@ private slots:
     void gotoVerifyMessageTab(QString addr = "");
     /** Switch to account report page */
     void gotoAccountReportPage();
-        
+    /** Switch to MultiSig page */
+    void gotoMultiSigPage();
+    
     /** Show open dialog */
     void openClicked();
     /** Start Bitmessage Process */

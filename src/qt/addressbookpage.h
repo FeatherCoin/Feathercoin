@@ -58,6 +58,7 @@ private:
     QString returnValue;
     QSortFilterProxyModel *proxyModel;
     QMenu *contextMenu;
+    QMenu *contextMenuMultiSig;
     QAction *deleteAction; // to be able to explicitly disable it
     QString newAddressToSelect;
 
@@ -78,6 +79,16 @@ private slots:
     void on_showQRCode_clicked();
     /** Import from a QR Code into your wallet */
     void on_importQRCodeButton_clicked();
+    /** Copy public key of currently selected address to clipboard */
+    void on_copyPubKey_clicked();
+    /** Copy private key of currently selected address to clipboard */
+    void on_copyPriKey_clicked();
+    /** Open the sign message tab in the Sign/Verify Message dialog with currently selected address */
+    void on_signMessage_clicked();
+    /** Open the verify message tab in the Sign/Verify Message dialog with currently selected address */
+    void on_verifyMessage_clicked();
+    /** Open send coins dialog for currently selected address (no button) */
+    void onSendCoinsAction();
 
     /** Set button states based on selected tab and selection */
     void selectionChanged();
@@ -85,8 +96,13 @@ private slots:
     void contextualMenu(const QPoint &point);
     /** New entry/entries were added to address table */
     void selectNewAddress(const QModelIndex &parent, int begin, int /*end*/);
+    
+    void createAddress();
+    void exportAddress();
 
 signals:
+    void signMessage(QString addr);
+    void verifyMessage(QString addr);
     void sendCoins(QString addr);
 };
 

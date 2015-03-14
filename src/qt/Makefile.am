@@ -107,7 +107,9 @@ QT_FORMS_UI = \
   forms/paperwalletdialog.ui \
   forms/commentdialog.ui \
   forms/debugdialog.ui \
-  forms/snapwidget.ui
+  forms/snapwidget.ui \
+  forms/createmultisigaddrdialog.ui \
+  forms/multisigdialog.ui
 
 QT_MOC_CPP = \
   moc_addressbookpage.cpp \
@@ -157,7 +159,9 @@ QT_MOC_CPP = \
   moc_qrcodedialog.cpp \
   moc_snapwidget.cpp \
   moc_verticallabel.cpp \
-  moc_reportview.cpp
+  moc_reportview.cpp \
+  moc_createmultisigaddrdialog.cpp \
+  moc_multisigdialog.cpp
 
 FEATHERCOIN_MM = \
   macdockiconhandler.mm \
@@ -230,7 +234,9 @@ BITCOIN_QT_H = \
   snapwidget.h \
   qimagesource.h \
   verticallabel.h \
-  reportview.h
+  reportview.h \
+  createmultisigaddrdialog.h \
+  multisigdialog.h
 
 RES_ICONS = \
   res/icons/add.png \
@@ -278,7 +284,8 @@ RES_ICONS = \
   res/icons/tx_mined.png \
   res/icons/openurl.png \
   res/icons/print.png \
-  res/icons/account-report.png
+  res/icons/account-report.png \
+  res/icons/multisig.png
 
 RES_FONTS = \
   res/fonts/ComicNeue-Bold.ttf \
@@ -344,7 +351,9 @@ BITCOIN_QT_CPP += \
   reportview.cpp \
   snapwidget.cpp \
   verticallabel.cpp \
-  qimagesource.cpp
+  qimagesource.cpp \
+  createmultisigaddrdialog.cpp \
+  multisigdialog.cpp
 endif
 
 RES_IMAGES = \

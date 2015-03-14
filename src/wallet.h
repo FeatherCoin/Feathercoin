@@ -14,6 +14,7 @@
 #include "util.h"
 #include "walletdb.h"
 #include "stealth.h"
+#include "script.h"
 
 #include <algorithm>
 #include <map>
@@ -426,6 +427,43 @@ public:
 
     /** Show progress e.g. for rescan */
     boost::signals2::signal<void (const std::string &title, int nProgress)> ShowProgress;
+    	
+    bool CreateRawTransaction(const std::vector<std::pair<CScript, int64> >& vecSend, CTransaction& txNew, 
+        int64& nFeeRet, std::string& strFailReason, bool isMultiSig, CReserveKey& reservekey, const CCoinControl *coinControl=NULL);
+        	
+    /* 
+     *  for shared wallet
+     */
+    bool IsMyShare(const CTxIn& txin) const;
+    bool IsMyShare(const CTxOut& txout) const;
+    bool IsMyShare(const CTransaction& tx) const;
+    int64 GetSharedBalance() const;
+    int64 GetSharedUnconfirmedBalance() const;
+    int64 GetSharedImmatureBalance() const;
+    int64 GetSharedCredit(const CTxOut& txout) const
+    {
+        if (!MoneyRange(txout.nValue))
+            throw std::runtime_error("CWallet::GetSharedCredit() : value out of range");
+        return (IsMyShare(txout) ? txout.nValue : 0);
+    }
+    bool IsFromMyShare(const CTransaction& tx) const
+    {
+        return (GetShareDebit(tx) > 0);
+    }
+    int64 GetShareDebit(const CTransaction& tx) const
+    {
+        int64 nDebit = 0;
+        BOOST_FOREACH(const CTxIn& txin, tx.vin)
+        {
+            nDebit += GetShareDebit(txin);
+            if (!MoneyRange(nDebit))
+                throw std::runtime_error("CWallet::GetDebit() : value out of range");
+        }
+        return nDebit;
+    }
+    int64 GetShareDebit(const CTxIn& txin) const;
+    void AvailableSharedCoins(std::vector<COutput>& vCoins, bool fOnlyConfirmed=true, const CCoinControl *coinControl=NULL) const;
+    bool SelectSharedCoins(int64 nTargetValue, std::set<std::pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64& nValueRet, const CCoinControl* coinControl=NULL) const;
 };
 
 /** A key allocated from the key pool. */
@@ -484,6 +522,7 @@ private:
     const CWallet* pwallet;
 
 public:
+    std::vector<CMerkleTx> vtxPrev;
     mapValue_t mapValue;
     std::vector<std::pair<std::string, std::string> > vOrderForm;
     unsigned int fTimeReceivedIsTxTime;
@@ -491,6 +530,7 @@ public:
     unsigned int nTimeSmart;
     char fFromMe;
     std::string strFromAccount;
+    std::vector<char> vfSpent; // which outputs are already spent
     int64_t nOrderPos;  // position in ordered transaction list
 
     // memory only
@@ -546,6 +586,7 @@ public:
         nAvailableCreditCached = 0;
         nChangeCached = 0;
         nOrderPos = -1;
+        fSharedAvailableCreditCached = false;
     }
 
     IMPLEMENT_SERIALIZE
@@ -604,6 +645,15 @@ public:
     {
         pwallet = pwalletIn;
         MarkDirty();
+    }
+    
+    bool IsSpent(unsigned int nOut) const
+    {
+        if (nOut >= vout.size())
+            throw std::runtime_error("CWalletTx::IsSpent() : nOut out of range");
+        if (nOut >= vfSpent.size())
+            return false;
+        return (!!vfSpent[nOut]);
     }
 
     int64_t GetDebit() const
@@ -695,6 +745,49 @@ public:
     {
         return (GetDebit() > 0);
     }
+    
+    bool IsConfirmed() const
+    {
+        // Quick answer in most cases
+        if (!IsFinal())
+            return false;
+        if (GetDepthInMainChain() >= 1)
+            return true;
+        if (!IsFromMe()) // using wtx's cached debit
+            return false;
+
+        // If no confirmations but it's from us, we can still
+        // consider it confirmed if all dependencies are confirmed
+        std::map<uint256, const CMerkleTx*> mapPrev;
+        std::vector<const CMerkleTx*> vWorkQueue;
+        vWorkQueue.reserve(vtxPrev.size()+1);
+        vWorkQueue.push_back(this);
+        for (unsigned int i = 0; i < vWorkQueue.size(); i++)
+        {
+            const CMerkleTx* ptx = vWorkQueue[i];
+
+            if (!ptx->IsFinal())
+                return false;
+            if (ptx->GetDepthInMainChain() >= 1)
+                continue;
+            if (!pwallet->IsFromMe(*ptx))
+                return false;
+
+            if (mapPrev.empty())
+            {
+                BOOST_FOREACH(const CMerkleTx& tx, vtxPrev)
+                    mapPrev[tx.GetHash()] = &tx;
+            }
+
+            BOOST_FOREACH(const CTxIn& txin, ptx->vin)
+            {
+                if (!mapPrev.count(txin.prevout.hash))
+                    return false;
+                vWorkQueue.push_back(mapPrev[txin.prevout.hash]);
+            }
+        }
+        return true;
+    }
 
     bool IsTrusted() const
     {
@@ -731,6 +824,37 @@ public:
     void RelayWalletTransaction();
 
     std::set<uint256> GetConflicts() const;
+    	
+    /* 
+     *  for shared wallet
+     */
+    mutable bool fSharedAvailableCreditCached;
+    mutable int64 nSharedAvailableCreditCached;
+    int64 GetSharedAvailableCredit(bool fUseCache=true) const
+    {
+        // Must wait until coinbase is safely deep enough in the chain before valuing it
+        if (IsCoinBase() && GetBlocksToMaturity() > 0)
+            return 0;
+
+        //if (fUseCache && fSharedAvailableCreditCached)
+            //return nSharedAvailableCreditCached;
+
+        int64 nCredit = 0;
+        for (unsigned int i = 0; i < vout.size(); i++)
+        {
+            if (!IsSpent(i))
+            {
+                const CTxOut &txout = vout[i];
+                nCredit += pwallet->GetSharedCredit(txout);
+                if (!MoneyRange(nCredit))
+                    throw std::runtime_error("CWalletTx::GetSharedAvailableCredit() : value out of range");
+            }
+        }
+
+        nSharedAvailableCreditCached = nCredit;
+        fSharedAvailableCreditCached = true;
+        return nCredit;
+    }
 };
 
 

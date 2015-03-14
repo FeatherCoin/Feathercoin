@@ -69,8 +69,12 @@
         <translation>创建新地址</translation>
     </message>
     <message>
-        <source>&amp;New</source>
-        <translation>新建(&amp;N)</translation>
+        <source>&amp;New Address</source>
+        <translation>新建(&amp;N)地址</translation>
+    </message>
+    <message>
+        <source>New MultiSig</source>
+        <translation>新建多重签名</translation>
     </message>
     <message>
         <source>Copy the currently selected address to the system clipboard</source>
@@ -164,6 +168,42 @@
         <source>There was an error trying to save the address list to %1.</source>
         <translation>地址列表保存至 %1 时发生错误。</translation>
     </message>
+    <message>
+        <source>Sign &amp;Message</source>
+        <translation>消息签名(&amp;M)</translation>
+    </message>
+    <message>
+        <source>&amp;Verify Message</source>
+        <translation>验证消息(&amp;V)</translation>
+    </message>
+    <message>
+        <source>Copy &amp;Public Key</source>
+        <translation>复制公匙(&amp;P)</translation>
+    </message>
+    <message>
+        <source>Copy Private Key</source>
+        <translation>复制私匙</translation>
+    </message>
+    <message>
+        <source>Export MultiSig Address</source>
+        <translation>导出多重签名地址</translation>
+    </message>
+    <message>
+        <source>Address "%1" doesn't have public key </source>
+        <translation>%1在地址簿中不存在公匙</translation>
+    </message>
+    <message>
+        <source>Address "%1" doesn't have private key </source>
+        <translation>%1在地址簿中不存在死匙</translation>
+    </message>
+    <message>
+        <source>Save MultiSig Address</source>
+        <translation>保存多重签名地址</translation>
+    </message>
+    <message>
+        <source>Could not write to file %1.</source>
+        <translation>不能写入文件%1</translation>
+    </message>
 </context>
 <context>
     <name>AddressTableModel</name>
@@ -182,6 +222,196 @@
     <message>
         <source>Stealth Address</source>
         <translation>隐身地址</translation>
+    </message>
+</context>
+<context>
+    <name>CreateMultiSigAddrDialog</name>
+    <message>
+        <source>Create MultiSig Address</source>
+        <translation>创建多重签名地址</translation>
+    </message>
+    <message>
+        <source>PublicKey</source>
+        <translation>公匙</translation>
+    </message>
+    <message>
+        <source>You need y keys to create a x-of-y Multisig address</source>
+        <translation>你需要创建多重签名地址的签名组合</translation>
+    </message>
+    <message>
+        <source>Require</source>
+        <translation>满足</translation>
+    </message>
+    <message>
+        <source>of</source>
+        <translation>总数</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation>导入</translation>
+    </message>
+    <message>
+        <source>Create</source>
+        <translation>创建</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>All public keys belong to this wallet!</source>
+        <translation>所有的公私属于这个钱包！</translation>
+    </message>
+    <message>
+        <source>You need </source>
+        <translation>你需要</translation>
+    </message>
+    <message>
+        <source> keys to create a </source>
+        <translation>把钥匙创建一个满足</translation>
+    </message>
+    <message>
+        <source>-of-</source>
+        <translation>总共</translation>
+    </message>
+    <message>
+        <source> MultiSig address</source>
+        <translation>的多重签名地址</translation>
+    </message>
+    <message>
+        <source>Load MultiSig Address</source>
+        <translation>加载多重签名地址</translation>
+    </message>
+    <message>
+        <source>Invalid public key  "%1" </source>
+        <translation>不可用的公匙%1</translation>
+    </message>
+</context>   
+<context>
+    <name>MultiSigDialog</name>
+    <message>
+        <source>Total balance:</source>
+        <translation>总额：</translation>
+    </message>
+    <message>
+        <source>    Addresses:</source>
+        <translation>    地址：</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>地址</translation>
+    </message>
+    <message>
+        <source>Available: </source>
+        <translation>可用：</translation>
+    </message>
+    <message>
+        <source>Require 0 of 0 signatures</source>
+        <translation>要求签名数量满足条件</translation>
+    </message>
+    <message>
+        <source>Import Raw Tx</source>
+        <translation>导入交易</translation>
+    </message>
+    <message>
+        <source>Export Raw Tx</source>
+        <translation>导出交易</translation>
+    </message>
+    <message>
+        <source>Unsigned</source>
+        <translation>未签名</translation>
+    </message>
+    <message>
+        <source>Signed</source>
+        <translation>签名</translation>
+    </message>
+    <message>
+        <source>Add &amp;Recipient</source>
+        <translation>添加收款人</translation>
+    </message>
+    <message>
+        <source>Clear &amp;All</source>
+        <translation>全部清除</translation>
+    </message>
+    <message>
+        <source>S&amp;end</source>
+        <translation>发送</translation>
+    </message>
+    <message>
+        <source>Send Coins</source>
+        <translation>支付硬币</translation>
+    </message>
+    <message>
+        <source>Confirm send coins</source>
+        <translation>确认支付</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to send %1?</source>
+        <translation>你确定要支付%1个币吗？</translation>
+    </message>
+    <message>
+        <source> and </source>
+        <translation>和</translation>
+    </message>
+    <message>
+        <source>Load Feathercoin Transaction</source>
+        <translation>加载羽毛币交易</translation>
+    </message>
+    <message>
+        <source>Feathercoin transaction file (*.ftc)</source>
+        <translation>羽毛币交易文件(*.ftc)</translation>
+    </message>
+    <message>
+        <source>Save Feathercoin Transaction</source>
+        <translation>保存羽毛币交易</translation>
+    </message>
+    <message>
+        <source>Error exporting</source>
+        <translation>导出错误</translation>
+    </message>
+    <message>
+        <source>Could not write to file %1.</source>
+        <translation>不能写入文件%1。</translation>
+    </message>
+    <message>
+        <source>Require </source>
+        <translation>满足 </translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation> 总共 </translation>
+    </message>
+    <message>
+        <source> signatures </source>
+        <translation> 签名 </translation>
+    </message>
+    <message>
+        <source>The recipient address is not valid, please recheck.</source>
+        <translation>收款人地址不合法，请检查。</translation>
+    </message>
+    <message>
+        <source>The amount to pay must be larger than 0.</source>
+        <translation>支付金额必须大于0。</translation>
+    </message>
+    <message>
+        <source>The amount exceeds your balance.</source>
+        <translation>金额超出您的账上余额。</translation>
+    </message>
+    <message>
+        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
+        <translation>计入 %1 交易费后的金额超出您的账上余额。</translation>
+    </message>
+    <message>
+        <source>Duplicate address found, can only send to each address once per send operation.</source>
+        <translation>发现重复的地址, 每次只能对同一地址发送一次。</translation>
+    </message>
+    <message>
+        <source>Transaction creation failed!</source>
+        <translation>交易创建失败！</translation>
+    </message>
+    <message>
+        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>错误：该交易被拒绝！发生这种错误的原因可能是：钱包中的羽毛币已经被用掉，有可能您复制了wallet.dat钱包文件，然后用复制的钱包文件支付了羽毛币，但是这个钱包文件中没有记录。</translation>
     </message>
 </context>
 <context>
@@ -320,6 +550,14 @@
     <message>
         <source>Browse transaction history</source>
         <translation>查看交易历史</translation>
+    </message>
+    <message>
+        <source>Get my account report</source>
+        <translation>查看我的账户报表</translation>
+    </message>
+    <message>
+        <source>Manage MultiSig transactions</source>
+        <translation>管理多重签名交易</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
@@ -488,6 +726,10 @@
     <message>
         <source>&amp;Comments</source>
         <translation>留言</translation>
+    </message>
+    <message>
+        <source>&amp;MultiSig</source>
+        <translation>重签签名</translation>
     </message>
     <message>
         <source>Insert your comments into blockchain</source>
@@ -927,6 +1169,14 @@ Address: %4
         <translation>您输入的“%1”不是有效的羽毛币地址。</translation>
     </message>
     <message>
+        <source>Address "%1" doesn't have public key </source>
+        <translation>地址“%1”公匙不存在于地址簿中</translation>
+    </message>
+    <message>
+        <source>Address "%1" doesn't have private key </source>
+        <translation>地址“%1”私匙不存在于地址簿中</translation>
+    </message>
+    <message>
         <source>Could not unlock wallet.</source>
         <translation>无法解锁钱包</translation>
     </message>
@@ -937,6 +1187,30 @@ Address: %4
     <message>
         <source>Stealth Address</source>
         <translation>隐身地址</translation>
+    </message>
+    <message>
+        <source>Public Key</source>
+        <translation>公匙</translation>
+    </message>
+    <message>
+        <source>Private Key</source>
+        <translation>私匙</translation>
+    </message>
+    <message>
+        <source>Scan Pubkey</source>
+        <translation>扫描公匙</translation>
+    </message>
+    <message>
+        <source>Scan Secret</source>
+        <translation>扫描私匙</translation>
+    </message>
+    <message>
+        <source>Spend Pubkey</source>
+        <translation>发送公匙</translation>
+    </message>
+    <message>
+        <source>Spend Secret</source>
+        <translation>发送私匙</translation>
     </message>
 </context>
 <context>

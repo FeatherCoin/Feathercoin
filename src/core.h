@@ -38,6 +38,8 @@ static const int AUXPOW_CHAIN_ID = 0x0062;
 static const int AUXPOW_START_MAINNET = 371337;
 static const int AUXPOW_START_TESTNET = 158100;
 
+extern int nBestHeight;
+static const unsigned int LOCKTIME_THRESHOLD2 = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 /** No amount larger than this (in satoshi) is valid */
 static const int64_t MAX_MONEY = 336000000 * COIN;
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
@@ -238,6 +240,23 @@ public:
         vin.clear();
         vout.clear();
         nLockTime = 0;
+    }
+    
+    bool IsFinal(int nBlockHeight=0, int64 nBlockTime=0) const
+    {
+        // Time based nLockTime implemented in 0.1.6
+        if (nLockTime == 0)
+            return true;
+        if (nBlockHeight == 0)
+            nBlockHeight = nBestHeight;
+        if (nBlockTime == 0)
+            nBlockTime = GetAdjustedTime();
+        if ((int64)nLockTime < ((int64)nLockTime < LOCKTIME_THRESHOLD2 ? (int64)nBlockHeight : nBlockTime))
+            return true;
+        BOOST_FOREACH(const CTxIn& txin, vin)
+            if (!txin.IsFinal())
+                return false;
+        return true;
     }
 
     bool IsNull() const

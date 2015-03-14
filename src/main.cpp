@@ -2346,6 +2346,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
         mempool.removeConflicts(tx, txConflicted);
     }
     
+    LogPrintf("SetTip and UpdateTip.pindexNew=%i\n",pindexNew->nHeight);    
     UpdateTip(pindexNew);
     	
     std::string strCmd = GetArg("-blocknotify", "");

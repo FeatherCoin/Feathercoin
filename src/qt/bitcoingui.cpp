@@ -272,6 +272,13 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     accountReportAction->setCheckable(true);
     accountReportAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(accountReportAction);
+    
+    multiSigAction = new QAction(QIcon(":/icons/multisig"), tr("&MultiSig"), this);
+    multiSigAction->setStatusTip(tr("Manage MultiSig transactions"));
+    multiSigAction->setToolTip(multiSigAction->statusTip());
+    multiSigAction->setCheckable(true);
+    multiSigAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    tabGroup->addAction(multiSigAction);
 
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
     // can be triggered from the tray menu, and need to show the GUI to be useful.
@@ -285,6 +292,8 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(accountReportAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(accountReportAction, SIGNAL(triggered()), this, SLOT(gotoAccountReportPage()));
+    connect(multiSigAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(multiSigAction, SIGNAL(triggered()), this, SLOT(gotoMultiSigPage()));
     
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setStatusTip(tr("Quit application"));
@@ -433,6 +442,7 @@ void BitcoinGUI::createMenuBar()
     if(walletFrame)
     {
         advanced->addAction(accountReportAction);
+        advanced->addAction(multiSigAction);
         advanced->addSeparator();
         advanced->addAction(inertBlockChainAction);
     }
@@ -464,6 +474,7 @@ void BitcoinGUI::createToolBars()
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
         toolbar->addAction(accountReportAction);
+        toolbar->addAction(multiSigAction);
         overviewAction->setChecked(true);
     }
 }
@@ -542,6 +553,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     paperWalletAction->setEnabled(enabled);
     inertBlockChainAction->setEnabled(enabled);
     debugAction->setEnabled(enabled);
+    multiSigAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(bool fIsTestnet)
@@ -698,6 +710,12 @@ void BitcoinGUI::gotoAccountReportPage()
 {
 		accountReportAction->setChecked(true);
     if (walletFrame) walletFrame->gotoAccountReportPage();
+}
+
+void BitcoinGUI::gotoMultiSigPage()
+{
+		multiSigAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoMultiSigPage();
 }
 
 void BitcoinGUI::gotoSignMessageTab(QString addr)

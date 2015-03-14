@@ -88,6 +88,9 @@ namespace GUIUtil
     QString getOpenFileName(QWidget *parent, const QString &caption, const QString &dir,
         const QString &filter,
         QString *selectedSuffixOut);
+    QString getLoadFileName(QWidget *parent=0, const QString &caption=QString(),
+                                   const QString &dir=QString(), const QString &filter=QString(),
+                                   QString *selectedSuffixOut=0);
 
     /** Get connection type to call object slot in GUI thread with invokeMethod. The call will be blocking.
 

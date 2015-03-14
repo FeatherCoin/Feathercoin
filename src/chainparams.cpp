@@ -75,8 +75,8 @@ public:
         assert(hashGenesisBlock == uint256("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2"));
 
         vSeeds.push_back(CDNSSeedData("ftc-c.com", "www.ftc-c.com"));
-        //vSeeds.push_back(CDNSSeedData("block.ftc-c.com", "block.ftc-c.com"));
-        //vSeeds.push_back(CDNSSeedData("pool.ftc-c.com", "pool.ftc-c.com"));
+        vSeeds.push_back(CDNSSeedData("block.ftc-c.com", "block.ftc-c.com"));
+        vSeeds.push_back(CDNSSeedData("pool.ftc-c.com", "pool.ftc-c.com"));
 
         //how to do feathercoin ?
         base58Prefixes[PUBKEY_ADDRESS] = list_of(14); // FeatherCoin addresses start with F

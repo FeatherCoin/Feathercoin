@@ -10,11 +10,13 @@
 class BitcoinGUI;
 class ClientModel;
 class OverviewPage;
+class AddressBookPage;
 class ReceiveCoinsDialog;
 class SendCoinsDialog;
 class SendCoinsRecipient;
 class TransactionView;
 class ReportView;
+class MultiSigDialog;
 class WalletModel;
 
 QT_BEGIN_NAMESPACE
@@ -57,12 +59,14 @@ private:
 
     OverviewPage *overviewPage;
     QWidget *transactionsPage;
+    AddressBookPage *addressBookPage;
     QWidget *accountreportPage;
     ReceiveCoinsDialog *receiveCoinsPage;
     SendCoinsDialog *sendCoinsPage;
+    MultiSigDialog *multiSigPage;
 
     TransactionView *transactionView;
-		ReportView *reportView;
+		ReportView *reportView;		
     QProgressDialog *progressDialog;
 
 public slots:
@@ -81,6 +85,8 @@ public slots:
     void gotoVerifyMessageTab(QString addr = "");
     /** Switch to account report page */
     void gotoAccountReportPage(); 
+    /** Switch to multisig page */
+    void gotoMultiSigPage();
     
     /** Show incoming transaction notification for new transactions.
 

@@ -6,6 +6,7 @@
 
 #include "addressbookpage.h"
 #include "askpassphrasedialog.h"
+#include "addressbookpage.h"
 #include "bitcoingui.h"
 #include "clientmodel.h"
 #include "guiutil.h"
@@ -13,6 +14,7 @@
 #include "overviewpage.h"
 #include "receivecoinsdialog.h"
 #include "sendcoinsdialog.h"
+#include "multisigdialog.h"
 #include "signverifymessagedialog.h"
 #include "transactiontablemodel.h"
 #include "transactionview.h"
@@ -72,22 +74,31 @@ WalletView::WalletView(QWidget *parent):
     
     receiveCoinsPage = new ReceiveCoinsDialog();
     sendCoinsPage = new SendCoinsDialog();
+    multiSigPage = new MultiSigDialog();
 
     addWidget(overviewPage);
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
     addWidget(accountreportPage);
+    addWidget(multiSigPage);
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), transactionView, SLOT(focusTransaction(QModelIndex)));
 
     // Double-clicking on a transaction on the transaction history page shows details
-    connect(transactionView, SIGNAL(doubleClicked(QModelIndex)), transactionView, SLOT(showDetails()));
-    
+    connect(transactionView, SIGNAL(doubleClicked(QModelIndex)), transactionView, SLOT(showDetails()));    
     connect(receiveCoinsPage, SIGNAL(importWallet(QString)), this, SLOT(importWallet(QString)));
+    
     // Clicking on "Send to QR" sends you to the send coins tab after snapping and reading image
-    connect(sendCoinsPage, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString)));
+    connect(sendCoinsPage, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString))); 
+    
+    // Clicking on "Send Coins" in the address book sends you to the send coins tab
+    connect(transactionView, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString))); 
+    // Clicking on "Verify Message" in the address book opens the verify message tab in the Sign/Verify Message dialog
+    connect(transactionView, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
+    // Clicking on "Sign Message" in the receive coins page opens the sign message tab in the Sign/Verify Message dialog
+    connect(transactionView, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
     
     // Clicking on "Export" allows to export the transaction list
     connect(exportButton, SIGNAL(clicked()), transactionView, SLOT(exportClicked()));
@@ -138,6 +149,7 @@ void WalletView::setWalletModel(WalletModel *walletModel)
     reportView->setModel(walletModel);
     receiveCoinsPage->setModel(walletModel);
     sendCoinsPage->setModel(walletModel);
+    multiSigPage->setModel(walletModel);
 
     if (walletModel)
     {
@@ -194,6 +206,11 @@ void WalletView::gotoReceiveCoinsPage()
 void WalletView::gotoAccountReportPage()
 {
     setCurrentWidget(accountreportPage); 
+}
+
+void WalletView::gotoMultiSigPage()
+{
+    setCurrentWidget(multiSigPage);
 }
 
 void WalletView::gotoSendCoinsPage(QString addr)
@@ -317,7 +334,7 @@ void WalletView::usedSendingAddresses()
 {
     if(!walletModel)
         return;
-    AddressBookPage *dlg = new AddressBookPage(AddressBookPage::ForEditing, AddressBookPage::SendingTab, this);
+    AddressBookPage *dlg = new AddressBookPage(AddressBookPage::ForEditing, AddressBookPage::SendingTab, this);    
     dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->setModel(walletModel->getAddressTableModel());
     dlg->show();

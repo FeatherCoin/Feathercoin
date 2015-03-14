@@ -24,15 +24,22 @@ struct AddressTableEntry
         Receiving,
         Hidden /* QSortFilterProxyModel will filter these out */
     };
+    
+    enum Category {
+        Normal,
+        MultiSig
+    };
 
     Type type;
     QString label;
     QString address;
     bool stealth;
+    Category category;
+    QStringList categoryStrList;
 
-    AddressTableEntry() {}
-    AddressTableEntry(Type type, const QString &label, const QString &address, const bool &stealth = false):
-        type(type), label(label), address(address), stealth(stealth) {}
+    AddressTableEntry() { categoryStrList << "Normal" << "MultiSig"; }
+    AddressTableEntry(Type type, const QString &label, const QString &address, const bool &stealth = false, Category cate = Normal):
+        type(type), label(label), address(address), stealth(stealth), category(cate) { categoryStrList << "Normal" << "MultiSig"; }
 };
 
 struct AddressTableEntryLessThan
@@ -84,13 +91,20 @@ public:
             BOOST_FOREACH(const PAIRTYPE(CTxDestination, CAddressBookData)& item, wallet->mapAddressBook)
             {
                 const CBitcoinAddress& address = item.first;
+                const std::string& strName = item.second.name;
                 bool fMine = IsMine(*wallet, address.Get());
+                bool fMyShare = IsMyShare(*wallet, address.Get());
                 AddressTableEntry::Type addressType = translateTransactionType(
                         QString::fromStdString(item.second.purpose), fMine);
-                const std::string& strName = item.second.name;
+                AddressTableEntry::Category cate = AddressTableEntry::Normal;
+                if ( fMyShare )
+                {
+                    cate = AddressTableEntry::MultiSig;
+                    addressType = AddressTableEntry::Sending;
+                }
                 cachedAddressTable.append(AddressTableEntry(addressType,
                                   QString::fromStdString(strName),
-                                  QString::fromStdString(address.ToString())));
+                                  QString::fromStdString(address.ToString()),false,cate));
             }
             std::set<CStealthAddress>::iterator it;
             for (it = wallet->stealthAddresses.begin(); it != wallet->stealthAddresses.end(); ++it)
@@ -99,7 +113,7 @@ public:
                 cachedAddressTable.append(AddressTableEntry(fMine ? AddressTableEntry::Receiving : AddressTableEntry::Sending,
                                   QString::fromStdString(it->label),
                                   QString::fromStdString(it->Encoded()),
-                                  true));
+                                  true,AddressTableEntry::Normal));
             };
         }
         // qLowerBound() and qUpperBound() require our cachedAddressTable list to be sorted in asc order
@@ -127,9 +141,16 @@ public:
             {
                 qDebug() << "AddressTablePriv::updateEntry : Warning: Got CT_NEW, but entry is already in model";
                 break;
-            }
+            }                       
             parent->beginInsertRows(QModelIndex(), lowerIndex, lowerIndex);
-            cachedAddressTable.insert(lowerIndex, AddressTableEntry(newEntryType, label, address));
+            if (address.at(0)=='f')
+            {
+            	cachedAddressTable.insert(lowerIndex, AddressTableEntry(newEntryType, label, address,false,AddressTableEntry::MultiSig));
+            }
+            else
+            {
+            	cachedAddressTable.insert(lowerIndex, AddressTableEntry(newEntryType, label, address,false,AddressTableEntry::Normal));
+            }
             parent->endInsertRows();
             break;
         case CT_UPDATED:
@@ -176,6 +197,7 @@ public:
 AddressTableModel::AddressTableModel(CWallet *wallet, WalletModel *parent) :
     QAbstractTableModel(parent),walletModel(parent),wallet(wallet),priv(0)
 {
+    //columns << tr("Label") << tr("Address")<< tr("Category");
     columns << tr("Label") << tr("Address");
     priv = new AddressTablePriv(wallet, this);
     priv->refreshAddressTable();
@@ -220,6 +242,9 @@ QVariant AddressTableModel::data(const QModelIndex &index, int role) const
             }
         case Address:
             return rec->address;
+        case Category:
+            //return rec->categoryStrList[rec->category];
+            return rec->category;
         }
     }
     else if (role == Qt::FontRole)

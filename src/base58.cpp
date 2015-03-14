@@ -245,6 +245,28 @@ bool CBitcoinAddress::GetKeyID(CKeyID &keyID) const {
 bool CBitcoinAddress::IsScript() const {
     return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
 }
+
+bool CBitcoinAddress::GetScriptID(CScriptID &scriptID) const {   
+    /*    if (!IsValid())
+            return false;
+        switch (vchVersion) {
+        case Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS):
+        case Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS_TEST): {
+            uint160 id;
+            memcpy(&id, &vchData[0], 20);
+            scriptID = CScriptID(id);
+            return true;
+        }
+        default: return false;
+        }*/        
+    if (!IsValid() || vchVersion != Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS))
+        return false;
+    uint160 id;
+    memcpy(&id, &vchData[0], 20);
+    scriptID = CScriptID(id);
+    return true;
+}
+
 /*
 void CBitcoinSecret::SetKey(const CKey& vchSecret) {
     assert(vchSecret.IsValid());

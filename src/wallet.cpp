@@ -4,7 +4,9 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "wallet.h"
-
+#include "walletdb.h"
+#include "crypter.h"
+#include "ui_interface.h"
 #include "base58.h"
 #include "checkpoints.h"
 #include "coincontrol.h"
@@ -2347,8 +2349,11 @@ bool CWallet::SetAddressBook(const CTxDestination& address, const string& strNam
         if (!strPurpose.empty()) /* update purpose only if requested */
             mapAddressBook[address].purpose = strPurpose;
     }
-    NotifyAddressBookChanged(this, address, strName, ::IsMine(*this, address),
-                             strPurpose, (fUpdated ? CT_UPDATED : CT_NEW) );
+    bool fMine = ::IsMine(*this, address);
+    if ( ::IsMyShare(*this, address) )
+        fMine = false;
+    //NotifyAddressBookChanged(this, address, strName, ::IsMine(*this, address), strPurpose, (fUpdated ? CT_UPDATED : CT_NEW) );
+    NotifyAddressBookChanged(this, address, strName, fMine, strPurpose, (fUpdated ? CT_UPDATED : CT_NEW) );
     if (!fFileBacked)
         return false;
     if (!strPurpose.empty() && !CWalletDB(strWalletFile).WritePurpose(CBitcoinAddress(address).ToString(), strPurpose))
@@ -2896,3 +2901,260 @@ void AddFixedChangeAddress(const CKeyID &changeAddress)
 {
     vChangeAddresses.push_back(changeAddress);
 }
+
+
+
+
+
+/* 
+ *  for shared wallet
+ */
+
+bool CWallet::SelectSharedCoins(int64 nTargetValue, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64& nValueRet, const CCoinControl* coinControl) const
+{
+    vector<COutput> vCoins;
+    AvailableSharedCoins(vCoins, false, coinControl);
+    
+    // coin control -> return all selected outputs (we want all selected to go into the transaction for sure)
+    if (coinControl && coinControl->HasSelected())
+    {
+        BOOST_FOREACH(const COutput& out, vCoins)
+        {
+            nValueRet += out.tx->vout[out.i].nValue;
+            setCoinsRet.insert(make_pair(out.tx, out.i));
+        }
+        return (nValueRet >= nTargetValue);
+    }
+
+    return (SelectCoinsMinConf(nTargetValue, 1, 6, vCoins, setCoinsRet, nValueRet) ||
+            SelectCoinsMinConf(nTargetValue, 1, 1, vCoins, setCoinsRet, nValueRet) ||
+            SelectCoinsMinConf(nTargetValue, 0, 1, vCoins, setCoinsRet, nValueRet));
+}
+
+bool CWallet::CreateRawTransaction(const std::vector<std::pair<CScript, int64> >& vecSend, CTransaction& txNew, 
+    int64& nFeeRet, std::string& strFailReason, bool isMultiSig, CReserveKey& reservekey, const CCoinControl *coinControl)
+{
+    int64 nValue = 0;
+    BOOST_FOREACH (const PAIRTYPE(CScript, int64)& s, vecSend)
+    {
+        if (nValue < 0)
+        {
+            strFailReason = _("Transaction amounts must be positive");
+            return false;
+        }
+        nValue += s.second;
+    }
+    if (vecSend.empty() || nValue < 0)
+    {
+        strFailReason = _("Transaction amounts must be positive");
+        return false;
+    }
+
+    int64 nTotalValue = nValue + nFeeRet;
+    CTransaction rawTx;
+
+    // vouts to the payees
+    BOOST_FOREACH (const PAIRTYPE(CScript, int64)& s, vecSend)
+    {
+        CTxOut txout(s.second, s.first);
+        if (txout.IsDust((CTransaction::nMinRelayTxFee)))
+        {
+            strFailReason = _("Transaction amount too small");
+            return false;
+        }
+        rawTx.vout.push_back(txout);
+    }
+
+    // Choose coins to use
+    set<pair<const CWalletTx*,unsigned int> > setCoins;
+    int64 nValueIn = 0;
+    if ( isMultiSig )
+    {
+        if (!SelectSharedCoins(nTotalValue, setCoins, nValueIn, coinControl))
+        {
+            strFailReason = _("Insufficient funds");
+            return false;
+        }
+    }
+    else
+    {
+        if (!SelectCoins(nTotalValue, setCoins, nValueIn, coinControl))
+        {
+            strFailReason = _("Insufficient funds");
+            return false;
+        }
+    }
+
+    int64 nChange = nValueIn - nTotalValue;
+    if (nChange > 0)
+    {
+        CScript scriptChange;
+        
+        // coin control: send change to custom address
+        if (coinControl && !boost::get<CNoDestination>(&coinControl->destChange))
+            scriptChange.SetDestination(coinControl->destChange);
+        else
+        {
+            // Reserve a new key pair from key pool
+            CPubKey vchPubKey;
+            assert(reservekey.GetReservedKey(vchPubKey)); // should never fail, as we just unlocked
+
+            scriptChange.SetDestination(vchPubKey.GetID());
+        }
+
+        CTxOut newTxOut(nChange, scriptChange);
+
+        if (newTxOut.IsDust((CTransaction::nMinRelayTxFee)))
+        {
+            nFeeRet += nChange;
+        }
+        else
+        {
+            vector<CTxOut>::iterator position = rawTx.vout.begin()+GetRandInt(rawTx.vout.size()+1);
+            rawTx.vout.insert(position, newTxOut);
+        }
+    }
+    else
+        reservekey.ReturnKey();
+
+    // Fill vin
+    BOOST_FOREACH(const PAIRTYPE(const CWalletTx*,unsigned int)& coin, setCoins)
+        rawTx.vin.push_back(CTxIn(coin.first->GetHash(),coin.second));
+
+    if ( !isMultiSig )
+    {
+        // Sign
+        int nIn = 0;
+        BOOST_FOREACH(const PAIRTYPE(const CWalletTx*,unsigned int)& coin, setCoins)
+            if (!SignSignature(*this, *coin.first, rawTx, nIn++))
+            {
+                strFailReason = _("Signing transaction failed");
+                return false;
+            }
+    }
+    
+    // Limit size
+    unsigned int nBytes = ::GetSerializeSize(rawTx, SER_NETWORK, PROTOCOL_VERSION);
+    if (nBytes >= MAX_STANDARD_TX_SIZE)
+    {
+        strFailReason = _("Transaction too large");
+        return false;
+    }
+
+    txNew = rawTx;
+    return true;
+}
+
+bool CWallet::IsMyShare(const CTxIn& txin) const
+{
+    {
+        LOCK(cs_wallet);
+        map<uint256, CWalletTx>::const_iterator mi = mapWallet.find(txin.prevout.hash);
+        if (mi != mapWallet.end())
+        {
+            const CWalletTx& prev = (*mi).second;
+            if (txin.prevout.n < prev.vout.size())
+                if (IsMyShare(prev.vout[txin.prevout.n]))
+                    return true;
+        }
+    }
+    return false;
+}
+
+bool CWallet::IsMyShare(const CTxOut& txout) const
+{
+    return ::IsMyShare(*this, txout.scriptPubKey);
+}
+
+bool CWallet::IsMyShare(const CTransaction& tx) const
+{
+    BOOST_FOREACH(const CTxOut& txout, tx.vout)
+        if (IsMyShare(txout) && txout.nValue >= DUST_HARD_LIMIT)
+            return true;
+
+    return false;
+}
+
+int64 CWallet::GetSharedBalance() const
+{
+    int64 nTotal = 0;
+    {
+        LOCK(cs_wallet);
+        for (map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
+        {
+            const CWalletTx* pcoin = &(*it).second;
+            if (pcoin->IsConfirmed())
+                nTotal += pcoin->GetSharedAvailableCredit();
+        }
+    }
+
+    return nTotal;
+}
+
+int64 CWallet::GetSharedUnconfirmedBalance() const
+{
+    int64 nTotal = 0;
+    {
+        LOCK(cs_wallet);
+        for (map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
+        {
+            const CWalletTx* pcoin = &(*it).second;
+            if (!pcoin->IsFinal() || !pcoin->IsConfirmed())
+                nTotal += pcoin->GetSharedAvailableCredit();
+        }
+    }
+    return nTotal;
+}
+
+int64 CWallet::GetSharedImmatureBalance() const
+{
+    return 0;
+}
+
+int64 CWallet::GetShareDebit(const CTxIn &txin) const
+{
+    {
+        LOCK(cs_wallet);
+        map<uint256, CWalletTx>::const_iterator mi = mapWallet.find(txin.prevout.hash);
+        if (mi != mapWallet.end())
+        {
+            const CWalletTx& prev = (*mi).second;
+            if (txin.prevout.n < prev.vout.size())
+                if (IsMyShare(prev.vout[txin.prevout.n]))
+                    return prev.vout[txin.prevout.n].nValue;
+        }
+    }
+    return 0;
+}
+
+void CWallet::AvailableSharedCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const CCoinControl *coinControl) const
+{
+    vCoins.clear();
+
+    {
+        LOCK(cs_wallet);
+        for (map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
+        {
+            const CWalletTx* pcoin = &(*it).second;
+
+            if (!pcoin->IsFinal())
+                continue;
+
+            if (fOnlyConfirmed && !pcoin->IsConfirmed())
+                continue;
+
+            if (pcoin->IsCoinBase() && pcoin->GetBlocksToMaturity() > 0)
+                continue;
+
+            for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
+                if (!(pcoin->IsSpent(i)) && IsMyShare(pcoin->vout[i]) &&
+                    !IsLockedCoin((*it).first, i) && pcoin->vout[i].nValue >= DUST_HARD_LIMIT &&
+                    (!coinControl || !coinControl->HasSelected() || coinControl->IsSelected((*it).first, i))) 
+                        vCoins.push_back(COutput(pcoin, i, pcoin->GetDepthInMainChain()));
+            }
+        }
+    }
+}
+
+
+

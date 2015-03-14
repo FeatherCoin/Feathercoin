@@ -134,6 +134,10 @@ public:
     qint64 getImmatureBalance() const;
     int getNumTransactions() const;
     EncryptionStatus getEncryptionStatus() const;
+    
+    qint64 getSharedBalance(const CCoinControl *coinControl=NULL) const;
+    qint64 getSharedUnconfirmedBalance() const;
+    qint64 getSharedImmatureBalance() const;
 
     // Check address for validity
     bool validateAddress(const QString &address);
@@ -141,9 +145,15 @@ public:
     // Return status record for SendCoins, contains error id + information
     struct SendCoinsReturn
     {
-        SendCoinsReturn(StatusCode status = OK):
-            status(status) {}
+        /*SendCoinsReturn(StatusCode status = OK):
+            status(status) {}*/
+        SendCoinsReturn(StatusCode status=Aborted,
+                         qint64 fee=0,
+                         QString hex=QString()):
+            status(status), fee(fee), hex(hex) {}
         StatusCode status;
+        qint64 fee; // is used in case status is "AmountWithFeeExceedsBalance"
+        QString hex; // is filled with the transaction hash if status is "OK"
     };
 
     // prepare transaction for getting txfee before sending coins
@@ -151,6 +161,7 @@ public:
 
     // Send coins to a list of recipients
     SendCoinsReturn sendCoins(WalletModelTransaction &transaction);
+    SendCoinsReturn createRawTransaction(const QList<SendCoinsRecipient> &recipients, CTransaction& txNew, const CCoinControl *coinControl, bool isMultiSig);
 
 		bool importPrivateKey(QString privKey);
 		
@@ -162,6 +173,8 @@ public:
     // Wallet backup
     bool backupWallet(const QString &filename);
 
+		bool isMultiSig;
+    bool was_locked;
     // RAI object for unlocking wallet, returned by requestUnlock()
     class UnlockContext
     {
@@ -197,6 +210,7 @@ public:
     void loadReceiveRequests(std::vector<std::string>& vReceiveRequests);
     bool saveReceiveRequest(const std::string &sAddress, const int64_t nId, const std::string &sRequest);
 
+		CWallet *getWallet(){ return wallet; }
 private:
     CWallet *wallet;
 

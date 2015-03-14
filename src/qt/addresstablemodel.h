@@ -31,9 +31,10 @@ public:
     };
     
     enum ColumnIndex {
-        Label = 0,   /**< User specified label */
+        Label = 0,   	/**< User specified label */
         Address = 1,  /**< Bitcoin address */
-        Type = 2  /**< Address type  */
+        Type = 2,  	  /**< Address type  */
+        Category = 3  /**< Address Category : Normal or MultiSig*/
     };
 
     enum RoleIndex {

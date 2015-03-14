@@ -82,6 +82,11 @@ void SendCoinsEntry::setModel(WalletModel *model)
     clear();
 }
 
+void SendCoinsEntry::setRemoveEnabled(bool enabled)
+{
+    ui->deleteButton->setEnabled(enabled);
+}
+
 void SendCoinsEntry::clear()
 {
     // clear UI elements for normal payment
@@ -239,6 +244,16 @@ bool SendCoinsEntry::isClear()
 void SendCoinsEntry::setFocus()
 {
     ui->payTo->setFocus();
+}
+
+void SendCoinsEntry::setFieldEnable(bool enable)
+{
+    ui->payTo->setEnabled(enable);
+    ui->addAsLabel->setEnabled(enable);
+    ui->payAmount->setEnabled(enable);
+    ui->addressBookButton->setEnabled(enable);
+    ui->pasteButton->setEnabled(enable);
+    ui->deleteButton->setEnabled(enable);
 }
 
 void SendCoinsEntry::updateDisplayUnit()

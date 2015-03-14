@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
+    <width>1009</width>
     <height>380</height>
    </rect>
   </property>
@@ -57,7 +57,18 @@
         <string>Create a new address</string>
        </property>
        <property name="text">
-        <string>&amp;New</string>
+        <string>&amp;New Address</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../feathercoin.qrc">
+         <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="newMultiSigAddress">
+       <property name="text">
+        <string>New MultiSig</string>
        </property>
        <property name="icon">
         <iconset resource="../feathercoin.qrc">
@@ -98,6 +109,34 @@
        <property name="icon">
         <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/qrcode</normaloff>:/icons/qrcode</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="signMessage">
+       <property name="toolTip">
+        <string>Sign a message to prove you own a FTC address</string>
+       </property>
+       <property name="text">
+        <string>Sign &amp;Message</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../feathercoin.qrc">
+         <normaloff>:/icons/edit</normaloff>:/icons/edit</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="verifyMessage">
+       <property name="toolTip">
+        <string>Verify a message to ensure it was signed with a specified FTC address</string>
+       </property>
+       <property name="text">
+        <string>&amp;Verify Message</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../feathercoin.qrc">
+         <normaloff>:/icons/transaction_0</normaloff>:/icons/transaction_0</iconset>
        </property>
       </widget>
      </item>
