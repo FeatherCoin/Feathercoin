@@ -463,7 +463,7 @@ public:
     }
     int64 GetShareDebit(const CTxIn& txin) const;
     void AvailableSharedCoins(std::vector<COutput>& vCoins, bool fOnlyConfirmed=true, const CCoinControl *coinControl=NULL) const;
-    bool SelectSharedCoins(int64 nTargetValue, std::set<std::pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64& nValueRet, const CCoinControl* coinControl=NULL) const;
+    bool SelectSharedCoins(int64 nTargetValue, std::set<std::pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64_t& nValueRet, const CCoinControl* coinControl=NULL) const;
 };
 
 /** A key allocated from the key pool. */
