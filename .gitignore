@@ -1,9 +1,9 @@
 *.tar.gz
 
 *.exe
-src/feathercon
-src/feathercond
-src/feathercon-cli
+src/feathercoin
+src/feathercoind
+src/feathercoin-cli
 src/test/test_bitcoin
 src/qt/test/test_bitcoin-qt
 
@@ -13,8 +13,6 @@ autom4te.cache/
 config.log
 config.status
 configure
-src/feathercoin-cli
-src/feathercoind
 src/bitcoin-config.h
 src/bitcoin-config.h.in
 src/build-aux/
