@@ -2910,7 +2910,7 @@ void AddFixedChangeAddress(const CKeyID &changeAddress)
  *  for shared wallet
  */
 
-bool CWallet::SelectSharedCoins(int64 nTargetValue, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64& nValueRet, const CCoinControl* coinControl) const
+bool CWallet::SelectSharedCoins(int64 nTargetValue, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64_t& nValueRet, const CCoinControl* coinControl) const
 {
     vector<COutput> vCoins;
     AvailableSharedCoins(vCoins, false, coinControl);
@@ -2967,7 +2967,7 @@ bool CWallet::CreateRawTransaction(const std::vector<std::pair<CScript, int64> >
 
     // Choose coins to use
     set<pair<const CWalletTx*,unsigned int> > setCoins;
-    int64 nValueIn = 0;
+    int64_t nValueIn = 0;
     if ( isMultiSig )
     {
         if (!SelectSharedCoins(nTotalValue, setCoins, nValueIn, coinControl))
