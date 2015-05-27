@@ -95,6 +95,7 @@ QT_FORMS_UI = \
   forms/openuridialog.ui \
   forms/optionsdialog.ui \
   forms/shiftdialog.ui \
+  forms/coinnectordialog.ui \
   forms/overviewpage.ui \
   forms/receivecoinsdialog.ui \
   forms/receiverequestdialog.ui \
@@ -106,6 +107,7 @@ QT_FORMS_UI = \
   forms/qrcodedialog.ui \
   forms/paperwalletdialog.ui \
   forms/commentdialog.ui \
+  forms/opennamedialog.ui \
   forms/debugdialog.ui \
   forms/snapwidget.ui \
   forms/createmultisigaddrdialog.ui \
@@ -133,6 +135,7 @@ QT_MOC_CPP = \
   moc_openuridialog.cpp \
   moc_optionsdialog.cpp \
   moc_shiftdialog.cpp \
+  moc_coinnectordialog.cpp \
   moc_optionsmodel.cpp \
   moc_overviewpage.cpp \
   moc_paymentserver.cpp \
@@ -203,6 +206,7 @@ BITCOIN_QT_H = \
   openuridialog.h \
   optionsdialog.h \
   shiftdialog.h \
+  coinnectordialog.h \
   optionsmodel.h \
   overviewpage.h \
   paymentrequestplus.h \
@@ -309,6 +313,7 @@ BITCOIN_QT_CPP = \
   notificator.cpp \
   optionsdialog.cpp \
   shiftdialog.cpp \
+  coinnectordialog.cpp \
   qrcodedialog.cpp \
   optionsmodel.cpp \
   qvalidatedlineedit.cpp \

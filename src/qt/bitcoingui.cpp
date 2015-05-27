@@ -13,6 +13,7 @@
 #include "openuridialog.h"
 #include "optionsdialog.h"
 #include "shiftdialog.h"
+#include "coinnectordialog.h"
 #include "optionsmodel.h"
 #include "rpcconsole.h"
 #include "utilitydialog.h"
@@ -338,6 +339,8 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     inertBlockChainAction->setStatusTip(tr("Insert your comments into blockchain"));
     debugAction = new QAction(QIcon(":/icons/sx"), tr("&SX Tool"), this);
     debugAction->setStatusTip(tr("SX Tool"));
+    opennameAction = new QAction(QIcon(":/icons/openname"), tr("&Openname"), this);
+    opennameAction->setStatusTip(tr("Your identity and reputation in blockchain"));
     
     lockWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Lock wallet"), this);
     lockWalletAction->setToolTip(tr("Lock wallet"));
@@ -365,11 +368,16 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     shapeshiftAction = new QAction(QIcon(":/icons/shapeshift"), tr("Shapeshift..."), this);
     shapeshiftAction->setStatusTip(tr("Exchange other coins whit your feathercoin on Shapeshift"));
     shapeshiftAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_8));
+    coinnectorAction = new QAction(QIcon(":/icons/coinnector"), tr("Coinnector..."), this);
+    coinnectorAction->setStatusTip(tr("Exchange other coins whit your feathercoin on Coinnector"));
+    coinnectorAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_9));
 
     showHelpMessageAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Command-line options"), this);
     showHelpMessageAction->setStatusTip(tr("Show the Feathercoin Core help message to get a list with possible Feathercoin command-line options"));
 
-    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    //connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(quitAction, SIGNAL(triggered()), walletFrame, SLOT(backupquitWallet()));
+    
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(optionsClicked()));
@@ -390,8 +398,10 @@ void BitcoinGUI::createActions(bool fIsTestnet)
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
         connect(bitmessageAction, SIGNAL(triggered()), this, SLOT(openBitmessageClicked()));
         connect(shapeshiftAction, SIGNAL(triggered()), this, SLOT(openShapeshiftClicked()));
+        connect(coinnectorAction, SIGNAL(triggered()), this, SLOT(openCoinnectorClicked()));
         connect(paperWalletAction, SIGNAL(triggered()), walletFrame, SLOT(printPaperWallets()));
         connect(inertBlockChainAction, SIGNAL(triggered()), walletFrame, SLOT(inertBlockChain()));
+        connect(opennameAction, SIGNAL(triggered()), walletFrame, SLOT(opennameClicked()));
         connect(debugAction, SIGNAL(triggered()), walletFrame, SLOT(debugClicked()));
     }
 #endif
@@ -445,6 +455,7 @@ void BitcoinGUI::createMenuBar()
         advanced->addAction(multiSigAction);
         advanced->addSeparator();
         advanced->addAction(inertBlockChainAction);
+        advanced->addAction(opennameAction);
     }
     
     QMenu *plugins = appMenuBar->addMenu(tr("&Plugins"));
@@ -453,6 +464,7 @@ void BitcoinGUI::createMenuBar()
         plugins->addAction(bitmessageAction);
         plugins->addSeparator();
         plugins->addAction(shapeshiftAction);
+        plugins->addAction(coinnectorAction);
     }
     
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
@@ -550,8 +562,10 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     accountReportAction->setEnabled(enabled);
     bitmessageAction->setEnabled(enabled);
     shapeshiftAction->setEnabled(enabled);
+    coinnectorAction->setEnabled(enabled);
     paperWalletAction->setEnabled(enabled);
     inertBlockChainAction->setEnabled(enabled);
+    opennameAction->setEnabled(enabled);
     debugAction->setEnabled(enabled);
     multiSigAction->setEnabled(enabled);
 }
@@ -652,6 +666,16 @@ void BitcoinGUI::openShapeshiftClicked()
         return;
 
     ShiftDialog dlg(this);
+    dlg.setModel(clientModel->getOptionsModel());
+    dlg.exec();
+}
+
+void BitcoinGUI::openCoinnectorClicked()
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+
+    CoinnectorDialog dlg(this);
     dlg.setModel(clientModel->getOptionsModel());
     dlg.exec();
 }
@@ -935,13 +959,14 @@ void BitcoinGUI::changeEvent(QEvent *e)
 }
 
 void BitcoinGUI::closeEvent(QCloseEvent *event)
-{
+{		
     if(clientModel)
     {
+    	//if (walletFrame) walletFrame->backupWallet();
 #ifndef Q_OS_MAC // Ignored on Mac
         if(!clientModel->getOptionsModel()->getMinimizeToTray() &&
            !clientModel->getOptionsModel()->getMinimizeOnClose())
-        {
+        { 
             QApplication::quit();
         }
 #endif
@@ -1084,9 +1109,11 @@ void BitcoinGUI::toggleHidden()
 }
 
 void BitcoinGUI::detectShutdown()
-{
+{			
     if (ShutdownRequested())
     {
+        //if (walletFrame) walletFrame->backupWallet();
+			
         if(rpcConsole)
             rpcConsole->hide();
         qApp->quit();

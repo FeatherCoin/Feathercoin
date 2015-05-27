@@ -239,8 +239,8 @@
    default state */
 #define USE_UPNP 0
 
-/* Define to 1 libzxing must be available for support */
-#define USE_ZXING 1
+/* Define to 0 libzxing must be available for support */
+#define USE_ZXING 0
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */

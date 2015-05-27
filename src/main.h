@@ -123,6 +123,14 @@ static const unsigned char REJECT_DUST = 0x41;
 static const unsigned char REJECT_INSUFFICIENTFEE = 0x42;
 static const unsigned char REJECT_CHECKPOINT = 0x43;
 
+static const char* OPENNAME_MAGIC_BYTES_MAINSET="08";
+static const char* OPENNAME_NAME_PREORDER="a";
+static const char* OPENNAME_NAME_REGISTRATION="b";
+static const char* OPENNAME_NAME_UPDATE="c";
+static const char* OPENNAME_NAME_TRANSFER="d";
+static const char* OPENNAME_NAME_RENEWAL="e";
+
+
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
 extern CTxMemPool mempool;

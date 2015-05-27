@@ -382,15 +382,24 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             vecSend.push_back(std::pair<CScript, int64_t>(scriptPubKey, rcp.amount));
 
 						//insert message into blockchain
-						if (rcp.message.length()>=1)
+						if ((rcp.message.length()>=1)&&(rcp.label=="blockchain"))
 						{				
 								std::string strMess = rcp.message.toStdString();
 								const char* pszMess =strMess.c_str();
                 CScript scriptP = CScript() << OP_RETURN << vector<unsigned char>((const unsigned char*)pszMess, (const unsigned char*)pszMess + strlen(pszMess));                
                 vecSend.push_back(std::pair<CScript, int64_t>(scriptP, 0));
              }
-            //normal
             
+            //commit openname
+						if ((rcp.message.length()>=1)&&(rcp.label=="openname"))
+						{		
+								std::string strMess = rcp.message.toStdString();
+								const char* pszMess =strMess.c_str();
+                CScript scriptP = CScript() << OP_RETURN << vector<unsigned char>((const unsigned char*)pszMess, (const unsigned char*)pszMess + strlen(pszMess));
+                vecSend.push_back(std::pair<CScript, int64_t>(scriptP, 0));
+             }
+             
+            //normal, do nothing
             total += rcp.amount;
         }
     }

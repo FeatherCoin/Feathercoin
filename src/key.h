@@ -195,6 +195,7 @@ public:
     CPrivKey GetPrivKey() const;
     bool SetPubKey(const CPubKey& vchPubKey);
     CPubKey GetPubKey() const;
+    std::vector<unsigned char> GetPubKeyU(bool fCompressed = false) const;
 
     bool Sign(uint256 hash, std::vector<unsigned char>& vchSig);
 

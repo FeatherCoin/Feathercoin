@@ -1,15 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS language="it" version="2.1">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About Bitcoin Core</source>
-        <translation>Info su Bitcoin Core</translation>
+        <source>About Feathercoin Core</source>
+        <translation>Info su Feathercoin Core</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;Bitcoin Core&lt;/b&gt; version</source>
-        <translation>Versione &lt;b&gt;Bitcoin Core&lt;/b&gt;</translation>
+        <source>&lt;b&gt;Feathercoin Core&lt;/b&gt; version</source>
+        <translation>Versione &lt;b&gt;Feathercoin Core&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+57"/>
@@ -20,6 +22,11 @@ Distributed under the MIT/X11 software license, see the accompanying file COPYIN
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.</source>
         <translation>
+
+
+
+
+
 Questo è un software sperimentale.
 
 Distribuito sotto la licenza software MIT/X11, vedi il file COPYING incluso oppure su http://www.opensource.org/licenses/mit-license.php.
@@ -33,14 +40,14 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+0"/>
-        <source>The Bitcoin Core developers</source>
-        <translation>Gli sviluppatori del Bitcoin Core</translation>
+        <source>The Feathercoin Core developers</source>
+        <translation>Gli sviluppatori del Feathercoin Core</translation>
     </message>
     <message>
         <location line="+12"/>
         <location line="+2"/>
         <source> (%1-bit)</source>
-        <translation>(%1-bit)</translation>
+        <translation> (%1-bit)</translation>
     </message>
 </context>
 <context>
@@ -48,7 +55,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message>
         <location filename="../forms/addressbookpage.ui" line="+30"/>
         <source>Double-click to edit address or label</source>
-        <translation>Fai doppio click per modificare o cancellare l&apos;etichetta</translation>
+        <translation>Fai doppio click per modificare l&apos;etichetta o indirizzo</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -71,7 +78,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
         <translation>&amp;Copia</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+58"/>
         <source>C&amp;lose</source>
         <translation>C&amp;hiudi</translation>
     </message>
@@ -81,7 +88,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
         <translation>&amp;Copia l&apos;indirizzo</translation>
     </message>
     <message>
-        <location filename="../forms/addressbookpage.ui" line="-41"/>
+        <location filename="../forms/addressbookpage.ui" line="-47"/>
         <source>Delete the currently selected address from the list</source>
         <translation>Cancella l&apos;indirizzo attualmente selezionato dalla lista</translation>
     </message>
@@ -103,7 +110,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message>
         <location filename="../addressbookpage.cpp" line="-30"/>
         <source>Choose the address to send coins to</source>
-        <translation>Scegli l&apos;indirizzo a cui inviare le monete per</translation>
+        <translation>Scegli l&apos;indirizzo a cui inviare le monete</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -127,13 +134,13 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+7"/>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Questi sono i tuoi indirizzi Bitcoin per inviare pagamenti. Controlla sempre l&apos;importo e l&apos;indirizzo del beneficiario prima di inviare  bitcoin</translation>
+        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Questi sono i tuoi indirizzi Feathercoin per inviare pagamenti. Controlla sempre l&apos;importo e l&apos;indirizzo del beneficiario prima di inviare monete.</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>These are your Bitcoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Questi sono i tuoi indirizzi Bitcoin per inviare pagamenti. Controlla sempre l&apos;importo e l&apos;indirizzo del beneficiario prima di inviare  bitcoin</translation>
+        <source>These are your Feathercoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Questi sono i tuoi indirizzi Feathercoin per inviare pagamenti. Controlla sempre l&apos;importo e l&apos;indirizzo del beneficiario prima di inviare pagamenti.</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -158,7 +165,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message>
         <location line="+13"/>
         <source>Exporting Failed</source>
-        <translation>Esportazione Fallita.</translation>
+        <translation>Esportazione Fallita</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -209,7 +216,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message>
         <location filename="../askpassphrasedialog.cpp" line="+40"/>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;10 or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
-        <translation>Inserisci la passphrase per il portamonete.&lt;br/&gt;Per piacere usare unapassphrase di &lt;b&gt;10 o più caratteri casuali&lt;/b&gt;, o &lt;b&gt;otto o più parole&lt;/b&gt;.</translation>
+        <translation>Inserisci la passphrase per il portamonete.&lt;br/&gt;Per piacere usare una passphrase di &lt;b&gt;10 o più caratteri casuali&lt;/b&gt;, o &lt;b&gt;otto o più parole&lt;/b&gt;.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -229,7 +236,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message>
         <location line="+3"/>
         <source>This operation needs your wallet passphrase to decrypt the wallet.</source>
-        <translation>Quest&apos;operazione necessita della passphrase per decifrare il portamonete,</translation>
+        <translation>Quest&apos;operazione necessita della passphrase per decifrare il portamonete.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -253,8 +260,8 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
-        <translation>Attenzione: se si cifra il portamonete e si perde la frase d&apos;ordine, &lt;b&gt;SI PERDERANNO TUTTI I PROPRI BITCOIN&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR COINS&lt;/b&gt;!</source>
+        <translation>Attenzione: se si cifra il portamonete e si perde la frase d&apos;ordine, &lt;b&gt;SI PERDERANNO TUTTE LE PROPRIE MONETE&lt;/b&gt;!</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -280,8 +287,8 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="-56"/>
-        <source>Bitcoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
-        <translation>Bitcoin verrà ora chiuso per finire il processo di crittazione. Ricorda che criptare il tuo portamonete non può fornire una protezione totale contro furti causati da malware che dovessero infettare il tuo computer.</translation>
+        <source>Feathercoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your coins from being stolen by malware infecting your computer.</source>
+        <translation>Feathercoin verrà ora chiuso per finire il processo di crittazione. Ricorda che criptare il tuo portamonete non può fornire una protezione totale contro furti causati da malware che dovessero infettare il tuo computer.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -335,7 +342,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message>
         <location line="+335"/>
         <source>Synchronizing with network...</source>
-        <translation>Sto sincronizzando con la rete...</translation>
+        <translation>Sincronizzando con la rete...</translation>
     </message>
     <message>
         <location line="-407"/>
@@ -374,8 +381,8 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+7"/>
-        <source>Show information about Bitcoin</source>
-        <translation>Mostra informazioni su Bitcoin</translation>
+        <source>Show information about Feathercoin</source>
+        <translation>Mostra informazioni su Feathercoin</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -431,17 +438,17 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message>
         <location line="+3"/>
         <source>Reindexing blocks on disk...</source>
-        <translation>Re-indicizzazione blocchi su disco...</translation>
+        <translation>Reindicizzazione blocchi su disco...</translation>
     </message>
     <message>
         <location line="-405"/>
-        <source>Send coins to a Bitcoin address</source>
-        <translation>Invia monete ad un indirizzo bitcoin</translation>
+        <source>Send coins to a Feathercoin address</source>
+        <translation>Invia monete ad un indirizzo Feathercoin</translation>
     </message>
     <message>
         <location line="+49"/>
-        <source>Modify configuration options for Bitcoin</source>
-        <translation>Modifica configurazione opzioni per bitcoin</translation>
+        <source>Modify configuration options for Feathercoin</source>
+        <translation>Modifica configurazione opzioni per Feathercoin</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -470,8 +477,8 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+430"/>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     <message>
         <location line="-643"/>
@@ -506,13 +513,13 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+7"/>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
-        <translation>Firma i messaggi con il tuo indirizzo Bitcoin per dimostrare di possederli</translation>
+        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
+        <translation>Firma i messaggi con il tuo indirizzo Feathercoin per dimostrare di possederli</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
-        <translation>Verifica i messaggi per accertarsi che siano stati firmati con gli indirizzi Bitcoin specificati</translation>
+        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
+        <translation>Verifica i messaggi per accertarsi che siano stati firmati con gli indirizzi Feathercoin specificati</translation>
     </message>
     <message>
         <location line="+48"/>
@@ -535,31 +542,31 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
         <translation>Barra degli strumenti &quot;Tabs&quot;</translation>
     </message>
     <message>
-        <location line="-284"/>
-        <location line="+376"/>
+        <location line="-283"/>
+        <location line="+375"/>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
     <message>
-        <location line="-401"/>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <location line="-400"/>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
-        <location line="+163"/>
-        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
-        <translation>Richiedi pagamenti (genera codici QR e bitcoin: URI)</translation>
+        <location line="+162"/>
+        <source>Request payments (generates QR codes and Feathercoin: URIs)</source>
+        <translation>Richiedi pagamenti (genera codici QR e Feathercoin: URI)</translation>
     </message>
     <message>
         <location line="+29"/>
         <location line="+2"/>
-        <source>&amp;About Bitcoin Core</source>
-        <translation>%Info su Bitcoin Core</translation>
+        <source>&amp;About Feathercoin Core</source>
+        <translation>%Info su Feathercoin Core</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>Show the list of used sending addresses and labels</source>
-        <translation>Modifica la lista degli indirizzi salvati e delle etichette</translation>
+        <translation>Mostra la lista degli indirizzi salvati e delle etichette</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -568,8 +575,8 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+3"/>
-        <source>Open a bitcoin: URI or payment request</source>
-        <translation>Apri un bitcoin: URI o richiesta di pagamento</translation>
+        <source>Open a Feathercoin: URI or payment request</source>
+        <translation>Apri un Feathercoin: URI o richiesta di pagamento</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -578,24 +585,27 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     </message>
     <message>
         <location line="+1"/>
-        <source>Show the Bitcoin Core help message to get a list with possible Bitcoin command-line options</source>
-        <translation>Mostra il messaggio di aiuto di Bitcoin Core per avere la lista di tutte le opzioni della riga di comando di Bitcoin.</translation>
+        <source>Show the Feathercoin Core help message to get a list with possible Feathercoin command-line options</source>
+        <translation>Mostra il messaggio di aiuto di Feathercoin Core per avere la lista di tutte le opzioni della riga di comando di Feathercoin</translation>
     </message>
     <message>
         <location line="+159"/>
         <location line="+5"/>
-        <source>Bitcoin client</source>
-        <translation>Bitcoin client</translation>
+        <source>Feathercoin client</source>
+        <translation>Feathercoin cliente</translation>
     </message>
     <message numerus="yes">
         <location line="+142"/>
-        <source>%n active connection(s) to Bitcoin network</source>
-        <translation><numerusform>%n connessione attiva alla rete Bitcoin</numerusform><numerusform>%n connessioni attive alla rete Bitcoin</numerusform></translation>
+        <source>%n active connection(s) to Feathercoin network</source>
+        <translation>
+			<numerusform>%n connessione attiva alla rete Feathercoin</numerusform>
+			<numerusform>%n connessioni attive alla rete Feathercoin</numerusform>
+		</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>No block source available...</source>
-        <translation>Nessun blocco di codice sorgente disponibile</translation>
+        <translation>Nessun blocco di codice sorgente disponibile...</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -610,17 +620,27 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message numerus="yes">
         <location line="+23"/>
         <source>%n hour(s)</source>
-        <translation><numerusform>%n ora</numerusform><numerusform>%n ore</numerusform></translation>
+        <translation>
+			<numerusform>%n ora</numerusform>
+			<numerusform>%n ore</numerusform>
+		</translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
         <source>%n day(s)</source>
-        <translation><numerusform>%n giorno</numerusform><numerusform>%n giorni</numerusform></translation>
+        <translation>
+			<numerusform>%n giorno</numerusform>
+			<numerusform>%n giorni</numerusform>
+		</translation>
     </message>
     <message numerus="yes">
         <location line="+4"/>
+        <location line="+6"/>
         <source>%n week(s)</source>
-        <translation><numerusform>%n settimana</numerusform><numerusform>%n settimane</numerusform></translation>
+		<translation>
+			<numerusform>%n settimana</numerusform>
+			<numerusform>%n settimane</numerusform>
+		</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -630,7 +650,10 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
     <message numerus="yes">
         <location line="+0"/>
         <source>%n year(s)</source>
-        <translation><numerusform>%n anno</numerusform><numerusform>%n anni</numerusform></translation>
+        <translation>
+			<numerusform>%n anno</numerusform>
+			<numerusform>%n anni</numerusform>
+		</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -663,7 +686,7 @@ Questo prodotto include software sviluppato dal progetto OpenSSL per l&apos;uso 
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-95"/>
         <source>Up to date</source>
         <translation>Aggiornato</translation>
     </message>
@@ -693,7 +716,6 @@ Address: %4
 Quantità: %2
 Tipo: %3
 Indirizzo: %4
-
 </translation>
     </message>
     <message>
@@ -707,9 +729,9 @@ Indirizzo: %4
         <translation>Il portamonete è &lt;b&gt;cifrato&lt;/b&gt; e attualmente &lt;b&gt;bloccato&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../bitcoin.cpp" line="+435"/>
-        <source>A fatal error occurred. Bitcoin can no longer continue safely and will quit.</source>
-        <translation>Riscontrato un errore irreversibile. Bitcoin non può più continuare in sicurezza e verrà terminato.</translation>
+        <location filename="../bitcoin.cpp" line="+441"/>
+        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
+        <translation>Riscontrato un errore irreversibile. Feathercoin non può più continuare in sicurezza e verrà terminato.</translation>
     </message>
 </context>
 <context>
@@ -997,7 +1019,7 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+43"/>
-        <location line="+66"/>
+        <location line="+63"/>
         <source>(no label)</source>
         <translation>(nessuna etichetta)</translation>
     </message>
@@ -1066,8 +1088,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="-5"/>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
-        <translation>L&apos;indirizzo inserito &quot;%1&quot; non è un indirizzo bitcoin valido.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid Feathercoin address.</source>
+        <translation>L&apos;indirizzo inserito &quot;%1&quot; non è un indirizzo Feathercoin valido.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1112,13 +1134,13 @@ Indirizzo: %4
     <name>HelpMessageDialog</name>
     <message>
         <location filename="../forms/helpmessagedialog.ui" line="+19"/>
-        <source>Bitcoin Core - Command-line options</source>
-        <translation>Bitcoin Core - Opzioni linea di comando</translation>
+        <source>Feathercoin Core - Command-line options</source>
+        <translation>Feathercoin Core - Opzioni linea di comando</translation>
     </message>
     <message>
         <location filename="../utilitydialog.cpp" line="+24"/>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -1170,18 +1192,18 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+9"/>
-        <source>Welcome to Bitcoin Core.</source>
-        <translation>Benvenuti su Bitcoin Core.</translation>
+        <source>Welcome to Feathercoin Core.</source>
+        <translation>Benvenuti su Feathercoin Core.</translation>
     </message>
     <message>
         <location line="+26"/>
-        <source>As this is the first time the program is launched, you can choose where Bitcoin Core will store its data.</source>
-        <translation>Visto che questa è la prima volta che il programma viene lanciato, puoi scegliere dove Bitcoin-Qt salverà i suoi dati.</translation>
+        <source>As this is the first time the program is launched, you can choose where Feathercoin Core will store its data.</source>
+        <translation>Visto che questa è la prima volta che il programma viene lanciato, puoi scegliere dove Feathercoin-Qt salverà i suoi dati.</translation>
     </message>
     <message>
         <location line="+10"/>
-        <source>Bitcoin Core will download and store a copy of the Bitcoin block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>Bitcoin Core scaricherà e salverà una copia del block chain di Bitcoin. Almeno %1GB di dati saranno salvati in questa cartella, e aumenteranno col tempo. Anche il portafoglio sarà salvato in questa cartella.</translation>
+        <source>Feathercoin Core will download and store a copy of the Feathercoin block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>Feathercoin Core scaricherà e salverà una copia del block chain di Feathercoin. Almeno %1GB di dati saranno salvati in questa cartella, e aumenteranno col tempo. Anche il portafoglio sarà salvato in questa cartella.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1195,8 +1217,8 @@ Indirizzo: %4
     </message>
     <message>
         <location filename="../intro.cpp" line="+85"/>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1271,13 +1293,13 @@ Indirizzo: %4
     </message>
     <message>
         <location line="-131"/>
-        <source>Automatically start Bitcoin after logging in to the system.</source>
-        <translation>Avvia automaticamente Bitcoin all&apos;accensione del computer</translation>
+        <source>Automatically start Feathercoin after logging in to the system.</source>
+        <translation>Avvia automaticamente Feathercoin all&apos;accensione del computer</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start Bitcoin on system login</source>
-        <translation>&amp;Fai partire Bitcoin all&apos;avvio del sistema</translation>
+        <source>&amp;Start Feathercoin on system login</source>
+        <translation>&amp;Fai partire Feathercoin all&apos;avvio del sistema</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -1300,14 +1322,9 @@ Indirizzo: %4
         <translation>Imposta il numero di thread di verifica script (fino a 16, 0 = auto, &lt;0 = lascia il maggior numero di core liberi, predefinito: 0)</translation>
     </message>
     <message>
-        <location line="+107"/>
-        <source>&amp;Spend unconfirmed change (experts only)</source>
-        <translation>&amp;Spendere resti non confermati (solo per esperti)</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <source>Connect to the Bitcoin network through a SOCKS proxy.</source>
-        <translation>Connetti alla rete Bitcoin attraverso un proxy SOCKS.</translation>
+        <location line="+153"/>
+        <source>Connect to the Feathercoin network through a SOCKS proxy.</source>
+        <translation>Connetti alla rete Feathercoin attraverso un proxy SOCKS.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1320,7 +1337,7 @@ Indirizzo: %4
         <translation>Indirizzo IP del proxy (es: IPv4: 127.0.0.1 / IPv6: ::1)</translation>
     </message>
     <message>
-        <location line="+224"/>
+        <location line="+214"/>
         <source>Active command-line options that override above options:</source>
         <translation>Attiva le opzioni command-line che ignorano queste opzioni:</translation>
     </message>
@@ -1342,7 +1359,17 @@ Indirizzo: %4
     <message>
         <location line="-86"/>
         <source>W&amp;allet</source>
-        <translation>Port&amp;afoglio</translation>
+        <translation>W&amp;allet</translation>
+    </message>
+    <message>
+        <location line="+65"/>
+        <source>Expert</source>
+        <translation>Esperto</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Enable coin &amp;control features</source>
+        <translation>Abilita controlli &amp;modo esperto</translation>
     </message>
     <message>
         <location line="+52"/>
@@ -1350,9 +1377,14 @@ Indirizzo: %4
         <translation>Se disabiliti l&apos;uso di resti non confermati, il resto di una transazione non potrà essere usato fintanto che la transazione non avrà almeno una conferma. Questo influisce anche su come è calcolato il saldo.</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>&amp;Spend unconfirmed change</source>
+        <translation>&amp;Spendi non confermato</translation>
+    </message>
+    <message>
         <location line="+40"/>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Apri automaticamente la porta del client Bitcoin sul router. Questo funziona solo se il router supporta UPnP ed è abilitato.</translation>
+        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Apri automaticamente la porta del client Feathercoin sul router. Questo funziona solo se il router supporta UPnP ed è abilitato.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1421,8 +1453,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting Bitcoin.</source>
-        <translation>La lingua dell&apos;interfaccia utente può essere impostata qui. L&apos;impostazione avrà effetto dopo il riavvio di Bitcoin.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Feathercoin.</source>
+        <translation>La lingua dell&apos;interfaccia utente può essere impostata qui. L&apos;impostazione avrà effetto dopo il riavvio di Feathercoin.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1436,8 +1468,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show Bitcoin addresses in the transaction list or not.</source>
-        <translation>Se mostrare l&apos;indirizzo Bitcoin nella transazione o meno.</translation>
+        <source>Whether to show Feathercoin addresses in the transaction list or not.</source>
+        <translation>Se mostrare l&apos;indirizzo Feathercoin nella transazione o meno.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1450,12 +1482,7 @@ Indirizzo: %4
         <translation>Mostrare/non mostrare le funzionalita&apos; di controllo della moneta.</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Display coin &amp;control features (experts only)</source>
-        <translation>Mostrare funzionalità coin &amp;control (solo per esperti)</translation>
-    </message>
-    <message>
-        <location line="+136"/>
+        <location line="+398"/>
         <source>&amp;OK</source>
         <translation>&amp;OK</translation>
     </message>
@@ -1511,8 +1538,8 @@ Indirizzo: %4
     <message>
         <location line="+50"/>
         <location line="+231"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Le informazioni visualizzate sono datate. Il tuo partafogli verrà sincronizzato automaticamente con il network Bitcoin dopo che la connessione è stabilita, ma questo processo non può essere completato ora.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Le informazioni visualizzate sono datate. Il tuo partafogli verrà sincronizzato automaticamente con il network Feathercoin dopo che la connessione è stabilita, ma questo processo non può essere completato ora.</translation>
     </message>
     <message>
         <location line="-238"/>
@@ -1581,8 +1608,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+1"/>
-        <source>URI can not be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
-        <translation>Impossibile interpretare l&apos;URI! Ciò può essere causato da un indirizzo Bitcoin invalido o da parametri URI non corretti.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid Feathercoin address or malformed URI parameters.</source>
+        <translation>Impossibile interpretare l&apos;URI! Ciò può essere causato da un indirizzo Feathercoin invalido o da parametri URI non corretti.</translation>
     </message>
     <message>
         <location line="+96"/>
@@ -1601,8 +1628,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="-353"/>
-        <source>Cannot start bitcoin: click-to-pay handler</source>
-        <translation>Impossibile avviare bitcoin: gestore click-to-pay</translation>
+        <source>Cannot start Feathercoin: click-to-pay handler</source>
+        <translation>Impossibile avviare Feathercoin: gestore click-to-pay</translation>
     </message>
     <message>
         <location line="+58"/>
@@ -1670,8 +1697,8 @@ Indirizzo: %4
     <message>
         <location filename="../bitcoin.cpp" line="+71"/>
         <location line="+11"/>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1685,8 +1712,8 @@ Indirizzo: %4
     </message>
     <message>
         <location filename="../guiutil.cpp" line="+82"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Inserisci un indirizzo Bitcoin (ad esempio 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <source>Enter a Feathercoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
+        <translation>Inserisci un indirizzo Feathercoin (ad esempio 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
 </context>
 <context>
@@ -1826,11 +1853,13 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+64"/>
+        <location filename="../rpcconsole.cpp" line="-10"/>
         <source>In:</source>
         <translation>Entrata:</translation>
     </message>
     <message>
         <location line="+80"/>
+        <location filename="../rpcconsole.cpp" line="+1"/>
         <source>Out:</source>
         <translation>Uscita:</translation>
     </message>
@@ -1846,8 +1875,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the Bitcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Apri il file di log del debug di Bitcoin dalla cartella attuale. Può richiedere alcuni secondi per file di log grandi.</translation>
+        <source>Open the Feathercoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Apri il file di log del debug di Feathercoin dalla cartella attuale. Può richiedere alcuni secondi per file di log grandi.</translation>
     </message>
     <message>
         <location line="+76"/>
@@ -1856,8 +1885,8 @@ Indirizzo: %4
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-30"/>
-        <source>Welcome to the Bitcoin RPC console.</source>
-        <translation>Benvenuto nella console RPC di Bitcoin</translation>
+        <source>Welcome to the Feathercoin RPC console.</source>
+        <translation>Benvenuto nella console RPC di Feathercoin</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1870,7 +1899,7 @@ Indirizzo: %4
         <translation>Scrivi &lt;b&gt;help&lt;/b&gt; per un riassunto dei comandi disponibili</translation>
     </message>
     <message>
-        <location line="+122"/>
+        <location line="+136"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
@@ -1935,8 +1964,8 @@ Indirizzo: %4
     <message>
         <location line="+14"/>
         <location line="+23"/>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
-        <translation>Un messaggio facoltativo da allegare alla richiesta di pagamento, il quale sarà mostrato quando la richiesta è aperta. Nota: Il messaggio non verrà inviato con il pagamento attraverso il network Bitcoin.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
+        <translation>Un messaggio facoltativo da allegare alla richiesta di pagamento, il quale sarà mostrato quando la richiesta è aperta. Nota: Il messaggio non verrà inviato con il pagamento attraverso il network Feathercoin.</translation>
     </message>
     <message>
         <location line="-7"/>
@@ -1986,7 +2015,7 @@ Indirizzo: %4
         <translation>Mostra</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+14"/>
         <source>Remove the selected entries from the list</source>
         <translation>Rimuovi le voci selezionate dalla lista</translation>
     </message>
@@ -1996,7 +2025,7 @@ Indirizzo: %4
         <translation>Rimuovi</translation>
     </message>
     <message>
-        <location filename="../receivecoinsdialog.cpp" line="+38"/>
+        <location filename="../receivecoinsdialog.cpp" line="+39"/>
         <source>Copy label</source>
         <translation>Copia l&apos;etichetta</translation>
     </message>
@@ -2124,7 +2153,7 @@ Indirizzo: %4
         <location filename="../sendcoinsdialog.cpp" line="+380"/>
         <location line="+80"/>
         <source>Send Coins</source>
-        <translation>Spedisci Bitcoin</translation>
+        <translation>Spedisci Feathercoin</translation>
     </message>
     <message>
         <location line="+76"/>
@@ -2189,7 +2218,7 @@ Indirizzo: %4
     <message>
         <location line="+44"/>
         <source>If this is activated, but the change address is empty or invalid, change will be sent to a newly generated address.</source>
-        <translation>Se questo e&apos; abilitato e l&apos;indirizzo per il resto e&apos; vuoto o invalido, il resto verra&apos; inviato a un nuovo indirizzo bitcoin generato per lo scopo.</translation>
+        <translation>Se questo e&apos; abilitato e l&apos;indirizzo per il resto e&apos; vuoto o invalido, il resto verra&apos; inviato a un nuovo indirizzo Feathercoin generato per lo scopo.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2234,7 +2263,7 @@ Indirizzo: %4
     <message>
         <location filename="../sendcoinsdialog.cpp" line="-229"/>
         <source>Confirm send coins</source>
-        <translation>Conferma la spedizione di bitcoin</translation>
+        <translation>Conferma la spedizione di Feathercoin</translation>
     </message>
     <message>
         <location line="-74"/>
@@ -2331,8 +2360,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+113"/>
-        <source>Warning: Invalid Bitcoin address</source>
-        <translation>Attenzione: Indirizzo Bitcoin non valido</translation>
+        <source>Warning: Invalid Feathercoin address</source>
+        <translation>Attenzione: Indirizzo Feathercoin non valido</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -2443,8 +2472,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+33"/>
-        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
-        <translation>Messaggio che era incluso nel bitcoin URI che sarà memorizzato con la transazione per vostro riferimento. Nota: Questo messaggio non sarà inviato attraverso la rete Bitcoin.</translation>
+        <source>A message that was attached to the Feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
+        <translation>Messaggio che era incluso nel Feathercoin URI che sarà memorizzato con la transazione per vostro riferimento. Nota: Questo messaggio non sarà inviato attraverso la rete Feathercoin.</translation>
     </message>
     <message>
         <location line="+426"/>
@@ -2468,8 +2497,8 @@ Indirizzo: %4
     <name>ShutdownWindow</name>
     <message>
         <location filename="../utilitydialog.cpp" line="+48"/>
-        <source>Bitcoin Core is shutting down...</source>
-        <translation>Bitcoin Core si sta spegnendo...</translation>
+        <source>Feathercoin Core is shutting down...</source>
+        <translation>Feathercoin Core si sta spegnendo...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2496,8 +2525,8 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+18"/>
-        <source>The address to sign the message with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Inserisci un indirizzo Bitcoin (ad esempio 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <source>The address to sign the message with (e.g. 6ds7JKXk2R78az3gP8JFEdHatB5o8sU7Vw)</source>
+        <translation>Inserisci un indirizzo Feathercoin (ad esempio 6ds7JKXk2R78az3gP8JFEdHatB5o8sU7Vw)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2538,7 +2567,7 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this Bitcoin address</source>
+        <source>Sign the message to prove you own this Feathercoin address</source>
         <translation>Firma un messaggio per dimostrare di possedere questo indirizzo</translation>
     </message>
     <message>
@@ -2569,13 +2598,13 @@ Indirizzo: %4
     </message>
     <message>
         <location line="+21"/>
-        <source>The address the message was signed with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Inserisci un indirizzo Bitcoin (ad esempio 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <source>The address the message was signed with (e.g. 6ds7JKXk2R78az3gP8JFEdHatB5o8sU7Vw)</source>
+        <translation>Inserisci un indirizzo Feathercoin (ad esempio 6ds7JKXk2R78az3gP8JFEdHatB5o8sU7Vw)</translation>
     </message>
     <message>
         <location line="+37"/>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
-        <translation>Verifica il messaggio per assicurarsi che sia stato firmato con l&apos;indirizzo Bitcoin specificato</translation>
+        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
+        <translation>Verifica il messaggio per assicurarsi che sia stato firmato con l&apos;indirizzo Feathercoin specificato</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2589,8 +2618,8 @@ Indirizzo: %4
     </message>
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+30"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Inserisci un indirizzo Bitcoin (ad esempio 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <source>Enter a Feathercoin address (e.g. 6ds7JKXk2R78az3gP8JFEdHatB5o8sU7Vw)</source>
+        <translation>Inserisci un indirizzo Feathercoin (ad esempio 6ds7JKXk2R78az3gP8JFEdHatB5o8sU7Vw)</translation>
     </message>
     <message>
         <location line="-1"/>
@@ -2615,7 +2644,7 @@ Indirizzo: %4
         <location line="-80"/>
         <location line="+80"/>
         <source>The entered address does not refer to a key.</source>
-        <translation>L&apos;indirizzo bitcoin inserito non è associato a nessuna chiave.</translation>
+        <translation>L&apos;indirizzo Feathercoin inserito non è associato a nessuna chiave.</translation>
     </message>
     <message>
         <location line="-72"/>
@@ -2668,13 +2697,13 @@ Indirizzo: %4
     <name>SplashScreen</name>
     <message>
         <location filename="../splashscreen.cpp" line="+28"/>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>The Bitcoin Core developers</source>
-        <translation>Gli sviluppatori del Bitcoin Core</translation>
+        <source>The Feathercoin Core developers</source>
+        <translation>Gli sviluppatori del Feathercoin Core</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2725,7 +2754,10 @@ Indirizzo: %4
     <message numerus="yes">
         <location line="+7"/>
         <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, trasmesso attraverso %n nodo</numerusform><numerusform>, trasmesso attraverso %n nodi</numerusform></translation>
+        <translation>
+			<numerusform>, trasmesso attraverso %n nodo</numerusform>
+			<numerusform>, trasmesso attraverso %n nodi</numerusform>
+		</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -2778,7 +2810,10 @@ Indirizzo: %4
     <message numerus="yes">
         <location line="-125"/>
         <source>matures in %n more block(s)</source>
-        <translation><numerusform>matura in %n ulteriore blocco</numerusform><numerusform>matura in altri %n blocchi</numerusform></translation>
+        <translation>
+			<numerusform>matura in %n ulteriore blocco</numerusform>
+			<numerusform>matura in altri %n blocchi</numerusform>
+		</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2827,7 +2862,7 @@ Indirizzo: %4
     <message>
         <location line="+7"/>
         <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Bisogna attendere %1 blocchi prima di spendere I bitcoin generati. Quando è stato generato questo blocco, è stato trasmesso alla rete per aggiungerlo alla catena di blocchi. Se non riesce a entrare nella catena, verrà modificato in &quot;non accettato&quot; e non sarà spendibile. Questo può accadere a volte, se un altro nodo genera un blocco entro pochi secondi del tuo.</translation>
+        <translation>Bisogna attendere %1 blocchi prima di spendere I Feathercoin generati. Quando è stato generato questo blocco, è stato trasmesso alla rete per aggiungerlo alla catena di blocchi. Se non riesce a entrare nella catena, verrà modificato in &quot;non accettato&quot; e non sarà spendibile. Questo può accadere a volte, se un altro nodo genera un blocco entro pochi secondi del tuo.</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2867,7 +2902,10 @@ Indirizzo: %4
     <message numerus="yes">
         <location line="-37"/>
         <source>Open for %n more block(s)</source>
-        <translation><numerusform>Aperto per %n altro blocco</numerusform><numerusform>Aperto per altri %n blocchi</numerusform></translation>
+        <translation>
+			<numerusform>Aperto per %n altro blocco</numerusform>
+			<numerusform>Aperto per altri %n blocchi</numerusform>
+		</translation>
     </message>
     <message>
         <location line="+72"/>
@@ -2918,7 +2956,10 @@ Indirizzo: %4
     <message numerus="yes">
         <location line="-21"/>
         <source>Open for %n more block(s)</source>
-        <translation><numerusform>Aperto per %n altro blocco</numerusform><numerusform>Aperto per altri %n blocchi</numerusform></translation>
+        <translation>
+			<numerusform>Aperto per %n altro blocco</numerusform>
+			<numerusform>Aperto per altri %n blocchi</numerusform>
+		</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3208,7 +3249,7 @@ Indirizzo: %4
     <message>
         <location filename="../walletmodel.cpp" line="+245"/>
         <source>Send Coins</source>
-        <translation>Spedisci Bitcoin</translation>
+        <translation>Spedisci Feathercoin</translation>
     </message>
 </context>
 <context>
@@ -3255,7 +3296,7 @@ Indirizzo: %4
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>Feathercoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+223"/>
         <source>Usage:</source>
@@ -3264,44 +3305,35 @@ Indirizzo: %4
     <message>
         <location line="-55"/>
         <source>List commands</source>
-        <translation>Lista comandi
-</translation>
+        <translation>Lista comandi</translation>
     </message>
     <message>
         <location line="-14"/>
         <source>Get help for a command</source>
-        <translation>Aiuto su un comando
-</translation>
+        <translation>Aiuto su un comando</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>Options:</source>
-        <translation>Opzioni:
-</translation>
+        <translation>Opzioni:</translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation>Specifica il file di configurazione (predefinito: bitcoin.conf)</translation>
+        <source>Specify configuration file (default: feathercoin.conf)</source>
+        <translation>Specifica il file di configurazione (predefinito: feathercoin.conf)</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Specify pid file (default: bitcoind.pid)</source>
-        <translation>Specifica il file pid (predefinito: bitcoind.pid)</translation>
+        <source>Specify pid file (default: feathercoin.pid)</source>
+        <translation>Specifica il file pid (predefinito: feathercoin.pid)</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Specify data directory</source>
-        <translation>Specifica la cartella dati
-</translation>
+        <translation>Specifica la cartella dati</translation>
     </message>
     <message>
-        <location line="-9"/>
-        <source>Set database cache size in megabytes (default: 25)</source>
-        <translation>Imposta la dimensione cache del database in megabyte (predefinita: 25)</translation>
-    </message>
-    <message>
-        <location line="-26"/>
+        <location line="-35"/>
         <source>Listen for connections on &lt;port&gt; (default: 8333 or testnet: 18333)</source>
         <translation>Ascolta le connessioni JSON-RPC su &lt;porta&gt; (predefinita: 8333 o testnet: 18333)</translation>
     </message>
@@ -3343,20 +3375,17 @@ Indirizzo: %4
     <message>
         <location line="+45"/>
         <source>Accept command line and JSON-RPC commands</source>
-        <translation>Accetta da linea di comando e da comandi JSON-RPC
-</translation>
+        <translation>Accetta da linea di comando e da comandi JSON-RPC</translation>
     </message>
     <message>
         <location line="+81"/>
         <source>Run in the background as a daemon and accept commands</source>
-        <translation>Esegui in background come demone e accetta i comandi
-</translation>
+        <translation>Esegui in background come demone e accetta i comandi</translation>
     </message>
     <message>
         <location line="+40"/>
         <source>Use the test network</source>
-        <translation>Utilizza la rete di prova
-</translation>
+        <translation>Utilizza la rete di prova</translation>
     </message>
     <message>
         <location line="-120"/>
@@ -3364,28 +3393,28 @@ Indirizzo: %4
         <translation>Accetta connessioni dall&apos;esterno (predefinito: 1 se no -proxy o -connect)</translation>
     </message>
     <message>
-        <location line="-95"/>
+        <location line="-98"/>
         <source>%s, you must set a rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=feathercoinrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;Feathercoin Alert&quot; admin@foo.com
 </source>
         <translation>%s, devi impostare una rpcpassword nel file di configurazione:
 %s
 Si raccomanda l&apos;uso della seguente password generata casualmente:
-rpcuser=bitcoinrpc
+rpcuser=feathercoinrpc
 rpcpassword=%s
 (non serve ricordare questa password)
 Il nome utente e la password NON DEVONO essere uguali.
 Se il file non esiste, crealo impostando i permessi di solo scrittura per il proprietario nel file.
 Si raccomanda anche di impostare alertnotify così sarai avvisato di eventuali problemi;
-per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@foo.com
+per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Feathercoin&quot; admin@foo.com
 </translation>
     </message>
     <message>
@@ -3404,12 +3433,7 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
         <translation>Collega all&apos;indirizzo indicato e resta sempre in ascolto su questo. Usa la notazione [host]:porta per l&apos;IPv6</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Cannot obtain a lock on data directory %s. Bitcoin is probably already running.</source>
-        <translation>Non è possibile ottenere i dati sulla cartella %s. Probabilmente Bitcoin è già in esecuzione.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Enter regression test mode, which uses a special chain in which blocks can be solved instantly. This is intended for regression testing tools and app development.</source>
         <translation>Entra in modalità di test di regressione, la quale usa una speciale catena in cui i blocchi sono risolti istantaneamente. Questo è fatto per lo sviluppo di strumenti e applicazioni per test di regressione.</translation>
     </message>
@@ -3420,8 +3444,13 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+3"/>
+        <source>Error: Listening for incoming connections failed (listen returned error %d)</source>
+        <translation>Errore: Connessioni in ricezione fallita (returned error %d)</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>Errore: la transazione è stata rifiutata. Ciò accade se alcuni bitcoin nel portamonete sono stati già spesi, ad esempio se è stata usata una copia del file wallet.dat e i bitcoin sono stati spesi dalla copia ma non segnati come spesi qui.</translation>
+        <translation>Errore: la transazione è stata rifiutata. Ciò accade se alcuni Feathercoin nel portamonete sono stati già spesi, ad esempio se è stata usata una copia del file wallet.dat e i Feathercoin sono stati spesi dalla copia ma non segnati come spesi qui.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -3439,7 +3468,12 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
         <translation>Questa versione è una compilazione pre-rilascio - usala a tuo rischio - non utilizzarla per la generazione o per applicazioni di commercio</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+3"/>
+        <source>Unable to bind to %s on this computer. Feathercoin Core is probably already running.</source>
+        <translation>Unable to bind to %s on this computer. Feathercoin Core is probably already running.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: -proxy)</source>
         <translation>Usa un SOCKS5 proxy separato per raggiungere servizi nascosti di Tor (predefinito: -proxy)</translation>
     </message>
@@ -3450,8 +3484,8 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+3"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Bitcoin will not work properly.</source>
-        <translation>Attenzione: si prega di controllare che la data del computer e l&apos;ora siano corrette. Se il vostro orologio è sbagliato Bitcoin non funziona correttamente.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Feathercoin will not work properly.</source>
+        <translation>Attenzione: si prega di controllare che la data del computer e l&apos;ora siano corrette. Se il vostro orologio è sbagliato Feathercoin non funziona correttamente.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3485,13 +3519,13 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+1"/>
-        <source>Bitcoin Core Daemon</source>
-        <translation>Bitcoin Core Daemon</translation>
+        <source>Feathercoin Core Daemon</source>
+        <translation>Feathercoin Core Daemon</translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Bitcoin RPC client version</source>
-        <translation>Versione Bitcoin RPC client</translation>
+        <source>Feathercoin RPC client version</source>
+        <translation>Versione Feathercoin RPC client</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3616,7 +3650,7 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Failed to write to coin database</source>
-        <translation>Scrittura nel database dei bitcoin fallita</translation>
+        <translation>Scrittura nel database fallita</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3641,7 +3675,7 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="+1"/>
         <source>Generate coins (default: 0)</source>
-        <translation>Genera Bitcoin (predefinito: 0)</translation>
+        <translation>Genera Feathercoin (predefinito: 0)</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -3695,8 +3729,13 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+1"/>
-        <source>Send command to Bitcoin server</source>
-        <translation>Invia comando al server Bitcoin</translation>
+        <source>Send command to Feathercoin server</source>
+        <translation>Invia comando al server Feathercoin</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Set database cache size in megabytes (%d to %d, default: %d)</source>
+        <translation>Set database cache size in megabytes (%d to %d, default: %d)</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3720,8 +3759,8 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+1"/>
-        <source>Start Bitcoin server</source>
-        <translation>Avvia server Bitcoin</translation>
+        <source>Start Feathercoin server</source>
+        <translation>Avvia server Feathercoin</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3730,8 +3769,8 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+10"/>
-        <source>Usage (deprecated, use bitcoin-cli):</source>
-        <translation>Usage (deprecato, usare bitcoin-cli):</translation>
+        <source>Usage (deprecated, use feathercoin-cli):</source>
+        <translation>Usage (deprecato, usare feathercoin-cli):</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3772,6 +3811,11 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
         <location line="-80"/>
         <source>Imports blocks from external blk000??.dat file</source>
         <translation>Importa blocchi da un file blk000??.dat esterno</translation>
+    </message>
+    <message>
+        <location line="-126"/>
+        <source>Cannot obtain a lock on data directory %s. Feathercoin Core is probably already running.</source>
+        <translation>Cannot obtain a lock on data directory %s. Feathercoin Core is probably already running.</translation>
     </message>
     <message>
         <location line="-106"/>
@@ -3835,8 +3879,8 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+9"/>
-        <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
-        <translation>Opzioni SSL: (vedi il wiki di Bitcoin per le istruzioni di configurazione SSL)</translation>
+        <source>SSL options: (see the Feathercoin Wiki for SSL setup instructions)</source>
+        <translation>Opzioni SSL: (vedi il wiki di Feathercoin per le istruzioni di configurazione SSL)</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -3896,8 +3940,7 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="+2"/>
         <source>Username for JSON-RPC connections</source>
-        <translation>Nome utente per connessioni JSON-RPC
-</translation>
+        <translation>Nome utente per connessioni JSON-RPC</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3933,8 +3976,7 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="-71"/>
         <source>Allow JSON-RPC connections from specified IP address</source>
-        <translation>Consenti connessioni JSON-RPC dall&apos;indirizzo IP specificato
-</translation>
+        <translation>Consenti connessioni JSON-RPC dall&apos;indirizzo IP specificato</translation>
     </message>
     <message>
         <location line="+81"/>
@@ -3959,14 +4001,12 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="-11"/>
         <source>Rescan the block chain for missing wallet transactions</source>
-        <translation>Ripeti analisi della catena dei blocchi per cercare le transazioni  mancanti dal portamonete
-</translation>
+        <translation>Ripeti analisi della catena dei blocchi per cercare le transazioni  mancanti dal portamonete</translation>
     </message>
     <message>
         <location line="+39"/>
         <source>Use OpenSSL (https) for JSON-RPC connections</source>
-        <translation>Utilizzare OpenSSL (https) per le connessioni  JSON-RPC
-</translation>
+        <translation>Utilizzare OpenSSL (https) per le connessioni  JSON-RPC</translation>
     </message>
     <message>
         <location line="-31"/>
@@ -3981,8 +4021,7 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="+17"/>
         <source>This help message</source>
-        <translation>Questo messaggio di aiuto
-</translation>
+        <translation>Questo messaggio di aiuto</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3992,8 +4031,7 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="-109"/>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
-        <translation>Consenti ricerche DNS per aggiungere nodi e collegare
-</translation>
+        <translation>Consenti ricerche DNS per aggiungere nodi e collegare</translation>
     </message>
     <message>
         <location line="+61"/>
@@ -4007,13 +4045,13 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     </message>
     <message>
         <location line="+1"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of Bitcoin</source>
-        <translation>Errore caricamento wallet.dat: il wallet richiede una versione nuova di Bitcoin</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Feathercoin</source>
+        <translation>Errore caricamento wallet.dat: il wallet richiede una versione nuova di Feathercoin</translation>
     </message>
     <message>
         <location line="+99"/>
-        <source>Wallet needed to be rewritten: restart Bitcoin to complete</source>
-        <translation>Il portamonete deve essere riscritto: riavviare Bitcoin per completare</translation>
+        <source>Wallet needed to be rewritten: restart Feathercoin to complete</source>
+        <translation>Il portamonete deve essere riscritto: riavviare Feathercoin per completare</translation>
     </message>
     <message>
         <location line="-101"/>
@@ -4068,15 +4106,10 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
     <message>
         <location line="-63"/>
         <source>Add a node to connect to and attempt to keep the connection open</source>
-        <translation>Elérendő csomópont megadása and attempt to keep the connection open</translation>
+        <translation>Aggiungi un nodo al collegamento e tenta di tenere aperta la connessione</translation>
     </message>
     <message>
-        <location line="-32"/>
-        <source>Unable to bind to %s on this computer. Bitcoin is probably already running.</source>
-        <translation>Impossibile collegarsi alla %s su questo computer. Probabilmente Bitcoin è già in esecuzione.</translation>
-    </message>
-    <message>
-        <location line="+96"/>
+        <location line="-64"/>
         <source>Loading wallet...</source>
         <translation>Caricamento portamonete...</translation>
     </message>
@@ -4115,7 +4148,9 @@ per esempio: alertnotify=echo %%s | mail -s &quot;Allarme Bitcoin&quot; admin@fo
         <source>You must set rpcpassword=&lt;password&gt; in the configuration file:
 %s
 If the file does not exist, create it with owner-readable-only file permissions.</source>
-        <translation>Devi settare rpcpassword=&lt;password&gt; nel file di configurazione: %s Se il file non esiste, crealo con i permessi di amministratore</translation>
+        <translation>Devi settare rpcpassword=&lt;password&gt; nel file di configurazione:
+%s
+Se il file non esiste, crealo con i permessi di amministratore</translation>
     </message>
 </context>
 </TS>

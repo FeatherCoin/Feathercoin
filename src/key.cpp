@@ -285,6 +285,20 @@ CPubKey CKey::GetPubKey() const
     return ret;
 }
 
+std::vector<unsigned char> CKey::GetPubKeyU(bool fCompressed) const 
+{
+    if (fCompressed)
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_COMPRESSED);
+    else
+        EC_KEY_set_conv_form(pkey, POINT_CONVERSION_UNCOMPRESSED);
+
+    int nSize = i2o_ECPublicKey(pkey, NULL);
+    std::vector<unsigned char> pubKey(nSize, 0);
+    unsigned char* pBegin = &pubKey[0];
+    i2o_ECPublicKey(pkey, &pBegin);
+    return pubKey;
+}
+
 bool CKey::Sign(uint256 hash, std::vector<unsigned char>& vchSig)
 {
     unsigned int nSize = ECDSA_size(pkey);
@@ -479,3 +493,8 @@ bool ECC_InitSanityCheck() {
     // TODO Is there more EC functionality that could be missing?
     return true;
 }
+
+
+
+
+

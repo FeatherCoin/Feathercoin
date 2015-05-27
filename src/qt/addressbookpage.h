@@ -83,6 +83,8 @@ private slots:
     void on_copyPubKey_clicked();
     /** Copy private key of currently selected address to clipboard */
     void on_copyPriKey_clicked();
+    /** Copy a serialization of just the secret parameter (32 bytes) to clipboard */
+    void on_copySecKey_clicked();
     /** Open the sign message tab in the Sign/Verify Message dialog with currently selected address */
     void on_signMessage_clicked();
     /** Open the verify message tab in the Sign/Verify Message dialog with currently selected address */

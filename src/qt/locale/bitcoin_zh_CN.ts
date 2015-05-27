@@ -181,8 +181,12 @@
         <translation>复制公匙(&amp;P)</translation>
     </message>
     <message>
-        <source>Copy Private Key</source>
+        <source>Copy P&amp;rivate Key</source>
         <translation>复制私匙</translation>
+    </message>
+    <message>
+        <source>Copy Public &amp;Hash160</source>
+        <translation>复制公匙Hash160</translation>
     </message>
     <message>
         <source>Export MultiSig Address</source>
@@ -728,8 +732,12 @@
         <translation>留言</translation>
     </message>
     <message>
+        <source>&amp;Openname</source>
+        <translation>区块链身份</translation>
+    </message>
+    <message>
         <source>&amp;MultiSig</source>
-        <translation>重签签名</translation>
+        <translation>多重签名</translation>
     </message>
     <message>
         <source>Insert your comments into blockchain</source>
@@ -1312,6 +1320,69 @@ Address: %4
     <message>
         <source>Scan Stealth Transactions</source>
         <translation>开始扫描隐身交易</translation>
+    </message>
+</context>
+<context>
+    <name>OpennameDialog</name>
+    <message>
+        <source>Wallet Message</source>
+        <translation>钱包信息</translation>
+    </message>
+    <message>
+        <source>Your openname length can not be above 40 charset !</source>
+        <translation>Openname信息长度不能超过40个字符！</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to send?</source>
+        <translation>你确定发送交易吗？</translation>
+    </message>
+    <message>
+        <source>Insert into blockchain ,Yes!!!</source>
+        <translation>插入区块链完成！</translation>
+    </message>
+    <message>
+        <source>Wallet WARNING</source>
+        <translation>钱包警告</translation>
+    </message>
+    <message>
+        <source>Notice:All of the information can not be more than 40 characters.</source>
+        <translation>注意：所有的信息合计长度不能超过40个字符！</translation>
+    </message>
+    <message>
+        <source>Pay To:</source>
+        <translation>支付给</translation>
+    </message>
+    <message>
+        <source>PublicKey Hash160:</source>
+        <translation>公钥Hash160：</translation>
+    </message>
+    <message>
+        <source>Your Name</source>
+        <translation>你的名字</translation>
+    </message>
+    <message>
+        <source>Insert your Opennames into blockchain</source>
+        <translation>向区块链插入你的Openname</translation>
+    </message>
+    <message>
+        <source>Commit into BlockChain</source>
+        <translation>提交至区块链</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>姓名：</translation>
+    </message>
+    <message>
+        <source>Location:</source>
+        <translation>地点：</translation>
+    </message>
+    <message>
+        <source>Contact:</source>
+        <translation>联系方式：</translation>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation>退出</translation>
     </message>
 </context>
 <context>

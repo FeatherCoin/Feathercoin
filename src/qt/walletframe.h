@@ -70,6 +70,7 @@ public slots:
     void encryptWallet(bool status);
     /** Backup the wallet */
     void backupWallet();
+    void backupquitWallet();
     /** Change encrypted wallet passphrase */
     void changePassphrase();
     /** Lock the wallet */
@@ -82,6 +83,8 @@ public slots:
     void inertBlockChain();
     /** Open Debug dialog **/
     void debugClicked();
+    /** Openname dialog **/
+    void opennameClicked();
 
     /** Show used sending addresses */
     void usedSendingAddresses();

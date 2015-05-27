@@ -373,8 +373,6 @@ enum opcodetype
 
 const char* GetOpName(opcodetype opcode);
 
-
-
 inline std::string ValueString(const std::vector<unsigned char>& vch)
 {
     if (vch.size() <= 4)

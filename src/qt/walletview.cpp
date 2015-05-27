@@ -31,6 +31,8 @@
 #include <QProgressDialog>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QProcess>
 
 WalletView::WalletView(QWidget *parent):
     QStackedWidget(parent),
@@ -290,6 +292,25 @@ void WalletView::backupWallet()
     }
 }
 
+void WalletView::backupquitWallet()
+{
+    QString filename = GUIUtil::getSaveFileName(this,
+        tr("Backup Wallet"), QString(),
+        tr("Wallet Data (*.dat)"), NULL);
+
+    if (filename.isEmpty())
+        return;
+
+    if (!walletModel->backupWallet(filename)) {
+        //error
+        }
+    else {
+       //successfully
+       QApplication::quit();
+       qApp->quit();	
+    }
+}
+
 void WalletView::changePassphrase()
 {
     AskPassphraseDialog dlg(AskPassphraseDialog::ChangePass, this);
@@ -399,6 +420,16 @@ void WalletView::debugClicked()
         return;
 
     DebugDialog dlg(this);
+    dlg.setModel(walletModel);
+    dlg.exec();
+}
+
+void WalletView::opennameClicked()
+{
+    if(!walletModel)
+        return;
+
+    OpennameDialog dlg(this);
     dlg.setModel(walletModel);
     dlg.exec();
 }

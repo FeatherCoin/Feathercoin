@@ -221,7 +221,7 @@ QT_TRANSLATE_NOOP("bitcoin-core", "Rescan the block chain for missing wallet tra
 QT_TRANSLATE_NOOP("bitcoin-core", "Rescanning..."),
 QT_TRANSLATE_NOOP("bitcoin-core", "Run a thread to flush wallet periodically (default: 1)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Run in the background as a daemon and accept commands"),
-QT_TRANSLATE_NOOP("bitcoin-core", "SSL options: (see the Bitcoin Wiki for SSL setup instructions)"),
+QT_TRANSLATE_NOOP("bitcoin-core", "SSL options: (see the Feathercoin Wiki for SSL setup instructions)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Select SOCKS version for -proxy (4 or 5, default: 5)"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Send command to Feathercoin Core"),
 QT_TRANSLATE_NOOP("bitcoin-core", "Send commands to node running on <ip> (default: 127.0.0.1)"),

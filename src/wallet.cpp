@@ -1993,7 +1993,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
         LogPrintf("Note: itTxA=%s\n", HexStr(itTxA,itTxA).c_str());//使用迭代器
         *itTxA++;//跨过操作符
         vchEphemPKtt.assign(itTxA, itTxA + 33);
-        vchEphemPK.assign(itTxA, itTxA + 33);
+        vchEphemPK.assign(itTxA, itTxA + 33);  //我补充的代码，关键，这个输出不能是空，应该是ephem_pubkey
         LogPrintf("Note: txout.scriptPubKey,again vchEphemPKtt=%s\n", HexStr(vchEphemPKtt).c_str());
         LogPrintf("Note: txout.scriptPubKey,again vchEphemPK=%s\n", HexStr(vchEphemPK).c_str());
         
@@ -2910,7 +2910,7 @@ void AddFixedChangeAddress(const CKeyID &changeAddress)
  *  for shared wallet
  */
 
-bool CWallet::SelectSharedCoins(int64 nTargetValue, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64& nValueRet, const CCoinControl* coinControl) const
+bool CWallet::SelectSharedCoins(int64 nTargetValue, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64_t& nValueRet, const CCoinControl* coinControl) const
 {
     vector<COutput> vCoins;
     AvailableSharedCoins(vCoins, false, coinControl);
@@ -2967,7 +2967,7 @@ bool CWallet::CreateRawTransaction(const std::vector<std::pair<CScript, int64> >
 
     // Choose coins to use
     set<pair<const CWalletTx*,unsigned int> > setCoins;
-    int64 nValueIn = 0;
+    int64_t nValueIn = 0;
     if ( isMultiSig )
     {
         if (!SelectSharedCoins(nTotalValue, setCoins, nValueIn, coinControl))

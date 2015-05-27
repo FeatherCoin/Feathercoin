@@ -176,6 +176,13 @@ void WalletFrame::backupWallet()
         walletView->backupWallet();
 }
 
+void WalletFrame::backupquitWallet()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->backupquitWallet();
+}
+
 void WalletFrame::changePassphrase()
 {
     WalletView *walletView = currentWalletView();
@@ -216,6 +223,13 @@ void WalletFrame::debugClicked()
     WalletView *walletView = currentWalletView();
     if (walletView)
         walletView->debugClicked();
+}
+
+void WalletFrame::opennameClicked()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->opennameClicked();
 }
 
 void WalletFrame::usedSendingAddresses()

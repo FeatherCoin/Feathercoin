@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OpennameDialog</class>
+ <widget class="QDialog" name="OpennameDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>556</width>
+    <height>375</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Insert your Opennames into blockchain</string>
+  </property>
+  <widget class="QPushButton" name="insertButton">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>320</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Commit into BlockChain</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../feathercoin.qrc">
+     <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>415</y>
+     <width>81</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::NoButton</set>
+   </property>
+   <property name="centerButtons">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtName">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>73</y>
+     <width>451</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Your Name</string>
+   </property>
+   <property name="statusTip">
+    <string>Your Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblName">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>77</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Name:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblLocation">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>120</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Location:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>320</y>
+     <width>81</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16177186</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../feathercoin.qrc">
+     <normaloff>:/icons/quit</normaloff>:/icons/quit</iconset>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtLocation">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>115</y>
+     <width>451</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblContact">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>161</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Contact:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtContact">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>158</y>
+     <width>451</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblNotice">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>561</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Notice:All of the information can not be more than 40 characters.</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOperations">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>198</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Operations:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmbOpt">
+   <property name="geometry">
+    <rect>
+     <x>115</x>
+     <y>197</y>
+     <width>131</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblPayTo">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>40</y>
+     <width>54</width>
+     <height>12</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pay To:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtPayAdress">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>40</y>
+     <width>451</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Your Name</string>
+   </property>
+   <property name="statusTip">
+    <string>Your Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblNamePrivkey">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>240</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PublicKey Hash160:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtNameAddress">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>239</y>
+     <width>401</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Your Name</string>
+   </property>
+   <property name="statusTip">
+    <string>Your Name</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../feathercoin.qrc"/>
+ </resources>
+ <connections/>
+</ui>

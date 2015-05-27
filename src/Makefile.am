@@ -30,6 +30,7 @@ BITCOIN_CORE_H = \
   auxpow.h \
   allocators.h \
   base58.h bignum.h \
+  base40.h \
   bloom.h \
   chainparams.h \
   checkpoints.h \

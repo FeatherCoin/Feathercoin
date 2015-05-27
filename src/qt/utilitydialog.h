@@ -18,6 +18,7 @@ namespace Ui {
     class AboutDialog;
     class PaperWalletDialog;
     class CommentDialog;
+    class OpennameDialog;
     class DebugDialog;
     class HelpMessageDialog;
 }
@@ -75,6 +76,30 @@ public:
 
 private:
     Ui::CommentDialog *ui;
+    WalletModel *model;
+    void processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg = QString());
+
+private slots:
+    void on_insertButton_clicked();
+    void on_pushButton_clicked();
+    
+signals:
+    void message(const QString &title, const QString &message, unsigned int style);
+};
+
+/** "openname" dialog box */
+class OpennameDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit OpennameDialog(QWidget *parent);
+    ~OpennameDialog();
+
+    void setModel(WalletModel *model);
+
+private:
+    Ui::OpennameDialog *ui;
     WalletModel *model;
     void processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg = QString());
 
