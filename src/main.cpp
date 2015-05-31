@@ -2515,20 +2515,32 @@ bool CBlockHeader::CheckProofOfWork(int nHeight) const
 	if (TestNet())
 	{
 		 //work in testnet
+			if (nHeight==INT_MAX)
+			{
+					if (!::CheckProofOfWork(GetPoWHashS(), nBits))
+					{
+							if (!::CheckProofOfWork(GetPoWHash(), nBits))
+							{
+									LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
+							    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: INT_MAX proof of work failed.");	
+							}
+					}
+					return true;
+			}			
 			if (nHeight>=10)
 			{
 				if (!::CheckProofOfWork(GetPoWHash(), nBits))
 				{
-						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
-				    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: proof of work failed.");	
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash in testnet, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHash in testnet: proof of work failed.");	
 				}
 			}
 			else
 			{
 				if (!::CheckProofOfWork(GetPoWHashS(), nBits))
 				{
-						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS, nHeight=%i \n",nHeight);
-				    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS: proof of work failed.");	
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS in testnet, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS in testnet: proof of work failed.");	
 				}
 			}
 	}
@@ -2551,16 +2563,16 @@ bool CBlockHeader::CheckProofOfWork(int nHeight) const
 			{
 				if (!::CheckProofOfWork(GetPoWHash(), nBits))
 				{
-						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
-				    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: proof of work failed.");	
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash in mainnet, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHash in mainnet: proof of work failed.");	
 				}
 			}
 			else
 			{
 				if (!::CheckProofOfWork(GetPoWHashS(), nBits))
 				{
-						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS, nHeight=%i \n",nHeight);
-				    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS: proof of work failed.");	
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS in mainnet, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS in mainnet: proof of work failed.");	
 				}
 			}
 	}
