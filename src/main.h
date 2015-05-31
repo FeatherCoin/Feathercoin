@@ -123,7 +123,10 @@ static const unsigned char REJECT_DUST = 0x41;
 static const unsigned char REJECT_INSUFFICIENTFEE = 0x42;
 static const unsigned char REJECT_CHECKPOINT = 0x43;
 
-static const char* OPENNAME_MAGIC_BYTES_MAINSET="08";
+//static const char* OPENNAME_MAGIC_BYTES_MAINSET="08";
+static const unsigned char OPENNAME_MAGIC_BYTES_MAINSET=0x08;
+//static const char* OPENNAME_MAGIC_BYTES_TESTSET="88";
+static const unsigned char OPENNAME_MAGIC_BYTES_TESTSET=0x88;
 static const char* OPENNAME_NAME_PREORDER="a";
 static const char* OPENNAME_NAME_REGISTRATION="b";
 static const char* OPENNAME_NAME_UPDATE="c";

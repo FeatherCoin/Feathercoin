@@ -599,7 +599,7 @@ bool IsStandardTx(const CTransaction& tx, string& reason)
     }
 
     unsigned int nDataOut = 0;
-    unsigned int nTxnOut = 0;
+    //unsigned int nTxnOut = 0;
     
     txnouttype whichType;
     BOOST_FOREACH(const CTxOut& txout, tx.vout) {
@@ -2306,51 +2306,6 @@ void static FindMostWorkChain() {
 //for 0.8.7 ACP
 bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 {
-    LOCK(cs_main);
-    CBlockIndex *pindexOldTip = chainActive.Tip();
-    bool fComplete = false;
-    while (!fComplete) {
-        FindMostWorkChain();
-        fComplete = true;
-
-        // Check whether we have something to do.
-        if (chainMostWork.Tip() == NULL) break;
-
-        // Disconnect active blocks which are no longer in the best chain.
-        while (chainActive.Tip() && !chainMostWork.Contains(chainActive.Tip())) {
-            if (!DisconnectTip(state))
-                return false;
-        }
-
-        // Connect new blocks.
-        while (!chainActive.Contains(chainMostWork.Tip())) {
-            CBlockIndex *pindexConnect = chainMostWork[chainActive.Height() + 1];
-            //if (!ConnectTip(state, pindexConnect)) {
-            if (!ConnectTip(state, pindexNew)) {
-                if (state.IsInvalid()) {
-                    // The block violates a consensus rule.
-                    if (!state.CorruptionPossible())
-                        InvalidChainFound(chainMostWork.Tip());
-                    fComplete = false;
-                    state = CValidationState();
-                    break;
-                } else {
-                    // A system error occurred (disk space, database error, ...).
-                    return false;
-                }
-            }
-        }
-    }
-
-    if (chainActive.Tip() != pindexOldTip) {
-        std::string strCmd = GetArg("-blocknotify", "");
-        if (!IsInitialBlockDownload() && !strCmd.empty())
-        {
-            boost::replace_all(strCmd, "%s", chainActive.Tip()->GetBlockHash().GetHex());
-            boost::thread t(runCommand, strCmd); // thread runs free
-        }
-    }
-
     return true;
 }
 
@@ -2557,35 +2512,58 @@ int GetAuxPowStartBlock()
 bool CBlockHeader::CheckProofOfWork(int nHeight) const
 {	
 	//LogPrintf("CBlockHeader::CheckProofOfWork(), nHeight=%i \n",nHeight);
-	if (nHeight==INT_MAX)
+	if (TestNet())
 	{
-			if (!::CheckProofOfWork(GetPoWHashS(), nBits))
+		 //work in testnet
+			if (nHeight>=10)
 			{
-					if (!::CheckProofOfWork(GetPoWHash(), nBits))
-					{
-							LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
-					    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: INT_MAX proof of work failed.");	
-					}
+				if (!::CheckProofOfWork(GetPoWHash(), nBits))
+				{
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: proof of work failed.");	
+				}
 			}
-			return true;
-	}
-	
-	if (nHeight>=nForkFour)
-	{
-		if (!::CheckProofOfWork(GetPoWHash(), nBits))
-		{
-				LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
-		    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: proof of work failed.");	
-		}
+			else
+			{
+				if (!::CheckProofOfWork(GetPoWHashS(), nBits))
+				{
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS: proof of work failed.");	
+				}
+			}
 	}
 	else
 	{
-		if (!::CheckProofOfWork(GetPoWHashS(), nBits))
-		{
-				LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS, nHeight=%i \n",nHeight);
-		    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS: proof of work failed.");	
-		}
-	}		
+		  //work in mainnet
+			if (nHeight==INT_MAX)
+			{
+					if (!::CheckProofOfWork(GetPoWHashS(), nBits))
+					{
+							if (!::CheckProofOfWork(GetPoWHash(), nBits))
+							{
+									LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
+							    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: INT_MAX proof of work failed.");	
+							}
+					}
+					return true;
+			}	
+			if (nHeight>=nForkFour)
+			{
+				if (!::CheckProofOfWork(GetPoWHash(), nBits))
+				{
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHash, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: proof of work failed.");	
+				}
+			}
+			else
+			{
+				if (!::CheckProofOfWork(GetPoWHashS(), nBits))
+				{
+						LogPrintf("CBlockHeader::CheckProofOfWork(),GetPoWHashS, nHeight=%i \n",nHeight);
+				    return error("CBlockHeader::CheckProofOfWork() GetPoWHashS: proof of work failed.");	
+				}
+			}
+	}
 	return true;
 }
 
