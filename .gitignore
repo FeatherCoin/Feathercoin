@@ -51,8 +51,8 @@ src/qt/test/moc*.cpp
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-bitcoin-qt
-Bitcoin-Qt.app
+feathercoin-qt
+Feathercoin-Qt.app
 
 # Unit-tests
 Makefile.test
