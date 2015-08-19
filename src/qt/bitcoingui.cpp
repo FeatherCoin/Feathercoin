@@ -488,6 +488,10 @@ void BitcoinGUI::createToolBars()
         toolbar->addAction(accountReportAction);
         toolbar->addAction(multiSigAction);
         overviewAction->setChecked(true);
+        QPalette palette;
+        palette.setBrush(QPalette::Background,QBrush(Qt::lightGray));
+        toolbar->setPalette(palette);
+        toolbar->setAutoFillBackground(true);
     }
 }
 
