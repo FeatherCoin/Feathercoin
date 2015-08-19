@@ -78,6 +78,8 @@ public:
         vSeeds.push_back(CDNSSeedData("block.ftc-c.com", "block.ftc-c.com"));
         vSeeds.push_back(CDNSSeedData("pool.ftc-c.com", "pool.ftc-c.com"));
         vSeeds.push_back(CDNSSeedData("feathercoin.com", "dnsseed.feathercoin.com"));
+        vSeeds.push_back(CDNSSeedData("dnsseed.alltheco.in", "dnsseed.alltheco.in"));
+        vSeeds.push_back(CDNSSeedData("dnsseed.feathercoin.com", "dnsseed.feathercoin.com"));
 
         //how to do feathercoin ?
         base58Prefixes[PUBKEY_ADDRESS] = list_of(14); // FeatherCoin addresses start with F
