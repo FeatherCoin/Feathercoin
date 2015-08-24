@@ -216,7 +216,8 @@ bool CBitcoinAddress::Set(const CTxDestination &dest) {
 bool CBitcoinAddress::IsValid() const {
     bool fCorrectSize = vchData.size() == 20;
     bool fKnownVersion = vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS) ||
-                         vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+                         vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS) ||
+                         vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS_OLD);
     return fCorrectSize && fKnownVersion;
 }
 
@@ -227,7 +228,8 @@ CTxDestination CBitcoinAddress::Get() const {
     memcpy(&id, &vchData[0], 20);
     if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS))
         return CKeyID(id);
-    else if (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS))
+    else if (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS) ||
+             vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS_OLD))
         return CScriptID(id);
     else
         return CNoDestination();
@@ -243,7 +245,8 @@ bool CBitcoinAddress::GetKeyID(CKeyID &keyID) const {
 }
 
 bool CBitcoinAddress::IsScript() const {
-    return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+    return IsValid() && (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS) ||
+                         vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS_OLD));
 }
 
 bool CBitcoinAddress::GetScriptID(CScriptID &scriptID) const {   
@@ -259,7 +262,8 @@ bool CBitcoinAddress::GetScriptID(CScriptID &scriptID) const {
         }
         default: return false;
         }*/        
-    if (!IsValid() || vchVersion != Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS))
+    if (!IsValid() || (vchVersion != Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS) && 
+                       vchVersion != Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS_OLD)))
         return false;
     uint160 id;
     memcpy(&id, &vchData[0], 20);
