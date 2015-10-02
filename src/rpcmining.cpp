@@ -374,7 +374,7 @@ Value getwork(const Array& params, bool fHelp)
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
         Object result;
-        result.push_back(Pair("data",     HexStr(BEGIN(pdata), fNeoScrypt ? (char *) &pdata[21] : END(pdata))));
+        result.push_back(Pair("data",     HexStr(BEGIN(pdata), fNeoScrypt ? (char *) &pdata[20] : END(pdata))));
         result.push_back(Pair("target",   HexStr(BEGIN(hashTarget), END(hashTarget))));
         /* Optional */
         if(fNeoScrypt)
