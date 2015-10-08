@@ -232,6 +232,9 @@
 /* Define if dbus support should be compiled in */
 #define USE_DBUS 1
 
+/* Define if QR support should be compiled in */
+#define USE_QR 1
+
 /* UPnP support not compiled if undefined, otherwise value (0 or 1) determines
    default state */
 #define USE_UPNP 0
