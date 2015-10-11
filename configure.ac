@@ -531,8 +531,10 @@ if test x$use_pkgconfig = xyes; then
       PKG_CHECK_MODULES([CRYPTO], [libcrypto], [INCLUDES="$INCLUDES $CRYPTO_CFLAGS"; LIBS="$LIBS $CRYPTO_LIBS"], [AC_MSG_ERROR(libcrypto  not found.)])
       BITCOIN_QT_CHECK([PKG_CHECK_MODULES([PROTOBUF], [protobuf], [have_protobuf=yes], [BITCOIN_QT_FAIL(libprotobuf not found)])])
       if test x$use_qr != xno; then
-        dnl libzxing has no module entry, so check without modules 
+        PKG_CHECK_MODULES([ZXING], [libzxing],, [AC_MSG_ERROR(libzxing  not found.)])
         BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_zxing=no])])
+        PKG_CHECK_MODULES([QRENCODE], [libqrencode],, [AC_MSG_ERROR(libcrypto  not found.)])
+        BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
       fi
     ]
   )
