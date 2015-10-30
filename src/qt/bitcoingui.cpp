@@ -704,7 +704,11 @@ void BitcoinGUI::openClicked()
 void BitcoinGUI::openBitmessageClicked()
 {
     QProcess *process = new QProcess;
+#if defined(Q_OS_LINUX)
+    QString program="pybitmessage";
+#else
     QString program="./bitmessagemain";
+#endif
     QStringList arguments;
     arguments << "";
     process->start(program,arguments);

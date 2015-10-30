@@ -1,9 +1,11 @@
 *.tar.gz
 
 *.exe
+*.directory
 src/feathercoin
 src/feathercoind
 src/feathercoin-cli
+src/bitcoin-config.h
 src/test/test_bitcoin
 src/qt/test/test_bitcoin-qt
 

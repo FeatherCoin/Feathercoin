@@ -7,7 +7,7 @@
 #else
 #include <QDesktopWidget>
 #endif
-#include <zxing/common/GlobalHistogramBinarizer.h>
+#include "zxing/common/GlobalHistogramBinarizer.h"
 #include <zxing/Binarizer.h>
 #include <zxing/BinaryBitmap.h>
 #include <zxing/MultiFormatReader.h>

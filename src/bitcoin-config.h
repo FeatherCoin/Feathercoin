@@ -108,6 +108,9 @@
 /* Define to 1 if you have the `protobuf ' library (-lprotobuf ). */
 /* #undef HAVE_LIBPROTOBUF_ */
 
+/* Define to 1 if you have the `qrencode' library (-lqrencode). */
+#define HAVE_LIBQRENCODE 1
+
 /* Define to 1 if you have the `rpcrt4' library (-lrpcrt4). */
 /* #undef HAVE_LIBRPCRT4 */
 
@@ -231,6 +234,9 @@
 
 /* Define if dbus support should be compiled in */
 #define USE_DBUS 1
+
+/* Define if QR support should be compiled in */
+#define USE_QRCODE 1
 
 /* UPnP support not compiled if undefined, otherwise value (0 or 1) determines
    default state */
