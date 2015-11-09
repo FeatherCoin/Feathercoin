@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2014 The Feathercoin developers
+// Copyright (c) 2013-2015 The Feathercoin developers
 
 #include "snapwidget.h"
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
