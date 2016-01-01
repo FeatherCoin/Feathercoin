@@ -1,9 +1,10 @@
-// Copyright (c) 2011-2014 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2014 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef PAYMENTSERVER_H
-#define PAYMENTSERVER_H
+#ifndef BITCOIN_QT_PAYMENTSERVER_H
+#define BITCOIN_QT_PAYMENTSERVER_H
+
 // This class handles payment requests from clicking on
 // bitcoin: URIs
 //
@@ -39,6 +40,8 @@
 
 class OptionsModel;
 
+class CWallet;
+
 QT_BEGIN_NAMESPACE
 class QApplication;
 class QByteArray;
@@ -49,7 +52,8 @@ class QSslError;
 class QUrl;
 QT_END_NAMESPACE
 
-class CWallet;
+// BIP70 max payment request size in bytes (DoS protection)
+extern const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE;
 
 class PaymentServer : public QObject
 {
@@ -58,7 +62,7 @@ class PaymentServer : public QObject
 public:
     // Parse URIs on command line
     // Returns false on error
-    static bool ipcParseCommandLine(int argc, char *argv[]);
+    static void ipcParseCommandLine(int argc, char *argv[]);
 
     // Returns true if there were URIs on the command line
     // which were successfully sent to an already-running
@@ -84,7 +88,17 @@ public:
     // OptionsModel is used for getting proxy settings and display unit
     void setOptionsModel(OptionsModel *optionsModel);
 
-signals:
+    // This is now public, because we use it in paymentservertests.cpp
+    static bool readPaymentRequestFromFile(const QString& filename, PaymentRequestPlus& request);
+
+    // Verify that the payment request network matches the client network
+    static bool verifyNetwork(const payments::PaymentDetails& requestDetails);
+    // Verify if the payment request is expired
+    static bool verifyExpired(const payments::PaymentDetails& requestDetails);
+    // Verify the payment request amount is valid
+    static bool verifyAmount(const CAmount& requestAmount);
+
+Q_SIGNALS:
     // Fired when a valid payment request is received
     void receivedPaymentRequest(SendCoinsRecipient);
 
@@ -94,7 +108,7 @@ signals:
     // Fired when a message should be reported to the user
     void message(const QString &title, const QString &message, unsigned int style);
 
-public slots:
+public Q_SLOTS:
     // Signal this when the main window's UI is ready
     // to display payment requests to the user
     void uiReady();
@@ -105,7 +119,7 @@ public slots:
     // Handle an incoming URI, URI with local file scheme or file
     void handleURIOrFile(const QString& s);
 
-private slots:
+private Q_SLOTS:
     void handleURIConnection();
     void netRequestFinished(QNetworkReply*);
     void reportSslErrors(QNetworkReply*, const QList<QSslError> &);
@@ -117,8 +131,7 @@ protected:
     bool eventFilter(QObject *object, QEvent *event);
 
 private:
-    static bool readPaymentRequest(const QString& filename, PaymentRequestPlus& request);
-    bool processPaymentRequest(PaymentRequestPlus& request, SendCoinsRecipient& recipient);
+    bool processPaymentRequest(const PaymentRequestPlus& request, SendCoinsRecipient& recipient);
     void fetchRequest(const QUrl& url);
 
     // Setup networking
@@ -135,4 +148,4 @@ private:
     OptionsModel *optionsModel;
 };
 
-#endif // PAYMENTSERVER_H
+#endif // BITCOIN_QT_PAYMENTSERVER_H

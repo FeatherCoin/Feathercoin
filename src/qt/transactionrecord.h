@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef TRANSACTIONRECORD_H
-#define TRANSACTIONRECORD_H
+#ifndef BITCOIN_QT_TRANSACTIONRECORD_H
+#define BITCOIN_QT_TRANSACTIONRECORD_H
 
+#include "amount.h"
 #include "uint256.h"
 
 #include <QList>
@@ -94,7 +95,7 @@ public:
 
     TransactionRecord(uint256 hash, qint64 time,
                 Type type, const std::string &address,
-                qint64 debit, qint64 credit):
+                const CAmount& debit, const CAmount& credit):
             hash(hash), time(time), type(type), address(address), debit(debit), credit(credit),
             idx(0)
     {
@@ -111,8 +112,8 @@ public:
     qint64 time;
     Type type;
     std::string address;
-    qint64 debit;
-    qint64 credit;
+    CAmount debit;
+    CAmount credit;
     /**@}*/
 
     /** Subtransaction index, for sort key */
@@ -120,6 +121,9 @@ public:
 
     /** Status: can change with block chain update */
     TransactionStatus status;
+
+    /** Whether the transaction was sent/received with a watch-only address */
+    bool involvesWatchAddress;
 
     /** Return the unique identifier for this transaction (part) */
     QString getTxID() const;
@@ -136,4 +140,4 @@ public:
     bool statusUpdateNeeded();
 };
 
-#endif // TRANSACTIONRECORD_H
+#endif // BITCOIN_QT_TRANSACTIONRECORD_H

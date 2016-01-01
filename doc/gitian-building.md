@@ -4,8 +4,8 @@ Gitian building
 *Setup instructions for a gitian build of Bitcoin using a Debian VM or physical system.*
 
 Gitian is the deterministic build process that is used to build the Bitcoin
-Core executables [1]. It provides a way to be reasonably sure that the
-executables are really built from source on github. It also makes sure that
+Core executables. It provides a way to be reasonably sure that the
+executables are really built from source on GitHub. It also makes sure that
 the same, tested dependencies are used and statically built into the executable.
 
 Multiple developers build the source code by following a specific descriptor
@@ -17,9 +17,6 @@ More independent gitian builders are needed, which is why I wrote this
 guide. It is preferred to follow these steps yourself instead of using someone else's
 VM image to avoid 'contaminating' the build.
 
-[1] For all platforms except for MacOSX, at this point. Work for deterministic
-builds for Mac is under way here: https://github.com/theuni/osx-cross-depends .
-
 Table of Contents
 ------------------
 
@@ -27,29 +24,32 @@ Table of Contents
 - [Connecting to the VM](#connecting-to-the-vm)
 - [Setting up Debian for gitian building](#setting-up-debian-for-gitian-building)
 - [Installing gitian](#installing-gitian)
-- [Setting up gitian images](#setting-up-gitian-images)
+- [Setting up the gitian image](#setting-up-the-gitian-image)
 - [Getting and building the inputs](#getting-and-building-the-inputs)
 - [Building Bitcoin](#building-bitcoin)
 - [Building an alternative repository](#building-an-alternative-repository)
 - [Signing externally](#signing-externally)
 - [Uploading signatures](#uploading-signatures)
 
+Preparing the Gitian builder host
+---------------------------------
+
+The first step is to prepare the host environment that will be used to perform the Gitian builds.
+This guide explains how to set up the environment, and how to start the builds.
+
+Debian Linux was chosen as the host distribution because it has a lightweight install (in contrast to Ubuntu) and is readily available.
+Any kind of virtualization can be used, for example:
+- [VirtualBox](https://www.virtualbox.org/), covered by this guide
+- [KVM](http://www.linux-kvm.org/page/Main_Page)
+- [LXC](https://linuxcontainers.org/), see also [Gitian host docker container](https://github.com/gdm85/tenku/tree/master/docker/gitian-bitcoin-host/README.md).
+
+You can also install on actual hardware instead of using virtualization.
+
 Create a new VirtualBox VM
 ---------------------------
-
-The first step is to create a new Virtual Machine, which will be explained in
-this section.  This VM will be used to do the Gitian builds. In this guide it
-will be explained how to set up the environment, and how to get the builds
-started.
-
-Debian Linux was chosen as the host distribution because it has a lightweight install (in
-contrast to Ubuntu) and is readily available. We here show the steps for
-VirtualBox [1], but any kind of virtualization can be used. You can also install
-on actual hardware instead of using a VM, in this case you can skip this section.
-
 In the VirtualBox GUI click "Create" and choose the following parameters in the wizard:
 
-![](gitian-building/create_vm_page1.png =100x20)
+![](gitian-building/create_vm_page1.png)
 
 - Type: Linux, Debian (64 bit)
 
@@ -74,20 +74,20 @@ In the VirtualBox GUI click "Create" and choose the following parameters in the 
 - Disk size: at least 40GB; as low as 20GB *may* be possible, but better to err on the safe side 
 - Push the `Create` button
 
-Get the [Debian 7.4 net installer](http://cdimage.debian.org/debian-cd/7.4.0/amd64/iso-cd/debian-7.4.0-amd64-netinst.iso).
+Get the [Debian 7.8 net installer](http://cdimage.debian.org/cdimage/archive/7.8.0/amd64/iso-cd/debian-7.8.0-amd64-netinst.iso) (a more recent minor version should also work, see also [Debian Network installation](https://www.debian.org/CD/netinst/)).
 This DVD image can be validated using a SHA256 hashing tool, for example on
 Unixy OSes by entering the following in a terminal:
 
-    echo "b712a141bc60269db217d3b3e456179bd6b181645f90e4aac9c42ed63de492e9  /home/orion/Downloads/debian-7.4.0-amd64-netinst.iso" | sha256sum -c
+    echo "e39c36d6adc0fd86c6edb0e03e22919086c883b37ca194d063b8e3e8f6ff6a3a  debian-7.8.0-amd64-netinst.iso" | sha256sum -c
     # (must return OK)
 
 After creating the VM, we need to configure it. 
 
-- Click the `Settings` button, then go to the `Network` tab. Adapter 1 should be attacked to `NAT`.
+- Click the `Settings` button, then go to the `Network` tab. Adapter 1 should be attached to `NAT`.
 
 ![](gitian-building/network_settings.png)
 
-- Click `Advanced`, then `Port Forwarding`. We want to set up a port through where we can reach the VM to get files in and out.
+- Click `Advanced`, then `Port Forwarding`. We want to set up a port through which we can reach the VM to get files in and out.
 - Create a new rule by clicking the plus icon.
 
 ![](gitian-building/port_forwarding_rules.png)
@@ -106,14 +106,12 @@ Then start the VM. On the first launch you will be asked for a CD or DVD image. 
 
 ![](gitian-building/select_startup_disk.png)
 
-[1] https://www.virtualbox.org/
-
 Installing Debian
 ------------------
 
-In this section it will be explained how to install Debian on the newly created VM.
+This section will explain how to install Debian on the newly created VM.
 
-- Choose the non-graphical installer.  We do not need the graphical environment, it will only increase installation time and disk usage.
+- Choose the non-graphical installer.  We do not need the graphical environment; it will only increase installation time and disk usage.
 
 ![](gitian-building/debian_install_1_boot_menu.png)
 
@@ -133,7 +131,7 @@ and proceed, just press `Enter`. To select a different button, press `Tab`.
 
 ![](gitian-building/debian_install_5_configure_the_network.png)
 
-- Choose a root password and enter it twice (and remember it for later) 
+- Choose a root password and enter it twice (remember it for later) 
 
 ![](gitian-building/debian_install_6a_set_up_root_password.png)
 
@@ -142,11 +140,11 @@ and proceed, just press `Enter`. To select a different button, press `Tab`.
 ![](gitian-building/debian_install_7_set_up_user_fullname.png)
 ![](gitian-building/debian_install_8_set_up_username.png)
 
-- Choose a user password and enter it twice (and remember it for later) 
+- Choose a user password and enter it twice (remember it for later) 
 
 ![](gitian-building/debian_install_9_user_password.png)
 
-- The installer will set up the clock using a time server, this process should be automatic
+- The installer will set up the clock using a time server; this process should be automatic
 - Set up the clock: choose a time zone (depends on the locale settings that you picked earlier; specifics don't matter)  
 
 ![](gitian-building/debian_install_10_configure_clock.png)
@@ -227,7 +225,6 @@ In this section we will be setting up the Debian installation for Gitian buildin
 First we need to log in as `root` to set up dependencies and make sure that our
 user can use the sudo command. Type/paste the following in the terminal:
 
-
 ```bash
 apt-get install git ruby sudo apt-cacher-ng qemu-utils debootstrap lxc python-cheetah parted kpartx bridge-utils
 adduser debian sudo
@@ -236,7 +233,7 @@ adduser debian sudo
 When you get a colorful screen with a question about the 'LXC directory', just
 go with the default (`/var/lib/lxc`).
 
-Then set up LXC and the rest with the following is a complex jumble of settings and workarounds:
+Then set up LXC and the rest with the following, which is a complex jumble of settings and workarounds:
 
 ```bash
 # the version of lxc-start in Debian 7.4 needs to run as root, so make sure
@@ -249,15 +246,16 @@ echo '#!/bin/sh -e' > /etc/rc.local
 echo 'brctl addbr br0' >> /etc/rc.local
 echo 'ifconfig br0 10.0.3.2/24 up' >> /etc/rc.local
 echo 'exit 0' >> /etc/rc.local
-# make sure that USE_LXC is always set when logging in as debian
+# make sure that USE_LXC is always set when logging in as debian,
+# and configure LXC IP addresses
 echo 'export USE_LXC=1' >> /home/debian/.profile
+echo 'export GITIAN_HOST_IP=10.0.3.2' >> /home/debian/.profile
+echo 'export LXC_GUEST_IP=10.0.3.5' >> /home/debian/.profile
 reboot
 ```
 
-At the end the VM is rebooted to make sure that the changes take effect.
-
-**Note**: If you're following this guide on a physical system instead of a VirtualBox VM you could use `10.0.2.2` instead
-of `10.0.3.2` in the above `ifconfig` line. This avoids having to patch gitian-builder in next section.
+At the end the VM is rebooted to make sure that the changes take effect. The steps in this
+section need only to be performed once.
 
 Installing gitian
 ------------------
@@ -279,65 +277,49 @@ cd ..
 
 **Note**: When sudo asks for a password, enter the password for the user *debian* not for *root*.
 
-Clone the git repositories for bitcoin and gitian,
+Clone the git repositories for bitcoin and gitian.
 
 ```bash
 git clone https://github.com/devrandom/gitian-builder.git
 git clone https://github.com/bitcoin/bitcoin
 ```
 
-We need to change the guest IP range for the gitian builder because otherwise it will
-collide with VirtualBox its NAT IP range. Gitian does not have a way yet to configure
-this, so we need to patch the IPs using `sed`. This is not nice but it will
-have to do for now... (a [pull request
-(#52)](https://github.com/devrandom/gitian-builder/pull/52) to make this
-configurable without patching has been submitted):
-
-```bash
-sed -i 's/10.0.2.2/10.0.3.2/g' gitian-builder/target-bin/bootstrap-fixup
-sed -i 's/10.0.2.5/10.0.3.5/g' gitian-builder/etc/lxc.config.in
-```
-
-*note* After you update the gitian-builder repository, you may need to repeat these manual changes.
-
-Setting up gitian images
+Setting up the gitian image
 -------------------------
 
-Gitian needs virtual images of the operating system to build in.
-Currently this is Ubuntu Precise for both x86 architectures.
-These images will be copied and used every time that a build is started to
+Gitian needs a virtual image of the operating system to build in.
+Currently this is Ubuntu Precise x86_64.
+This image will be copied and used every time that a build is started to
 make sure that the build is deterministic.
-Creating the images will take a while, but only has to be done once.
+Creating the image will take a while, but only has to be done once.
 
 Execute the following as user `debian`:
 
 ```bash
 cd gitian-builder
-bin/make-base-vm --lxc --arch i386 --suite precise
 bin/make-base-vm --lxc --arch amd64 --suite precise
 ```
 
-There will be a lot of warnings printed during build of the images. These can be ignored.
+There will be a lot of warnings printed during build of the image. These can be ignored.
 
 **Note**: When sudo asks for a password, enter the password for the user *debian* not for *root*.
 
 Getting and building the inputs
 --------------------------------
 
-In [doc/release-process.md](release-process.md) in the bitcoin repository under 'Fetch and build inputs'.
-you will find a list of `wget` commands that can be executed to get the dependencies.
+Follow the instructions in [doc/release-process.md](release-process.md) in the bitcoin repository
+under 'Fetch and build inputs' to install sources which require manual intervention. Also follow
+the next step: 'Seed the Gitian sources cache', which will fetch all necessary source files allowing
+for gitian to work offline.
 
-I needed to add `--no-check-certificate` to the OpenSSL wget line to make it work.
-Likely this is because the ca-certificates in Debian 7.4 is fairly old. This does not create a 
-security issue as the gitian descriptors check integrity of the input archives and refuse to work
-if any one is corrupted.
+Building Bitcoin
+----------------
 
-After downloading the archives, execute the `gbuild` commends to build the dependencies.
-This can take a long time, but only has to be done when the dependencies change, for example
-to upgrade the used version.
+To build Bitcoin (for Linux, OSX and Windows) just follow the steps under 'perform
+gitian builds' in [doc/release-process.md](release-process.md) in the bitcoin repository.
 
-**Note**: Do not forget to copy the result from `build/out` to `inputs` after every gbuild command! This will save
-you a lot of time.
+This may take a long time as it also builds the dependencies needed for each descriptor.
+These dependencies will be cached after a successful build to avoid rebuilding them where possible.
 
 At any time you can check the package installation and build progress with
 
@@ -345,31 +327,6 @@ At any time you can check the package installation and build progress with
 tail -f var/install.log
 tail -f var/build.log
 ```
-
-To make sure that the output is exactly the same, and that the time, date, locale and
-even the ordering of files in the file system doesn't influence the result,
-some special precautions are taken. This means that the result is expected to
-be the same every time. The expected SHA256 hashes of the intermediate
-inputs (at the time of release 0.9.0) are:
-
-    05fe8e9aef00d295f24a94deef7d3a918af5aeef371ba57fdd5a6acd8c51f6cb  bitcoin-deps-linux32-gitian-r3.zip
-    4227aa9d9fedbb4265b8d10a4f78b7435f34b00a54eb4d662bf78f59c6e70c27  bitcoin-deps-linux64-gitian-r3.zip
-    f29b7d9577417333fb56e023c2977f5726a7c297f320b175a4108cf7cd4c2d29  boost-linux32-1.55.0-gitian-r1.zip
-    88232451c4104f7eb16e469ac6474fd1231bd485687253f7b2bdf46c0781d535  boost-linux64-1.55.0-gitian-r1.zip
-    60dc2d3b61e9c7d5dbe2f90d5955772ad748a47918ff2d8b74e8db9b1b91c909  boost-win32-1.55.0-gitian-r6.zip
-    f65fcaf346bc7b73bc8db3a8614f4f6bee2f61fcbe495e9881133a7c2612a167  boost-win64-1.55.0-gitian-r6.zip
-    0ba0855e1084132d05fd8687c19d8430b91f6c410a9ab7938e4fea650c2b22c8  bitcoin-deps-win32-gitian-r10.zip
-    5f9ffba0c13ddefc1d339f66ab973ea64623c9cc1f9078cb2b145bce86bd28e2  bitcoin-deps-win64-gitian-r10.zip
-    963e3e5e85879010a91143c90a711a5d1d5aba992e38672cdf7b54e42c56b2f1  qt-win32-5.2.0-gitian-r2.zip
-    751c579830d173ef3e6f194e83d18b92ebef6df03289db13ab77a52b6bc86ef0  qt-win64-5.2.0-gitian-r2.zip
-    e2e403e1a08869c7eed4d4293bce13d51ec6a63592918b90ae215a0eceb44cb4  protobuf-win32-2.5.0-gitian-r4.zip
-    a0999037e8b0ef9ade13efd88fee261ba401f5ca910068b7e0cd3262ba667db0  protobuf-win64-2.5.0-gitian-r4.zip
-
-Building Bitcoin
-----------------
-
-To build Bitcoin (for Linux and/or Windows) just follow the steps under 'perform
-gitian builds' in [doc/release-process.md](release-process.md) in the bitcoin repository.
 
 Output from `gbuild` will look something like
 
@@ -380,7 +337,7 @@ Output from `gbuild` will look something like
     Resolving deltas: 100% (25724/25724), done.
     From https://github.com/bitcoin/bitcoin
     ... (new tags, new branch etc)
-    --- Building for precise i386 ---
+    --- Building for precise x86_64 ---
     Stopping target if it is up
     Making a new image copy
     stdin: is not a tty
@@ -395,13 +352,10 @@ Output from `gbuild` will look something like
     lxc-start: Connection refused - inotify event with no name (mask 32768)
     Running build script (log in var/build.log)
 
-As when building the dependencies, the progress of package installation and building
-can be inspected in `var/install.log` and `var/build.log`.
-
 Building an alternative repository
 -----------------------------------
 
-If you want to do a test build of a pull on github it can be useful to point
+If you want to do a test build of a pull on GitHub it can be useful to point
 the gitian builder at an alternative repository, using the same descriptors
 and inputs.
 
@@ -411,13 +365,14 @@ URL=https://github.com/laanwj/bitcoin.git
 COMMIT=2014_03_windows_unicode_path
 ./bin/gbuild --commit bitcoin=${COMMIT} --url bitcoin=${URL} ../bitcoin/contrib/gitian-descriptors/gitian-linux.yml
 ./bin/gbuild --commit bitcoin=${COMMIT} --url bitcoin=${URL} ../bitcoin/contrib/gitian-descriptors/gitian-win.yml
+./bin/gbuild --commit bitcoin=${COMMIT} --url bitcoin=${URL} ../bitcoin/contrib/gitian-descriptors/gitian-osx.yml
 ```
 
 Signing externally
 -------------------
 
-If you want to do the PGP signing on another device that's possible too; just define `SIGNER` as mentioned
-and follow the steps in the build process as normally.
+If you want to do the PGP signing on another device, that's also possible; just define `SIGNER` as mentioned
+and follow the steps in the build process as normal.
 
     gpg: skipped "laanwj": secret key not available
 
@@ -425,8 +380,9 @@ When you execute `gsign` you will get an error from GPG, which can be ignored. C
 in `gitian.sigs` to your signing machine and do
 
 ```bash
-    gpg --detach-sign ${VERSION}/${SIGNER}/bitcoin-build.assert
-    gpg --detach-sign ${VERSION}-win/${SIGNER}/bitcoin-build.assert
+    gpg --detach-sign ${VERSION}-linux/${SIGNER}/bitcoin-linux-build.assert
+    gpg --detach-sign ${VERSION}-win/${SIGNER}/bitcoin-win-build.assert
+    gpg --detach-sign ${VERSION}-osx-unsigned/${SIGNER}/bitcoin-osx-build.assert
 ```
 
 This will create the `.sig` files that can be committed together with the `.assert` files to assert your
@@ -435,9 +391,6 @@ gitian build.
 Uploading signatures
 ---------------------
 
-After building and signing you can push your signatures (both the `.assert` and
-`.assert.sig` files) to the
-[bitcoin/gitian.sigs](https://github.com/bitcoin/gitian.sigs/) repository, or
-if not possible create a pull request. You can also mail the files to me
-(laanwj@gmail.com) and I'll commit them.
-
+After building and signing you can push your signatures (both the `.assert` and `.assert.sig` files) to the
+[bitcoin/gitian.sigs](https://github.com/bitcoin/gitian.sigs/) repository, or if that's not possible create a pull
+request. You can also mail the files to Wladimir (laanwj@gmail.com) and he will commit them.

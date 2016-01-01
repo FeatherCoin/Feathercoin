@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef WALLETFRAME_H
-#define WALLETFRAME_H
+#ifndef BITCOIN_QT_WALLETFRAME_H
+#define BITCOIN_QT_WALLETFRAME_H
 
 #include <QFrame>
 #include <QMap>
@@ -47,7 +47,7 @@ private:
 
     WalletView *currentWalletView();
 
-public slots:
+public Q_SLOTS:
     /** Switch to overview (home) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
@@ -61,30 +61,15 @@ public slots:
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
-    /** Switch to account report page */
-    void gotoAccountReportPage();
-    /** Switch to multisig page */
-    void gotoMultiSigPage();
-    
+
     /** Encrypt the wallet */
     void encryptWallet(bool status);
     /** Backup the wallet */
     void backupWallet();
-    void backupquitWallet();
     /** Change encrypted wallet passphrase */
     void changePassphrase();
-    /** Lock the wallet */
-    void lockWallet();    
     /** Ask for passphrase to unlock wallet temporarily */
     void unlockWallet();
-    /** Open the print paper wallets dialog **/
-    void printPaperWallets();
-    /** Open comment dialog **/
-    void inertBlockChain();
-    /** Open Debug dialog **/
-    void debugClicked();
-    /** Openname dialog **/
-    void opennameClicked();
 
     /** Show used sending addresses */
     void usedSendingAddresses();
@@ -92,4 +77,4 @@ public slots:
     void usedReceivingAddresses();
 };
 
-#endif // WALLETFRAME_H
+#endif // BITCOIN_QT_WALLETFRAME_H

@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef ADDRESSBOOKPAGE_H
-#define ADDRESSBOOKPAGE_H
+#ifndef BITCOIN_QT_ADDRESSBOOKPAGE_H
+#define BITCOIN_QT_ADDRESSBOOKPAGE_H
 
 #include <QDialog>
 
@@ -43,26 +43,23 @@ public:
     ~AddressBookPage();
 
     void setModel(AddressTableModel *model);
-    void setOptionsModel(OptionsModel *optionsModel);
     const QString &getReturnValue() const { return returnValue; }
 
-public slots:
+public Q_SLOTS:
     void done(int retval);
 
 private:
     Ui::AddressBookPage *ui;
     AddressTableModel *model;
-    OptionsModel *optionsModel;
     Mode mode;
     Tabs tab;
     QString returnValue;
     QSortFilterProxyModel *proxyModel;
     QMenu *contextMenu;
-    QMenu *contextMenuMultiSig;
     QAction *deleteAction; // to be able to explicitly disable it
     QString newAddressToSelect;
 
-private slots:
+private Q_SLOTS:
     /** Delete currently selected address entry */
     void on_deleteAddress_clicked();
     /** Create a new address for receiving coins and / or add a new address book entry */
@@ -75,22 +72,6 @@ private slots:
     void onEditAction();
     /** Export button clicked */
     void on_exportButton_clicked();
-    /** Generate a QR Code from the currently selected address */
-    void on_showQRCode_clicked();
-    /** Import from a QR Code into your wallet */
-    void on_importQRCodeButton_clicked();
-    /** Copy public key of currently selected address to clipboard */
-    void on_copyPubKey_clicked();
-    /** Copy private key of currently selected address to clipboard */
-    void on_copyPriKey_clicked();
-    /** Copy a serialization of just the secret parameter (32 bytes) to clipboard */
-    void on_copySecKey_clicked();
-    /** Open the sign message tab in the Sign/Verify Message dialog with currently selected address */
-    void on_signMessage_clicked();
-    /** Open the verify message tab in the Sign/Verify Message dialog with currently selected address */
-    void on_verifyMessage_clicked();
-    /** Open send coins dialog for currently selected address (no button) */
-    void onSendCoinsAction();
 
     /** Set button states based on selected tab and selection */
     void selectionChanged();
@@ -98,14 +79,9 @@ private slots:
     void contextualMenu(const QPoint &point);
     /** New entry/entries were added to address table */
     void selectNewAddress(const QModelIndex &parent, int begin, int /*end*/);
-    
-    void createAddress();
-    void exportAddress();
 
-signals:
-    void signMessage(QString addr);
-    void verifyMessage(QString addr);
+Q_SIGNALS:
     void sendCoins(QString addr);
 };
 
-#endif // ADDRESSBOOKPAGE_H
+#endif // BITCOIN_QT_ADDRESSBOOKPAGE_H

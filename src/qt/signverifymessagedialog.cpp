@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "signverifymessagedialog.h"
@@ -7,11 +7,13 @@
 
 #include "addressbookpage.h"
 #include "guiutil.h"
+#include "scicon.h"
 #include "walletmodel.h"
 
 #include "base58.h"
 #include "init.h"
-#include "wallet.h"
+#include "main.h" // For strMessageMagic
+#include "wallet/wallet.h"
 
 #include <string>
 #include <vector>
@@ -25,9 +27,17 @@ SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->addressBookButton_SM->setIcon(SingleColorIcon(":/icons/address-book"));
+    ui->pasteButton_SM->setIcon(SingleColorIcon(":/icons/editpaste"));
+    ui->copySignatureButton_SM->setIcon(SingleColorIcon(":/icons/editcopy"));
+    ui->signMessageButton_SM->setIcon(SingleColorIcon(":/icons/edit"));
+    ui->clearButton_SM->setIcon(SingleColorIcon(":/icons/remove"));
+    ui->addressBookButton_VM->setIcon(SingleColorIcon(":/icons/address-book"));
+    ui->verifyMessageButton_VM->setIcon(SingleColorIcon(":/icons/transaction_0"));
+    ui->clearButton_VM->setIcon(SingleColorIcon(":/icons/remove"));
+
 #if QT_VERSION >= 0x040700
     ui->signatureOut_SM->setPlaceholderText(tr("Click \"Sign Message\" to generate signature"));
-    ui->addressIn_VM->setPlaceholderText(tr("Enter a Feathercoin address (e.g. 6djzFXtrfK8axEpEhSPe5o7YgJ16gFjSw7)"));
 #endif
 
     GUIUtil::setupAddressWidget(ui->addressIn_SM, this);
@@ -217,10 +227,8 @@ void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
     ss << strMessageMagic;
     ss << ui->messageIn_VM->document()->toPlainText().toStdString();
 
-    //CPubKey pubkey;
-    CKey key;
-    //if (!pubkey.RecoverCompact(Hash(ss.begin(), ss.end()), vchSig))
-    if (!key.SetCompactSignature(Hash(ss.begin(), ss.end()), vchSig))
+    CPubKey pubkey;
+    if (!pubkey.RecoverCompact(Hash(ss.begin(), ss.end()), vchSig))
     {
         ui->signatureIn_VM->setValid(false);
         ui->statusLabel_VM->setStyleSheet("QLabel { color: red; }");
@@ -228,8 +236,7 @@ void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
         return;
     }
 
-    //if (!(CBitcoinAddress(pubkey.GetID()) == addr))
-    if (!(CBitcoinAddress(key.GetPubKey().GetID()) == addr))
+    if (!(CBitcoinAddress(pubkey.GetID()) == addr))
     {
         ui->statusLabel_VM->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel_VM->setText(QString("<nobr>") + tr("Message verification failed.") + QString("</nobr>"));

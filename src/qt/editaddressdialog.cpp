@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "editaddressdialog.h"
@@ -7,11 +7,6 @@
 
 #include "addresstablemodel.h"
 #include "guiutil.h"
-#include "stealth.h"
-#include "base58.h"
-#include "wallet.h"
-#include "walletmodel.h"
-#include "init.h"
 
 #include <QDataWidgetMapper>
 #include <QMessageBox>
@@ -32,24 +27,16 @@ EditAddressDialog::EditAddressDialog(Mode mode, QWidget *parent) :
     case NewReceivingAddress:
         setWindowTitle(tr("New receiving address"));
         ui->addressEdit->setEnabled(false);
-        ui->addressEdit->setVisible(false);
-        ui->stealthCB->setEnabled(true);
-        ui->stealthCB->setVisible(true);
         break;
     case NewSendingAddress:
         setWindowTitle(tr("New sending address"));
-        ui->stealthCB->setVisible(false);
         break;
     case EditReceivingAddress:
         setWindowTitle(tr("Edit receiving address"));
         ui->addressEdit->setEnabled(false);
-        ui->addressEdit->setVisible(true);
-        ui->stealthCB->setEnabled(false);
-        ui->stealthCB->setVisible(true);
         break;
     case EditSendingAddress:
         setWindowTitle(tr("Edit sending address"));
-        ui->stealthCB->setVisible(false);
         break;
     }
 
@@ -71,63 +58,11 @@ void EditAddressDialog::setModel(AddressTableModel *model)
     mapper->setModel(model);
     mapper->addMapping(ui->labelEdit, AddressTableModel::Label);
     mapper->addMapping(ui->addressEdit, AddressTableModel::Address);
-    mapper->addMapping(ui->stealthCB, AddressTableModel::Type);
 }
 
 void EditAddressDialog::loadRow(int row)
 {
     mapper->setCurrentIndex(row);
-    
-    if (ui->addressEdit->text().length()>=75)
-    {
-	    CStealthAddress sxAddr;
-	    if (sxAddr.SetEncoded(ui->addressEdit->text().toStdString()))
-	    {
-	    	ui->lblPubkey->setText("");
-	    	ui->lblPrikey->setText("");
-	    	ui->lblScanPubkey->setText(HexStr(sxAddr.scan_pubkey).c_str());
-	    	ui->lblScanSecret->setText(HexStr(sxAddr.scan_secret).c_str());
-	    	ui->lblSpendPubkey->setText(HexStr(sxAddr.spend_pubkey).c_str());
-	    	ui->lblSpendSecret->setText(HexStr(sxAddr.spend_secret).c_str());
-	    }
-  	}
-  	else
-  	{
-  		CBitcoinAddress address(ui->addressEdit->text().toStdString());
-      CKeyID keyID;
-      if ( !address.GetKeyID(keyID) )
-      {
-          QMessageBox::warning(this, windowTitle(),
-              tr("Address \"%1\" doesn't have public key ").arg(ui->addressEdit->text()),
-              QMessageBox::Ok, QMessageBox::Ok);
-          return;
-      }
-      CPubKey vchPubKey;
-      if ( !pwalletMain->GetPubKey(keyID, vchPubKey))
-      {
-          QMessageBox::warning(this, windowTitle(),
-              tr("Address \"%1\" doesn't have public key ").arg(ui->addressEdit->text()),
-              QMessageBox::Ok, QMessageBox::Ok);
-          return;
-      }
-      CSecret vchSecret;
-      bool fCompressed;
-      if (!pwalletMain->GetSecret(keyID, vchSecret, fCompressed))
-      {
-          QMessageBox::warning(this, windowTitle(),
-              tr("Address \"%1\" doesn't have private key ").arg(ui->addressEdit->text()),
-              QMessageBox::Ok, QMessageBox::Ok);
-          return;
-      }
-      ui->lblPubkey->setText(HexStr(vchPubKey).c_str());
-      ui->lblPrikey->setText(CBitcoinSecret(vchSecret, fCompressed).ToString().c_str());
-      GUIUtil::setClipboard(QString::fromStdString(HexStr(vchPubKey)));
-      
-    	ui->lblScanPubkey->setText("");
-    	ui->lblScanSecret->setText("");
-    	ui->lblSpendPubkey->setText("");
-    	ui->lblSpendSecret->setText("");
-  	}
 }
 
 bool EditAddressDialog::saveCurrentRow()
@@ -139,14 +74,10 @@ bool EditAddressDialog::saveCurrentRow()
     {
     case NewReceivingAddress:
     case NewSendingAddress:
-    	  {
-    	   int typeInd  = ui->stealthCB->isChecked() ? AddressTableModel::AT_Stealth : AddressTableModel::AT_Normal;
-         address = model->addRow(
-                   mode == NewSendingAddress ? AddressTableModel::Send : AddressTableModel::Receive,
-                   ui->labelEdit->text(),
-                   ui->addressEdit->text(),
-                   typeInd);
-        }
+        address = model->addRow(
+                mode == NewSendingAddress ? AddressTableModel::Send : AddressTableModel::Receive,
+                ui->labelEdit->text(),
+                ui->addressEdit->text());
         break;
     case EditReceivingAddress:
     case EditSendingAddress:
@@ -176,7 +107,7 @@ void EditAddressDialog::accept()
             break;
         case AddressTableModel::INVALID_ADDRESS:
             QMessageBox::warning(this, windowTitle(),
-                tr("The entered address \"%1\" is not a valid Feathercoin address.").arg(ui->addressEdit->text()),
+                tr("The entered address \"%1\" is not a valid Bitcoin address.").arg(ui->addressEdit->text()),
                 QMessageBox::Ok, QMessageBox::Ok);
             break;
         case AddressTableModel::DUPLICATE_ADDRESS:

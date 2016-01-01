@@ -1,5 +1,5 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "walletframe.h"
@@ -8,7 +8,6 @@
 #include "walletview.h"
 
 #include <cstdio>
-#include <iostream>
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -120,20 +119,6 @@ void WalletFrame::gotoHistoryPage()
         i.value()->gotoHistoryPage();
 }
 
-void WalletFrame::gotoAccountReportPage()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->gotoAccountReportPage();
-}
-
-void WalletFrame::gotoMultiSigPage()
-{
-    QMap<QString, WalletView*>::const_iterator i;
-    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
-        i.value()->gotoMultiSigPage();
-}
-
 void WalletFrame::gotoReceiveCoinsPage()
 {
     QMap<QString, WalletView*>::const_iterator i;
@@ -176,13 +161,6 @@ void WalletFrame::backupWallet()
         walletView->backupWallet();
 }
 
-void WalletFrame::backupquitWallet()
-{
-    WalletView *walletView = currentWalletView();
-    if (walletView)
-        walletView->backupquitWallet();
-}
-
 void WalletFrame::changePassphrase()
 {
     WalletView *walletView = currentWalletView();
@@ -190,46 +168,11 @@ void WalletFrame::changePassphrase()
         walletView->changePassphrase();
 }
 
-void WalletFrame::lockWallet()
-{
-    WalletView *walletView = currentWalletView();
-    if (walletView)
-        walletView->lockWallet();
-}
-
 void WalletFrame::unlockWallet()
 {
     WalletView *walletView = currentWalletView();
     if (walletView)
         walletView->unlockWallet();
-}
-
-void WalletFrame::printPaperWallets()
-{
-    WalletView *walletView = currentWalletView();
-    if (walletView)
-        walletView->printPaperWallets();
-}
-
-void WalletFrame::inertBlockChain()
-{
-    WalletView *walletView = currentWalletView();
-    if (walletView)
-        walletView->inertBlockChain();
-}
-
-void WalletFrame::debugClicked()
-{
-    WalletView *walletView = currentWalletView();
-    if (walletView)
-        walletView->debugClicked();
-}
-
-void WalletFrame::opennameClicked()
-{
-    WalletView *walletView = currentWalletView();
-    if (walletView)
-        walletView->opennameClicked();
 }
 
 void WalletFrame::usedSendingAddresses()

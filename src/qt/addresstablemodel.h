@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef ADDRESSTABLEMODEL_H
-#define ADDRESSTABLEMODEL_H
+#ifndef BITCOIN_QT_ADDRESSTABLEMODEL_H
+#define BITCOIN_QT_ADDRESSTABLEMODEL_H
 
 #include <QAbstractTableModel>
 #include <QStringList>
@@ -24,17 +24,9 @@ public:
     explicit AddressTableModel(CWallet *wallet, WalletModel *parent = 0);
     ~AddressTableModel();
 
-    enum AddressType {
-        AT_Unknown = 0, /**< User specified label */
-        AT_Normal = 1,  /**< Feathercoin address */
-        AT_Stealth = 2  /**< Stealth address */
-    };
-    
     enum ColumnIndex {
-        Label = 0,   	/**< User specified label */
-        Address = 1,  /**< Bitcoin address */
-        Type = 2,  	  /**< Address type  */
-        Category = 3  /**< Address Category : Normal or MultiSig*/
+        Label = 0,   /**< User specified label */
+        Address = 1  /**< Bitcoin address */
     };
 
     enum RoleIndex {
@@ -69,8 +61,7 @@ public:
     /* Add an address to the model.
        Returns the added address on success, and an empty string otherwise.
      */
-    //QString addRow(const QString &type, const QString &label, const QString &address);
-    QString addRow(const QString &type, const QString &label, const QString &address, int addressType);
+    QString addRow(const QString &type, const QString &label, const QString &address);
 
     /* Look up label for address in address book, if not found return empty string.
      */
@@ -93,7 +84,7 @@ private:
     /** Notify listeners that data changed. */
     void emitDataChanged(int index);
 
-public slots:
+public Q_SLOTS:
     /* Update address list from core.
      */
     void updateEntry(const QString &address, const QString &label, bool isMine, const QString &purpose, int status);
@@ -101,4 +92,4 @@ public slots:
     friend class AddressTablePriv;
 };
 
-#endif // ADDRESSTABLEMODEL_H
+#endif // BITCOIN_QT_ADDRESSTABLEMODEL_H

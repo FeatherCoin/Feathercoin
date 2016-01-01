@@ -1,10 +1,16 @@
 // Copyright (c) 2011-2014 The Bitcoin Core developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "util.h"
 
+#include "clientversion.h"
+#include "primitives/transaction.h"
+#include "random.h"
 #include "sync.h"
+#include "utilstrencodings.h"
+#include "utilmoneystr.h"
+#include "test/test_bitcoin.h"
 
 #include <stdint.h>
 #include <vector>
@@ -13,7 +19,7 @@
 
 using namespace std;
 
-BOOST_AUTO_TEST_SUITE(util_tests)
+BOOST_FIXTURE_TEST_SUITE(util_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(util_criticalsection)
 {
@@ -33,31 +39,6 @@ BOOST_AUTO_TEST_CASE(util_criticalsection)
 
         BOOST_ERROR("break was swallowed!");
     } while(0);
-}
-
-BOOST_AUTO_TEST_CASE(util_MedianFilter)
-{
-    CMedianFilter<int> filter(5, 15);
-
-    BOOST_CHECK_EQUAL(filter.median(), 15);
-
-    filter.input(20); // [15 20]
-    BOOST_CHECK_EQUAL(filter.median(), 17);
-
-    filter.input(30); // [15 20 30]
-    BOOST_CHECK_EQUAL(filter.median(), 20);
-
-    filter.input(3); // [3 15 20 30]
-    BOOST_CHECK_EQUAL(filter.median(), 17);
-
-    filter.input(7); // [3 7 15 20 30]
-    BOOST_CHECK_EQUAL(filter.median(), 15);
-
-    filter.input(18); // [3 7 18 20 30]
-    BOOST_CHECK_EQUAL(filter.median(), 18);
-
-    filter.input(0); // [0 3 7 18 30]
-    BOOST_CHECK_EQUAL(filter.median(), 7);
 }
 
 static const unsigned char ParseHex_expected[65] = {
@@ -108,13 +89,11 @@ BOOST_AUTO_TEST_CASE(util_HexStr)
 
 BOOST_AUTO_TEST_CASE(util_DateTimeStrFormat)
 {
-/*These are platform-dependant and thus removed to avoid useless test failures
     BOOST_CHECK_EQUAL(DateTimeStrFormat("%Y-%m-%d %H:%M:%S", 0), "1970-01-01 00:00:00");
     BOOST_CHECK_EQUAL(DateTimeStrFormat("%Y-%m-%d %H:%M:%S", 0x7FFFFFFF), "2038-01-19 03:14:07");
-    // Formats used within Bitcoin
     BOOST_CHECK_EQUAL(DateTimeStrFormat("%Y-%m-%d %H:%M:%S", 1317425777), "2011-09-30 23:36:17");
     BOOST_CHECK_EQUAL(DateTimeStrFormat("%Y-%m-%d %H:%M", 1317425777), "2011-09-30 23:36");
-*/
+    BOOST_CHECK_EQUAL(DateTimeStrFormat("%a, %d %b %Y %H:%M:%S +0000", 1317425777), "Fri, 30 Sep 2011 23:36:17 +0000");
 }
 
 BOOST_AUTO_TEST_CASE(util_ParseParameters)
@@ -165,17 +144,6 @@ BOOST_AUTO_TEST_CASE(util_GetArg)
     BOOST_CHECK_EQUAL(GetBoolArg("booltest4", false), true);
 }
 
-BOOST_AUTO_TEST_CASE(util_WildcardMatch)
-{
-    BOOST_CHECK(WildcardMatch("127.0.0.1", "*"));
-    BOOST_CHECK(WildcardMatch("127.0.0.1", "127.*"));
-    BOOST_CHECK(WildcardMatch("abcdef", "a?cde?"));
-    BOOST_CHECK(!WildcardMatch("abcdef", "a?cde??"));
-    BOOST_CHECK(WildcardMatch("abcdef", "a*f"));
-    BOOST_CHECK(!WildcardMatch("abcdef", "a*x"));
-    BOOST_CHECK(WildcardMatch("", "*"));
-}
-
 BOOST_AUTO_TEST_CASE(util_FormatMoney)
 {
     BOOST_CHECK_EQUAL(FormatMoney(0, false), "0.00");
@@ -205,7 +173,7 @@ BOOST_AUTO_TEST_CASE(util_FormatMoney)
 
 BOOST_AUTO_TEST_CASE(util_ParseMoney)
 {
-    int64_t ret = 0;
+    CAmount ret = 0;
     BOOST_CHECK(ParseMoney("0.0", ret));
     BOOST_CHECK_EQUAL(ret, 0);
 
@@ -315,21 +283,21 @@ BOOST_AUTO_TEST_CASE(strprintf_numbers)
 {
     int64_t s64t = -9223372036854775807LL; /* signed 64 bit test value */
     uint64_t u64t = 18446744073709551615ULL; /* unsigned 64 bit test value */
-    BOOST_CHECK(strprintf("%s %d %s", B, s64t, E) == B" -9223372036854775807 "E);
-    BOOST_CHECK(strprintf("%s %u %s", B, u64t, E) == B" 18446744073709551615 "E);
-    BOOST_CHECK(strprintf("%s %x %s", B, u64t, E) == B" ffffffffffffffff "E);
+    BOOST_CHECK(strprintf("%s %d %s", B, s64t, E) == B" -9223372036854775807 " E);
+    BOOST_CHECK(strprintf("%s %u %s", B, u64t, E) == B" 18446744073709551615 " E);
+    BOOST_CHECK(strprintf("%s %x %s", B, u64t, E) == B" ffffffffffffffff " E);
 
     size_t st = 12345678; /* unsigned size_t test value */
     ssize_t sst = -12345678; /* signed size_t test value */
-    BOOST_CHECK(strprintf("%s %"PRIszd" %s", B, sst, E) == B" -12345678 "E);
-    BOOST_CHECK(strprintf("%s %"PRIszu" %s", B, st, E) == B" 12345678 "E);
-    BOOST_CHECK(strprintf("%s %"PRIszx" %s", B, st, E) == B" bc614e "E);
+    BOOST_CHECK(strprintf("%s %d %s", B, sst, E) == B" -12345678 " E);
+    BOOST_CHECK(strprintf("%s %u %s", B, st, E) == B" 12345678 " E);
+    BOOST_CHECK(strprintf("%s %x %s", B, st, E) == B" bc614e " E);
 
     ptrdiff_t pt = 87654321; /* positive ptrdiff_t test value */
     ptrdiff_t spt = -87654321; /* negative ptrdiff_t test value */
-    BOOST_CHECK(strprintf("%s %"PRIpdd" %s", B, spt, E) == B" -87654321 "E);
-    BOOST_CHECK(strprintf("%s %"PRIpdu" %s", B, pt, E) == B" 87654321 "E);
-    BOOST_CHECK(strprintf("%s %"PRIpdx" %s", B, pt, E) == B" 5397fb1 "E);
+    BOOST_CHECK(strprintf("%s %d %s", B, spt, E) == B" -87654321 " E);
+    BOOST_CHECK(strprintf("%s %u %s", B, pt, E) == B" 87654321 " E);
+    BOOST_CHECK(strprintf("%s %x %s", B, pt, E) == B" 5397fb1 " E);
 }
 #undef B
 #undef E
@@ -342,4 +310,49 @@ BOOST_AUTO_TEST_CASE(gettime)
     BOOST_CHECK((GetTime() & ~0xFFFFFFFFLL) == 0);
 }
 
+BOOST_AUTO_TEST_CASE(test_ParseInt32)
+{
+    int32_t n;
+    // Valid values
+    BOOST_CHECK(ParseInt32("1234", NULL));
+    BOOST_CHECK(ParseInt32("0", &n) && n == 0);
+    BOOST_CHECK(ParseInt32("1234", &n) && n == 1234);
+    BOOST_CHECK(ParseInt32("01234", &n) && n == 1234); // no octal
+    BOOST_CHECK(ParseInt32("2147483647", &n) && n == 2147483647);
+    BOOST_CHECK(ParseInt32("-2147483648", &n) && n == -2147483648);
+    BOOST_CHECK(ParseInt32("-1234", &n) && n == -1234);
+    // Invalid values
+    BOOST_CHECK(!ParseInt32("1a", &n));
+    BOOST_CHECK(!ParseInt32("aap", &n));
+    BOOST_CHECK(!ParseInt32("0x1", &n)); // no hex
+    // Overflow and underflow
+    BOOST_CHECK(!ParseInt32("-2147483649", NULL));
+    BOOST_CHECK(!ParseInt32("2147483648", NULL));
+    BOOST_CHECK(!ParseInt32("-32482348723847471234", NULL));
+    BOOST_CHECK(!ParseInt32("32482348723847471234", NULL));
+}
+
+BOOST_AUTO_TEST_CASE(test_FormatParagraph)
+{
+    BOOST_CHECK_EQUAL(FormatParagraph("", 79, 0), "");
+    BOOST_CHECK_EQUAL(FormatParagraph("test", 79, 0), "test");
+    BOOST_CHECK_EQUAL(FormatParagraph(" test", 79, 0), "test");
+    BOOST_CHECK_EQUAL(FormatParagraph("test test", 79, 0), "test test");
+    BOOST_CHECK_EQUAL(FormatParagraph("test test", 4, 0), "test\ntest");
+    BOOST_CHECK_EQUAL(FormatParagraph("testerde test ", 4, 0), "testerde\ntest");
+    BOOST_CHECK_EQUAL(FormatParagraph("test test", 4, 4), "test\n    test");
+    BOOST_CHECK_EQUAL(FormatParagraph("This is a very long test string. This is a second sentence in the very long test string."), "This is a very long test string. This is a second sentence in the very long\ntest string.");
+}
+
+BOOST_AUTO_TEST_CASE(test_FormatSubVersion)
+{
+    std::vector<std::string> comments;
+    comments.push_back(std::string("comment1"));
+    std::vector<std::string> comments2;
+    comments2.push_back(std::string("comment1"));
+    comments2.push_back(std::string("comment2"));
+    BOOST_CHECK_EQUAL(FormatSubVersion("Test", 99900, std::vector<std::string>()),std::string("/Test:0.9.99/"));
+    BOOST_CHECK_EQUAL(FormatSubVersion("Test", 99900, comments),std::string("/Test:0.9.99(comment1)/"));
+    BOOST_CHECK_EQUAL(FormatSubVersion("Test", 99900, comments2),std::string("/Test:0.9.99(comment1; comment2)/"));
+}
 BOOST_AUTO_TEST_SUITE_END()
