@@ -1761,7 +1761,11 @@ void PartitionCheck(bool (*initialDownloadCheck)(), CCriticalSection& cs, const 
     const int SPAN_HOURS=4;
     const int SPAN_SECONDS=SPAN_HOURS*60*60;
     int BLOCKS_EXPECTED = SPAN_SECONDS / nPowTargetSpacing;
-
+    if (chainActive.Height()>=nForkThree && nPowTargetSpacing==150)
+  	{
+  		BLOCKS_EXPECTED = SPAN_SECONDS / 60;
+  	}
+  	
     boost::math::poisson_distribution<double> poisson(BLOCKS_EXPECTED);
 
     std::string strWarning;
@@ -1794,15 +1798,21 @@ void PartitionCheck(bool (*initialDownloadCheck)(), CCriticalSection& cs, const 
     }
     else if (p <= alertThreshold && nBlocks > BLOCKS_EXPECTED)
     {
-        // Many more blocks than expected: alert!
+    		// Many more blocks than expected: alert!
+    		// partitioncheck alert:nPowTargetSpacing=150,BLOCKS_EXPECTED=96,nBlocks=227
         strWarning = strprintf(_("WARNING: abnormally high number of blocks generated, %d blocks received in the last %d hours (%d expected)"),
                                nBlocks, SPAN_HOURS, BLOCKS_EXPECTED);
     }
     if (!strWarning.empty())
     {
+    		LogPrintf("partitioncheck alert:nPowTargetSpacing=%d,BLOCKS_EXPECTED=%d,nBlocks=%d,at chainActive.Height=%d\n",nPowTargetSpacing,BLOCKS_EXPECTED,nBlocks,chainActive.Height());
         strMiscWarning = strWarning;
         CAlert::Notify(strWarning, true);
         lastAlertTime = now;
+    }
+    else
+    {
+    		LogPrintf("partitioncheck OK.\n");
     }
 }
 
