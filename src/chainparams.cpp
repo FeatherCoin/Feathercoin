@@ -73,6 +73,7 @@ public:
         vAlertPubKey = ParseHex("043c19a29fe8f763369aea68107e82854af7b072fc7d2d2adb87d2a3b40b51ab0d0e77805096e255a87388b175fd4a49d93d9b6c878004975e41222a3b85086eef");
         nDefaultPort = 9336;
         nMinerThreads = 0;
+        nMaxTipAge = 24 * 60 * 60;
         nPruneAfterHeight = 100000;
 
         /**
@@ -168,6 +169,7 @@ public:
         vAlertPubKey = ParseHex("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
         nDefaultPort = 19336;
         nMinerThreads = 0;
+        nMaxTipAge = 0x7fffffff;
         nPruneAfterHeight = 1000;
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
@@ -225,6 +227,7 @@ public:
         pchMessageStart[2] = 0xb5;
         pchMessageStart[3] = 0xda;
         nMinerThreads = 1;
+        nMaxTipAge = 24 * 60 * 60;
         genesis.nTime = 1296688602;
         genesis.nBits = 0x207fffff;
         genesis.nNonce = 2;

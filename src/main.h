@@ -350,7 +350,7 @@ bool IsFinalTx(const CTransaction &tx, int nBlockHeight, int64_t nBlockTime);
  *
  * Calls IsFinalTx() with current block height and appropriate block time.
  */
-bool CheckFinalTx(const CTransaction &tx);
+bool CheckFinalTx(const CTransaction &tx, int flags = -1);
 
 /** 
  * Closure representing one script verification

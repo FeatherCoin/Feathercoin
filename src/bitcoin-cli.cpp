@@ -26,7 +26,7 @@ std::string HelpMessageCli()
     strUsage += HelpMessageOpt("-regtest", _("Enter regression test mode, which uses a special chain in which blocks can be "
                                              "solved instantly. This is intended for regression testing tools and app development."));
     strUsage += HelpMessageOpt("-rpcconnect=<ip>", strprintf(_("Send commands to node running on <ip> (default: %s)"), "127.0.0.1"));
-    strUsage += HelpMessageOpt("-rpcport=<port>", strprintf(_("Connect to JSON-RPC on <port> (default: %u or testnet: %u)"), 8332, 18332));
+    strUsage += HelpMessageOpt("-rpcport=<port>", strprintf(_("Connect to JSON-RPC on <port> (default: %u or testnet: %u)"), 9337, 19337));
     strUsage += HelpMessageOpt("-rpcwait", _("Wait for RPC server to start"));
     strUsage += HelpMessageOpt("-rpcuser=<user>", _("Username for JSON-RPC connections"));
     strUsage += HelpMessageOpt("-rpcpassword=<pw>", _("Password for JSON-RPC connections"));
@@ -66,9 +66,9 @@ static bool AppInitRPC(int argc, char* argv[])
         std::string strUsage = _("Bitcoin Core RPC client version") + " " + FormatFullVersion() + "\n";
         if (!mapArgs.count("-version")) {
             strUsage += "\n" + _("Usage:") + "\n" +
-                  "  bitcoin-cli [options] <command> [params]  " + _("Send command to Bitcoin Core") + "\n" +
-                  "  bitcoin-cli [options] help                " + _("List commands") + "\n" +
-                  "  bitcoin-cli [options] help <command>      " + _("Get help for a command") + "\n";
+                  "  feathercoin-cli [options] <command> [params]  " + _("Send command to Feathercoin Core") + "\n" +
+                  "  feathercoin-cli [options] help                " + _("List commands") + "\n" +
+                  "  feathercoin-cli [options] help <command>      " + _("Get help for a command") + "\n";
 
             strUsage += "\n" + HelpMessageCli();
         }

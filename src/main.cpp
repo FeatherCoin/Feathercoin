@@ -709,11 +709,37 @@ bool IsFinalTx(const CTransaction &tx, int nBlockHeight, int64_t nBlockTime)
     return true;
 }
 
-bool CheckFinalTx(const CTransaction &tx)
+bool CheckFinalTx(const CTransaction &tx, int flags)
 {
     AssertLockHeld(cs_main);
-    return IsFinalTx(tx, chainActive.Height() + 1, GetAdjustedTime());
+
+    // By convention a negative value for flags indicates that the
+    // current network-enforced consensus rules should be used. In
+    // a future soft-fork scenario that would mean checking which
+    // rules would be enforced for the next block and setting the
+    // appropriate flags. At the present time no soft-forks are
+    // scheduled, so no flags are set.
+    flags = std::max(flags, 0);
+
+    // CheckFinalTx() uses chainActive.Height()+1 to evaluate
+    // nLockTime because when IsFinalTx() is called within
+    // CBlock::AcceptBlock(), the height of the block *being*
+    // evaluated is what is used. Thus if we want to know if a
+    // transaction can be part of the *next* block, we need to call
+    // IsFinalTx() with one more than chainActive.Height().
+    const int nBlockHeight = chainActive.Height() + 1;
+
+    // Timestamps on the other hand don't get any special treatment,
+    // because we can't know what timestamp the next block will have,
+    // and there aren't timestamp applications where it matters.
+    // However this changes once median past time-locks are enforced:
+    const int64_t nBlockTime = (flags & LOCKTIME_MEDIAN_TIME_PAST)
+                             ? chainActive.Tip()->GetMedianTimePast()
+                             : GetAdjustedTime();
+
+    return IsFinalTx(tx, nBlockHeight, nBlockTime);
 }
+
 
 /**
  * Check transaction inputs to mitigate two
@@ -931,9 +957,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
     // Only accept nLockTime-using transactions that can be mined in the next
     // block; we don't want our mempool filled up with transactions that can't
     // be mined yet.
-    if (!CheckFinalTx(tx))
-        return state.DoS(0, error("AcceptToMemoryPool: non-final"),
-                         REJECT_NONSTANDARD, "non-final");
+    if (!CheckFinalTx(tx, STANDARD_LOCKTIME_VERIFY_FLAGS))
+        return state.DoS(0, false, REJECT_NONSTANDARD, "non-final");
 
     // is it already in the memory pool?
     uint256 hash = tx.GetHash();
@@ -1092,47 +1117,45 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
 bool GetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock, bool fAllowSlow)
 {
     CBlockIndex *pindexSlow = NULL;
+
+    LOCK(cs_main);
+
+    if (mempool.lookup(hash, txOut))
     {
-        LOCK(cs_main);
+        return true;
+    }
+
+    if (fTxIndex) {
+        CDiskTxPos postx;
+        if (pblocktree->ReadTxIndex(hash, postx)) {
+            CAutoFile file(OpenBlockFile(postx, true), SER_DISK, CLIENT_VERSION);
+            if (file.IsNull())
+                return error("%s: OpenBlockFile failed", __func__);
+            CBlockHeader header;
+            try {
+                file >> header;
+                fseek(file.Get(), postx.nTxOffset, SEEK_CUR);
+                file >> txOut;
+            } catch (const std::exception& e) {
+                return error("%s: Deserialize or I/O error - %s", __func__, e.what());
+            }
+            hashBlock = header.GetHash();
+            if (txOut.GetHash() != hash)
+                return error("%s: txid mismatch", __func__);
+            return true;
+        }
+    }
+
+    if (fAllowSlow) { // use coin database to locate block that contains transaction, and scan it
+        int nHeight = -1;
         {
-            if (mempool.lookup(hash, txOut))
-            {
-                return true;
-            }
+            CCoinsViewCache &view = *pcoinsTip;
+            const CCoins* coins = view.AccessCoins(hash);
+            if (coins)
+                nHeight = coins->nHeight;
         }
-
-        if (fTxIndex) {
-            CDiskTxPos postx;
-            if (pblocktree->ReadTxIndex(hash, postx)) {
-                CAutoFile file(OpenBlockFile(postx, true), SER_DISK, CLIENT_VERSION);
-                if (file.IsNull())
-                    return error("%s: OpenBlockFile failed", __func__);
-                CBlockHeader header;
-                try {
-                    file >> header;
-                    fseek(file.Get(), postx.nTxOffset, SEEK_CUR);
-                    file >> txOut;
-                } catch (const std::exception& e) {
-                    return error("%s: Deserialize or I/O error - %s", __func__, e.what());
-                }
-                hashBlock = header.GetHash();
-                if (txOut.GetHash() != hash)
-                    return error("%s: txid mismatch", __func__);
-                return true;
-            }
-        }
-
-        if (fAllowSlow) { // use coin database to locate block that contains transaction, and scan it
-            int nHeight = -1;
-            {
-                CCoinsViewCache &view = *pcoinsTip;
-                const CCoins* coins = view.AccessCoins(hash);
-                if (coins)
-                    nHeight = coins->nHeight;
-            }
-            if (nHeight > 0)
-                pindexSlow = chainActive[nHeight];
-        }
+        if (nHeight > 0)
+            pindexSlow = chainActive[nHeight];
     }
 
     if (pindexSlow) {
@@ -1252,7 +1275,7 @@ bool IsInitialBlockDownload()
     if (lockIBDState)
         return false;
     bool state = (chainActive.Height() < pindexBestHeader->nHeight - 24 * 6 ||
-            pindexBestHeader->GetBlockTime() < GetTime() - 24 * 60 * 60);
+            pindexBestHeader->GetBlockTime() < GetTime() - chainParams.MaxTipAge());
     if (!state)
         lockIBDState = true;
     return state;
@@ -1874,9 +1897,16 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
    	bool fStrictPayToScriptHash =true;
     unsigned int flags = SCRIPT_VERIFY_P2SH;
 
-    // Start enforcing the DERSIG (BIP66) rules, for block.nVersion=3 blocks, when 75% of the network has upgraded:
+    // Start enforcing the DERSIG (BIP66) rules, for block.nVersion=3 blocks,
+    // when 75% of the network has upgraded:
     if (block.nVersion >= 3 && IsSuperMajority(3, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
         flags |= SCRIPT_VERIFY_DERSIG;
+    }
+    
+    // Start enforcing CHECKLOCKTIMEVERIFY, (BIP65) for block.nVersion=4
+    // blocks, when 75% of the network has upgraded:
+    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
     }
 
     CBlockUndo blockundo;
@@ -2016,7 +2046,7 @@ bool static FlushStateToDisk(CValidationState &state, FlushStateMode mode) {
     std::set<int> setFilesToPrune;
     bool fFlushForPrune = false;
     try {
-    if (fPruneMode && fCheckForPruning) {
+    if (fPruneMode && fCheckForPruning && !fReindex) {
         FindFilesToPrune(setFilesToPrune);
         fCheckForPruning = false;
         if (!setFilesToPrune.empty()) {
@@ -2828,6 +2858,11 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if (block.nVersion < 3 && IsSuperMajority(3, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s : rejected nVersion=2 block", __func__),
                              REJECT_OBSOLETE, "bad-version");
+                             
+    // Reject block.nVersion=3 blocks when 95% (75% on testnet) of the network has upgraded:
+    if (block.nVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
+                             REJECT_OBSOLETE, "bad-version");
 
     return true;
 }
@@ -2840,10 +2875,15 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
     const Consensus::Params& consensusParams = chainParams.GetConsensus(nHeight);
 
     // Check that all transactions are finalized
-    BOOST_FOREACH(const CTransaction& tx, block.vtx)
-        if (!IsFinalTx(tx, nHeight, block.GetBlockTime())) {
+    BOOST_FOREACH(const CTransaction& tx, block.vtx) {
+        int nLockTimeFlags = 0;
+        int64_t nLockTimeCutoff = (nLockTimeFlags & LOCKTIME_MEDIAN_TIME_PAST)
+                                ? pindexPrev->GetMedianTimePast()
+                                : block.GetBlockTime();
+        if (!IsFinalTx(tx, nHeight, nLockTimeCutoff)) {
             return state.DoS(10, error("%s: contains a non-final transaction", __func__), REJECT_INVALID, "bad-txns-nonfinal");
         }
+    }
    
     // Enforce block.nVersion=2 rule that the coinbase starts with serialized block height
     // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):

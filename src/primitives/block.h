@@ -26,7 +26,8 @@ class CBlockHeader
 {
 public:
     // header
-    static const int32_t CURRENT_VERSION=3;
+    // https://github.com/bitcoin/bitcoin/commit/fc7f0ee28caca472d527ecd208d7012a42d94ad9
+    static const int32_t CURRENT_VERSION=4;
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;
