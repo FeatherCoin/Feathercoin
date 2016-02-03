@@ -101,7 +101,7 @@
     </message>
     </context>
 <context>
-    <name>BitcoinGUI</name>
+    <name>FeathercoinGUI</name>
     <message>
         <source>Synchronizing with network...</source>
         <translation>Sinchroniseer met die netwerk ...</translation>
@@ -139,8 +139,8 @@
         <translation>&amp;Opsies</translation>
     </message>
     <message>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -625,7 +625,7 @@
     <name>WalletView</name>
     </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>feathercoin-core</name>
     <message>
         <source>Options:</source>
         <translation>Opsies:</translation>

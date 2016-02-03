@@ -62,12 +62,12 @@
         <translation>მიღების მისამართი</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>ეს არის თქვენი Bitcoin-მისამართები გადახდების შესასრულებლად. მონეტების გაგზავნამდე ყოველთვის შეამოწმეთ თანხა და მიმღების მისამართი.</translation>
+        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>ეს არის თქვენი Feathercoin-მისამართები გადახდების შესასრულებლად. მონეტების გაგზავნამდე ყოველთვის შეამოწმეთ თანხა და მიმღების მისამართი.</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>ეს არის თქვენი Bitcoin-მისამართები გადახდების მისაღებად. რეკომენდებულია ყოველი ტრანსაქციისათვის ახალი მიღების მისამართის გამოყენება.</translation>
+        <source>These are your Feathercoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>ეს არის თქვენი Feathercoin-მისამართები გადახდების მისაღებად. რეკომენდებულია ყოველი ტრანსაქციისათვის ახალი მიღების მისამართის გამოყენება.</translation>
     </message>
     <message>
         <source>Copy &amp;Label</source>
@@ -201,7 +201,7 @@
     </message>
 </context>
 <context>
-    <name>BitcoinGUI</name>
+    <name>FeathercoinGUI</name>
     <message>
         <source>Sign &amp;message...</source>
         <translation>ხელ&amp;მოწერა</translation>
@@ -283,8 +283,8 @@
         <translation>დისკზე ბლოკების რეინდექსაცია...</translation>
     </message>
     <message>
-        <source>Send coins to a Bitcoin address</source>
-        <translation>მონეტების გაგზავნა Bitcoin-მისამართზე</translation>
+        <source>Send coins to a Feathercoin address</source>
+        <translation>მონეტების გაგზავნა Feathercoin-მისამართზე</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -307,8 +307,8 @@
         <translation>&amp;ვერიფიკაცია</translation>
     </message>
     <message>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -335,12 +335,12 @@
         <translation>თქვენი საფულის პირადი გასაღებების დაშიფრვა</translation>
     </message>
     <message>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
-        <translation>მესიჯებზე ხელმოწერა თქვენი Bitcoin-მისამართებით იმის დასტურად, რომ ის თქვენია</translation>
+        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
+        <translation>მესიჯებზე ხელმოწერა თქვენი Feathercoin-მისამართებით იმის დასტურად, რომ ის თქვენია</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
-        <translation>შეამოწმეთ, რომ მესიჯები ხელმოწერილია მითითებული Bitcoin-მისამართით</translation>
+        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
+        <translation>შეამოწმეთ, რომ მესიჯები ხელმოწერილია მითითებული Feathercoin-მისამართით</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -359,16 +359,16 @@
         <translation>ბარათების პანელი</translation>
     </message>
     <message>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
-        <translation>გადახდის მოთხოვნა (შეიქმნება QR-კოდები და bitcoin: ბმულები)</translation>
+        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
+        <translation>გადახდის მოთხოვნა (შეიქმნება QR-კოდები და feathercoin: ბმულები)</translation>
     </message>
     <message>
-        <source>&amp;About Bitcoin Core</source>
-        <translation>Bitcoin Core-ს შეს&amp;ახებ</translation>
+        <source>&amp;About Feathercoin Core</source>
+        <translation>Feathercoin Core-ს შეს&amp;ახებ</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -379,16 +379,16 @@
         <translation>გამოყენებული მიღების მისამართებისა და ნიშნულების სიის ჩვენება</translation>
     </message>
     <message>
-        <source>Open a bitcoin: URI or payment request</source>
-        <translation>bitcoin: URI-ის ან გადახდის მოთხოვნის გახსნა</translation>
+        <source>Open a feathercoin: URI or payment request</source>
+        <translation>feathercoin: URI-ის ან გადახდის მოთხოვნის გახსნა</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>საკომანდო სტრიქონის ოპ&amp;ციები</translation>
     </message>
     <message>
-        <source>Show the Bitcoin Core help message to get a list with possible Bitcoin command-line options</source>
-        <translation>Bitcoin Core-ს დახმარების ჩვენება Bitcoin-ის საკომანდო სტრიქონის დასაშვები ოპციების სანახავად</translation>
+        <source>Show the Feathercoin Core help message to get a list with possible Feathercoin command-line options</source>
+        <translation>Feathercoin Core-ს დახმარების ჩვენება Feathercoin-ის საკომანდო სტრიქონის დასაშვები ოპციების სანახავად</translation>
     </message>
     <message>
         <source>No block source available...</source>
@@ -684,8 +684,8 @@
         <translation>მისამართი "%1" უკვე არის მისამართების წიგნში.</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Bitcoin address.</source>
-        <translation>შეყვანილი მისამართი "%1" არ არის ვალიდური Bitcoin-მისამართი.</translation>
+        <source>The entered address "%1" is not a valid Feathercoin address.</source>
+        <translation>შეყვანილი მისამართი "%1" არ არის ვალიდური Feathercoin-მისამართი.</translation>
     </message>
     <message>
         <source>Could not unlock wallet.</source>
@@ -722,16 +722,16 @@
 <context>
     <name>HelpMessageDialog</name>
     <message>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
         <source>version</source>
         <translation>ვერსია</translation>
     </message>
     <message>
-        <source>About Bitcoin Core</source>
-        <translation>Bitcoin Core-ს შესახებ</translation>
+        <source>About Feathercoin Core</source>
+        <translation>Feathercoin Core-ს შესახებ</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -753,12 +753,12 @@
         <translation>მოგესალმებით</translation>
     </message>
     <message>
-        <source>Welcome to Bitcoin Core.</source>
-        <translation>მოგესალმებათ Bitcoin Core.</translation>
+        <source>Welcome to Feathercoin Core.</source>
+        <translation>მოგესალმებათ Feathercoin Core.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where Bitcoin Core will store its data.</source>
-        <translation>ეს პროგრამის პირველი გაშვებაა; შეგიძლიათ მიუთითოთ, სად შეინახოს მონაცემები Bitcoin Core-მ.</translation>
+        <source>As this is the first time the program is launched, you can choose where Feathercoin Core will store its data.</source>
+        <translation>ეს პროგრამის პირველი გაშვებაა; შეგიძლიათ მიუთითოთ, სად შეინახოს მონაცემები Feathercoin Core-მ.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -769,8 +769,8 @@
         <translation>მითითებული კატალოგის გამოყენება:</translation>
     </message>
     <message>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
         <source>Error</source>
@@ -851,8 +851,8 @@
         <translation>დაუდასტურებელი ხურდის გამოყენების აკრძალვის შემდეგ მათი გამოყენება შეუძლებელი იქნება, სანამ ტრანსაქციას არ ექნება ერთი დასტური მაინც. ეს აისახება თქვენი ნაშთის დათვლაზეც.</translation>
     </message>
     <message>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>როუტერში Bitcoin-კლიენტის პორტის ავტომატური გახსნა. მუშაობს, თუ თქვენს როუტერს ჩართული აქვს UPnP.</translation>
+        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>როუტერში Feathercoin-კლიენტის პორტის ავტომატური გახსნა. მუშაობს, თუ თქვენს როუტერს ჩართული აქვს UPnP.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -946,8 +946,8 @@
         <translation>ფორმა</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>ნაჩვენები ინფორმაცია შეიძლება მოძველებული იყოს. თქვენი საფულე ავტომატურად სინქრონიზდება Bitcoin-ის ქსელთან კავშირის დამყარების შემდეგ, ეს პროცესი ჯერ არ არის დასრულებული.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>ნაჩვენები ინფორმაცია შეიძლება მოძველებული იყოს. თქვენი საფულე ავტომატურად სინქრონიზდება Feathercoin-ის ქსელთან კავშირის დამყარების შემდეგ, ეს პროცესი ჯერ არ არის დასრულებული.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1001,8 +1001,8 @@
         <translation>გადახდის მოთხოვნის შეცდომა</translation>
     </message>
     <message>
-        <source>Cannot start bitcoin: click-to-pay handler</source>
-        <translation>ვერ გაიშვა bitcoin: click-to-pay</translation>
+        <source>Cannot start feathercoin: click-to-pay handler</source>
+        <translation>ვერ გაიშვა feathercoin: click-to-pay</translation>
     </message>
     <message>
         <source>Payment request fetch URL is invalid: %1</source>
@@ -1224,7 +1224,7 @@
         <translation>ად&amp;რე გამოყენებული მიღების მისამართის გამოყენება (არ არის რეკომენდებული)</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
         <translation>არააუცილებელი მესიჯი, რომელიც ერთვის გადახდის მოთხოვნას და ნაჩვენები იქნება მოთხოვნის გახსნისას. შენიშვნა: მესიჯი არ გაყვება გადახდას ბითქოინის ქსელში.</translation>
     </message>
     <message>
@@ -1513,8 +1513,8 @@
         <translation>ტრანსაქცია უარყოფილია! შესაძლოა მონეტების ნაწილი თქვენი საფულიდან უკვე გამოყენებულია, რაც შეიძლება მოხდეს wallet.dat-ის ასლის გამოყენებისას, როცა მონეტები გაიგზავნა სხვა ასლიდან, აქ კი არ არის გაგზავნილად მონიშნული.</translation>
     </message>
     <message>
-        <source>Warning: Invalid Bitcoin address</source>
-        <translation>ყურადღება: არასწორია Bitcoin-მისამართი</translation>
+        <source>Warning: Invalid Feathercoin address</source>
+        <translation>ყურადღება: არასწორია Feathercoin-მისამართი</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -1584,7 +1584,7 @@
         <translation>შეიყვანეთ ამ მისამართის ნიშნული გამოყენებული მისამართების სიაში დასამატებლად</translation>
     </message>
     <message>
-        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
+        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
         <translation>მესიჯი, რომელიც თან ერთვის მონეტებს:  URI, რომელიც შეინახება ტრანსაქციასთან ერთად თქვენთვის. შენიშვნა: მესიჯი არ გაყვება გადახდას ბითქოინის ქსელში.</translation>
     </message>
     <message>
@@ -1599,8 +1599,8 @@
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>Bitcoin Core is shutting down...</source>
-        <translation>Bitcoin Core იხურება...</translation>
+        <source>Feathercoin Core is shutting down...</source>
+        <translation>Feathercoin Core იხურება...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -1646,7 +1646,7 @@
         <translation>მიმდინარე ხელმოწერის კოპირება კლიპბორდში</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Bitcoin address</source>
+        <source>Sign the message to prove you own this Feathercoin address</source>
         <translation>მოაწერეთ ხელი იმის დასადასტურებლად, რომ ეს მისამართი თქვენია</translation>
     </message>
     <message>
@@ -1666,8 +1666,8 @@
         <translation>მესიჯის &amp;ვერიფიკაცია</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
-        <translation>შეამოწმეთ, რომ მესიჯი ხელმოწერილია მითითებული Bitcoin-მისამართით</translation>
+        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
+        <translation>შეამოწმეთ, რომ მესიჯი ხელმოწერილია მითითებული Feathercoin-მისამართით</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -1733,12 +1733,12 @@
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
-        <source>The Bitcoin Core developers</source>
-        <translation>Bitcoin Core-ს ავტორები</translation>
+        <source>The Feathercoin Core developers</source>
+        <translation>Feathercoin Core-ს ავტორები</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -2173,7 +2173,7 @@
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>feathercoin-core</name>
     <message>
         <source>Options:</source>
         <translation>ოპციები:</translation>
