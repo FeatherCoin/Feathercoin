@@ -221,7 +221,7 @@
     </message>
 </context>
 <context>
-    <name>BitcoinGUI</name>
+    <name>FeathercoinGUI</name>
     <message>
         <source>Sign &amp;message...</source>
         <translation>消息签名(&amp;M)...</translation>
@@ -2779,7 +2779,7 @@
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>feathercoin-core</name>
     <message>
         <source>Options:</source>
         <translation>选项：
@@ -3211,8 +3211,8 @@ rpcpassword=%s
         <translation>信息</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. Bitcoin Core is shutting down.</source>
-        <translation>初始化完整性检查失败。Bitcoin Core 即将关闭。</translation>
+        <source>Initialization sanity check failed. Feathercoin Core is shutting down.</source>
+        <translation>初始化完整性检查失败。Feathercoin Core 即将关闭。</translation>
     </message>
     <message>
         <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
@@ -3344,7 +3344,7 @@ rpcpassword=%s
         <translation>JSON-RPC 连接用户名</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart Bitcoin Core to complete</source>
+        <source>Wallet needed to be rewritten: restart Feathercoin Core to complete</source>
         <translation>钱包需要被改写：重新启动核心钱包来完成</translation>
     </message>
     <message>
