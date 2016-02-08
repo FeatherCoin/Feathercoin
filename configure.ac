@@ -434,7 +434,7 @@ if test x$use_hardening != xno; then
   CPPFLAGS="$CPPFLAGS $HARDENED_CPPFLAGS"
   LDFLAGS="$LDFLAGS $HARDENED_LDFLAGS"
   OBJCXXFLAGS="$CXXFLAGS"
-  CFLAGS="$CXXFLAGS"
+  CFLAGS="$CFLAGS $CXXFLAGS"
 fi
 
 dnl this flag screws up non-darwin gcc even when the check fails. special-case it.
