@@ -15,7 +15,7 @@ AC_DEFUN([BITCOIN_FIND_BDB61],[
     AC_TRY_COMPILE([
       #include <${searchpath}db_cxx.h>
     ],[
-      #if !((DB_VERSION_MAJOR == 6 && DB_VERSION_MINOR >= 1) || DB_VERSION_MAJOR > 4)
+      #if !((DB_VERSION_MAJOR == 6 && DB_VERSION_MINOR >= 1) || DB_VERSION_MAJOR >= 4)
         #error "failed to find bdb > 4.8"
       #endif
     ],[
@@ -29,6 +29,7 @@ AC_DEFUN([BITCOIN_FIND_BDB61],[
       #include <${searchpath}db_cxx.h>
     ],[
       #if !(DB_VERSION_MAJOR == 6 && DB_VERSION_MINOR == 1)
+)
         #error "failed to find bdb 6.1"
       #endif
     ],[
