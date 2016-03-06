@@ -792,8 +792,8 @@ bool CTxMemPool::accept(CValidationState &state, CTransaction &tx, bool fCheckIn
 
         // Check against previous transactions
         // This is done last to help prevent CPU exhaustion denial-of-service attacks.
-        if (!tx.CheckInputs(state, view, true, SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_STRICTENC))
-        {
+        if(!tx.CheckInputs(state, view, true,
+          SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_STRICTENC | SCRIPT_VERIFY_DERSIG)) {
             return error("CTxMemPool::accept() : ConnectInputs failed %s", hash.ToString().c_str());
         }
     }
@@ -1305,8 +1305,8 @@ bool IsInitialBlockDownload()
         pindexLastBest = pindexBest;
         nLastUpdate = GetTime();
     }
-    return (GetTime() - nLastUpdate < 10 &&
-            pindexBest->GetBlockTime() < GetTime() - 24 * 60 * 60);
+    return(((GetTime() - nLastUpdate) < 10) &&
+      (pindexBest->GetBlockTime() < (GetTime() - 4 * 60 * 60)));
 }
 
 void static InvalidChainFound(CBlockIndex* pindexNew)
@@ -2333,7 +2333,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
     }
 
 	// ppcoin: check pending sync-checkpoint
-    AcceptPendingSyncCheckpoint();
+    if(!IsInitialBlockDownload()) AcceptPendingSyncCheckpoint();
 
     return true;
 }
@@ -2381,7 +2381,7 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
     }
 
 	// ppcoin: ask for pending sync-checkpoint if any
-    if (!IsInitialBlockDownload())
+    if(pfrom && !IsInitialBlockDownload())
         AskForPendingSyncCheckpoint(pfrom);
 
     // If we don't already have its previous block, shunt it off to holding area until we get it
@@ -3115,8 +3115,9 @@ string GetWarnings(string strFor)
     }
 
     // Longer invalid proof-of-work chain
-    if (pindexBest && nBestInvalidWork > nBestChainWork + (pindexBest->GetBlockWork() * 6).getuint256())
-    {
+    if(pindexBest && !IsInitialBlockDownload() && !fTestNet &&
+      IsSyncCheckpointTooOld(60 * 60 * 24 * 10) &&
+      (nBestInvalidWork > nBestChainWork + (pindexBest->GetBlockWork() * 6).getuint256())) {
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.");
     }
