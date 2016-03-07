@@ -21,7 +21,7 @@
 #define CLIENT_VERSION_MINOR 9
 
 /* Build revision */
-#define CLIENT_VERSION_REVISION 3.1
+#define CLIENT_VERSION_REVISION 3
 
 /* Version is release */
 #define COPYRIGHT_YEAR 2014
@@ -109,7 +109,7 @@
 /* #undef HAVE_LIBPROTOBUF_ */
 
 /* Define to 1 if you have the `qrencode' library (-lqrencode). */
-#define HAVE_LIBQRENCODE 1
+/* #undef HAVE_LIBQRENCODE */
 
 /* Define to 1 if you have the `rpcrt4' library (-lrpcrt4). */
 /* #undef HAVE_LIBRPCRT4 */
@@ -139,7 +139,7 @@
 /* #undef HAVE_LIBWS2_32 */
 
 /* Define to 1 if you have the `zxing' library (-lzxing). */
-#define HAVE_LIBZXING 1
+/* #undef HAVE_LIBZXING */
 
 /* Define to 1 if you have the `z ' library (-lz ). */
 /* #undef HAVE_LIBZ_ */
@@ -233,17 +233,17 @@
 #define STRERROR_R_CHAR_P 1
 
 /* Define if dbus support should be compiled in */
-#define USE_DBUS 1
+/* #undef USE_DBUS */
 
 /* Define if QR support should be compiled in */
-#define USE_QRCODE 1
+/* #undef USE_QRCODE */
 
 /* UPnP support not compiled if undefined, otherwise value (0 or 1) determines
    default state */
 #define USE_UPNP 0
 
 /* Define if QR support should be compiled in */
-#define USE_ZXING 1
+/* #undef USE_ZXING */
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
