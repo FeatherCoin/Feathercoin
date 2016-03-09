@@ -12,7 +12,7 @@
 #define CLIENT_VERSION_BUILD 0
 
 /* Version is release */
-#define CLIENT_VERSION_IS_RELEASE true
+#define CLIENT_VERSION_IS_RELEASE false
 
 /* Major version */
 #define CLIENT_VERSION_MAJOR 0
@@ -21,10 +21,10 @@
 #define CLIENT_VERSION_MINOR 9
 
 /* Build revision */
-#define CLIENT_VERSION_REVISION 3
+#define CLIENT_VERSION_REVISION 5
 
 /* Version is release */
-#define COPYRIGHT_YEAR 2014
+#define COPYRIGHT_YEAR 2015
 
 /* Define to 1 to enable wallet functions */
 #define ENABLE_WALLET 1
@@ -51,7 +51,7 @@
 #define HAVE_BOOST_THREAD /**/
 
 /* define if the Boost::Unit_Test_Framework library is available */
-/* #undef HAVE_BOOST_UNIT_TEST_FRAMEWORK */
+#define HAVE_BOOST_UNIT_TEST_FRAMEWORK /**/
 
 /* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
    don't. */
@@ -208,7 +208,7 @@
 #define PACKAGE_NAME "Feathercoin Core"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Feathercoin Core 0.9.3"
+#define PACKAGE_STRING "Feathercoin Core 0.9.5"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "feathercoin"
@@ -217,7 +217,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.9.3"
+#define PACKAGE_VERSION "0.9.5"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */
