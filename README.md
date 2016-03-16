@@ -19,9 +19,12 @@
 <h1>Official Wesbite and Downloads</h1>
 <p>
 <ul>
+<!-- removed download links, as both versions are not safe
 <li>0.9.5 wallet for:<a href="http://www.ftc-c.com/pack3/feathercoin-qt.rar/">windows</a></li>
 <li>0.11.2 wallet for:<a href="http://www.ftc-c.com/pack4/feathercoin-setup.exe/">windows</a></li>
+-->
 </ul>
+
 </p>
 
 <p>
