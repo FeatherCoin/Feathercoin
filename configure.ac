@@ -533,8 +533,8 @@ if test x$use_pkgconfig = xyes; then
       if test x$use_qr != xno; then
       #  PKG_CHECK_MODULES([ZXING], [zxing],, [AC_MSG_ERROR(libzxing  not found.)])
         BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_zxing=no])])
-        PKG_CHECK_MODULES([QRENCODE], [libqrencode],, [AC_MSG_ERROR(libqrencode  not found.)])
-        BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
+      #  PKG_CHECK_MODULES([QRENCODE], [libqrencode],, [AC_MSG_ERROR(libqrencode  not found.)])
+      #  BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
       fi
     ]
   )

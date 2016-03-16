@@ -8,6 +8,8 @@ src/feathercoin-cli
 src/bitcoin-config.h
 src/test/test_bitcoin
 src/qt/test/test_bitcoin-qt
+src/bitcoin-config.h
+
 
 autom4te.cache/
 config.log
