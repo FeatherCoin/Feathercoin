@@ -6,24 +6,29 @@ src/feathercoin
 src/feathercoind
 src/feathercoin-cli
 src/bitcoin-config.h
+src/bitcoin-config.h
+src/Makefile.in
+
+src/test/Makefile.in
 src/test/test_bitcoin
-src/qt/test/test_bitcoin-qt
-src/bitcoin-config.h
 
-
-autom4te.cache/
-config.log
-config.status
-configure
-src/bitcoin-config.h
 src/build-aux/
 src/stamp-h1
 
 src/qt/*.moc
 src/qt/moc_*.cpp
 src/qt/forms/ui_*.h
-
+src/qt/Makefile.in
 src/qt/test/moc*.cpp
+src/qt/test/test_bitcoin-qt
+src/qt/test/Makefile.in
+
+
+autom4te.cache/
+config.log
+config.status
+configure
+
 
 .deps
 .dirstamp
