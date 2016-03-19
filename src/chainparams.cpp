@@ -66,9 +66,13 @@ public:
          * a large 32-bit integer with any alignment.
          */
         pchMessageStart[0] = 0xfb;
+        pchMessageStartNew[0] = 0xfe;
         pchMessageStart[1] = 0xc0;
+        pchMessageStartNew[1] = 0x46;
         pchMessageStart[2] = 0xb6;
+        pchMessageStartNew[2] = 0x54;
         pchMessageStart[3] = 0xdb;
+        pchMessageStartNew[3] = 0x43;
 
         vAlertPubKey = ParseHex("043c19a29fe8f763369aea68107e82854af7b072fc7d2d2adb87d2a3b40b51ab0d0e77805096e255a87388b175fd4a49d93d9b6c878004975e41222a3b85086eef");
         nDefaultPort = 9336;
@@ -107,8 +111,8 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
 
 
-        vSeeds.push_back(CDNSSeedData("ftc-c.com", "dnsseed.ftc-c.com"));
         vSeeds.push_back(CDNSSeedData("feathercoin.com", "dnsseed.feathercoin.com"));
+        vSeeds.push_back(CDNSSeedData("ftc-c.com", "dnsseed.ftc-c.com"));
         vSeeds.push_back(CDNSSeedData("block.ftc-c.com", "block.ftc-c.com"));
         
 
@@ -130,8 +134,10 @@ public:
         checkpointData = (Checkpoints::CCheckpointData) {
             boost::assign::map_list_of
             ( 11111, uint256S("0x150efec427f0c53e0732b4a7ae88bd12c56e90c5577e5b0a86d19f8341ef733d"))
-            ( 33333, uint256S("0x7b13e5ef2e84db87747601d35b4f612288ee83b5350283ea64178d8b9d513222"))
-            ( 74000, uint256S("0x9af08ac63e721b798403bcd44212cf054eb2aeef319b2a8126abd151f6313b7f"))
+            ( 22267, uint256S("0x23dc7d871fc2a9b994112e978019f6370bab0b8979f557afe77a7ab620224b70"))
+            ( 33001, uint256S("0x0a9d974a327961025a6b1dcbb70f980da2e61cf2c7079df6a73ac834fc3f8bc4"))
+            ( 34000, uint256S("0x082f5d9023af3f068733ab68cf81b741f58e3c75ae28d2a9bd07f30b74c38356"))
+            ( 87948, uint256S("0xcc090355706db5bff83db9a0623b5cc4febd317e5bd07c9bb5a7ee22a7891810"))
             (105000, uint256S("0xf88127af8f17ddd0dcfe1c052dba95033cde83269ced952700e58d1dd7209f30"))
             (134444, uint256S("0x7fea1270611335aa5cce27c1cdfe1c7d27dbe3528d606013f2bd271d15b35943"))
             (168000, uint256S("0x966b27809cf680558b4ec1265eeb18b16cad0ac89c95c213059457e970cd11a8"))
@@ -140,8 +146,8 @@ public:
             (216116, uint256S("0x0d44239447a8fc21c18087237ffa359fdffe9f0714c997fcc3bac4bf49d06ceb"))
             (225430, uint256S("0x75565a0b2673a06bfcd70d80c490d0d90fd31f8768e9e5fbffb85047673720c2"))
             (250000, uint256S("0x3bbf886d14cc2f00c06ab22a46329a3fe6837b6ac5f504a85339be91e9b4fbe9"))
-            (279000, uint256S("0x84aa29e0d627a4fbeca90127d90c1f56dd7f7f2ad9fa675d11866fd67d41d05a"))
-            (295000, uint256S("0x338ecad728cd9d97f7d12cc75e3e254c47155e6dcc6223d71f1dd8a1d9d9dc9b")),
+            (432001, uint256S("0x37ae6928845fb6aa4e8f62135557e056621b72b7c0c773c2eeecc7d19a78d0f4"))
+            (1114311,uint256S("0x93515f222f16a9ff3db6594e5ee7c12924cff9ba05b01dbe551d0a9e65dd141f")),
             1366181271, // * UNIX timestamp of last checkpoint block 1366181271
             36544669,   // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)

@@ -97,6 +97,7 @@ protected:
     Consensus::Params *pConsensusRoot; // Binary search tree root
     
     CMessageHeader::MessageStartChars pchMessageStart;
+    CMessageHeader::MessageStartChars pchMessageStartNew;
     //! Raw pub key bytes for the broadcast alert signing key.
     std::vector<unsigned char> vAlertPubKey;
     int nDefaultPort;

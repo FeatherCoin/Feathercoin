@@ -2164,21 +2164,21 @@ void static UpdateTip(CBlockIndex *pindexNew) {
 
     cvBlockChange.notify_all();
 
-    // Check the version of the last 100 blocks to see if we need to upgrade:
+    // Check the version of the last 500 blocks to see if we need to upgrade:
     static bool fWarned = false;
     if (!IsInitialBlockDownload() && !fWarned)
     {
         int nUpgraded = 0;
         const CBlockIndex* pindex = chainActive.Tip();
-        for (int i = 0; i < 100 && pindex != NULL; i++)
+        for (int i = 0; i < 500 && pindex != NULL; i++)
         {
             if (pindex->nVersion > CBlock::CURRENT_VERSION)
                 ++nUpgraded;
             pindex = pindex->pprev;
         }
         if (nUpgraded > 0)
-            LogPrintf("%s: %d of last 100 blocks above version %d\n", __func__, nUpgraded, (int)CBlock::CURRENT_VERSION);
-        if (nUpgraded > 100/2)
+            LogPrintf("%s: %d of last 500 blocks above version %d\n", __func__, nUpgraded, (int)CBlock::CURRENT_VERSION);
+        if (nUpgraded > 500/2)
         {
             // strMiscWarning is read by GetWarnings(), called by Qt and the JSON-RPC code to warn the user:
             strMiscWarning = _("Warning: This version is obsolete; upgrade required!");
@@ -4091,14 +4091,18 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
     if (strCommand == "version")
     {
-    		//LogPrintf("\nProcessMessages version\n");
         // Each connection can only send one version message
-        if (pfrom->nVersion != 0)
+        /*if (pfrom->nVersion != 0)
         {
             pfrom->PushMessage("reject", strCommand, REJECT_DUPLICATE, string("Duplicate version message"));
             Misbehaving(pfrom->GetId(), 1);
             return false;
-        }
+        }*/
+        
+        /* Process the 1st version message received per connection
+         * and ignore the others if any */
+        if(pfrom->nVersion)
+						return(true);
 
         int64_t nTime;
         CAddress addrMe;
@@ -4353,8 +4357,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                     else
                     {
                     	//LogPrintf("ProcessMessages vToFetch.push_back false,nPowTargetSpacing=%d,nHeight=%d.\n",chainparams.GetConsensus().nPowTargetSpacing,chainActive.Tip()->nHeight);
-                    	LogPrintf("ProcessMessages vToFetch chainActive.Tip()->GetBlockTime()=%u \n",chainActive.Tip()->GetBlockTime());
-                    	LogPrintf("ProcessMessages vToFetch GetAdjustedTime() =%u \n",GetAdjustedTime());
+                    	//LogPrintf("ProcessMessages vToFetch chainActive.Tip()->GetBlockTime()=%u \n",chainActive.Tip()->GetBlockTime());
+                    	//LogPrintf("ProcessMessages vToFetch GetAdjustedTime() =%u \n",GetAdjustedTime());
                     	//LogPrintf("ProcessMessages vToFetch chainparams.GetConsensus().nPowTargetSpacing=%d \n",chainparams.GetConsensus().nPowTargetSpacing * 20);
                     	//LogPrintf("ProcessMessages vToFetch nodestate->nBlocksInFlight =%u \n",nodestate->nBlocksInFlight);
                     	//LogPrintf("ProcessMessages vToFetch MAX_BLOCKS_IN_TRANSIT_PER_PEER =%d \n",MAX_BLOCKS_IN_TRANSIT_PER_PEER);
@@ -4986,17 +4990,43 @@ bool ProcessMessages(CNode* pfrom)
         it++;
 
         // Scan for message start
-        if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
+        /*if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
             LogPrintf("PROCESSMESSAGE: INVALID MESSAGESTART %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
             fOk = false;
             break;
+        }*/
+        bool fMagic;
+        /* Message start detector */
+        if(pfrom->nVersion) {
+            /* If a protocol version is known, the detection is easy */
+            if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
+                //pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStartNew), END(pchMessageStartNew));
+                fMagic = true;
+            } else {
+                //pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStart), END(pchMessageStart));
+                fMagic = false;
+            }
+        } else {
+            /* Check for the old magic number first */
+            //pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStart), END(pchMessageStart));
+            fMagic = false;
+            /*if(vRecv.end() == pstart) {
+                // Must be the new magic number 
+                pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStartNew), END(pchMessageStartNew));
+                fMagic = true;
+            }*/
         }
 
         // Read header
+        std::string output;
+				output.assign(msg.hdr.pchMessageStart);   
+        std::vector<unsigned char> opt_script(output.begin(), output.end());
+        LogPrintf("PROCESSMESSAGE: pfrom->nVersion=%d,msg.hdr.pchMessageStart=%s\n", pfrom->nVersion,HexStr(opt_script).c_str());
         CMessageHeader& hdr = msg.hdr;
-        if (!hdr.IsValid(Params().MessageStart()))
+        //if (!hdr.IsValid(Params().MessageStart()))
+        if (!hdr.IsValid(Params().MessageStart(),fMagic))
         {
-            LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id);
+            LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
             continue;
         }
         string strCommand = hdr.GetCommand();
@@ -5016,7 +5046,7 @@ bool ProcessMessages(CNode* pfrom)
         }
 
         // Process message
-        LogPrintf("ProcessMessages Point=%s\n",strCommand);
+        // LogPrintf("ProcessMessages Point=%s\n",strCommand);
         bool fRet = false;
         try
         {
