@@ -18,6 +18,8 @@ int nTargetSpacing;
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
+    const CChainParams& chainParams = Params();
+
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
     unsigned int nProofOfWorkLimitNeo = UintToArith256(params.powNeoLimit).GetCompact();
 
@@ -30,7 +32,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     //LogPrintf("GetNextWorkRequired.1 pindexLast block Height=%d,nBits=%d \n",pindexLast->nHeight,pindexLast->nBits);
 
     /* The 4th hard fork and testnet hard fork */
-    if ((nHeight >= nForkFour)) {
+    if ((nHeight >= nForkFour)|| ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetFork))) {
         if(!fNeoScrypt) fNeoScrypt = true;
         /* Difficulty reset after the switch */
         if((nHeight == nForkFour))
@@ -49,7 +51,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if (nHeight >= nForkTwo)
 				nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
 		
-    if (nHeight >= nForkThree ) {
+    if ((nHeight >= nForkThree) || (chainParams.NetworkIDString()=="test")) {
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
     }
@@ -59,6 +61,13 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int nInterval = nTargetTimespan / nTargetSpacing;
 
     bool fHardFork = (nHeight == nForkOne) || (nHeight == nForkTwo) || (nHeight == nForkThree) || (nHeight == nForkFour);
+    if(chainParams.NetworkIDString()=="test") {
+        if (nHeight == nTestnetFork) {
+            fHardFork = true;
+        } else {
+            fHardFork = false;
+        }
+    }
 
 		//LogPrintf("GetNextWorkRequired.1.1 nInterval=%d,nTargetTimespan=%d,nTargetSpacing=%d \n",nInterval,nTargetTimespan,nTargetSpacing);    
     // Only change once per difficulty adjustment interval
@@ -66,7 +75,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     //if ((pindexLast->nHeight+1) % params.DifficultyAdjustmentInterval() != 0)
     if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < nForkThree))
     {
-        if (params.fPowAllowMinDifficultyBlocks)
+        if (params.fPowAllowMinDifficultyBlocks && (chainParams.NetworkIDString()=="test"))
         {
             // Special difficulty rule for testnet:
             // If the new block's timestamp is more than 2* 10 minutes
@@ -83,11 +92,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
                 const CBlockIndex* pindex = pindexLast;
                 while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
                     pindex = pindex->pprev;
-                LogPrintf("GetNextWorkRequired.1.3 nBits=%d\n",pindex->nBits);
+                LogPrintf("main,GetNextWorkRequired.1.3 nBits=%d\n",pindex->nBits);
                 return pindex->nBits;
             }
         }
-        //LogPrintf("GetNextWorkRequired.1.4 nBits=%d\n",pindexLast->nBits);
+        LogPrintf("GetNextWorkRequired.1.4 nBits=%d\n",pindexLast->nBits);
         return pindexLast->nBits;
     }
     LogPrintf("GetNextWorkRequired.2 Difficulty rules regular blocks,nHeight=%d,nInterval=%d,nHeight nInterval=%d\n",nHeight,nInterval,nHeight % nInterval);
@@ -100,14 +109,16 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < nInterval; i++)
         pindexFirst = pindexFirst->pprev;
-    assert(pindexFirst);    
+    assert(pindexFirst);
 
-		//LogPrintf("GetNextWorkRequired.3 Difficulty pindexFirst->nHeight=%d,nInterval=%d,nHeight=%d\n",pindexFirst->nHeight,nInterval,nHeight);
+		LogPrintf("GetNextWorkRequired.3 Difficulty pindexFirst->nHeight=%d,nInterval=%d,nHeight=%d\n",pindexFirst->nHeight,nInterval,nHeight);
     return CalculateNextWorkRequired(pindexLast, pindexFirst->GetBlockTime(), params,nInterval,nHeight);
 }
 
 unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params,int nInterval,int nHeight)
 {
+		const CChainParams& chainParams = Params();
+		
     // Limit adjustment step
     int64_t nActualTimespan = pindexLast->GetBlockTime() - nFirstBlockTime;
     LogPrintf("CalculateNextWorkRequired.1 nActualTimespan = %d  before bounds\n", nActualTimespan);
@@ -136,7 +147,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     
   	//eHRC  
 		//Additional averaging over 15, 120 and 480 block window
-    if((nHeight >= nForkThree) ) 
+    if((nHeight >= nForkThree) || (chainParams.NetworkIDString()=="test")) 
    	{
         nInterval *= 480;
 
@@ -202,6 +213,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     arith_uint256 bnOld;
     bnNew.SetCompact(pindexLast->nBits);
     bnOld = bnNew;
+    //watch
     bnNew *= nActualTimespan;
     bnNew /= nTargetTimespan;
 
@@ -230,6 +242,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
         return error("CheckProofOfWork(): nBits below minimum work");
 
     // Check proof of work matches claimed amount
+    // if (hash > bnTarget.getuint256())
     if (UintToArith256(hash) > bnTarget)
         return error("CheckProofOfWork(): hash doesn't match nBits");
 
@@ -238,23 +251,39 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
 
 bool CheckHeaderProofOfWork(int nHeight,uint256 hash_n,uint256 hash_s, unsigned int nBits, const Consensus::Params& params)
 {	
-	if (nHeight>=nForkFour)
+	const CChainParams& chainParams = Params();
+	if (chainParams.NetworkIDString()=="main") 
 	{
-		if (!CheckProofOfWork(hash_n, nBits,params))
-		{
-				LogPrintf("CheckHeaderProofOfWork(),neoscrypt in mainnet, nHeight=%i \n",nHeight);
-		    return error("CheckHeaderProofOfWork() neoscrypt in mainnet: proof of work failed.");	
-		}
+			if (nHeight>=nForkFour)
+			{
+				if (!CheckProofOfWork(hash_n, nBits,params))
+				{
+						LogPrintf("CheckHeaderProofOfWork(),neoscrypt in mainnet, nHeight=%i \n",nHeight);
+				    return error("CheckHeaderProofOfWork() neoscrypt in mainnet: proof of work failed.");	
+				}
+			}
+			else
+			{
+				if (!CheckProofOfWork(hash_s, nBits,params))
+				{
+						LogPrintf("CheckHeaderProofOfWork(),scrypt in mainnet, nHeight=%i \n",nHeight);
+				    return error("CheckHeaderProofOfWork() scrypt in mainnet: proof of work failed.");	
+				}
+			}
 	}
 	else
 	{
-		if (!CheckProofOfWork(hash_s, nBits,params))
-		{
-				LogPrintf("CheckHeaderProofOfWork(),scrypt in mainnet, nHeight=%i \n",nHeight);
-		    return error("CheckHeaderProofOfWork() scrypt in mainnet: proof of work failed.");	
-		}
+				//Check for -testnet or -regtest 
+				if (!CheckProofOfWork(hash_n, nBits,params))
+				{
+						LogPrintf("CheckHeaderProofOfWork(),neoscrypt in testnet,proof of work failed. nHeight=%i \n",nHeight);
+						if (!CheckProofOfWork(hash_s, nBits,params))
+						{
+								LogPrintf("CheckHeaderProofOfWork(),scrypt in testnet,proof of work failed. nHeight=%i \n",nHeight);
+						    return error("CheckHeaderProofOfWork() scrypt in mainnet: proof of work failed.");	
+						}
+				}
 	}
-	
 	return true;
 }
 

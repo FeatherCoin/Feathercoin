@@ -64,7 +64,7 @@ uint64_t nPruneTarget = 0;
 bool fAlerts = DEFAULT_ALERTS;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying and mining) */
-CFeeRate minRelayTxFee = CFeeRate(100000);
+CFeeRate minRelayTxFee = CFeeRate(5000);
 
 CTxMemPool mempool(::minRelayTxFee);
 
@@ -1246,13 +1246,15 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex)
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
+		const CChainParams& chainParams = Params();
+		
     int halvings = (nHeight + 306960) / consensusParams.nSubsidyHalvingInterval;
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
         return 0;
 
     CAmount nSubsidy = 200 * COIN;
-		if(nHeight >= nForkThree )
+		if ((nHeight >= nForkThree)||(chainParams.NetworkIDString()=="test"))
 			nSubsidy = 80 * COIN;
 			
     // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
@@ -1389,7 +1391,7 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
       log(pindexNew->nChainWork.getdouble())/log(2.0), DateTimeStrFormat("%Y-%m-%d %H:%M:%S",
       pindexNew->GetBlockTime()));
     CBlockIndex *tip = chainActive.Tip();
-    assert (tip);
+    assert(tip);
     LogPrintf("%s:  current best=%s  height=%d  log2_work=%.8g  date=%s\n", __func__,
       tip->GetBlockHash().ToString(), chainActive.Height(), log(tip->nChainWork.getdouble())/log(2.0),
       DateTimeStrFormat("%Y-%m-%d %H:%M:%S", tip->GetBlockTime()));
@@ -1789,6 +1791,12 @@ void PartitionCheck(bool (*initialDownloadCheck)(), CCriticalSection& cs, const 
   		BLOCKS_EXPECTED = SPAN_SECONDS / 60;
   	}
   	
+  	const CChainParams& chainParams = Params();
+  	if (chainParams.NetworkIDString()=="test")
+  	{
+  			BLOCKS_EXPECTED = SPAN_SECONDS / 60;
+  	}
+  	
     boost::math::poisson_distribution<double> poisson(BLOCKS_EXPECTED);
 
     std::string strWarning;
@@ -1899,15 +1907,19 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     // Start enforcing the DERSIG (BIP66) rules, for block.nVersion=3 blocks,
     // when 75% of the network has upgraded:
-    if (block.nVersion >= 3 && IsSuperMajority(3, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+    /*if (block.nVersion >= 3 && IsSuperMajority(3, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
         flags |= SCRIPT_VERIFY_DERSIG;
-    }
+    }*/
     
-    // Start enforcing CHECKLOCKTIMEVERIFY, (BIP65) for block.nVersion=4
+    // Start enforcing the DERSIG (BIP66) rules and CHECKLOCKTIMEVERIFY, (BIP65) for block.nVersion=4
     // blocks, when 75% of the network has upgraded:
-    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
-        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
-    }
+    if (pindex->nHeight >=MIN_BLOCKHEADER_VERSION4_HEIGHT)
+    {
+		    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+		        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+		        flags |= SCRIPT_VERIFY_DERSIG;
+		    }
+		}
 
     CBlockUndo blockundo;
 
@@ -2858,12 +2870,17 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if (block.nVersion < 3 && IsSuperMajority(3, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s : rejected nVersion=2 block", __func__),
                              REJECT_OBSOLETE, "bad-version");
+                       
+                             
+    if (block.nVersion ==3)
+        return state.Invalid(error("%s : rejected nVersion=3 block,block v3 was never enforced.", __func__),
+                             REJECT_OBSOLETE, "bad-version");
                              
     // Reject block.nVersion=3 blocks when 95% (75% on testnet) of the network has upgraded:
     if (block.nVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
                              REJECT_OBSOLETE, "bad-version");
-
+                             
     return true;
 }
 
@@ -2887,14 +2904,29 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
    
     // Enforce block.nVersion=2 rule that the coinbase starts with serialized block height
     // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):
-    //if (block.nVersion >= 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
-    if (block.nVersion >= 2 && block.nTime > nSwitchV2)
+    // if (block.nVersion >= 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    if (block.nVersion == 2 && block.nTime > nSwitchV2
+    	                     && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
     {
         CScript expect = CScript() << nHeight;
-        //if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
-        if(!std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin()))
+        if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
         {
-            return state.DoS(100, error("%s: block height mismatch in coinbase", __func__), REJECT_INVALID, "bad-cb-height");           
+            return state.DoS(100, error("%s: block nVersion 2 height mismatch in coinbase", __func__), REJECT_INVALID, "bad-cb-height");           
+        }
+    }
+    
+    // Feathercoin: Block v3 was never enforced, so we trigger this against v4
+    if (block.nVersion == 3)
+    {
+    		return state.DoS(100, error("%s: block nVersion 3 height mismatch in coinbase,block v3 was never enforced.", __func__), REJECT_INVALID, "bad-cb-height");     
+    }
+    if (block.nVersion == 4 && block.nTime > MIN_BLOCKHEADER_VERSION4_SwitchTime
+    	                     && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    {
+        CScript expect = CScript() << nHeight;
+        if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
+        {
+            return state.DoS(100, error("%s: block nVersion 4 height mismatch in coinbase", __func__), REJECT_INVALID, "bad-cb-height");           
         }
     }
 
