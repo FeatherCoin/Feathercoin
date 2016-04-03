@@ -2838,7 +2838,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     // Check proof of work
     if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
     {
-    		LogPrintf("ContextualCheckBlockHeader,block.nBits=%d,GetNextWorkRequired=%d\n",block.nBits,GetNextWorkRequired(pindexPrev, &block, consensusParams));
+    		LogPrintf("ContextualCheckBlockHeader,nHeight=%d,block.nBits=%d,GetNextWorkRequired=%d\n",nHeight,block.nBits,GetNextWorkRequired(pindexPrev, &block, consensusParams));
         return state.DoS(100, error("%s: incorrect proof of work", __func__),
                          REJECT_INVALID, "bad-diffbits");
     }
@@ -2868,9 +2868,11 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     // Reject block.nVersion=2 blocks when 95% (75% on testnet) of the network has upgraded:
     if (block.nVersion < 3 && IsSuperMajority(3, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+    {
+    		LogPrintf("rejected nVersion=2: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
         return state.Invalid(error("%s : rejected nVersion=2 block", __func__),
                              REJECT_OBSOLETE, "bad-version");
-                       
+    }                   
                              
     if (block.nVersion ==3)
         return state.Invalid(error("%s : rejected nVersion=3 block,block v3 was never enforced.", __func__),
@@ -3071,6 +3073,7 @@ static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned 
             ++nFound;
         pstart = pstart->pprev;
     }
+    LogPrintf("IsSuperMajority: minVersion=%d, nFound=%d,nRequired=%d \n",minVersion,nFound,nRequired);
     return (nFound >= nRequired);
 }
 

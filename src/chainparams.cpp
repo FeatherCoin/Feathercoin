@@ -165,9 +165,9 @@ class CTestNetParams : public CMainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nMajorityEnforceBlockUpgrade = 51;
-        consensus.nMajorityRejectBlockOutdated = 75;
-        consensus.nMajorityWindow = 100;
+        consensus.nMajorityEnforceBlockUpgrade = 510;
+        consensus.nMajorityRejectBlockOutdated = 750;
+        consensus.nMajorityWindow = 1000;
         consensus.fPowAllowMinDifficultyBlocks = true;
         pchMessageStart[0] = 0xda;
         pchMessageStart[1] = 0xaf;

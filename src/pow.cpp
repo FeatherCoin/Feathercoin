@@ -35,7 +35,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if ((nHeight >= nForkFour)|| ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetFork))) {
         if(!fNeoScrypt) fNeoScrypt = true;
         /* Difficulty reset after the switch */
-        if((nHeight == nForkFour))
+        if((nHeight == nForkFour)|| ((chainParams.NetworkIDString()=="test") && (nHeight == nTestnetFork)))
         {
         	LogPrintf("GetNextWorkRequired.1.00 4th hard fork\n");
           return nProofOfWorkLimitNeo;
@@ -195,7 +195,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     }
 
     // The 2nd hard fork (1.0905077 aka 9% difficulty limiter)
-    if(nHeight >= nForkTwo ) {
+    if ((nHeight >= nForkTwo)||(chainParams.NetworkIDString()=="test")) {
         nActualTimespanMax = nTargetTimespan*494/453;
         nActualTimespanMin = nTargetTimespan*453/494;
     }
@@ -207,16 +207,22 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     //LogPrintf("CalculateNextWorkRequired.4 RETARGET: nTargetTimespan = %d, nTargetTimespan/nActualTimespan = %.4f\n", nTargetTimespan, (float) nTargetTimespan/nActualTimespan);
 
 
+    arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
+    /*if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetFork))
+    		 bnPowLimit = UintToArith256(params.powNeoLimit);*/
+    
     // Retarget
-    const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     arith_uint256 bnNew;
-    arith_uint256 bnOld;
     bnNew.SetCompact(pindexLast->nBits);
+    arith_uint256 bnOld;    
     bnOld = bnNew;
     //watch
     bnNew *= nActualTimespan;
     bnNew /= nTargetTimespan;
 
+    LogPrintf("CalculateNextWorkRequired.Retarget: bnNew = %s\n", bnNew.ToString());
+    LogPrintf("CalculateNextWorkRequired.Retarget: powNeoLimit = %s\n", UintToArith256(params.powNeoLimit).ToString());
+    LogPrintf("CalculateNextWorkRequired.Retarget: bnPowLimit = %s\n", UintToArith256(params.powLimit).ToString());
     if (bnNew > bnPowLimit)
         bnNew = bnPowLimit;
 
