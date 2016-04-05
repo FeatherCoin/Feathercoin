@@ -100,7 +100,7 @@ static const int nForkThree = 204639;
 // The 4th hard fork
 static const int nForkFour = 432000;
 
-static const int nTestnetFork   =  10;
+static const int nTestnetFork   =  600;
 
 /** blockchain version 4 didn't become active until height and time. */
 static const int MIN_BLOCKHEADER_VERSION4_HEIGHT = 1544845;         //make after 2016/12/25

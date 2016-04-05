@@ -169,10 +169,16 @@ public:
         consensus.nMajorityRejectBlockOutdated = 750;
         consensus.nMajorityWindow = 1000;
         consensus.fPowAllowMinDifficultyBlocks = true;
+        
         pchMessageStart[0] = 0xda;
+        pchMessageStartNew[0] = 0xaa;
         pchMessageStart[1] = 0xaf;
+        pchMessageStartNew[1] = 0xbb;
         pchMessageStart[2] = 0xa5;
+        pchMessageStartNew[2] = 0xcc;
         pchMessageStart[3] = 0xba;
+        pchMessageStartNew[3] = 0xdd;
+        
         vAlertPubKey = ParseHex("04302390343f91cc401d56d68b123028bf52e5fca1939df127f63c6467cdf9c8e2c14b61104cf817d0b780da337893ecc4aaff1309e536162dabbdb45200ca2b0a");
         nDefaultPort = 19336;
         nMinerThreads = 0;

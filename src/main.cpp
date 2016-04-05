@@ -5025,44 +5025,51 @@ bool ProcessMessages(CNode* pfrom)
         it++;
 
         // Scan for message start
-        /*if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
-            LogPrintf("PROCESSMESSAGE: INVALID MESSAGESTART %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
-            fOk = false;
-            break;
-        }*/
         bool fMagic;
-        /* Message start detector */
-        if(pfrom->nVersion) {
-            /* If a protocol version is known, the detection is easy */
-            if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
-                //pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStartNew), END(pchMessageStartNew));
-                fMagic = true;
-            } else {
-                //pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStart), END(pchMessageStart));
-                fMagic = false;
-            }
-        } else {
-            /* Check for the old magic number first */
-            //pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStart), END(pchMessageStart));
-            fMagic = false;
-            /*if(vRecv.end() == pstart) {
-                // Must be the new magic number 
-                pstart = search(vRecv.begin(), vRecv.end(), BEGIN(pchMessageStartNew), END(pchMessageStartNew));
-                fMagic = true;
-            }*/
+        if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
+        		fMagic = true;
+        		
+		        std::string output;
+						output.assign(msg.hdr.pchMessageStartNew);   
+		        std::vector<unsigned char> opt_script(output.begin(), output.end());
+		        LogPrintf("PROCESSMESSAGE Scan: pfrom->nVersion=%d,msg.hdr.pchMessageStartNew=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
+        
+		        if (memcmp(msg.hdr.pchMessageStartNew, Params().MessageStartNew(), MESSAGE_START_SIZE) != 0) {
+		            LogPrintf("PROCESSMESSAGE Scan: INVALID MessageStartNew %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
+		            fOk = false;
+		            break;
+		        }
+        }
+        else{
+        		fMagic = false;
+        		
+		        std::string output;
+						output.assign(msg.hdr.pchMessageStart);   
+		        std::vector<unsigned char> opt_script(output.begin(), output.end());
+		        LogPrintf("PROCESSMESSAGE Scan: pfrom->nVersion=%d,msg.hdr.pchMessageStart=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
+        
+		        if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
+		            LogPrintf("PROCESSMESSAGE Scan: INVALID MessageStart %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
+		            fOk = false;
+		            break;
+		        }
         }
 
         // Read header
-        std::string output;
-				output.assign(msg.hdr.pchMessageStart);   
-        std::vector<unsigned char> opt_script(output.begin(), output.end());
-        LogPrintf("PROCESSMESSAGE: pfrom->nVersion=%d,msg.hdr.pchMessageStart=%s\n", pfrom->nVersion,HexStr(opt_script).c_str());
         CMessageHeader& hdr = msg.hdr;
-        //if (!hdr.IsValid(Params().MessageStart()))
-        if (!hdr.IsValid(Params().MessageStart(),fMagic))
-        {
-            LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
-            continue;
+        if (fMagic == true) {
+		        if (!hdr.IsValid(Params().MessageStartNew(),fMagic))
+		        {
+		            LogPrintf("PROCESSMESSAGE New: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
+		            continue;
+		        }
+        }
+        else {
+		        if (!hdr.IsValid(Params().MessageStart(),fMagic))
+		        {
+		            LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
+		            continue;
+		        }
         }
         string strCommand = hdr.GetCommand();
 
