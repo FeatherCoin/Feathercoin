@@ -208,8 +208,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
 
 
     arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
-    /*if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetFork))
-    		 bnPowLimit = UintToArith256(params.powNeoLimit);*/
+    arith_uint256 bnPowScyptLimit = UintToArith256(uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
     
     // Retarget
     arith_uint256 bnNew;
@@ -220,9 +219,15 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     bnNew *= nActualTimespan;
     bnNew /= nTargetTimespan;
 
-    LogPrintf("CalculateNextWorkRequired.Retarget: bnNew = %s\n", bnNew.ToString());
-    LogPrintf("CalculateNextWorkRequired.Retarget: powNeoLimit = %s\n", UintToArith256(params.powNeoLimit).ToString());
-    LogPrintf("CalculateNextWorkRequired.Retarget: bnPowLimit = %s\n", UintToArith256(params.powLimit).ToString());
+		LogPrintf("CalculateNextWorkRequired.Retarget: pindexLast=%s\n",pindexLast->ToString());
+    LogPrintf("CalculateNextWorkRequired.Retarget: bnNew       = %s ,%08x ,%d\n", bnNew.ToString(),bnNew.GetCompact(),bnNew.GetCompact());
+    LogPrintf("CalculateNextWorkRequired.Retarget: bnPowLimit  = %s ,%08x ,%d\n", bnPowLimit.ToString(),bnPowLimit.GetCompact(),bnPowLimit.GetCompact());
+    LogPrintf("CalculateNextWorkRequired.Retarget: powNeoLimit = %s ,%08x ,%d\n", UintToArith256(params.powNeoLimit).ToString(),UintToArith256(params.powNeoLimit).GetCompact(),UintToArith256(params.powNeoLimit).GetCompact());
+		LogPrintf("CalculateNextWorkRequired.Retarget: bnPowScyptLimit  = %s ,%08x ,%d\n", bnPowScyptLimit.ToString(),bnPowScyptLimit.GetCompact(),bnPowScyptLimit.GetCompact());
+		
+		if (chainParams.NetworkIDString()=="main")
+				bnPowLimit = bnPowScyptLimit;
+				
     if (bnNew > bnPowLimit)
         bnNew = bnPowLimit;
 
@@ -243,8 +248,15 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
 
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
+    arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
+    arith_uint256 bnPowScyptLimit = UintToArith256(uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    const CChainParams& chainParams = Params();
+		if (chainParams.NetworkIDString()=="main")
+				bnPowLimit = bnPowScyptLimit;
+				
     // Check range
-    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(params.powLimit))
+    //if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(params.powLimit))
+    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > bnPowLimit)
         return error("CheckProofOfWork(): nBits below minimum work");
 
     // Check proof of work matches claimed amount

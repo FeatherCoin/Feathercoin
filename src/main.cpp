@@ -1486,7 +1486,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
             if (coins->IsCoinBase()) {
                 if (nSpendHeight - coins->nHeight < COINBASE_MATURITY)
                     return state.Invalid(
-                        error("CheckInputs(): tried to spend coinbase at depth %d", nSpendHeight - coins->nHeight),
+                        error("CheckInputs(): tried to spend coinbase at depth %d,COINBASE_MATURITY=%d", nSpendHeight - coins->nHeight,COINBASE_MATURITY),
                         REJECT_INVALID, "bad-txns-premature-spend-of-coinbase");
             }
 
@@ -2971,12 +2971,15 @@ bool AcceptBlockHeader(const CBlockHeader& block, CValidationState& state, CBloc
         if (mi == mapBlockIndex.end())
             return state.DoS(10, error("%s: prev block not found", __func__), 0, "bad-prevblk");
         pindexPrev = (*mi).second;
+        nHeight = pindexPrev->nHeight+1;
         if (pindexPrev->nStatus & BLOCK_FAILED_MASK)
             return state.DoS(100, error("%s: prev block invalid", __func__), REJECT_INVALID, "bad-prevblk");
     }
 
     if (!ContextualCheckBlockHeader(block, state, pindexPrev))
     {
+    		LogPrintf("AcceptBlockHeader 2,nHeight=%d\n",nHeight);
+    		LogPrintf("AcceptBlockHeader 2,pindexPrev=%s\n",pindexPrev->ToString());
     		LogPrintf("AcceptBlockHeader ContextualCheckBlockHeader Fail.\n");
         return false;
 		}
