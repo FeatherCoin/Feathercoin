@@ -70,9 +70,9 @@ static const int64_t DUST_HARD_LIMIT = 1000000;
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
 static const int COINBASE_MATURITY = 30;
 /** Coinbase maturity after block 145000 **/
-static const int COINBASE_MATURITY_NEW = 60*4;
+static const int COINBASE_MATURITY_NEW = BASE_MATURITY;
 /** Block at which COINBASE_MATURITY_NEW comes into effect **/
-static const int COINBASE_MATURITY_SWITCH = 145000;
+static const int COINBASE_MATURITY_SWITCH = 1180000;
 /** Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp. */
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 /** Maximum number of script-checking threads allowed */
@@ -539,6 +539,8 @@ public:
     // >=1 : this many blocks deep in the main chain
     int GetDepthInMainChain(CBlockIndex* &pindexRet) const;
     int GetDepthInMainChain() const { CBlockIndex *pindexRet; return GetDepthInMainChain(pindexRet); }
+    int GetHeightInMainChain(CBlockIndex* &pindexRet) const;
+    int GetHeightInMainChain() const { CBlockIndex *pindexRet; return GetHeightInMainChain(pindexRet); }
     bool IsInMainChain() const { CBlockIndex *pindexRet; return GetDepthInMainChainINTERNAL(pindexRet) > 0; }
     int GetBlocksToMaturity() const;
     bool AcceptToMemoryPool(bool fLimitFree=true);
