@@ -1458,6 +1458,19 @@ bool CScriptCheck::operator()() {
     return true;
 }
 
+int GetRequiredMaturityDepth(int nHeight)
+{
+
+    if (nHeight >= COINBASE_MATURITY_SWITCH)
+    {
+        return COINBASE_MATURITY_NEW;
+    }
+    else
+    {
+        return COINBASE_MATURITY;
+    }
+}
+
 bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsViewCache &inputs, bool fScriptChecks, unsigned int flags, bool cacheStore, std::vector<CScriptCheck> *pvChecks)
 {
     if (!tx.IsCoinBase())
@@ -1484,7 +1497,8 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
 
             // If prev is coinbase, check that it's matured
             if (coins->IsCoinBase()) {
-                if (nSpendHeight - coins->nHeight < COINBASE_MATURITY)
+            		int minDepth = GetRequiredMaturityDepth(coins->nHeight);            		
+                if (nSpendHeight - coins->nHeight < minDepth)
                     return state.Invalid(
                         error("CheckInputs(): tried to spend coinbase at depth %d,COINBASE_MATURITY=%d", nSpendHeight - coins->nHeight,COINBASE_MATURITY),
                         REJECT_INVALID, "bad-txns-premature-spend-of-coinbase");

@@ -425,7 +425,8 @@ bool TestBlockValidity(CValidationState &state, const CBlock& block, CBlockIndex
 bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex **pindex, bool fRequested, CDiskBlockPos* dbp);
 bool AcceptBlockHeader(const CBlockHeader& block, CValidationState& state, CBlockIndex **ppindex= NULL);
 
-
+// Feathercoin specific implementation, standardizes checks for the hard maturity change at block 1180000
+int GetRequiredMaturityDepth(int nHeight);
 
 class CBlockFileInfo
 {
