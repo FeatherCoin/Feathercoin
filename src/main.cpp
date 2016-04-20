@@ -64,7 +64,7 @@ uint64_t nPruneTarget = 0;
 bool fAlerts = DEFAULT_ALERTS;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying and mining) */
-CFeeRate minRelayTxFee = CFeeRate(100000);
+CFeeRate minRelayTxFee = CFeeRate(5000);
 
 CTxMemPool mempool(::minRelayTxFee);
 
@@ -1246,13 +1246,15 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex)
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
+		const CChainParams& chainParams = Params();
+		
     int halvings = (nHeight + 306960) / consensusParams.nSubsidyHalvingInterval;
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
         return 0;
 
     CAmount nSubsidy = 200 * COIN;
-		if(nHeight >= nForkThree )
+		if ((nHeight >= nForkThree)||(chainParams.NetworkIDString()=="test"))
 			nSubsidy = 80 * COIN;
 			
     // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
@@ -1389,7 +1391,7 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
       log(pindexNew->nChainWork.getdouble())/log(2.0), DateTimeStrFormat("%Y-%m-%d %H:%M:%S",
       pindexNew->GetBlockTime()));
     CBlockIndex *tip = chainActive.Tip();
-    assert (tip);
+    assert(tip);
     LogPrintf("%s:  current best=%s  height=%d  log2_work=%.8g  date=%s\n", __func__,
       tip->GetBlockHash().ToString(), chainActive.Height(), log(tip->nChainWork.getdouble())/log(2.0),
       DateTimeStrFormat("%Y-%m-%d %H:%M:%S", tip->GetBlockTime()));
@@ -1456,6 +1458,19 @@ bool CScriptCheck::operator()() {
     return true;
 }
 
+int GetRequiredMaturityDepth(int nHeight)
+{
+
+    if (nHeight >= COINBASE_MATURITY_SWITCH)
+    {
+        return COINBASE_MATURITY_NEW;
+    }
+    else
+    {
+        return COINBASE_MATURITY;
+    }
+}
+
 bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsViewCache &inputs, bool fScriptChecks, unsigned int flags, bool cacheStore, std::vector<CScriptCheck> *pvChecks)
 {
     if (!tx.IsCoinBase())
@@ -1482,9 +1497,10 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
 
             // If prev is coinbase, check that it's matured
             if (coins->IsCoinBase()) {
-                if (nSpendHeight - coins->nHeight < COINBASE_MATURITY)
+            		int minDepth = GetRequiredMaturityDepth(coins->nHeight);            		
+                if (nSpendHeight - coins->nHeight < minDepth)
                     return state.Invalid(
-                        error("CheckInputs(): tried to spend coinbase at depth %d", nSpendHeight - coins->nHeight),
+                        error("CheckInputs(): tried to spend coinbase at depth %d,COINBASE_MATURITY=%d", nSpendHeight - coins->nHeight,COINBASE_MATURITY),
                         REJECT_INVALID, "bad-txns-premature-spend-of-coinbase");
             }
 
@@ -1789,6 +1805,12 @@ void PartitionCheck(bool (*initialDownloadCheck)(), CCriticalSection& cs, const 
   		BLOCKS_EXPECTED = SPAN_SECONDS / 60;
   	}
   	
+  	const CChainParams& chainParams = Params();
+  	if (chainParams.NetworkIDString()=="test")
+  	{
+  			BLOCKS_EXPECTED = SPAN_SECONDS / 60;
+  	}
+  	
     boost::math::poisson_distribution<double> poisson(BLOCKS_EXPECTED);
 
     std::string strWarning;
@@ -1899,15 +1921,19 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     // Start enforcing the DERSIG (BIP66) rules, for block.nVersion=3 blocks,
     // when 75% of the network has upgraded:
-    if (block.nVersion >= 3 && IsSuperMajority(3, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+    /*if (block.nVersion >= 3 && IsSuperMajority(3, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
         flags |= SCRIPT_VERIFY_DERSIG;
-    }
+    }*/
     
-    // Start enforcing CHECKLOCKTIMEVERIFY, (BIP65) for block.nVersion=4
+    // Start enforcing the DERSIG (BIP66) rules and CHECKLOCKTIMEVERIFY, (BIP65) for block.nVersion=4
     // blocks, when 75% of the network has upgraded:
-    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
-        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
-    }
+    if (pindex->nHeight >=MIN_BLOCKHEADER_VERSION4_HEIGHT)
+    {
+		    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+		        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+		        flags |= SCRIPT_VERIFY_DERSIG;
+		    }
+		}
 
     CBlockUndo blockundo;
 
@@ -2164,21 +2190,21 @@ void static UpdateTip(CBlockIndex *pindexNew) {
 
     cvBlockChange.notify_all();
 
-    // Check the version of the last 100 blocks to see if we need to upgrade:
+    // Check the version of the last 500 blocks to see if we need to upgrade:
     static bool fWarned = false;
     if (!IsInitialBlockDownload() && !fWarned)
     {
         int nUpgraded = 0;
         const CBlockIndex* pindex = chainActive.Tip();
-        for (int i = 0; i < 100 && pindex != NULL; i++)
+        for (int i = 0; i < 500 && pindex != NULL; i++)
         {
             if (pindex->nVersion > CBlock::CURRENT_VERSION)
                 ++nUpgraded;
             pindex = pindex->pprev;
         }
         if (nUpgraded > 0)
-            LogPrintf("%s: %d of last 100 blocks above version %d\n", __func__, nUpgraded, (int)CBlock::CURRENT_VERSION);
-        if (nUpgraded > 100/2)
+            LogPrintf("%s: %d of last 500 blocks above version %d\n", __func__, nUpgraded, (int)CBlock::CURRENT_VERSION);
+        if (nUpgraded > 500/2)
         {
             // strMiscWarning is read by GetWarnings(), called by Qt and the JSON-RPC code to warn the user:
             strMiscWarning = _("Warning: This version is obsolete; upgrade required!");
@@ -2826,7 +2852,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     // Check proof of work
     if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
     {
-    		LogPrintf("ContextualCheckBlockHeader,block.nBits=%d,GetNextWorkRequired=%d\n",block.nBits,GetNextWorkRequired(pindexPrev, &block, consensusParams));
+    		LogPrintf("ContextualCheckBlockHeader,nHeight=%d,block.nBits=%d,GetNextWorkRequired=%d\n",nHeight,block.nBits,GetNextWorkRequired(pindexPrev, &block, consensusParams));
         return state.DoS(100, error("%s: incorrect proof of work", __func__),
                          REJECT_INVALID, "bad-diffbits");
     }
@@ -2856,14 +2882,21 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     // Reject block.nVersion=2 blocks when 95% (75% on testnet) of the network has upgraded:
     if (block.nVersion < 3 && IsSuperMajority(3, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+    {
+    		LogPrintf("rejected nVersion=2: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
         return state.Invalid(error("%s : rejected nVersion=2 block", __func__),
+                             REJECT_OBSOLETE, "bad-version");
+    }                   
+                             
+    if (block.nVersion ==3)
+        return state.Invalid(error("%s : rejected nVersion=3 block,block v3 was never enforced.", __func__),
                              REJECT_OBSOLETE, "bad-version");
                              
     // Reject block.nVersion=3 blocks when 95% (75% on testnet) of the network has upgraded:
     if (block.nVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
                              REJECT_OBSOLETE, "bad-version");
-
+                             
     return true;
 }
 
@@ -2887,14 +2920,29 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
    
     // Enforce block.nVersion=2 rule that the coinbase starts with serialized block height
     // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):
-    //if (block.nVersion >= 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
-    if (block.nVersion >= 2 && block.nTime > nSwitchV2)
+    // if (block.nVersion >= 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    if (block.nVersion == 2 && block.nTime > nSwitchV2
+    	                     && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
     {
         CScript expect = CScript() << nHeight;
-        //if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
-        if(!std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin()))
+        if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
         {
-            return state.DoS(100, error("%s: block height mismatch in coinbase", __func__), REJECT_INVALID, "bad-cb-height");           
+            return state.DoS(100, error("%s: block nVersion 2 height mismatch in coinbase", __func__), REJECT_INVALID, "bad-cb-height");           
+        }
+    }
+    
+    // Feathercoin: Block v3 was never enforced, so we trigger this against v4
+    if (block.nVersion == 3)
+    {
+    		return state.DoS(100, error("%s: block nVersion 3 height mismatch in coinbase,block v3 was never enforced.", __func__), REJECT_INVALID, "bad-cb-height");     
+    }
+    if (block.nVersion == 4 && block.nTime > MIN_BLOCKHEADER_VERSION4_SwitchTime
+    	                     && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    {
+        CScript expect = CScript() << nHeight;
+        if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
+        {
+            return state.DoS(100, error("%s: block nVersion 4 height mismatch in coinbase", __func__), REJECT_INVALID, "bad-cb-height");           
         }
     }
 
@@ -2937,12 +2985,15 @@ bool AcceptBlockHeader(const CBlockHeader& block, CValidationState& state, CBloc
         if (mi == mapBlockIndex.end())
             return state.DoS(10, error("%s: prev block not found", __func__), 0, "bad-prevblk");
         pindexPrev = (*mi).second;
+        nHeight = pindexPrev->nHeight+1;
         if (pindexPrev->nStatus & BLOCK_FAILED_MASK)
             return state.DoS(100, error("%s: prev block invalid", __func__), REJECT_INVALID, "bad-prevblk");
     }
 
     if (!ContextualCheckBlockHeader(block, state, pindexPrev))
     {
+    		LogPrintf("AcceptBlockHeader 2,nHeight=%d\n",nHeight);
+    		LogPrintf("AcceptBlockHeader 2,pindexPrev=%s\n",pindexPrev->ToString());
     		LogPrintf("AcceptBlockHeader ContextualCheckBlockHeader Fail.\n");
         return false;
 		}
@@ -3039,6 +3090,7 @@ static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned 
             ++nFound;
         pstart = pstart->pprev;
     }
+    LogPrintf("IsSuperMajority: minVersion=%d, nFound=%d,nRequired=%d \n",minVersion,nFound,nRequired);
     return (nFound >= nRequired);
 }
 
@@ -4091,14 +4143,18 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
     if (strCommand == "version")
     {
-    		//LogPrintf("\nProcessMessages version\n");
         // Each connection can only send one version message
-        if (pfrom->nVersion != 0)
+        /*if (pfrom->nVersion != 0)
         {
             pfrom->PushMessage("reject", strCommand, REJECT_DUPLICATE, string("Duplicate version message"));
             Misbehaving(pfrom->GetId(), 1);
             return false;
-        }
+        }*/
+        
+        /* Process the 1st version message received per connection
+         * and ignore the others if any */
+        if(pfrom->nVersion)
+						return(true);
 
         int64_t nTime;
         CAddress addrMe;
@@ -4353,8 +4409,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                     else
                     {
                     	//LogPrintf("ProcessMessages vToFetch.push_back false,nPowTargetSpacing=%d,nHeight=%d.\n",chainparams.GetConsensus().nPowTargetSpacing,chainActive.Tip()->nHeight);
-                    	LogPrintf("ProcessMessages vToFetch chainActive.Tip()->GetBlockTime()=%u \n",chainActive.Tip()->GetBlockTime());
-                    	LogPrintf("ProcessMessages vToFetch GetAdjustedTime() =%u \n",GetAdjustedTime());
+                    	//LogPrintf("ProcessMessages vToFetch chainActive.Tip()->GetBlockTime()=%u \n",chainActive.Tip()->GetBlockTime());
+                    	//LogPrintf("ProcessMessages vToFetch GetAdjustedTime() =%u \n",GetAdjustedTime());
                     	//LogPrintf("ProcessMessages vToFetch chainparams.GetConsensus().nPowTargetSpacing=%d \n",chainparams.GetConsensus().nPowTargetSpacing * 20);
                     	//LogPrintf("ProcessMessages vToFetch nodestate->nBlocksInFlight =%u \n",nodestate->nBlocksInFlight);
                     	//LogPrintf("ProcessMessages vToFetch MAX_BLOCKS_IN_TRANSIT_PER_PEER =%d \n",MAX_BLOCKS_IN_TRANSIT_PER_PEER);
@@ -4986,18 +5042,51 @@ bool ProcessMessages(CNode* pfrom)
         it++;
 
         // Scan for message start
-        if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
-            LogPrintf("PROCESSMESSAGE: INVALID MESSAGESTART %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
-            fOk = false;
-            break;
+        bool fMagic;
+        if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
+        		fMagic = true;
+        		
+		        std::string output;
+						output.assign(msg.hdr.pchMessageStartNew);   
+		        std::vector<unsigned char> opt_script(output.begin(), output.end());
+		        LogPrintf("PROCESSMESSAGE Scan: pfrom->nVersion=%d,msg.hdr.pchMessageStartNew=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
+        
+		        if (memcmp(msg.hdr.pchMessageStartNew, Params().MessageStartNew(), MESSAGE_START_SIZE) != 0) {
+		            LogPrintf("PROCESSMESSAGE Scan: INVALID MessageStartNew %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
+		            fOk = false;
+		            break;
+		        }
+        }
+        else{
+        		fMagic = false;
+        		
+		        std::string output;
+						output.assign(msg.hdr.pchMessageStart);   
+		        std::vector<unsigned char> opt_script(output.begin(), output.end());
+		        LogPrintf("PROCESSMESSAGE Scan: pfrom->nVersion=%d,msg.hdr.pchMessageStart=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
+        
+		        if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
+		            LogPrintf("PROCESSMESSAGE Scan: INVALID MessageStart %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
+		            fOk = false;
+		            break;
+		        }
         }
 
         // Read header
         CMessageHeader& hdr = msg.hdr;
-        if (!hdr.IsValid(Params().MessageStart()))
-        {
-            LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id);
-            continue;
+        if (fMagic == true) {
+		        if (!hdr.IsValid(Params().MessageStartNew(),fMagic))
+		        {
+		            LogPrintf("PROCESSMESSAGE New: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
+		            continue;
+		        }
+        }
+        else {
+		        if (!hdr.IsValid(Params().MessageStart(),fMagic))
+		        {
+		            LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
+		            continue;
+		        }
         }
         string strCommand = hdr.GetCommand();
 
@@ -5016,7 +5105,7 @@ bool ProcessMessages(CNode* pfrom)
         }
 
         // Process message
-        LogPrintf("ProcessMessages Point=%s\n",strCommand);
+        // LogPrintf("ProcessMessages Point=%s\n",strCommand);
         bool fRet = false;
         try
         {

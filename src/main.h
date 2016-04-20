@@ -100,6 +100,12 @@ static const int nForkThree = 204639;
 // The 4th hard fork
 static const int nForkFour = 432000;
 
+static const int nTestnetFork   =  600;
+
+/** blockchain version 4 didn't become active until height and time. */
+static const int MIN_BLOCKHEADER_VERSION4_HEIGHT = 1544845;         //make after 2016/12/25
+static const unsigned int MIN_BLOCKHEADER_VERSION4_SwitchTime = 1482631200;  //2016/12/25 10:00:00  http://tool.chinaz.com/Tools/unixtime.aspx
+
 struct BlockHasher
 {
     size_t operator()(const uint256& hash) const { return hash.GetCheapHash(); }
@@ -419,7 +425,8 @@ bool TestBlockValidity(CValidationState &state, const CBlock& block, CBlockIndex
 bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex **pindex, bool fRequested, CDiskBlockPos* dbp);
 bool AcceptBlockHeader(const CBlockHeader& block, CValidationState& state, CBlockIndex **ppindex= NULL);
 
-
+// Feathercoin specific implementation, standardizes checks for the hard maturity change at block 1180000
+int GetRequiredMaturityDepth(int nHeight);
 
 class CBlockFileInfo
 {
