@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
+// Copyright (c) 2013-2016 The Feathercoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,7 +13,10 @@ static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule):bitcoin=100 */
 static const int COINBASE_MATURITY = 30;
-
+/** Coinbase maturity after block 1180000 **/
+static const int COINBASE_MATURITY_NEW = 100;
+/** Block at which COINBASE_MATURITY_NEW comes into effect **/
+static const int COINBASE_MATURITY_SWITCH = 1180000;
 
 /** Flags for LockTime() */
 enum {
