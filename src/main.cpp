@@ -5002,7 +5002,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 bool ProcessMessages(CNode* pfrom)
 {
     //if (fDebug)
-    //    LogPrintf("%s(%u messages)\n", __func__, pfrom->vRecvMsg.size());
+    //LogPrintf("%s(%u messages)\n", __func__, pfrom->vRecvMsg.size());
 
     //
     // Message format
@@ -5013,7 +5013,7 @@ bool ProcessMessages(CNode* pfrom)
     //  (x) data
     //
     bool fOk = true;
-
+		
     if (!pfrom->vRecvGetData.empty())
         ProcessGetData(pfrom);
 
@@ -5037,57 +5037,90 @@ bool ProcessMessages(CNode* pfrom)
         // end, if an incomplete message is found
         if (!msg.complete())
             break;
+            
+        CDataStream& vRecvMsg = msg.hdrbuf;
+        vRecvMsg << msg.hdr;
 
         // at this point, any failure means we can delete the current message
         it++;
 
         // Scan for message start
+        CDataStream::iterator pstart;
+        int nHeaderSize;
         bool fMagic;
-        if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
-        		fMagic = true;
-        		
-		        std::string output;
-						output.assign(msg.hdr.pchMessageStartNew);   
-		        std::vector<unsigned char> opt_script(output.begin(), output.end());
-		        LogPrintf("PROCESSMESSAGE Scan: pfrom->nVersion=%d,msg.hdr.pchMessageStartNew=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
         
-		        if (memcmp(msg.hdr.pchMessageStartNew, Params().MessageStartNew(), MESSAGE_START_SIZE) != 0) {
-		            LogPrintf("PROCESSMESSAGE Scan: INVALID MessageStartNew %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
-		            fOk = false;
-		            break;
-		        }
+        /* Message start detector */
+        unsigned char pchMessageStart[4]    = { 0xfb, 0xc0, 0xb6, 0xdb };
+        unsigned char pchMessageStartNew[4] = { 0xfe, 0x46, 0x54, 0x43 };
+        
+        if(pfrom->nVersion) {
+			        if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
+			        		fMagic = true;
+			        		pstart = search(vRecvMsg.begin(), vRecvMsg.end(), BEGIN(pchMessageStartNew), END(pchMessageStartNew));
+			        }
+			        else{
+			        		fMagic = false;
+			        		pstart = search(vRecvMsg.begin(), vRecvMsg.end(), BEGIN(pchMessageStart), END(pchMessageStart));
+			        }
         }
-        else{
+        else
+        {
         		fMagic = false;
-        		
-		        std::string output;
-						output.assign(msg.hdr.pchMessageStart);   
-		        std::vector<unsigned char> opt_script(output.begin(), output.end());
-		        LogPrintf("PROCESSMESSAGE Scan: pfrom->nVersion=%d,msg.hdr.pchMessageStart=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
-        
-		        if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
-		            LogPrintf("PROCESSMESSAGE Scan: INVALID MessageStart %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
-		            fOk = false;
-		            break;
-		        }
+        		pstart = search(vRecvMsg.begin(), vRecvMsg.end(), BEGIN(pchMessageStart), END(pchMessageStart));
+        		if(vRecvMsg.end() == pstart) {
+                /* Must be the new magic number */
+                pstart = search(vRecvMsg.begin(), vRecvMsg.end(), BEGIN(pchMessageStartNew), END(pchMessageStartNew));
+                fMagic = true;
+            }
         }
+        //Message header size=24
+        nHeaderSize = vRecvMsg.GetSerializeSize(CMessageHeader(Params().MessageStart(),fMagic));	
+        LogPrintf("PROCESSMESSAGE.1 :fMagic=%d,vRecvMsg=%s,nHeaderSize=%d,pstart_to_end=%d,pstart_to_star=%d,vRecv_size=%d \n",fMagic,vRecvMsg.str(), nHeaderSize,vRecvMsg.end() - pstart,pstart - vRecvMsg.begin(),(int)vRecvMsg.size() );			
+				
+        if (vRecvMsg.end() - pstart < nHeaderSize)
+        {
+            if ((int)vRecvMsg.size() > nHeaderSize)
+            {
+                LogPrintf("\n\nPROCESSMESSAGE MESSAGESTART NOT FOUND\n\n");
+                vRecvMsg.erase(vRecvMsg.begin(), vRecvMsg.end() - nHeaderSize);
+            }
+            vector<unsigned char> vRecvMsgOut(vRecvMsg.begin(), vRecvMsg.begin() + nHeaderSize);
+            LogPrintf("PROCESSMESSAGE.1.10 this message break,pfrom->nVersion=%d,vRecvMsg_HexStr=%s \n",pfrom->nVersion,HexStr(vRecvMsgOut).c_str());
+            break;
+        }
+        if (pstart - vRecvMsg.begin() > 0)
+            LogPrintf("\n\nPROCESSMESSAGE SKIPPED %d BYTES\n\n", pstart - vRecvMsg.begin());
+        vRecvMsg.erase(vRecvMsg.begin(), pstart);
+
 
         // Read header
+        vector<unsigned char> vHeaderSave(vRecvMsg.begin(), vRecvMsg.begin() + nHeaderSize);
+        LogPrintf("PROCESSMESSAGEE.2 : nHeaderSize=%d,vHeaderSave=%s \n", nHeaderSize,HexStr(vHeaderSave).c_str());
         CMessageHeader& hdr = msg.hdr;
-        if (fMagic == true) {
+        vRecvMsg >> hdr;
+        
+        if(fMagic) {
 		        if (!hdr.IsValid(Params().MessageStartNew(),fMagic))
 		        {
-		            LogPrintf("PROCESSMESSAGE New: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
+								std::string output;
+								output.assign(msg.hdr.pchMessageStart);   
+								std::vector<unsigned char> opt_script(output.begin(), output.end());
+								LogPrintf("PROCESSMESSAGE.3 hdr.IsValid false: Read header pfrom->nVersion=%d,msg.hdr.pchMessageStart=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
+		            LogPrintf("PROCESSMESSAGE.3 : Read header error command=%s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
 		            continue;
 		        }
-        }
-        else {
+        } else {
 		        if (!hdr.IsValid(Params().MessageStart(),fMagic))
 		        {
-		            LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
+								std::string output;
+								output.assign(msg.hdr.pchMessageStart);   
+								std::vector<unsigned char> opt_script(output.begin(), output.end());
+								LogPrintf("PROCESSMESSAGE.3 hdr.IsValid false: Read header pfrom->nVersion=%d,msg.hdr.pchMessageStart=%s,string=%s\n", pfrom->nVersion,HexStr(opt_script).c_str(),output);
+		            LogPrintf("PROCESSMESSAGE.3 : Read header error command=%s peer=%d,fMagic=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id,fMagic);
 		            continue;
 		        }
         }
+		        
         string strCommand = hdr.GetCommand();
 
         // Message size
@@ -5105,7 +5138,7 @@ bool ProcessMessages(CNode* pfrom)
         }
 
         // Process message
-        // LogPrintf("ProcessMessages Point=%s\n",strCommand);
+        LogPrintf("ProcessMessages Point=%s\n",strCommand);
         bool fRet = false;
         try
         {

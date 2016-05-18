@@ -439,21 +439,21 @@ void CNode::PushVersion()
     if(nVersion) {
         if(nVersion >= NEW_MAGIC_VERSION)
           PushVersionMessage(true, PROTOCOL_VERSION, nLocalServices, nTime, addrYou, addrMe,
-            nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight);
+            nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight, true);
         else
           PushVersionMessage(false, PROTOCOL_VERSION, nLocalServices, nTime, addrYou, addrMe,
-            nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight);
+            nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight, true);
     } else {
-        /* If a peer version isn't known, send two messages using both magic numbers the old 1st;
-         * dual magic peers decode both, process the 1st (old) and ignore the 2nd (new) with no consequences,
-         * old magic peers decode and process the old + "MESSAGESTART NOT FOUND" and "SKIPPED 24 BYTES",
-         * future new magic only peers decode and process the new + "SKIPPED 130 BYTES" */
         PushVersionMessage(false, PROTOCOL_VERSION, nLocalServices, nTime, addrYou, addrMe,
-          nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight);
+          nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight, true);
         PushVersionMessage(true, PROTOCOL_VERSION, nLocalServices, nTime, addrYou, addrMe,
-          nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight);
-        LogPrint("peer %s unknown, sending version using dual magic\n", addr.ToString().c_str());
+          nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight, true);
+/*				PushMessage("version", PROTOCOL_VERSION, nLocalServices, nTime, addrYou, addrMe,
+                nLocalHostNonce, FormatSubVersion(CLIENT_NAME, CLIENT_VERSION, std::vector<string>()), nBestHeight, true);*/
     }
+    
+     LogPrintf("PushVersion sent version message to %s, version=%d, blocks=%d, us=%s, them=%s,nVersion=%d \n",
+       addr.ToString().c_str(), PROTOCOL_VERSION, nBestHeight, addrMe.ToString().c_str(), addrYou.ToString().c_str(),nVersion);
 }
 
 
@@ -1070,7 +1070,7 @@ void ThreadMapPort()
             }
         }
 
-        string strDesc = "Bitcoin " + FormatFullVersion();
+        string strDesc = "Feathercoin " + FormatFullVersion();
 
         try {
             while (true) {
@@ -2069,17 +2069,24 @@ void CNode::BeginMessage(const char* pszCommand) EXCLUSIVE_LOCK_FUNCTION(cs_vSen
         
     ENTER_CRITICAL_SECTION(cs_vSend);
     assert(ssSend.size() == 0);
-    //ssSend << CMessageHeader(Params().MessageStart(), pszCommand, 0);
-    ssSend << CMessageHeader(Params().MessageStart(), pszCommand, 0,fMagic);
-    LogPrint("net", "sending: %s ", SanitizeString(pszCommand));   
+    //ssSend << CMessageHeader(Params().MessageStart(), pszCommand, 0);    
+		if (fMagic) {
+				ssSend << CMessageHeader(Params().MessageStartNew(), pszCommand, 0,fMagic);
+		} else {
+				ssSend << CMessageHeader(Params().MessageStart(), pszCommand, 0,fMagic);
+		}
 }
 
 void CNode::BeginVersionMessage(bool fMagic) EXCLUSIVE_LOCK_FUNCTION(cs_vSend)
-{
+{    
 		ENTER_CRITICAL_SECTION(cs_vSend);
 		assert(ssSend.size() == 0);
-		ssSend << CMessageHeader(Params().MessageStart(),"version", 0, fMagic);
-		LogPrint("sending version using %s magic ", fMagic ? "new" : "old");
+		if (fMagic) {
+				ssSend << CMessageHeader(Params().MessageStartNew(),"version", 0, fMagic);
+		} else {
+				ssSend << CMessageHeader(Params().MessageStart(),"version", 0, fMagic);
+		}
+		LogPrintf("BeginVersionMessage sending version using %s magic \n", fMagic ? "new" : "old");
 }
 
 void CNode::AbortMessage() UNLOCK_FUNCTION(cs_vSend)

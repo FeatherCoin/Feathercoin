@@ -62,7 +62,6 @@ public:
         HEADER_SIZE = MESSAGE_START_SIZE + COMMAND_SIZE + MESSAGE_SIZE_SIZE + CHECKSUM_SIZE
     };
     char pchMessageStart[MESSAGE_START_SIZE];
-    char pchMessageStartNew[MESSAGE_START_SIZE];
     char pchCommand[COMMAND_SIZE];
     unsigned int nMessageSize;
     unsigned int nChecksum;
