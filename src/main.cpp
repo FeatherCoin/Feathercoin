@@ -2812,7 +2812,7 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
        
         /* Don't accept blocks with bogus nVersion numbers after this point */
         if (nHeight >= nForkFour)  {
-            if(block.nVersion != 2)
+            if(block.nVersion < 2)
                 return(state.DoS(100, error("AcceptBlock() : incorrect block version")));
         }
         
