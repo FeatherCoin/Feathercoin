@@ -2245,7 +2245,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
 
         /* Don't accept blocks with bogus nVersion numbers after this point */
         if((nHeight >= nForkFour) || (fTestNet && (nHeight >= nTestnetFork))) {
-            if(nVersion != 2)
+            if(nVersion < 2)
                 return(state.DoS(100, error("AcceptBlock() : incorrect block version")));
         }
  
