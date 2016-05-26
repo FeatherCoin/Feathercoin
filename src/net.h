@@ -297,6 +297,8 @@ protected:
 
 public:
     uint256 hashContinue;
+    CBlockIndex* pindexLastGetBlocksBegin;
+    uint256 hashLastGetBlocksEnd;
     int nStartingHeight;
 
     // flood relay
@@ -304,6 +306,7 @@ public:
     CRollingBloomFilter addrKnown;
     bool fGetAddr;
     std::set<uint256> setKnown;
+    uint256 hashCheckpointKnown; //ppcoin: known sent sync-checkpoint
 
     // inventory based relay
     mruset<CInv> setInventoryKnown;
@@ -607,6 +610,7 @@ public:
     }
     
     void CloseSocketDisconnect();
+		void PushGetBlocks(CBlockIndex* pindexBegin, uint256 hashEnd);
 
     // Denial-of-service detection/prevention
     // The idea is to detect peers that are behaving

@@ -86,5 +86,11 @@ namespace Checkpoints {
         }
         return NULL;
     }
+    
+    uint256 GetLatestHardenedCheckpoint(const CCheckpointData& data)
+    {
+        const MapCheckpoints& checkpoints = data.mapCheckpoints;
+        return (checkpoints.rbegin()->second);
+    }
 
 } // namespace Checkpoints

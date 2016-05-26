@@ -10,6 +10,7 @@
 #include "arith_uint256.h"
 #include "chainparams.h"
 #include "checkpoints.h"
+#include "checkpointsync.h"
 #include "checkqueue.h"
 #include "consensus/validation.h"
 #include "init.h"
@@ -2212,6 +2213,14 @@ void static UpdateTip(CBlockIndex *pindexNew) {
             fWarned = true;
         }
     }
+    
+    if (!IsSyncCheckpointEnforced()) // checkpoint advisory mode    
+    {
+    	if (pindexBestHeader->pprev && !CheckSyncCheckpoint(pindexBestHeader->GetBlockHash(), pindexBestHeader->pprev))
+    		strCheckpointWarning = _("Warning: checkpoint on different blockchain fork, contact developers to resolve the issue");
+    	else
+    		strCheckpointWarning = "";
+    }
 }
 
 /** Disconnect chainActive's tip. */
@@ -2869,6 +2878,11 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
             return state.DoS(100, error("%s: rejected by checkpoint lock-in at %d", __func__, nHeight),
                              REJECT_CHECKPOINT, "checkpoint mismatch");
 
+        // ppcoin: check that the block satisfies synchronized checkpoint
+        // checkpoint advisory mode
+        if (!IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
+        	return error("checkpoint AcceptBlock() : rejected by synchronized checkpoint");
+        	
         // Don't accept any forks from the main chain prior to last checkpoint
         CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(chainParams.Checkpoints());
         if (pcheckpoint && nHeight < pcheckpoint->nHeight)
@@ -3077,6 +3091,9 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     if (fCheckForPruning)
         FlushStateToDisk(state, FLUSH_STATE_NONE); // we just allocated more disk space for block files
 
+    // ppcoin: check pending sync-checkpoint
+    AcceptPendingSyncCheckpoint();
+    
 		//LogPrintf("AcceptBlock OK,nHeight=%d.\n",nHeight);
     return true;
 }
@@ -3099,7 +3116,7 @@ bool ProcessNewBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, bool
 {
     // Preliminary checks
     bool checked = CheckBlock(*pblock, state);
-
+    	
     {
         LOCK(cs_main);
         bool fRequested = MarkBlockAsReceived(pblock->GetHash());
@@ -3107,6 +3124,10 @@ bool ProcessNewBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, bool
         if (!checked) {
             return error("%s: CheckBlock FAILED", __func__);
         }
+        
+		    // ppcoin: ask for pending sync-checkpoint if any
+		    if (!IsInitialBlockDownload())
+		    	AskForPendingSyncCheckpoint(pfrom);
 
         // Store to disk
         CBlockIndex *pindex = NULL;
@@ -3122,6 +3143,11 @@ bool ProcessNewBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, bool
     if (!ActivateBestChain(state, pblock))
         return error("%s: ActivateBestChain failed", __func__);
 
+    // ppcoin: if responsible for sync-checkpoint send it
+    if (pfrom && !CSyncCheckpoint::strMasterPrivKey.empty() &&
+    	(int)GetArg("-checkpointdepth", -1) >= 0)
+    	SendSyncCheckpoint(AutoSelectSyncCheckpoint());
+    	
 		//LogPrintf("ProcessNewBlock OK.\n");
     return true;
 }
@@ -3383,6 +3409,12 @@ bool static LoadBlockIndexDB()
             break;
         }
     }
+    
+    // ppcoin: load hashSyncCheckpoint
+    if (!pblocktree->ReadSyncCheckpoint(hashSyncCheckpoint))
+    	 LogPrintf("LoadBlockIndexDB(): synchronized checkpoint not read\n");
+    else
+    	 LogPrintf("LoadBlockIndexDB(): synchronized checkpoint %s\n", hashSyncCheckpoint.ToString().c_str());
 
     // Check presence of blk files
     LogPrintf("Checking all blk files are present...\n");
@@ -3595,12 +3627,19 @@ bool InitBlockIndex() {
             if (!ActivateBestChain(state, &block))
                 return error("LoadBlockIndex(): genesis block cannot be activated");
            
+            // ppcoin: initialize synchronized checkpoint
+            if (!WriteSyncCheckpoint(Params().GetConsensus(0).hashGenesisBlock))
+                return error("LoadBlockIndex() : failed to init sync checkpoint");
+            
             // Force a chainstate write so that when we VerifyDB in a moment, it doesn't check stale data
             return FlushStateToDisk(state, FLUSH_STATE_ALWAYS);
         } catch (const std::runtime_error& e) {
             return error("LoadBlockIndex(): failed to initialize block database: %s", e.what());
         }
     }
+    // ppcoin: if checkpoint master key changed must reset sync-checkpoint
+    if (!CheckCheckpointPubKey())
+    	return error("LoadBlockIndex() : failed to reset checkpoint master pubkey");
 
     return true;
 }
@@ -3913,6 +3952,12 @@ string GetWarnings(string strFor)
         strStatusBar = strRPC = "testsafemode enabled";
 
     // Misc warnings like out of disk space and clock is wrong
+    // Checkpoint warning
+    if (strCheckpointWarning != "")
+    {
+    	nPriority = 900;
+    	strStatusBar = strCheckpointWarning;
+    }
     if (strMiscWarning != "")
     {
         nPriority = 1000;
@@ -3928,6 +3973,13 @@ string GetWarnings(string strFor)
     {
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
+    }
+    
+    // ppcoin: if detected invalid checkpoint enter safe mode
+    if (hashInvalidCheckpoint.IsNull() == false)
+    {
+    		nPriority = 3000;
+    		strStatusBar = strRPC = _("WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.");
     }
 
     // Alerts
@@ -4250,6 +4302,13 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 item.second.RelayTo(pfrom);
         }
 
+        // ppcoin: relay sync-checkpoint
+        {
+            LOCK(cs_hashSyncCheckpoint);
+            if (!checkpointMessage.IsNull())
+                checkpointMessage.RelayTo(pfrom);
+        }
+        
         pfrom->fSuccessfullyConnected = true;
 
         string remoteAddr;
@@ -4264,6 +4323,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         int64_t nTimeOffset = nTime - GetTime();
         pfrom->nTimeOffset = nTimeOffset;
         AddTimeData(pfrom->addr, nTimeOffset);
+        
+        // ppcoin: ask for pending sync-checkpoint if any
+        if (!IsInitialBlockDownload())
+        	AskForPendingSyncCheckpoint(pfrom);
     }
 
 
@@ -4910,7 +4973,21 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         }
     }
 
+    else if (strCommand == "checkpoint") // ppcoin synchronized checkpoint
+    {
+        CSyncCheckpoint checkpoint;
+        vRecv >> checkpoint;
 
+        if (checkpoint.ProcessSyncCheckpoint(pfrom))
+        {
+            // Relay
+            pfrom->hashCheckpointKnown = checkpoint.hashCheckpoint;
+            LOCK(cs_vNodes);
+            BOOST_FOREACH(CNode* pnode, vNodes)
+                checkpoint.RelayTo(pnode);
+        }
+    }
+    
     else if (strCommand == "filterload")
     {
     		//LogPrintf("\nProcessMessages filterload\n");

@@ -186,7 +186,7 @@ enum
 /*
  * Basic Types
  */
-inline unsigned int GetSerializeSize(char a,      int, int=0) { return 1; }
+inline unsigned int GetSerializeSize(char a, int, int=0) { return 1; }
 inline unsigned int GetSerializeSize(int8_t a,    int, int=0) { return 1; }
 inline unsigned int GetSerializeSize(uint8_t a,   int, int=0) { return 1; }
 inline unsigned int GetSerializeSize(int16_t a,   int, int=0) { return 2; }
@@ -210,7 +210,8 @@ template<typename Stream> inline void Serialize(Stream& s, uint64_t a,     int, 
 template<typename Stream> inline void Serialize(Stream& s, float a,        int, int=0) { ser_writedata32(s, ser_float_to_uint32(a)); }
 template<typename Stream> inline void Serialize(Stream& s, double a,       int, int=0) { ser_writedata64(s, ser_double_to_uint64(a)); }
 
-template<typename Stream> inline void Unserialize(Stream& s, char& a,      int, int=0) { a = ser_readdata8(s); } // TODO Get rid of bare char
+
+template<typename Stream> inline void Unserialize(Stream& s, char& a,      int, int=0)    { a = ser_readdata8(s); } // TODO Get rid of bare char
 template<typename Stream> inline void Unserialize(Stream& s, int8_t& a,    int, int=0) { a = ser_readdata8(s); }
 template<typename Stream> inline void Unserialize(Stream& s, uint8_t& a,   int, int=0) { a = ser_readdata8(s); }
 template<typename Stream> inline void Unserialize(Stream& s, int16_t& a,   int, int=0) { a = ser_readdata16(s); }

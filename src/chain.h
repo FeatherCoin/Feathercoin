@@ -16,6 +16,8 @@
 
 #include <boost/foreach.hpp>
 
+extern CBlockIndex *pindexBestHeader;
+
 struct CDiskBlockPos
 {
     int nFile;
@@ -107,6 +109,9 @@ public:
 
     //! pointer to the index of the predecessor of this block
     CBlockIndex* pprev;
+    
+    // (memory only) pointer to the index of the *active* successor of this block
+    CBlockIndex* pnext;
 
     //! pointer to the index of some further predecessor of this block
     CBlockIndex* pskip;
@@ -156,6 +161,7 @@ public:
     {
         phashBlock = NULL;
         pprev = NULL;
+        pnext = NULL;
         pskip = NULL;
         nHeight = 0;
         nFile = 0;
@@ -235,6 +241,11 @@ public:
         return (int64_t)nTime;
     }
 
+    bool IsInMainChain() const
+    {
+        return (pnext || this == pindexBestHeader);
+    }
+    
     enum { nMedianTimeSpan=11 };
 
     int64_t GetMedianTimePast() const

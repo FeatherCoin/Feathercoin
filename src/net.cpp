@@ -16,6 +16,8 @@
 #include "scheduler.h"
 #include "ui_interface.h"
 #include "crypto/common.h"
+#include "primitives/block.h"
+#include "main.h"
 
 #ifdef WIN32
 #include <string.h>
@@ -117,6 +119,20 @@ unsigned short GetListenPort()
 {
     return (unsigned short)(GetArg("-port", Params().GetDefaultPort()));
 }
+
+
+void CNode::PushGetBlocks(CBlockIndex* pindexBegin, uint256 hashEnd)
+{ 
+    // Filter out duplicate requests
+    if (pindexBegin == pindexLastGetBlocksBegin && hashEnd == hashLastGetBlocksEnd)
+        return;
+    pindexLastGetBlocksBegin = pindexBegin;
+    hashLastGetBlocksEnd = hashEnd;
+		
+    //PushMessage("getblocks", CBlockLocator(pindexBegin->phashBlock), hashEnd);
+    PushMessage("getblocks", chainActive.GetLocator(pindexBegin), hashEnd);
+}
+
 
 // find 'best' local address for a particular peer
 bool GetLocal(CService& addr, const CNetAddr *paddrPeer)
@@ -1992,6 +2008,8 @@ CNode::CNode(SOCKET hSocketIn, CAddress addrIn, std::string addrNameIn, bool fIn
     nSendSize = 0;
     nSendOffset = 0;
     hashContinue = uint256();
+    pindexLastGetBlocksBegin = 0;
+    hashLastGetBlocksEnd = uint256();
     nStartingHeight = -1;
     fGetAddr = false;
     fRelayTxes = false;
