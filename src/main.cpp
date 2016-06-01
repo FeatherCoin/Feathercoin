@@ -2881,7 +2881,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
         // ppcoin: check that the block satisfies synchronized checkpoint
         // checkpoint advisory mode
         if (!IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
-        	return error("checkpoint AcceptBlock() : rejected by synchronized checkpoint");
+        	return error("checkpoint ContextualCheckBlockHeader() : rejected by synchronized checkpoint");
         	
         // Don't accept any forks from the main chain prior to last checkpoint
         CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(chainParams.Checkpoints());
@@ -3091,10 +3091,11 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     if (fCheckForPruning)
         FlushStateToDisk(state, FLUSH_STATE_NONE); // we just allocated more disk space for block files
 
+		LogPrintf("AcceptBlock sync-checkpoint,nHeight=%d.\n",nHeight);
     // ppcoin: check pending sync-checkpoint
     AcceptPendingSyncCheckpoint();
-    
-		//LogPrintf("AcceptBlock OK,nHeight=%d.\n",nHeight);
+		LogPrintf("AcceptBlock OK,nHeight=%d.\n",nHeight);
+		
     return true;
 }
 
@@ -3107,7 +3108,7 @@ static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned 
             ++nFound;
         pstart = pstart->pprev;
     }
-    LogPrintf("IsSuperMajority: minVersion=%d, nFound=%d,nRequired=%d \n",minVersion,nFound,nRequired);
+    //LogPrintf("IsSuperMajority: minVersion=%d, nFound=%d,nRequired=%d \n",minVersion,nFound,nRequired);
     return (nFound >= nRequired);
 }
 
@@ -3415,7 +3416,7 @@ bool static LoadBlockIndexDB()
     	 LogPrintf("LoadBlockIndexDB(): synchronized checkpoint not read\n");
     else
     	 LogPrintf("LoadBlockIndexDB(): synchronized checkpoint %s\n", hashSyncCheckpoint.ToString().c_str());
-
+		
     // Check presence of blk files
     LogPrintf("Checking all blk files are present...\n");
     set<int> setBlkDataFiles;
@@ -4565,7 +4566,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
     else if (strCommand == "getheaders")
     {
-    		//LogPrint("\nProcessMessages getheaders\n");
+    		LogPrintf("\n ProcessMessages getheaders. \n");
         CBlockLocator locator;
         uint256 hashStop;
         vRecv >> locator >> hashStop;
@@ -4733,7 +4734,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
     else if (strCommand == "headers" && !fImporting && !fReindex) // Ignore headers received while importing
     {
-    		//LogPrintf("\nProcessMessages headers\n");
+    		LogPrintf("ProcessMessages headers. \n");
         std::vector<CBlockHeader> headers;
 
         // Bypass the normal CBlock deserialization, as we don't want to risk deserializing 2000 full blocks.
@@ -4755,7 +4756,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             return true;
         }
 
-        //LogPrintf("ProcessMessages headers 0\n");
+        LogPrintf("ProcessMessages headers 0\n");
         CBlockIndex *pindexLast = NULL;
         BOOST_FOREACH(const CBlockHeader& header, headers) {
             CValidationState state;
@@ -4772,7 +4773,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 }
             }
         }
-        //LogPrintf("ProcessMessages headers 1\n");
+        LogPrintf("ProcessMessages headers 1\n");
 
         if (pindexLast)
             UpdateBlockAvailability(pfrom->GetId(), pindexLast->GetBlockHash());
@@ -4784,9 +4785,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             LogPrint("net", "more getheaders (%d) to end to peer=%d (startheight:%d)\n", pindexLast->nHeight, pfrom->id, pfrom->nStartingHeight);
             pfrom->PushMessage("getheaders", chainActive.GetLocator(pindexLast), uint256());
         }
-        //LogPrintf("\nProcessMessages headers 2\n");
+        LogPrintf("ProcessMessages headers 2\n");
 
         CheckBlockIndex();
+        LogPrintf("ProcessMessages headers 3\n");
     }
 
     else if (strCommand == "block" && !fImporting && !fReindex) // Ignore blocks received while importing
@@ -4980,11 +4982,13 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
         if (checkpoint.ProcessSyncCheckpoint(pfrom))
         {
+        		LogPrintf("\n checkpoint.ProcessSyncCheckpoint(pfrom)=true \n.");
             // Relay
             pfrom->hashCheckpointKnown = checkpoint.hashCheckpoint;
             LOCK(cs_vNodes);
             BOOST_FOREACH(CNode* pnode, vNodes)
                 checkpoint.RelayTo(pnode);
+            LogPrintf("checkpoint.ProcessSyncCheckpoint  Relay=OK \n.");
         }
     }
     
