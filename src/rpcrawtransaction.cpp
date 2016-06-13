@@ -297,7 +297,7 @@ Value listunspent(const Array& params, bool fHelp)
             CTxDestination address;
             if (ExtractDestination(pk, address))
             {
-	      
+#warning BOOST_VERSION      
 #if ((BOOST_VERSION / 100000 == 1) && (BOOST_VERSION / 100 % 1000 == 58))
 		  const qCScriptID& hash = boost::get<const CScriptID>(address);
 #else
