@@ -31,6 +31,12 @@
  */
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CPrivKey;
 
+
+// CSecret is a serialization of just the secret parameter (32 bytes)
+// https://github.com/bitcoin/bitcoin/commit/dfa23b94c24aae6466152fccbe896ba5dc0e97b4
+typedef std::vector<unsigned char, secure_allocator<unsigned char> > CSecret;
+
+
 /** An encapsulated private key. */
 class CKey
 {
@@ -101,10 +107,11 @@ public:
 
     //! Check whether the public key corresponding to this private key is (to be) compressed.
     bool IsCompressed() const { return fCompressed; }
+    
 
     //! Initialize from a CPrivKey (serialized OpenSSL private key data).
     bool SetPrivKey(const CPrivKey& vchPrivKey, bool fCompressed);
-
+		
     //! Generate a new private key using a cryptographic PRNG.
     void MakeNewKey(bool fCompressed);
 
@@ -134,7 +141,7 @@ public:
      *                  add 0x04 for compressed keys.
      */
     bool SignCompact(const uint256& hash, std::vector<unsigned char>& vchSig) const;
-
+		
     //! Derive BIP32 child key.
     bool Derive(CKey& keyChild, ChainCode &ccChild, unsigned int nChild, const ChainCode& cc) const;
 

@@ -8,10 +8,12 @@
 
 #include "script/interpreter.h"
 #include "uint256.h"
+#include "wallet/stealth.h"
 
 #include <boost/variant.hpp>
 
 #include <stdint.h>
+
 
 class CKeyID;
 class CScript;
@@ -80,7 +82,8 @@ public:
  *  * CScriptID: TX_SCRIPTHASH destination
  *  A CTxDestination is the internal data type encoded in a CBitcoinAddress
  */
-typedef boost::variant<CNoDestination, CKeyID, CScriptID> CTxDestination;
+//typedef boost::variant<CNoDestination, CKeyID, CScriptID> CTxDestination;
+typedef boost::variant<CNoDestination, CKeyID, CScriptID, CStealthAddress> CTxDestination;
 
 const char* GetTxnOutputType(txnouttype t);
 

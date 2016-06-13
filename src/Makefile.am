@@ -153,6 +153,7 @@ BITCOIN_CORE_H = \
   validationinterface.h \
   version.h \
   wallet/crypter.h \
+  wallet/stealth.h \
   wallet/db.h \
   wallet/wallet.h \
   wallet/wallet_ismine.h \
@@ -213,6 +214,7 @@ libbitcoin_server_a_SOURCES = \
 libbitcoin_wallet_a_CPPFLAGS = $(BITCOIN_INCLUDES)
 libbitcoin_wallet_a_SOURCES = \
   wallet/crypter.cpp \
+  wallet/stealth.cpp \
   wallet/db.cpp \
   wallet/rpcdump.cpp \
   wallet/rpcwallet.cpp \

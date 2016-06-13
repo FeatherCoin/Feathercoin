@@ -295,6 +295,10 @@ public:
         *script << OP_HASH160 << ToByteVector(scriptID) << OP_EQUAL;
         return true;
     }
+    bool operator()(const CStealthAddress &stxAddr) const {
+        script->clear();
+        return false;
+    }
 };
 }
 

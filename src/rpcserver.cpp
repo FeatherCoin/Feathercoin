@@ -310,6 +310,14 @@ static const CRPCCommand vRPCCommands[] =
     { "generating",         "getgenerate",            &getgenerate,            true  },
     { "generating",         "setgenerate",            &setgenerate,            true  },
     { "generating",         "generate",               &generate,               true  },
+    
+    { "stealthaddress",     "getnewstealthaddress",   &getnewstealthaddress,   true },
+    { "stealthaddress",     "liststealthaddresses",   &liststealthaddresses,   true },
+    { "stealthaddress",     "importstealthaddress",   &importstealthaddress,   true },
+    { "stealthaddress",     "sendtostealthaddress",   &sendtostealthaddress,   true },
+    { "stealthaddress",     "clearwallettransactions",&clearwallettransactions,true },
+    { "stealthaddress",     "scanforalltxns",         &scanforalltxns,         true },
+    { "stealthaddress",     "scanforstealthtxns",     &scanforstealthtxns,     true },
 #endif
 
     /* Raw transactions */

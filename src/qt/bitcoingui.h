@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2014 The Bitcoin Core developers
+// Copyright (c) 2014-2016 The Feathercoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,6 +18,7 @@
 #include <QMenu>
 #include <QPoint>
 #include <QSystemTrayIcon>
+#include <QLabel>
 
 class ClientModel;
 class NetworkStyle;
@@ -36,8 +38,25 @@ class QProgressBar;
 class QProgressDialog;
 QT_END_NAMESPACE
 
+
+class ActiveLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    ActiveLabel(const QString & text = "", QWidget * parent = 0);
+    ~ActiveLabel(){}
+
+Q_SIGNALS:
+    void clicked();
+
+protected:
+    void mouseReleaseEvent (QMouseEvent * event) ;
+
+};
+
+
 /**
-  Bitcoin GUI main class. This class represents the main window of the Bitcoin UI. It communicates with both the client and
+  Feathercoin GUI main class. This class represents the main window of the Bitcoin UI. It communicates with both the client and
   wallet models to give the user an up-to-date view of the current core state.
 */
 class BitcoinGUI : public QMainWindow
@@ -75,10 +94,11 @@ protected:
 
 private:
     ClientModel *clientModel;
+    WalletModel *walletModel;
     WalletFrame *walletFrame;
 
     UnitDisplayStatusBarControl *unitDisplayControl;
-    QLabel *labelEncryptionIcon;
+    ActiveLabel *labelEncryptionIcon;
     QLabel *labelConnectionsIcon;
     QLabel *labelBlocksIcon;
     QLabel *progressBarLabel;
@@ -107,6 +127,9 @@ private:
     QAction *openRPCConsoleAction;
     QAction *openAction;
     QAction *showHelpMessageAction;
+    
+    QAction *lockWalletAction;
+    QAction *unlockWalletAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;

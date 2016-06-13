@@ -146,7 +146,8 @@ void ReceiveCoinsDialog::on_receiveButton_clicked()
         }
     } else {
         /* Generate new receiving address */
-        address = model->getAddressTableModel()->addRow(AddressTableModel::Receive, label, "");
+        int typeInd  = AddressTableModel::AT_Normal;
+        address = model->getAddressTableModel()->addRow(AddressTableModel::Receive, label, "",typeInd);
     }
     SendCoinsRecipient info(address, label,
         ui->reqAmount->value(), ui->reqMessage->text());

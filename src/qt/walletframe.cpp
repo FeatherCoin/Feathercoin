@@ -168,6 +168,13 @@ void WalletFrame::changePassphrase()
         walletView->changePassphrase();
 }
 
+void WalletFrame::lockWallet()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->lockWallet();
+}
+
 void WalletFrame::unlockWallet()
 {
     WalletView *walletView = currentWalletView();

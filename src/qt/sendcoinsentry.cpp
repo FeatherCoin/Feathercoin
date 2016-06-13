@@ -11,9 +11,11 @@
 #include "optionsmodel.h"
 #include "scicon.h"
 #include "walletmodel.h"
+#include "wallet/stealth.h"
 
 #include <QApplication>
 #include <QClipboard>
+#include <QDebug>
 
 SendCoinsEntry::SendCoinsEntry(QWidget *parent) :
     QStackedWidget(parent),
@@ -169,6 +171,14 @@ SendCoinsRecipient SendCoinsEntry::getValue()
     recipient.message = ui->messageTextLabel->text();
     recipient.fSubtractFeeFromAmount = (ui->checkboxSubtractFeeFromAmount->checkState() == Qt::Checked);
 
+    if (recipient.address.length() > 75 
+        && IsStealthAddress(recipient.address.toStdString()))
+        recipient.typeInd = AddressTableModel::AT_Stealth;
+    else
+        recipient.typeInd = AddressTableModel::AT_Normal;
+        	
+    qDebug() << "SendCoinsEntry::getValue,recipient.typeInd ="+QString::number(recipient.typeInd);
+    
     return recipient;
 }
 
