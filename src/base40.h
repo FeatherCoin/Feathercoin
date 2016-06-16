@@ -16,7 +16,6 @@
 #include <algorithm>
 
 static const char* pszBase40 = "0123456789abcdefghijklmnopqrstuvwxyz-_.+";
-static const char* pszBase16 = "0123456789abcdef";
 
 
 //Turn a string into a non-negative integer.
@@ -50,7 +49,6 @@ void i64tohex(uint64_t n,char *s)
 //Turn a non-negative integer into a string.
 std::string int_to_charset(uint64_t val)
 {
-	if (val < 0)	 return "ERROR";
 	if (val == 0)	 return "0";
 		 
 	std::string output;
