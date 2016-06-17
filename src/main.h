@@ -103,8 +103,8 @@ static const int nForkFour = 432000;
 static const int nTestnetFork   =  600;
 
 /** blockchain version 4 didn't become active until height and time. */
-static const int MIN_BLOCKHEADER_VERSION4_HEIGHT = 1544845;         //make after 2016/12/25
-static const unsigned int MIN_BLOCKHEADER_VERSION4_SwitchTime = 1482631200;  //2016/12/25 10:00:00  http://tool.chinaz.com/Tools/unixtime.aspx
+static const int MIN_BLOCKHEADER_VERSION4_HEIGHT = 1278297;         //after 2016/07/01
+static const unsigned int MIN_BLOCKHEADER_VERSION4_SwitchTime = 1467302400;  //2016/07/01 10:00:00  http://tool.chinaz.com/Tools/unixtime.aspx
 
 struct BlockHasher
 {
