@@ -2319,6 +2319,22 @@ void static FindMostWorkChain() {
 //for 0.8.7 ACP
 bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 {
+		CBlockIndex *pindex = chainActive.Tip();
+		LogPrintf("SetBestChain: chainActive nHeight=%d,BlockHash=%s\n",pindex->nHeight,pindex->GetBlockHash().ToString());
+		LogPrintf("SetBestChain: pindexNew nHeight=%d,BlockHash=%s,pprev nHeight=%d,BlockHash=%s\n",pindexNew->nHeight,pindexNew->GetBlockHash().ToString(),pindexNew->pprev->nHeight,pindexNew->pprev->GetBlockHash().ToString());
+		
+		if ((pindex->nHeight+1)!=pindexNew->nHeight)
+				return true;
+		
+		LogPrintf("SetBestChain: pindexNew go.\n");
+				
+		if (!ConnectTip(state,pindexNew))
+		{
+				LogPrintf("SetBestChain: false.\n");
+				return false;
+		}
+		
+		LogPrintf("SetBestChain: true.\n");
     return true;
 }
 
@@ -2812,8 +2828,11 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
        
         /* Don't accept blocks with bogus nVersion numbers after this point */
         if (nHeight >= nForkFour)  {
-            if(block.nVersion < 2)
+            if ((block.nVersion !=2)&&(block.nVersion !=4)) 
+            {
+            		LogPrintf("AcceptBlockHeader,incorrect block version=%d \n",block.nVersion);
                 return(state.DoS(100, error("AcceptBlock() : incorrect block version")));
+            }
         }
         
         // Check proof of work
