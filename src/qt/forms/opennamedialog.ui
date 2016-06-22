@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>556</width>
-    <height>375</height>
+    <width>552</width>
+    <height>382</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QPushButton" name="insertButton">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>320</y>
-     <width>171</width>
+     <x>30</x>
+     <y>330</y>
+     <width>181</width>
      <height>31</height>
     </rect>
    </property>
@@ -49,8 +49,8 @@
   <widget class="QLineEdit" name="txtName">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>73</y>
+     <x>30</x>
+     <y>100</y>
      <width>451</width>
      <height>20</height>
     </rect>
@@ -66,7 +66,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>77</y>
+     <y>80</y>
      <width>54</width>
      <height>12</height>
     </rect>
@@ -79,7 +79,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>120</y>
+     <y>130</y>
      <width>54</width>
      <height>12</height>
     </rect>
@@ -91,8 +91,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>450</x>
-     <y>320</y>
+     <x>220</x>
+     <y>330</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -114,8 +114,8 @@
   <widget class="QLineEdit" name="txtLocation">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>115</y>
+     <x>30</x>
+     <y>150</y>
      <width>451</width>
      <height>20</height>
     </rect>
@@ -125,7 +125,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>161</y>
+     <y>180</y>
      <width>54</width>
      <height>12</height>
     </rect>
@@ -137,8 +137,8 @@
   <widget class="QLineEdit" name="txtContact">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>158</y>
+     <x>30</x>
+     <y>200</y>
      <width>451</width>
      <height>20</height>
     </rect>
@@ -147,21 +147,21 @@
   <widget class="QLabel" name="lblNotice">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
+     <x>150</x>
+     <y>10</y>
      <width>561</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Notice:All of the information can not be more than 40 characters.</string>
+    <string>All fields must be 40 characters or less.</string>
    </property>
   </widget>
   <widget class="QLabel" name="lblOperations">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>198</y>
+     <y>230</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -173,8 +173,8 @@
   <widget class="QComboBox" name="cmbOpt">
    <property name="geometry">
     <rect>
-     <x>115</x>
-     <y>197</y>
+     <x>120</x>
+     <y>230</y>
      <width>131</width>
      <height>22</height>
     </rect>
@@ -184,7 +184,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>40</y>
+     <y>30</y>
      <width>54</width>
      <height>12</height>
     </rect>
@@ -196,8 +196,8 @@
   <widget class="QLineEdit" name="txtPayAdress">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>40</y>
+     <x>30</x>
+     <y>50</y>
      <width>451</width>
      <height>20</height>
     </rect>
@@ -213,8 +213,8 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>240</y>
-     <width>111</width>
+     <y>270</y>
+     <width>141</width>
      <height>16</height>
     </rect>
    </property>
@@ -225,8 +225,8 @@
   <widget class="QLineEdit" name="txtNameAddress">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>239</y>
+     <x>30</x>
+     <y>290</y>
      <width>401</width>
      <height>20</height>
     </rect>
