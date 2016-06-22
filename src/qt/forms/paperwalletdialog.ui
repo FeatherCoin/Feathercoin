@@ -58,7 +58,7 @@
     <string>New Address</string>
    </property>
    <property name="icon">
-    <iconset resource="../bitcoin.qrc">
+    <iconset resource="../feathercoin.qrc">
      <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
    </property>
   </widget>
@@ -75,7 +75,7 @@
     <string notr="true"/>
    </property>
    <property name="pixmap">
-    <pixmap resource="../bitcoin.qrc">:/images/paper_wallet</pixmap>
+    <pixmap resource="../feathercoin.qrc">:/images/paper_wallet</pixmap>
    </property>
   </widget>
   <widget class="VerticalLabel" name="addressText">
@@ -140,27 +140,27 @@
   <widget class="QPushButton" name="printButton">
    <property name="geometry">
     <rect>
-     <x>430</x>
-     <y>420</y>
-     <width>131</width>
-     <height>31</height>
+     <x>420</x>
+     <y>415</y>
+     <width>111</width>
+     <height>26</height>
     </rect>
    </property>
    <property name="text">
     <string>Print Wallet</string>
    </property>
    <property name="icon">
-    <iconset resource="../bitcoin.qrc">
+    <iconset resource="../feathercoin.qrc">
      <normaloff>:/icons/receiving_addresses</normaloff>:/icons/receiving_addresses</iconset>
    </property>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>580</x>
-     <y>420</y>
-     <width>111</width>
-     <height>31</height>
+     <x>610</x>
+     <y>415</y>
+     <width>81</width>
+     <height>26</height>
     </rect>
    </property>
    <property name="standardButtons">
@@ -173,9 +173,9 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>420</y>
-     <width>131</width>
+     <x>190</x>
+     <y>415</y>
+     <width>91</width>
      <height>26</height>
     </rect>
    </property>
@@ -186,10 +186,10 @@
   <widget class="QComboBox" name="walletCount">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>420</y>
-     <width>111</width>
-     <height>31</height>
+     <x>290</x>
+     <y>415</y>
+     <width>74</width>
+     <height>26</height>
     </rect>
    </property>
    <property name="editable">
@@ -261,7 +261,7 @@
     <rect>
      <x>100</x>
      <y>378</y>
-     <width>591</width>
+     <width>600</width>
      <height>30</height>
     </rect>
    </property>
@@ -316,7 +316,7 @@ p, li { white-space: pre-wrap; }
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../bitcoin.qrc"/>
+  <include location="../feathercoin.qrc"/>
  </resources>
  <connections>
   <connection>
