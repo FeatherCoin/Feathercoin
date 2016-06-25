@@ -140,7 +140,7 @@
   <widget class="QPushButton" name="printButton">
    <property name="geometry">
     <rect>
-     <x>460</x>
+     <x>430</x>
      <y>420</y>
      <width>131</width>
      <height>31</height>
@@ -157,10 +157,10 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>610</x>
-     <y>425</y>
-     <width>81</width>
-     <height>21</height>
+     <x>580</x>
+     <y>420</y>
+     <width>121</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="standardButtons">
@@ -173,7 +173,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>170</x>
      <y>420</y>
      <width>131</width>
      <height>26</height>
@@ -186,7 +186,7 @@
   <widget class="QComboBox" name="walletCount">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>300</x>
      <y>420</y>
      <width>111</width>
      <height>31</height>
