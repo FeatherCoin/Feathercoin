@@ -1,5 +1,6 @@
 
-**status of 0.8.7.3 ist production (old release)**
+**status of master-0.8 ist production (old release)**
+code version is 0.8.7.3
 
 Feathercoin
 ===========
