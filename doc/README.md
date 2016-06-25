@@ -6,67 +6,68 @@ Copyright (c) 2009-2016 Feathercoin Developers
 
 Setup
 ---------------------
+
 [Feathercoin Core] is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. 
 
-Example Build from source
---------------------------
+Example UNIX Build from source
+------------------------------
 
-The Feathercoin wallet contains a number of additional features which require additional libraries to the Bitcoin build instructions.
+The Feathercoin wallet contains a number of features which require additional libraries to the Bitcoin build instructions.
 
-### Quick build example for Ubuntu 16.04
+### Quick build example for Ubuntu 16.04  
 
-sudo apt-get install git
-sudo apt-get install autoconf automake  debhelper dh-autoreconf
-sudo apt-get install libssl-dev libdb++-dev libminiupnpc-dev binutils
-sudo apt-get install autotools-dev
+sudo apt-get install git  
+sudo apt-get install autoconf automake  debhelper dh-autoreconf  
+sudo apt-get install libssl-dev libdb++-dev libminiupnpc-dev binutils  
+sudo apt-get install autotools-dev  
 
-#  You need the Qt5 run-time libraries to build Feathercoin-Qt.
+### You need the Qt5 run-time libraries to build Feathercoin-Qt.  
 
-sudo apt-get install qtbase5-dev qttools5-dev-tools
-sudo apt-get install libqt5printsupport5 libqtopengl5-dev
-sudo apt-get install libqjson-dev
+sudo apt-get install qtbase5-dev qttools5-dev-tools  
+sudo apt-get install libqt5printsupport5 libqtopengl5-dev  
+sudo apt-get install libqjson-dev  
 
 sudo apt-get install libqt5gui5 libqt5core5 libqt5dbus5
 
-sudo apt-get libssl-dev
+sudo apt-get libssl-dev  
 
-sudo apt-get install libzxing libqrencode-dev pkg-config libprotobuf-dev  protobuf-compiler
-sudo apt-get install debhelper 
+sudo apt-get install libzxing libqrencode-dev pkg-config libprotobuf-dev  protobuf-compiler  
+sudo apt-get install debhelper  
 
 If you need to compile or install the zxing libraries yourself, download the sources from github.com.
-Search for zxing-cpp to get the c++ version of the code.
+Search for zxing-cpp to get the c++ version of the code.   
 
-Download the .deb file or Install the binaries available for zxing after installing the Feathercoin PPA
+Download the .deb file or Install the binaries available for zxing after installing the Feathercoin PPA  
 
-http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux
+http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux  
 
-sudo apt-get update
-sudo apt-get install libzxing
+sudo apt-get update  
+sudo apt-get install libzxing  
 
 # copy the zxing files to source : 
 cp -R /usr/include/zxing ~/Feathercoin/src/zxing
 
 Install boost Libraries
 
-sudo apt-get install libboost-all-dev
-sudo apt install libmessaging-menu-dev
+sudo apt-get install libboost-all-dev  
+sudo apt install libmessaging-menu-dev  
 
-cd Feathercoin
-make clean
-   autoupdate
-   ./autogen.sh
-   ./configure --with-gui=qt5 --enable-tests=no
-   make
+cd Feathercoin  
+make clean  
+   autoupdate  
+   ./autogen.sh  
+   ./configure --with-gui=qt5 --enable-tests=no  
+   make  
 
-Possible issues
-----------------
+Possible issues  
+---------------- 
 
 # Use alternate database, 4.8 is still most portable.
-sudo apt-get install libdb5.3-dev
+sudo apt-get install libdb5.3-dev  
+     
 
-   
-   
-Running
+     
+Running Feathercoin
 ---------------------
 The following are some helpful notes on how to run Feathercoin on your native platform. 
 
