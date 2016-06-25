@@ -1,3 +1,5 @@
+<b> Status of 0.11.2 is beta </b>
+
 <h1>Feathercoin</h1>
 
 <p><center><img src="http://www.ftc-c.com/pack4/F2_240.jpg"></center></p>
