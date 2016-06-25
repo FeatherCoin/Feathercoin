@@ -24,7 +24,7 @@ The Feathercoin wallet contains a number of features which require additional li
 
     sudo apt-get install autotools-dev  
 
-## You need the Qt5 run-time libraries to build Feathercoin-Qt.  
+### You need the Qt5 run-time libraries to build Feathercoin-Qt.  
 
     sudo apt-get install qtbase5-dev qttools5-dev-tools  
 
@@ -40,20 +40,20 @@ The Feathercoin wallet contains a number of features which require additional li
 
     sudo apt-get install debhelper  
 
-## If you need to compile or install the zxing libraries yourself, download the sources from github.com.
+### If you need to compile or install the zxing libraries yourself, download the sources from github.com.
 Search for zxing-cpp to get the c++ version of the code.   
 
-## Download the .deb file or Install the binaries available for zxing after installing the Feathercoin PPA  
+### Download the .deb file or Install the binaries available for zxing after installing the Feathercoin PPA  
 
 http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux  
 
     sudo apt-get update  
     sudo apt-get install libzxing  
 
-## copy the zxing files to source : 
+### copy the zxing files to source : 
 cp -R /usr/include/zxing ~/Feathercoin/src/zxing
 
-## Install boost Libraries
+### Install boost Libraries
 
     sudo apt-get install libboost-all-dev  
 
@@ -69,7 +69,14 @@ cp -R /usr/include/zxing ~/Feathercoin/src/zxing
 Possible issues  
 ---------------- 
 
-# Use alternate database, 4.8 is still most portable.
+## Enable uPNP
+--enable-upnp-default 
+
+## Dependency issues with qr codes
+
+--with-qrcode=no
+
+## Use alternate database, 4.8 is still most portable.
 sudo apt-get install libdb5.3-dev  
      
 
