@@ -1,3 +1,6 @@
+
+**status of 0.8.7.3 ist production (old release)**
+
 Feathercoin
 ===========
 
