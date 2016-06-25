@@ -16,48 +16,55 @@ The Feathercoin wallet contains a number of features which require additional li
 
 ### Quick build example for Ubuntu 16.04  
 
-sudo apt-get install git  
-sudo apt-get install autoconf automake  debhelper dh-autoreconf  
-sudo apt-get install libssl-dev libdb++-dev libminiupnpc-dev binutils  
-sudo apt-get install autotools-dev  
+    sudo apt-get install git  
 
-### You need the Qt5 run-time libraries to build Feathercoin-Qt.  
+    sudo apt-get install autoconf automake  debhelper dh-autoreconf  
 
-sudo apt-get install qtbase5-dev qttools5-dev-tools  
-sudo apt-get install libqt5printsupport5 libqtopengl5-dev  
-sudo apt-get install libqjson-dev  
+    sudo apt-get install libssl-dev libdb++-dev libminiupnpc-dev binutils  
 
-sudo apt-get install libqt5gui5 libqt5core5 libqt5dbus5
+    sudo apt-get install autotools-dev  
 
-sudo apt-get libssl-dev  
+## You need the Qt5 run-time libraries to build Feathercoin-Qt.  
 
-sudo apt-get install libzxing libqrencode-dev pkg-config libprotobuf-dev  protobuf-compiler  
-sudo apt-get install debhelper  
+    sudo apt-get install qtbase5-dev qttools5-dev-tools  
 
-If you need to compile or install the zxing libraries yourself, download the sources from github.com.
+    sudo apt-get install libqt5printsupport5 libqtopengl5-dev  
+
+    sudo apt-get install libqjson-dev  
+
+    sudo apt-get install libqt5gui5 libqt5core5 libqt5dbus5  
+
+    sudo apt-get libssl-dev  
+
+    sudo apt-get install libzxing libqrencode-dev pkg-config libprotobuf-dev  protobuf-compiler  
+
+    sudo apt-get install debhelper  
+
+## If you need to compile or install the zxing libraries yourself, download the sources from github.com.
 Search for zxing-cpp to get the c++ version of the code.   
 
-Download the .deb file or Install the binaries available for zxing after installing the Feathercoin PPA  
+## Download the .deb file or Install the binaries available for zxing after installing the Feathercoin PPA  
 
 http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux  
 
-sudo apt-get update  
-sudo apt-get install libzxing  
+    sudo apt-get update  
+    sudo apt-get install libzxing  
 
-# copy the zxing files to source : 
+## copy the zxing files to source : 
 cp -R /usr/include/zxing ~/Feathercoin/src/zxing
 
-Install boost Libraries
+## Install boost Libraries
 
-sudo apt-get install libboost-all-dev  
-sudo apt install libmessaging-menu-dev  
+    sudo apt-get install libboost-all-dev  
 
-cd Feathercoin  
-make clean  
-   autoupdate  
-   ./autogen.sh  
-   ./configure --with-gui=qt5 --enable-tests=no  
-   make  
+    sudo apt install libmessaging-menu-dev  
+
+    cd Feathercoin  
+    make clean  
+     autoupdate  
+     ./autogen.sh  
+     ./configure --with-gui=qt5 --enable-tests=no  
+    make  
 
 Possible issues  
 ---------------- 
