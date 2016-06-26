@@ -90,12 +90,6 @@ int64_t CTransaction::nMinTxFee = 1000000;  // Override with -mintxfee
 int64_t CTransaction::nMinRelayTxFee = 1000000;
 
 map<uint256, CBlock*> mapOrphanBlocksA;
-
-struct COrphanBlock {
-    uint256 hashBlock;
-    uint256 hashPrev;
-    vector<unsigned char> vchBlock;
-};
 map<uint256, COrphanBlock*> mapOrphanBlocks;
 multimap<uint256, COrphanBlock*> mapOrphanBlocksByPrev;
 
@@ -2315,25 +2309,61 @@ void static FindMostWorkChain() {
     // We have a new best.
     chainMostWork.SetTip(pindexNew);
 }
-
+  
 //for 0.8.7 ACP
 bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 {
-		CBlockIndex *pindex = chainActive.Tip();
-		LogPrintf("SetBestChain: chainActive nHeight=%d,BlockHash=%s\n",pindex->nHeight,pindex->GetBlockHash().ToString());
+		LOCK(cs_main);
+		CBlockIndex *pindexOldTip = chainActive.Tip();
+		LogPrintf("SetBestChain: chainActive nHeight=%d,BlockHash=%s\n",pindexOldTip->nHeight,pindexOldTip->GetBlockHash().ToString());
 		LogPrintf("SetBestChain: pindexNew nHeight=%d,BlockHash=%s,pprev nHeight=%d,BlockHash=%s\n",pindexNew->nHeight,pindexNew->GetBlockHash().ToString(),pindexNew->pprev->nHeight,pindexNew->pprev->GetBlockHash().ToString());
 		
-		if ((pindex->nHeight+1)!=pindexNew->nHeight)
-				return true;
-		
-		LogPrintf("SetBestChain: pindexNew go.\n");
-				
-		if (!ConnectTip(state,pindexNew))
-		{
-				LogPrintf("SetBestChain: false.\n");
-				return false;
-		}
-		
+    // Check whether we have something to do.
+    if (pindexNew == NULL) 
+    		return true;
+    if (pindexNew == pindexOldTip) 
+    		return true;
+        			
+    // All modifications to the coin state will be done in this cache.
+    // Only when all have succeeded, we push it to pcoinsTip.
+    CCoinsViewCache view(*pcoinsTip, true);
+
+    // Find the fork (从pindexOldTip退到pindexNew)  
+    CBlockIndex* pfork = pindexOldTip;
+    CBlockIndex* plonger = pindexNew;
+    while (pfork && pfork != plonger)
+    {
+        while (plonger->nHeight > pfork->nHeight) {
+            plonger = plonger->pprev;
+            assert(plonger != NULL);
+        }
+        if (pfork == plonger)
+            break;
+        pfork = pfork->pprev;
+        assert(pfork != NULL);
+    }
+    LogPrintf("SetBestChain: pfork nHeight=%d,BlockHash=%s\n",pfork->nHeight,pfork->GetBlockHash().ToString());
+
+    // List of what to disconnect (从pindexOldTip退到pindexNew=pfork)
+    vector<CBlockIndex*> vDisconnect;
+    for (CBlockIndex* pindex = pindexOldTip; pindex != pfork; pindex = pindex->pprev)
+        vDisconnect.push_back(pindex);
+
+    // List of what to connect (typically only pindexNew)
+    vector<CBlockIndex*> vConnect;
+    for (CBlockIndex* pindex = pindexNew; pindex != pfork; pindex = pindex->pprev)
+        vConnect.push_back(pindex);
+    reverse(vConnect.begin(), vConnect.end());
+    
+    if (vDisconnect.size() > 0) {
+        LogPrintf("REORGANIZE: Disconnect %"PRIszu" blocks; %s...\n", vDisconnect.size(), pfork->GetBlockHash().ToString());
+        LogPrintf("REORGANIZE: Connect %"PRIszu" blocks; ...%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString());
+    }
+    
+    
+    
+    
+    
 		LogPrintf("SetBestChain: true.\n");
     return true;
 }
@@ -2967,7 +2997,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
 {
     // Feathercoin: temporarily disable v2 block lockin until we are ready for v2 transition
-    return false;
+    // return false;
     
     unsigned int nFound = 0;
     for (unsigned int i = 0; i < nToCheck && nFound < nRequired && pstart != NULL; i++)
@@ -2977,6 +3007,12 @@ bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, uns
         pstart = pstart->pprev;
     }
     return (nFound >= nRequired);
+}
+
+bool CBlockIndex::IsInMainChain() const
+{
+		//return (pnext || this == chainActive.Tip());
+		return chainActive.Contains(this);
 }
 
 int64_t CBlockIndex::GetMedianTime() const
@@ -4564,15 +4600,20 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     else if (strCommand == "checkpoint") // ppcoin synchronized checkpoint
     {
         CSyncCheckpoint checkpoint;
-        vRecv >> checkpoint;
+        vRecv >> checkpoint;  //收到的检查点
+        LogPrintf("Receive checkpoint,hashCheckpoint=%s\n.",checkpoint.hashCheckpoint.ToString().c_str());
 
         if (checkpoint.ProcessSyncCheckpoint(pfrom))
         {
+        		LogPrintf("checkpoint.ProcessSyncCheckpoint(pfrom)=true, hashCheckpoint=%s\n.",checkpoint.hashCheckpoint.ToString().c_str());
+        		
             // Relay
             pfrom->hashCheckpointKnown = checkpoint.hashCheckpoint;
             LOCK(cs_vNodes);
             BOOST_FOREACH(CNode* pnode, vNodes)
                 checkpoint.RelayTo(pnode);
+            
+            LogPrintf("checkpoint.ProcessSyncCheckpoint  Relay=OK \n.");
         }
     }
 

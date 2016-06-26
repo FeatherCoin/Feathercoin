@@ -13,6 +13,7 @@
 #include "chainparams.h"
 #include "core.h"
 #include "ui_interface.h"
+#include "main.h"
 
 #ifdef WIN32
 #include <string.h>
@@ -97,15 +98,15 @@ unsigned short GetListenPort()
 }
 
 void CNode::PushGetBlocks(CBlockIndex* pindexBegin, uint256 hashEnd)
-{ 
-    // main.h:PushGetBlocks(CNode* pnode, CBlockIndex* pindexBegin, uint256 hashEnd);
+{    
     // Filter out duplicate requests
-    /*if (pindexBegin == pindexLastGetBlocksBegin && hashEnd == hashLastGetBlocksEnd)
+    if (pindexBegin == pindexLastGetBlocksBegin && hashEnd == hashLastGetBlocksEnd)
         return;
     pindexLastGetBlocksBegin = pindexBegin;
     hashLastGetBlocksEnd = hashEnd;
 		
-    PushMessage("getblocks", CBlockLocator(pindexBegin), hashEnd);*/ //'CBlockIndex*' to 'const CBlockLocator&' 
+    //PushMessage("getblocks", CBlockLocator(pindexBegin->phashBlock), hashEnd);
+    PushMessage("getblocks", chainActive.GetLocator(pindexBegin), hashEnd);
 }
 
 // find 'best' local address for a particular peer
