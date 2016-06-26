@@ -69,14 +69,14 @@ cp -R /usr/include/zxing ~/Feathercoin/src/zxing
 Possible issues  
 ---------------- 
 
-## Enable uPNP
+### Enable uPNP
 --enable-upnp-default 
 
-## Dependency issues with qr codes
+### Dependency issues with qr codes and zxing
 
 --with-qrcode=no
 
-## Use alternate database, 4.8 is still most portable.
+### Use alternate database, 4.8 is still most portable.
 sudo apt-get install libdb5.3-dev  
      
 
