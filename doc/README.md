@@ -56,12 +56,12 @@ Search for zxing-cpp to get the c++ version of the code.
 
 https://github.com/glassechidna/zxing-cpp
 
-Build command for libzxing : 
+Build command for libzxing :  
 
-export CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0"
-cmake -G “Unix Makefiles” … -D_GLIBCXX_USE_CXX11_ABI=0 -DCMAKE_BUILD_TYPE=Release
-make 
-sudo make install 
+export CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0"  
+cmake -G “Unix Makefiles” … -D_GLIBCXX_USE_CXX11_ABI=0 -DCMAKE_BUILD_TYPE=Release   
+make  
+sudo make install   
 
    
 ### copy the zxing files to source : 
