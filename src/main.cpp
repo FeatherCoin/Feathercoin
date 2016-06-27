@@ -1494,9 +1494,9 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
         return error("Check range CheckProofOfWork() : nBits below minimum work");
 
     // Check proof of work matches claimed amount
-    LogPrintf("CheckProofOfWork() hash=%s \n",hash.ToString().c_str());
-    LogPrintf("CheckProofOfWork() nBits=%i \n",nBits);
-    LogPrintf("CheckProofOfWork() bnTarget.getuint256=%s \n",bnTarget.getuint256().ToString().c_str());
+    //LogPrintf("CheckProofOfWork() hash=%s \n",hash.ToString().c_str());
+    //LogPrintf("CheckProofOfWork() nBits=%i \n",nBits);
+    //LogPrintf("CheckProofOfWork() bnTarget.getuint256=%s \n",bnTarget.getuint256().ToString().c_str());
     if (hash > bnTarget.getuint256())
         return error("matches claimed amount, CheckProofOfWork() : hash doesn't match nBits");
 
@@ -2315,8 +2315,8 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 {
 		LOCK(cs_main);
 		CBlockIndex *pindexOldTip = chainActive.Tip();
-		LogPrintf("SetBestChain: chainActive nHeight=%d,BlockHash=%s\n",pindexOldTip->nHeight,pindexOldTip->GetBlockHash().ToString());
-		LogPrintf("SetBestChain: pindexNew nHeight=%d,BlockHash=%s,pprev nHeight=%d,BlockHash=%s\n",pindexNew->nHeight,pindexNew->GetBlockHash().ToString(),pindexNew->pprev->nHeight,pindexNew->pprev->GetBlockHash().ToString());
+		LogPrintf("SetBestChain:100 chainActive nHeight=%d,BlockHash=%s\n",pindexOldTip->nHeight,pindexOldTip->GetBlockHash().ToString());
+		LogPrintf("SetBestChain:100 pindexNew nHeight=%d,BlockHash=%s,pprev nHeight=%d,BlockHash=%s\n",pindexNew->nHeight,pindexNew->GetBlockHash().ToString(),pindexNew->pprev->nHeight,pindexNew->pprev->GetBlockHash().ToString());
 		
     // Check whether we have something to do.
     if (pindexNew == NULL) 
@@ -2342,7 +2342,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
         pfork = pfork->pprev;
         assert(pfork != NULL);
     }
-    LogPrintf("SetBestChain: pfork nHeight=%d,BlockHash=%s\n",pfork->nHeight,pfork->GetBlockHash().ToString());
+    LogPrintf("SetBestChain:110 pfork nHeight=%d,BlockHash=%s\n",pfork->nHeight,pfork->GetBlockHash().ToString());
 
     // List of what to disconnect (´ÓpindexOldTipÍËµ½pindexNew=pfork)
     vector<CBlockIndex*> vDisconnect;
@@ -2356,15 +2356,94 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     reverse(vConnect.begin(), vConnect.end());
     
     if (vDisconnect.size() > 0) {
-        LogPrintf("REORGANIZE: Disconnect %"PRIszu" blocks; %s...\n", vDisconnect.size(), pfork->GetBlockHash().ToString());
-        LogPrintf("REORGANIZE: Connect %"PRIszu" blocks; ...%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString());
+        LogPrintf("SetBestChain:120: Disconnect %"PRIszu" blocks; %s...\n", vDisconnect.size(), pfork->GetBlockHash().ToString());
+        LogPrintf("SetBestChain:120: Connect %"PRIszu" blocks; ...%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString());
     }
     
     
+    // Disconnect shorter branch
+    vector<CTransaction> vResurrect;
+    BOOST_FOREACH(CBlockIndex* pindex, vDisconnect) {
+        CBlock block;
+        if (!ReadBlockFromDisk(block, pindex))
+            return state.Abort(_("Failed to read block"));
+        int64 nStart = GetTimeMicros();
+        bool fClean = true;
+        if (!DisconnectBlock(block, state, pindex, view, &fClean))
+            return error("SetBestBlock() : DisconnectBlock %s failed", pindex->GetBlockHash().ToString().c_str());
+        if (fBenchmark)
+            LogPrintf("- Disconnect: %.2fms\n", (GetTimeMicros() - nStart) * 0.001);
+
+        // Queue memory transactions to resurrect.
+        // We only do this for blocks after the last checkpoint (reorganisation before that
+        // point should only happen with -reindex/-loadblock, or a misbehaving peer.
+        BOOST_FOREACH(const CTransaction& tx, block.vtx)
+            if (!tx.IsCoinBase() && pindex->nHeight > Checkpoints::GetTotalBlocksEstimate())
+                vResurrect.push_back(tx);
+    }
     
+    // Connect longer branch
+    vector<CTransaction> vDelete;
+    BOOST_FOREACH(CBlockIndex *pindex, vConnect) {
+        CBlock block;
+        if (!ReadBlockFromDisk(block, pindex))
+            return state.Abort(_("Failed to read block"));
+        int64 nStart = GetTimeMicros();
+        if (!ConnectBlock(block, state, pindex, view)) {
+            if (state.IsInvalid()) {
+                InvalidChainFound(pindexNew);
+                InvalidBlockFound(pindex,state);
+            }
+            return error("SetBestBlock() : ConnectBlock %s failed", pindex->GetBlockHash().ToString().c_str());
+        }
+        if (fBenchmark)
+            LogPrintf("- Connect: %.2fms\n", (GetTimeMicros() - nStart) * 0.001);
+
+        // Queue memory transactions to delete
+        BOOST_FOREACH(const CTransaction& tx, block.vtx)
+            vDelete.push_back(tx);
+    }
+    LogPrintf("SetBestChain:130: \n");
     
+    // Flush changes to global coin state
+    int64 nStart = GetTimeMicros();
+    int nModified = view.GetCacheSize();
+    assert(view.Flush());
+    int64 nTime = GetTimeMicros() - nStart;
+    if (fBenchmark)
+        LogPrintf("- Flush %i transactions: %.2fms (%.4fms/tx)\n", nModified, 0.001 * nTime, 0.001 * nTime / nModified);    
     
-		LogPrintf("SetBestChain: true.\n");
+    if (!WriteChainState(state))
+        return false;
+        
+    // Resurrect memory transactions that were in the disconnected branch
+    BOOST_FOREACH(CTransaction& tx, vResurrect) {
+        // ignore validation errors in resurrected transactions
+        CValidationState stateDummy;
+        list<CTransaction> removed;
+        if (!AcceptToMemoryPool(mempool, stateDummy, tx, false, NULL))
+            mempool.remove(tx, removed, true);               
+    }
+    
+    // Delete redundant memory transactions that are in the connected branch
+    list<CTransaction> txConflicted;
+    BOOST_FOREACH(CTransaction& tx, vDelete) {
+        list<CTransaction> removed;
+        mempool.remove(tx, removed);
+        mempool.removeConflicts(tx, txConflicted);
+    }
+    
+    mempool.check(pcoinsTip);
+    LogPrintf("SetBestChain:140: \n");
+    
+    UpdateTip(pindexNew);
+    
+    // Tell wallet about transactions that went from mempool to conflicted:
+    BOOST_FOREACH(const CTransaction &tx, txConflicted) {
+        SyncWithWallets(tx.GetHash(), tx, NULL);
+    }
+    
+		LogPrintf("SetBestChain:150 true.\n");
     return true;
 }
 
@@ -3011,7 +3090,6 @@ bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, uns
 
 bool CBlockIndex::IsInMainChain() const
 {
-		//return (pnext || this == chainActive.Tip());
 		return chainActive.Contains(this);
 }
 
