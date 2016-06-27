@@ -58,6 +58,9 @@ https://github.com/glassechidna/zxing-cpp
 
 Build command for libzxing :  
 
+mkdir build
+cd build
+
 export CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0"  
 cmake -G “Unix Makefiles” … -D_GLIBCXX_USE_CXX11_ABI=0 -DCMAKE_BUILD_TYPE=Release   
 make  
