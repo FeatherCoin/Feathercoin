@@ -62,7 +62,7 @@ mkdir build
 cd build
 
 export CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0"  
-cmake -G “Unix Makefiles” … -D_GLIBCXX_USE_CXX11_ABI=0 -DCMAKE_BUILD_TYPE=Release   
+cmake -G “Unix Makefiles”.. -D_GLIBCXX_USE_CXX11_ABI=0 -DCMAKE_BUILD_TYPE=Release   
 make  
 sudo make install   
 
@@ -101,6 +101,8 @@ Possible issues
 
 ### Use alternate database, 4.8 is still most portable.
 sudo apt-get install libdb5.3-dev  
+
+--with-incompatible-bdb
      
      
 Running Feathercoin
