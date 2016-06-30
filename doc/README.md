@@ -16,6 +16,8 @@ The Feathercoin wallet contains a number of features which require additional li
 
 ### Quick build example for Ubuntu 16.04  
 
+    sudo apt-get update upgrade
+
     sudo apt-get install git  
 
     sudo apt-get install autoconf automake  debhelper dh-autoreconf  
@@ -23,6 +25,8 @@ The Feathercoin wallet contains a number of features which require additional li
     sudo apt-get install libssl-dev libdb++-dev libminiupnpc-dev binutils  
 
     sudo apt-get install autotools-dev  
+    
+    build-essential
 
     
 ### You need the Qt5 run-time libraries to build Feathercoin-Qt.  
@@ -61,16 +65,17 @@ Build command for libzxing :
 mkdir build
 cd build
 
-export CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0"  
-cmake -G “Unix Makefiles”.. -D_GLIBCXX_USE_CXX11_ABI=0 -DCMAKE_BUILD_TYPE=Release   
+export CXXFLAGS="-fPIC"
+cmake -G “Unix Makefiles”.. -DCMAKE_BUILD_TYPE=Release   
 make  
 sudo make install   
 
    
-### copy the zxing files to source : 
+### For Ununtu 16.04 - Edit : the zxing files source.  
 
-cp -R /usr/include/zxing ~/Feathercoin/src/zxing
+sudo nano /usr/local/include/zxing/LuminanceSource.h
 
+On Line 30 : Change public to private:
 
 ### Install boost Libraries
 
@@ -82,28 +87,42 @@ cp -R /usr/include/zxing ~/Feathercoin/src/zxing
     make clean  
      ./autogen.sh
      autoupdate
-     ./configure --with-gui=qt5 --enable-tests=no  
+     ./configure --with-gui=qt5 --enable-tests=no  --with-incompatible-bdb --enable-upnp-default --with-qrcode=yes
     make  
 
     
 Possible issues  
 ---------------- 
 
+### Enable uPNP.   
 
-### Enable uPNP
 --enable-upnp-default 
 
 
-### Dependency issues with qr codes and zxing
+### Dependency issues with qr codes and zxing.  
 
 --with-qrcode=no
 
 
-### Use alternate database, 4.8 is still most portable.
+### Use alternate database, 4.8 is still most portable.  
+
 sudo apt-get install libdb5.3-dev  
 
 --with-incompatible-bdb
-     
+   
+### Build Berkley database version 4.8 from source.     
+
+wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
+tar -xzvf db-4.8.30.NC.tar.gz
+cd db-4.8.30.NC/build_unix/
+…/dist/configure --enable-cxx
+make
+sudo make install
+
+Example config usage :
+
+./configure --disable-upnp-default --disable-tests --with-boost-libdir=/usr/lib/arm-linux-gnueabihf CPPFLAGS="-I/usr/local/BerkeleyDB.4.8/include -O2" LDFLAGS="-L/usr/local/BerkeleyDB.4.8/lib"
+
      
 Running Feathercoin
 ---------------------
