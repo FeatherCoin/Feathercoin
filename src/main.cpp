@@ -1160,7 +1160,8 @@ bool GetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock
 //
 // CBlock and CBlockIndex
 //
-static CBlockIndex* pblockindexFBBHLast;
+// pblockindexFBBHLast : no longer used 
+// static CBlockIndex* pblockindexFBBHLast;
 bool WriteBlockToDisk(CBlock& block, CDiskBlockPos& pos)
 {
     // Open history file to append
