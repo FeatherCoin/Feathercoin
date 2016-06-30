@@ -60,6 +60,7 @@ bool fPruneMode = false;
 bool fIsBareMultisigStd = true;
 bool fCheckBlockIndex = false;
 bool fCheckpointsEnabled = true;
+bool fBenchmark = false;
 size_t nCoinCacheUsage = 5000 * 300;
 uint64_t nPruneTarget = 0;
 bool fAlerts = DEFAULT_ALERTS;
@@ -2404,6 +2405,188 @@ static void PruneBlockIndexCandidates() {
     assert(!setBlockIndexCandidates.empty());
 }
 
+
+//for 0.8.7 ACP
+bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
+{
+		const CChainParams& chainParams = Params();  
+		
+		LOCK(cs_main);
+		CBlockIndex *pindexOldTip = chainActive.Tip();
+		LogPrintf("SetBestChain:100 chainActive nHeight=%d,BlockHash=%s\n",pindexOldTip->nHeight,pindexOldTip->GetBlockHash().ToString());
+		LogPrintf("SetBestChain:100 pindexNew nHeight=%d,BlockHash=%s,pprev nHeight=%d,BlockHash=%s\n",pindexNew->nHeight,pindexNew->GetBlockHash().ToString(),pindexNew->pprev->nHeight,pindexNew->pprev->GetBlockHash().ToString());
+		
+    // Check whether we have something to do.
+    if (pindexNew == NULL) 
+    		return true;
+    if (pindexNew == pindexOldTip) 
+    		return true;
+    // rollback
+    if (pindexNew->nHeight - pindexOldTip->nHeight >= 1)
+    		return true;
+        			
+    // All modifications to the coin state will be done in this cache.
+    // Only when all have succeeded, we push it to pcoinsTip.
+    CCoinsViewCache view(pcoinsTip);
+    
+    // Find the fork (从pindexOldTip退到pindexNew)  
+    CBlockIndex* pfork = pindexOldTip;
+    CBlockIndex* plonger = pindexNew;
+    while (pfork && pfork != plonger)
+    {
+        while (plonger->nHeight > pfork->nHeight) {
+            plonger = plonger->pprev;
+            assert(plonger != NULL);
+        }
+        if (pfork == plonger)
+            break;
+        pfork = pfork->pprev;
+        assert(pfork != NULL);
+    }
+    LogPrintf("SetBestChain:110 pfork nHeight=%d,BlockHash=%s\n",pfork->nHeight,pfork->GetBlockHash().ToString());
+
+    // List of what to disconnect (从pindexOldTip退到pindexNew=pfork)
+    vector<CBlockIndex*> vDisconnect;
+    for (CBlockIndex* pindex = pindexOldTip; pindex != pfork; pindex = pindex->pprev)
+        vDisconnect.push_back(pindex);
+
+    // List of what to connect (typically only pindexNew)
+    vector<CBlockIndex*> vConnect;
+    for (CBlockIndex* pindex = pindexNew; pindex != pfork; pindex = pindex->pprev)
+        vConnect.push_back(pindex);
+    reverse(vConnect.begin(), vConnect.end());
+    
+    if (vDisconnect.size() > 0) {
+        LogPrintf("SetBestChain:120: Disconnect %d blocks; %s...\n", vDisconnect.size(), pfork->GetBlockHash().ToString());
+        LogPrintf("SetBestChain:120: Connect %d blocks; ...%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString());
+    }
+
+    // Disconnect shorter branch
+    vector<CTransaction> vResurrect;
+    BOOST_FOREACH(CBlockIndex* pindex, vDisconnect) {
+        CBlock block;
+        if (!ReadBlockFromDisk(block, pindex))
+            return AbortNode(state, "Failed to read block");
+        int64_t nStart = GetTimeMicros();
+        bool fClean = true;
+        if (!DisconnectBlock(block, state, pindex, view, &fClean))
+            return error("SetBestBlock() : DisconnectBlock %s failed", pindex->GetBlockHash().ToString().c_str());
+        if (fBenchmark)
+            LogPrintf("- Disconnect: %.2fms\n", (GetTimeMicros() - nStart) * 0.001);
+
+        // Queue memory transactions to resurrect.
+        // We only do this for blocks after the last checkpoint (reorganisation before that
+        // point should only happen with -reindex/-loadblock, or a misbehaving peer.
+        BOOST_FOREACH(const CTransaction& tx, block.vtx)
+            if (!tx.IsCoinBase() && pindex->nHeight > Checkpoints::GetTotalBlocksEstimate(chainParams.Checkpoints()))
+                vResurrect.push_back(tx);
+    }
+
+    // Connect longer branch
+    vector<CTransaction> vDelete;
+    BOOST_FOREACH(CBlockIndex *pindex, vConnect) {
+        CBlock block;
+        if (!ReadBlockFromDisk(block, pindex))
+            return AbortNode(state, "Failed to read block");
+        int64_t nStart = GetTimeMicros();
+        if (!ConnectBlock(block, state, pindex, view)) {
+            if (state.IsInvalid()) {
+                InvalidChainFound(pindexNew);
+                InvalidBlockFound(pindex,state);
+            }
+            return error("SetBestBlock() : ConnectBlock %s failed", pindex->GetBlockHash().ToString().c_str());
+        }
+        if (fBenchmark)
+            LogPrintf("- Connect: %.2fms\n", (GetTimeMicros() - nStart) * 0.001);
+
+        // Queue memory transactions to delete
+        BOOST_FOREACH(const CTransaction& tx, block.vtx)
+            vDelete.push_back(tx);
+    }
+    LogPrintf("SetBestChain:130: \n");
+
+    // Flush changes to global coin state
+    int64_t nStart = GetTimeMicros();
+    int nModified = view.GetCacheSize();
+    assert(view.Flush());
+    int64_t nTime = GetTimeMicros() - nStart;
+    if (fBenchmark)
+        LogPrintf("- Flush %i transactions: %.2fms (%.4fms/tx)\n", nModified, 0.001 * nTime, 0.001 * nTime / nModified);  
+
+
+    // Avoid writing/flushing immediately after startup.
+    static int64_t nLastWrite = 0;
+    static int64_t nLastFlush = 0;
+    static int64_t nLastSetChain = 0;
+    int64_t nNow = nStart;
+    if (nLastWrite == 0) {
+        nLastWrite = nNow;
+    }
+    if (nLastFlush == 0) {
+        nLastFlush = nNow;
+    }
+    if (nLastSetChain == 0) {
+        nLastSetChain = nNow;
+    }
+    size_t cacheSize = pcoinsTip->DynamicMemoryUsage();
+    bool fFlushForPrune = false;
+    FlushStateMode mode;
+    // The cache is large and close to the limit, but we have time now (not in the middle of a block processing).
+    bool fCacheLarge = mode == FLUSH_STATE_PERIODIC && cacheSize * (10.0/9) > nCoinCacheUsage;
+    // The cache is over the limit, we have to write now.
+    bool fCacheCritical = mode == FLUSH_STATE_IF_NEEDED && cacheSize > nCoinCacheUsage;
+    // It's been a while since we wrote the block index to disk. Do this frequently, so we don't need to redownload after a crash.
+    bool fPeriodicWrite = mode == FLUSH_STATE_PERIODIC && nNow > nLastWrite + (int64_t)DATABASE_WRITE_INTERVAL * 1000000;
+    // It's been very long since we flushed the cache. Do this infrequently, to optimize cache usage.
+    bool fPeriodicFlush = mode == FLUSH_STATE_PERIODIC && nNow > nLastFlush + (int64_t)DATABASE_FLUSH_INTERVAL * 1000000;
+    // Combine all conditions that result in a full cache flush.
+    bool fDoFullFlush = (mode == FLUSH_STATE_ALWAYS) || fCacheLarge || fCacheCritical || fPeriodicFlush || fFlushForPrune;
+    if (fDoFullFlush) {
+        // Typical CCoins structures on disk are around 128 bytes in size.
+        // Pushing a new one to the database can cause it to be written
+        // twice (once in the log, and once in the tables). This is already
+        // an overestimation, as most will delete an existing entry or
+        // overwrite one. Still, use a conservative safety factor of 2.
+        if (!CheckDiskSpace(128 * 2 * 2 * pcoinsTip->GetCacheSize()))
+            return state.Error("out of disk space");
+        // Flush the chainstate (which may refer to block index entries).
+        if (!pcoinsTip->Flush())
+            return AbortNode(state, "Failed to write to coin database");
+        nLastFlush = nNow;
+    }
+    
+    // Resurrect memory transactions that were in the disconnected branch
+    BOOST_FOREACH(CTransaction& tx, vResurrect) {
+        // ignore validation errors in resurrected transactions
+        CValidationState stateDummy;
+        list<CTransaction> removed;
+        if (!AcceptToMemoryPool(mempool, stateDummy, tx, false, NULL))
+            mempool.remove(tx, removed, true);               
+    }
+    
+    // Delete redundant memory transactions that are in the connected branch
+    list<CTransaction> txConflicted;
+    BOOST_FOREACH(CTransaction& tx, vDelete) {
+        list<CTransaction> removed;
+        mempool.remove(tx, removed);
+        mempool.removeConflicts(tx, txConflicted);
+    }
+    
+    mempool.check(pcoinsTip);
+    LogPrintf("SetBestChain:140: \n");
+    
+    UpdateTip(pindexNew);
+    
+    // Tell wallet about transactions that went from mempool to conflicted:
+    BOOST_FOREACH(const CTransaction &tx, txConflicted) {
+        SyncWithWallets(tx, NULL);
+    }
+    
+		LogPrintf("SetBestChain:150 true.\n");
+    return true;
+}
+		
+
 /**
  * Try to make some progress towards making pindexMostWork the active block.
  * pblock is either NULL or a pointer to a CBlock corresponding to pindexMostWork.
@@ -2612,6 +2795,8 @@ CBlockIndex* AddToBlockIndex(const CBlockHeader& block)
     // to avoid miners withholding blocks but broadcasting headers, to get a
     // competitive advantage.
     pindexNew->nSequenceId = 0;
+    //LogPrintf("AddToBlockIndex 100,hash=%s\n",hash.ToString().c_str());
+    //LogPrintf("AddToBlockIndex 110,pindexNew.nHeight=%d,mapBlockIndex.size=%d\n",pindexNew->nHeight,mapBlockIndex.size());
     BlockMap::iterator mi = mapBlockIndex.insert(make_pair(hash, pindexNew)).first;
     pindexNew->phashBlock = &((*mi).first);
     BlockMap::iterator miPrev = mapBlockIndex.find(block.hashPrevBlock);
@@ -2627,6 +2812,8 @@ CBlockIndex* AddToBlockIndex(const CBlockHeader& block)
         pindexBestHeader = pindexNew;
 
     setDirtyBlockIndex.insert(pindexNew);
+    //LogPrintf("AddToBlockIndex 150,pindexNew.nHeight=%d\n",pindexNew->nHeight);
+    //LogPrintf("AddToBlockIndex 200\n");
 
     return pindexNew;
 }
@@ -3341,12 +3528,14 @@ CBlockIndex * InsertBlockIndex(uint256 hash)
         return (*mi).second;
 
     // Create new
+    //LogPrintf("InsertBlockIndex 100,hash=%s\n",hash.ToString().c_str());
     CBlockIndex* pindexNew = new CBlockIndex();
     if (!pindexNew)
         throw runtime_error("LoadBlockIndex(): new CBlockIndex failed");
     mi = mapBlockIndex.insert(make_pair(hash, pindexNew)).first;
     pindexNew->phashBlock = &((*mi).first);
-
+		//LogPrintf("InsertBlockIndex 200,pindexNew.nHeight=%d\n",pindexNew->nHeight);
+		
     return pindexNew;
 }
 
@@ -4981,15 +5170,17 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         CSyncCheckpoint checkpoint;
         vRecv >> checkpoint;
 
+				LogPrintf("Receive checkpoint, hashCheckpoint=%s\n",checkpoint.hashCheckpoint.ToString().c_str());
         if (checkpoint.ProcessSyncCheckpoint(pfrom))
         {
-        		LogPrintf("\n checkpoint.ProcessSyncCheckpoint(pfrom)=true \n.");
+        		LogPrintf("checkpoint.ProcessSyncCheckpoint(pfrom)=true, hashCheckpoint=%s\n",checkpoint.hashCheckpoint.ToString().c_str());
+        		
             // Relay
             pfrom->hashCheckpointKnown = checkpoint.hashCheckpoint;
             LOCK(cs_vNodes);
             BOOST_FOREACH(CNode* pnode, vNodes)
                 checkpoint.RelayTo(pnode);
-            LogPrintf("checkpoint.ProcessSyncCheckpoint  Relay=OK \n.");
+            LogPrintf("checkpoint.ProcessSyncCheckpoint  Relay=OK \n");
         }
     }
     

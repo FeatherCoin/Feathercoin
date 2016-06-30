@@ -241,10 +241,7 @@ public:
         return (int64_t)nTime;
     }
 
-    bool IsInMainChain() const
-    {
-        return (pnext || this == pindexBestHeader);
-    }
+    bool IsInMainChain() const;
     
     enum { nMedianTimeSpan=11 };
 

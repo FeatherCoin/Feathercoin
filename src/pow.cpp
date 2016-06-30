@@ -96,7 +96,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
                 return pindex->nBits;
             }
         }
-        LogPrintf("GetNextWorkRequired.1.4 nBits=%d\n",pindexLast->nBits);
+        //LogPrintf("GetNextWorkRequired.1.4 nBits=%d\n",pindexLast->nBits);
         return pindexLast->nBits;
     }
     LogPrintf("GetNextWorkRequired.2 Difficulty rules regular blocks,nHeight=%d,nInterval=%d,nHeight nInterval=%d\n",nHeight,nInterval,nHeight % nInterval);
@@ -121,7 +121,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
 		
     // Limit adjustment step
     int64_t nActualTimespan = pindexLast->GetBlockTime() - nFirstBlockTime;
-    LogPrintf("CalculateNextWorkRequired.1 nActualTimespan = %d  before bounds\n", nActualTimespan);
+    //LogPrintf("CalculateNextWorkRequired.1 nActualTimespan = %d  before bounds\n", nActualTimespan);
     
         
     // Additional averaging over 4x nInterval window
@@ -219,11 +219,11 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     bnNew *= nActualTimespan;
     bnNew /= nTargetTimespan;
 
-		LogPrintf("CalculateNextWorkRequired.Retarget: pindexLast=%s\n",pindexLast->ToString());
-    LogPrintf("CalculateNextWorkRequired.Retarget: bnNew       = %s ,%08x ,%d\n", bnNew.ToString(),bnNew.GetCompact(),bnNew.GetCompact());
-    LogPrintf("CalculateNextWorkRequired.Retarget: bnPowLimit  = %s ,%08x ,%d\n", bnPowLimit.ToString(),bnPowLimit.GetCompact(),bnPowLimit.GetCompact());
-    LogPrintf("CalculateNextWorkRequired.Retarget: powNeoLimit = %s ,%08x ,%d\n", UintToArith256(params.powNeoLimit).ToString(),UintToArith256(params.powNeoLimit).GetCompact(),UintToArith256(params.powNeoLimit).GetCompact());
-		LogPrintf("CalculateNextWorkRequired.Retarget: bnPowScyptLimit  = %s ,%08x ,%d\n", bnPowScyptLimit.ToString(),bnPowScyptLimit.GetCompact(),bnPowScyptLimit.GetCompact());
+		//LogPrintf("CalculateNextWorkRequired.Retarget: pindexLast=%s\n",pindexLast->ToString());
+    //LogPrintf("CalculateNextWorkRequired.Retarget: bnNew       = %s ,%08x ,%d\n", bnNew.ToString(),bnNew.GetCompact(),bnNew.GetCompact());
+    //LogPrintf("CalculateNextWorkRequired.Retarget: bnPowLimit  = %s ,%08x ,%d\n", bnPowLimit.ToString(),bnPowLimit.GetCompact(),bnPowLimit.GetCompact());
+    //LogPrintf("CalculateNextWorkRequired.Retarget: powNeoLimit = %s ,%08x ,%d\n", UintToArith256(params.powNeoLimit).ToString(),UintToArith256(params.powNeoLimit).GetCompact(),UintToArith256(params.powNeoLimit).GetCompact());
+		//LogPrintf("CalculateNextWorkRequired.Retarget: bnPowScyptLimit  = %s ,%08x ,%d\n", bnPowScyptLimit.ToString(),bnPowScyptLimit.GetCompact(),bnPowScyptLimit.GetCompact());
 		
 		if (chainParams.NetworkIDString()=="main")
 				bnPowLimit = bnPowScyptLimit;

@@ -1,5 +1,5 @@
-// Copyright (c) 2012-2013 PPCoin developers https://github.com/ppcoin/ppcoin
-// Copyright (c) 2013 Primecoin developers  https://github.com/primecoin/primecoin
+// Copyright (c) 2012-2013 PPCoin developers
+// Copyright (c) 2013 Primecoin developers
 // Copyright (c) 2013-2016 Feathercoin developers
 // Distributed under conditional MIT/X11 software license,
 // see the accompanying file COPYING
@@ -82,13 +82,13 @@ using namespace json_spirit;
 using namespace std;
 
 
-// ppcoin: sync-checkpoint master key
+//sync-checkpoint master key
 const std::string CSyncCheckpoint::strMainPubKey = "04b9ff17f2865bc685456429defb94fcb1ffc44a98703f0d62513fa47e7b76e4c6ab10b59e2c068d45f6a04b47bcee8b0fa50b33bfa53ff279a02863dbf1da6128";
 const std::string CSyncCheckpoint::strTestPubKey = "04db371d2b99df9e7962b2ce2369ada9821261e7f943a57a7ff3494d7d6c87939d3632fcaa2878bd5e45cfea0ea435fd6ee049a28ccbd0998ea3aadeb7abeed065";
 std::string CSyncCheckpoint::strMasterPrivKey = "";
 
 
-// ppcoin: synchronized checkpoint (centrally broadcasted)
+//synchronized checkpoint (centrally broadcasted)
 uint256 hashSyncCheckpoint;
 uint256 hashPendingCheckpoint;
 CSyncCheckpoint checkpointMessage;
@@ -99,7 +99,7 @@ std::string strCheckpointWarning;
 
 std::map<uint256, CBlock*> mapOrphanBlocks;
 
-// ppcoin: get last synchronized checkpoint
+//get last synchronized checkpoint
 CBlockIndex* GetLastSyncCheckpoint()
 {
     LOCK(cs_hashSyncCheckpoint);
@@ -110,7 +110,7 @@ CBlockIndex* GetLastSyncCheckpoint()
     return NULL;
 }
 
-// ppcoin: only descendant of current sync-checkpoint is allowed
+//only descendant of current sync-checkpoint is allowed
 bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
 {
     if (!mapBlockIndex.count(hashSyncCheckpoint))
@@ -209,17 +209,15 @@ bool AcceptPendingSyncCheckpoint()
 {
     LOCK(cs_hashSyncCheckpoint);
     
-    //if (hashPendingCheckpoint != 0 && mapBlockIndex.count(hashPendingCheckpoint))
     if ((hashPendingCheckpoint.IsNull()==false) && mapBlockIndex.count(hashPendingCheckpoint))
     {
     		LogPrintf("AcceptPendingSyncCheckpoint hashPendingCheckpoint=%s,IsNull=%d \n",hashPendingCheckpoint.ToString().c_str(),hashPendingCheckpoint.IsNull());
-        //是否该执行??
+        //是否该执行
         if (mapBlockIndex[hashPendingCheckpoint]->nHeight>0)
         {
         			LogPrintf("AcceptPendingSyncCheckpoint hashPendingCheckpoint.nHeight = %d \n",mapBlockIndex[hashPendingCheckpoint]->nHeight);
 			        if (!ValidateSyncCheckpoint(hashPendingCheckpoint))
 			        {
-			            //hashPendingCheckpoint = 0;
 			            hashPendingCheckpoint = uint256();
 			            checkpointMessagePending.SetNull();
 			            return false;
@@ -230,13 +228,9 @@ bool AcceptPendingSyncCheckpoint()
 			        if (IsSyncCheckpointEnforced() && !pindexCheckpoint->IsInMainChain())
 			        {
 			            CValidationState state;
-			            //if (!SetBestChain(state, pindexCheckpoint))
-			            CBlock block(pindexCheckpoint->GetBlockHeader());
-			            CBlock *pblockCheckpoint = &block;
-			            //if (!ActivateBestChain(state, pblockCheckpoint))
-			            if (!true)
+			            if (!SetBestChain(state, pindexCheckpoint))
 			            {
-			            		LogPrintf("AcceptPendingSyncCheckpoint set hashInvalidCheckpoint .\n");
+			            		LogPrintf("AcceptPendingSyncCheckpoint SetBestChain hashInvalidCheckpoint .\n");
 			                hashInvalidCheckpoint = hashPendingCheckpoint;
 			                return error("AcceptPendingSyncCheckpoint: SetBestChain failed for sync checkpoint %s", hashPendingCheckpoint.ToString().c_str());
 			            }
@@ -244,11 +238,11 @@ bool AcceptPendingSyncCheckpoint()
 			
 			        if (!WriteSyncCheckpoint(hashPendingCheckpoint))
 			            return error("AcceptPendingSyncCheckpoint(): failed to write sync checkpoint %s", hashPendingCheckpoint.ToString().c_str());
-			        //hashPendingCheckpoint = 0;
+
 			        hashPendingCheckpoint = uint256();
 			        checkpointMessage = checkpointMessagePending;
 			        checkpointMessagePending.SetNull();
-			        printf("AcceptPendingSyncCheckpoint : sync-checkpoint at %s\n", hashSyncCheckpoint.ToString().c_str());
+			        LogPrintf("AcceptPendingSyncCheckpoint : sync-checkpoint at %s\n", hashSyncCheckpoint.ToString().c_str());
 			        // relay the checkpoint
 			        if (!checkpointMessage.IsNull())
 			        {
@@ -302,18 +296,15 @@ bool CheckSyncCheckpoint(const uint256& hashBlock, const CBlockIndex* pindexPrev
 bool WantedByPendingSyncCheckpoint(uint256 hashBlock)
 {
     LOCK(cs_hashSyncCheckpoint);
-    //if (hashPendingCheckpoint == 0)
+
     if (hashPendingCheckpoint.IsNull())
         return false;
     if (hashBlock == hashPendingCheckpoint)
         return true;
-    if (mapOrphanBlocks.count(hashPendingCheckpoint)
-        && hashBlock == WantedByOrphan(mapOrphanBlocks[hashPendingCheckpoint]))
-        return true;
     return false;
 }
 
-// ppcoin: reset synchronized checkpoint to last hardened checkpoint
+//reset synchronized checkpoint to last hardened checkpoint
 bool ResetSyncCheckpoint()
 {
     LOCK(cs_hashSyncCheckpoint);
@@ -321,12 +312,9 @@ bool ResetSyncCheckpoint()
     if (mapBlockIndex.count(hash) && !mapBlockIndex[hash]->IsInMainChain())
     {
         // checkpoint block accepted but not yet in main chain
-        printf("ResetSyncCheckpoint: SetBestChain to hardened checkpoint %s\n", hash.ToString().c_str());
+        LogPrintf("ResetSyncCheckpoint: SetBestChain to hardened checkpoint %s\n", hash.ToString().c_str());
         CValidationState state;
-        //if (!SetBestChain(state, mapBlockIndex[hash]))
-        CBlock block(mapBlockIndex[hash]->GetBlockHeader());
-        CBlock *pblockCheckpoint = &block;
-        if (!ActivateBestChain(state, pblockCheckpoint))
+        if (!SetBestChain(state, mapBlockIndex[hash]))
         {
             return error("ResetSyncCheckpoint: SetBestChain failed for hardened checkpoint %s", hash.ToString().c_str());
         }
@@ -449,7 +437,7 @@ bool IsSyncCheckpointTooOld(unsigned int nSeconds)
     return (pindexSync->GetBlockTime() + nSeconds < GetAdjustedTime());
 }
 
-// ppcoin: find block wanted by given orphan block
+//find block wanted by given orphan block
 uint256 WantedByOrphan(const CBlock* pblockOrphan)
 {
     // Work back to the first block in the orphan chain
@@ -458,7 +446,7 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
     return pblockOrphan->hashPrevBlock;
 }
 
-// ppcoin: verify signature of sync-checkpoint message
+//verify signature of sync-checkpoint message
 bool CSyncCheckpoint::CheckSignature()
 {
     //std::string strMasterPubKey = fTestNet? CSyncCheckpoint::strTestPubKey : CSyncCheckpoint::strMainPubKey;
@@ -473,18 +461,17 @@ bool CSyncCheckpoint::CheckSignature()
     return true;
 }
 
-// ppcoin: process synchronized checkpoint
+//process synchronized checkpoint
 bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 {
     if (!CheckSignature())
         return false;
 
-		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 100,hashCheckpoint=%s \n",hashCheckpoint.ToString().c_str());
+		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 100,hashCheckpoint=%s,mapBlockIndex.count=%d \n",hashCheckpoint.ToString().c_str(),mapBlockIndex.count(hashCheckpoint));
     LOCK(cs_hashSyncCheckpoint);
     if (!mapBlockIndex.count(hashCheckpoint))
     {
     		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 110,mapBlockIndex.count=%d \n",mapBlockIndex.count(hashCheckpoint));
-    		//LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 120: mapBlockIndex= %s\n", mapBlockIndex[hashCheckpoint]->ToString());
         
         // We haven't received the checkpoint chain, keep the checkpoint as pending
         hashPendingCheckpoint = hashCheckpoint;
@@ -493,21 +480,21 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
         // Ask this guy to fill in what we're missing
         if (pfrom)
         {
-            pfrom->PushGetBlocks(pindexBestHeader, hashCheckpoint);
+            //pfrom->PushGetBlocks(pindexBestHeader, hashCheckpoint);
             // ask directly as well in case rejected earlier by duplicate proof-of-stake because getblocks may not get it this time
-            //要检查，去掉mapOrphanBlocks
-            //pfrom->AskFor(CInv(MSG_BLOCK, mapOrphanBlocks.count(hashCheckpoint)? WantedByOrphan(mapOrphanBlocks[hashCheckpoint]) : hashCheckpoint));
-            LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 140 ,AskFor.\n");
-            //pfrom->AskFor(CInv(MSG_BLOCK, hashCheckpoint));  //count=0,区块链错位
+            LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 140 ,AskFor %s.\n", hashCheckpoint.ToString().c_str());
+            //pfrom->AskFor(CInv(MSG_BLOCK, hashCheckpoint));  //count=0,区块链错位造成count=1
             LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 150 ,AskFor.\n");
         }
         return false;
     }
 
-		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 200 .\n");
-		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 201 hashCheckpoint=%s ,nHeight=%d\n",hashCheckpoint.ToString().c_str(),mapBlockIndex[hashCheckpoint]->nHeight);
+		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 200.\n");
+		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 201 hashCheckpoint=%s\n",hashCheckpoint.ToString().c_str());
 		if ((mapBlockIndex.count(hashSyncCheckpoint) >0) && (mapBlockIndex[hashSyncCheckpoint]->nHeight>0))
 		{
+				LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 202 nHeight=%d\n", mapBlockIndex[hashCheckpoint]->nHeight);
+				
 				//同步块大于0
 		    if (!ValidateSyncCheckpoint(hashCheckpoint))
 		        return false;
@@ -519,13 +506,9 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 		    {
 		        // checkpoint chain received but not yet main chain
 		        CValidationState state;
-		        //if (!SetBestChain(state, pindexCheckpoint))
-		        CBlock block(pindexCheckpoint->GetBlockHeader());
-		        CBlock *pblockCheckpoint = &block;
-		        //if (!ActivateBestChain(state,pblockCheckpoint))
-		        if (!true)
+		        if (!SetBestChain(state, pindexCheckpoint))
 		        {
-		        		LogPrintf("ProcessSyncCheckpoint set hashInvalidCheckpoint .\n");
+		        		LogPrintf("ProcessSyncCheckpoint 220,SetBestChain hashInvalidCheckpoint .\n");
 		            hashInvalidCheckpoint = hashCheckpoint;
 		            return error("ProcessSyncCheckpoint: SetBestChain failed for sync checkpoint %s", hashCheckpoint.ToString().c_str());
 		        }
@@ -538,7 +521,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 		    
 		    CSyncCheckpoint checkpointNull;
 		    checkpointMessagePending=checkpointNull;
-		    LogPrintf("ProcessSyncCheckpoint: sync-checkpoint at %s\n", hashCheckpoint.ToString().c_str());
+		    LogPrintf("ProcessSyncCheckpoint 230: sync-checkpoint at %s\n", hashCheckpoint.ToString().c_str());
 		}
 		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 300. \n");
 		
@@ -583,7 +566,6 @@ Value sendcheckpoint(const Array& params, bool fHelp)
         throw runtime_error("Not a checkpointmaster node, first set checkpointkey in configuration and restart client. ");
 
     std::string strHash = params[0].get_str();
-    //uint256 hash(strHash);
     uint256 hash=uint256S(strHash);
 
     if (!SendSyncCheckpoint(hash))

@@ -43,12 +43,6 @@ public:
     int nVersion;
     uint256 hashCheckpoint;      // checkpoint block
 
-    /*IMPLEMENT_SERIALIZE
-    (
-        READWRITE(this->nVersion);
-        nVersion = this->nVersion;
-        READWRITE(hashCheckpoint);
-    )*/
     ADD_SERIALIZE_METHODS;
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
@@ -112,7 +106,7 @@ public:
 
     bool IsNull() const
     {
-        return (hashCheckpoint == uint256S("0"));
+        return (hashCheckpoint == uint256());
     }
 
     uint256 GetHash() const

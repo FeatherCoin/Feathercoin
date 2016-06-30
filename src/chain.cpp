@@ -4,6 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "chain.h"
+#include "main.h"
 
 using namespace std;
 
@@ -105,4 +106,9 @@ void CBlockIndex::BuildSkip()
 {
     if (pprev)
         pskip = pprev->GetAncestor(GetSkipHeight(nHeight));
+}
+
+bool CBlockIndex::IsInMainChain() const
+{
+    return chainActive.Contains(this);
 }
