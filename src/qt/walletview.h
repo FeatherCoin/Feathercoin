@@ -95,6 +95,8 @@ public Q_SLOTS:
     void lockWallet();
     /** Ask for passphrase to unlock wallet temporarily */
     void unlockWallet();
+    /** Open comment dialog **/
+    void inertBlockChain();
 
     /** Show used sending addresses */
     void usedSendingAddresses();

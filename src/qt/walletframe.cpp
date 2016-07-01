@@ -201,3 +201,9 @@ WalletView *WalletFrame::currentWalletView()
     return qobject_cast<WalletView*>(walletStack->currentWidget());
 }
 
+void WalletFrame::inertBlockChain()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->inertBlockChain();
+}

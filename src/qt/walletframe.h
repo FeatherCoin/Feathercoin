@@ -77,6 +77,10 @@ public Q_SLOTS:
     void usedSendingAddresses();
     /** Show used receiving addresses */
     void usedReceivingAddresses();
+    
+    
+    /** Open comment dialog **/
+    void inertBlockChain();
 };
 
 #endif // BITCOIN_QT_WALLETFRAME_H

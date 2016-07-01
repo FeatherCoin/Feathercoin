@@ -20,6 +20,9 @@ static const CAmount CENT = 1000000;
 static const CAmount MAX_MONEY = 21000000 * 16 * COIN;
 inline bool MoneyRange(const CAmount& nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 
+/** Dust Hard Limit, ignored as wallet inputs (mininput default) */
+static const int64_t DUST_HARD_LIMIT = CENT;
+
 /** Type-safe wrapper class to for fee rates
  * (how much to pay based on transaction size)
  */

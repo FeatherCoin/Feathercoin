@@ -130,6 +130,7 @@ private:
     
     QAction *lockWalletAction;
     QAction *unlockWalletAction;
+    QAction *inertBlockChainAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;

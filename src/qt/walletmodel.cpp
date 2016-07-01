@@ -357,7 +357,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             vecSend.push_back(recipient);
             
             //insert message into blockchain
-						if ((rcp.message.length()>=1)&&(rcp.label=="blockchain"))
+						if ((rcp.message.length()>=1)&&(rcp.label=="comment"))
 						{				
 								std::string strMess = rcp.message.toStdString();
 								const char* pszMess =strMess.c_str();

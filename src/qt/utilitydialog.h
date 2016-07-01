@@ -7,12 +7,15 @@
 
 #include <QDialog>
 #include <QObject>
+#include "walletmodel.h"
 
 class BitcoinGUI;
 class ClientModel;
+class SendCoinsRecipient;
 
 namespace Ui {
     class HelpMessageDialog;
+    class CommentDialog;
 }
 
 /** "Help message" dialog box */
@@ -47,6 +50,31 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event);
+};
+
+
+/** "Comment" dialog box */
+class CommentDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit CommentDialog(QWidget *parent);
+    ~CommentDialog();
+
+    void setModel(WalletModel *model);
+
+private:
+    Ui::CommentDialog *ui;
+    WalletModel *model;
+    void processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg = QString());
+
+private Q_SLOTS:
+    void on_insertButton_clicked();
+    void on_pushButton_clicked();
+    
+Q_SIGNALS:	
+    void message(const QString &title, const QString &message, unsigned int style);
 };
 
 #endif // BITCOIN_QT_UTILITYDIALOG_H
