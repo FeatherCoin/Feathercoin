@@ -123,16 +123,20 @@ static const unsigned char REJECT_DUST = 0x41;
 static const unsigned char REJECT_INSUFFICIENTFEE = 0x42;
 static const unsigned char REJECT_CHECKPOINT = 0x43;
 
-// static const char* OPENNAME_MAGIC_BYTES_MAINSET="08";
 static const unsigned char OPENNAME_MAGIC_BYTES_MAINSET=0x08;
-// static const char* OPENNAME_MAGIC_BYTES_TESTSET="88";
 static const unsigned char OPENNAME_MAGIC_BYTES_TESTSET=0x88;
+
 static const char* OPENNAME_NAME_PREORDER="a";
 static const char* OPENNAME_NAME_REGISTRATION="b";
 static const char* OPENNAME_NAME_UPDATE="c";
 static const char* OPENNAME_NAME_TRANSFER="d";
 static const char* OPENNAME_NAME_RENEWAL="e";
 
+struct COrphanBlock {
+    uint256 hashBlock;
+    uint256 hashPrev;
+    vector<unsigned char> vchBlock;
+};
 
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
@@ -146,7 +150,8 @@ extern CBlockIndex* pindexBest;
 extern unsigned int nTransactionsUpdated;
 extern uint64_t nLastBlockTx;
 extern uint64_t nLastBlockSize;
-extern std::map<uint256, CBlock*> mapOrphanBlocksA;  //for checkpointsync.cpp
+extern std::map<uint256, CBlock*> mapOrphanBlocksA;
+extern std::map<uint256, COrphanBlock*> mapOrphanBlocks; 
 extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;
 extern bool fImporting;
@@ -889,10 +894,7 @@ public:
         return (CBigNum(1)<<256) / (bnTarget+1);
     }
     
-    bool IsInMainChain() const
-    {
-        return (pnext || this == pindexBest);
-    }
+    bool IsInMainChain() const;
 
     bool CheckIndex() const
     {
