@@ -369,7 +369,7 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     shapeshiftAction->setStatusTip(tr("Exchange other coins whit your feathercoin on Shapeshift"));
     shapeshiftAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_8));
     coinnectorAction = new QAction(QIcon(":/icons/coinnector"), tr("Coinnector..."), this);
-    coinnectorAction->setStatusTip(tr("Exchange other coins whit your feathercoin on Coinnector"));
+    coinnectorAction->setStatusTip(tr("Exchange other coins with your feathercoin on Coinnector"));
     coinnectorAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_9));
 
     showHelpMessageAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation), tr("&Command-line options"), this);
