@@ -65,7 +65,7 @@ CoinnectorDialog::~CoinnectorDialog()
 
 void CoinnectorDialog::replyFinished(QNetworkReply *reply)
 {   
-    int sw=0;
+//  int sw=0;
     QByteArray data = reply->readAll();
     QString result(data);
     ui->textReplyEdit->setText(result);
