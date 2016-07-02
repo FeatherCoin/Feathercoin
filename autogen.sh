@@ -1,5 +1,5 @@
 #!/bin/sh
 set -e
 autoupdate
-autoreconf  -if --warnings=all
+# autoreconf  -if --warnings=all
 
