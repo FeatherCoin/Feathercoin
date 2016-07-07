@@ -1154,7 +1154,8 @@ bool GetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock
 //
 // CBlock and CBlockIndex
 //
-static CBlockIndex* pblockindexFBBHLast;
+// pblockindexFBBHLast : no longer used 
+// static CBlockIndex* pblockindexFBBHLast;
 bool WriteBlockToDisk(CBlock& block, CDiskBlockPos& pos)
 {
     // Open history file to append
@@ -3024,7 +3025,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         }
 
     // Enforce block.nVersion=2 rule that the coinbase starts with serialized block height
-    if (block.nVersion >= 2)
+    if (block.nVersion == 2 && block.nTime > nSwitchV2 ) 
     {
         // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):
         if ((!TestNet() && CBlockIndex::IsSuperMajority(2, pindex->pprev, 750, 1000)) ||
@@ -3032,9 +3033,31 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         {
             CScript expect = CScript() << nHeight;
             if (block.vtx[0].vin[0].scriptSig.size() < expect.size() ||
-                !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) {
+                !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
+            {
                 pindex->nStatus |= BLOCK_FAILED_VALID;
-                return state.DoS(100, error("AcceptBlock() : block height mismatch in coinbase"),
+                LogPrintf("AcceptBlock() block.nVersion=%d,nHeight=%d:\n",block.nVersion,nHeight);
+                LogPrintf("AcceptBlock() block.vtx[0].vin[0].scriptSig.size()=%d,expect.size()=%d:\n",block.vtx[0].vin[0].scriptSig.size(),expect.size());
+                return state.DoS(100, error("AcceptBlock() : block nVersion 2 height mismatch in coinbase"),
+                                 REJECT_INVALID, "bad-cb-height");
+            }
+        }
+    }
+    
+    if (block.nVersion == 4 )
+    {
+        // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):
+        if ((!TestNet() && CBlockIndex::IsSuperMajority(2, pindex->pprev, 750, 1000)) ||
+            (TestNet() && CBlockIndex::IsSuperMajority(2, pindex->pprev, 51, 100)))
+        {
+            CScript expect = CScript() << nHeight;
+            if (block.vtx[0].vin[0].scriptSig.size() < expect.size() ||
+                !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
+            {
+                pindex->nStatus |= BLOCK_FAILED_VALID;
+                LogPrintf("AcceptBlock() block.nVersion=%d,nHeight=%d:\n",block.nVersion,nHeight);
+                LogPrintf("AcceptBlock() block.vtx[0].vin[0].scriptSig.size()=%d,expect.size()=%d:\n",block.vtx[0].vin[0].scriptSig.size(),expect.size());
+                return state.DoS(100, error("AcceptBlock() : block nVersion 4 height mismatch in coinbase"),
                                  REJECT_INVALID, "bad-cb-height");
             }
         }
@@ -3076,6 +3099,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
 {
     // Feathercoin: temporarily disable v2 block lockin until we are ready for v2 transition
+    // 1000个中有750个新版本
     // return false;
     
     unsigned int nFound = 0;
