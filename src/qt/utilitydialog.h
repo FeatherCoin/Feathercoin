@@ -9,6 +9,7 @@
 #include <QObject>
 #include "walletmodel.h"
 
+
 class BitcoinGUI;
 class ClientModel;
 class SendCoinsRecipient;
@@ -21,6 +22,13 @@ namespace Ui {
     class OpennameDialog;
     class DebugDialog;
     class HelpMessageDialog;
+    /* These definitions generate warnings, but they are used in utility dialog.cpp */
+static const char* OPENNAME_NAME_PREORDER="a";
+static const char* OPENNAME_NAME_REGISTRATION="b";
+static const char* OPENNAME_NAME_UPDATE="c";
+static const char* OPENNAME_NAME_TRANSFER="d";
+static const char* OPENNAME_NAME_RENEWAL="e";
+    
 }
 
 /** "About" dialog box */
@@ -91,6 +99,7 @@ signals:
 class OpennameDialog : public QDialog
 {
     Q_OBJECT
+    
 
 public:
     explicit OpennameDialog(QWidget *parent);
@@ -102,7 +111,7 @@ private:
     Ui::OpennameDialog *ui;
     WalletModel *model;
     void processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg = QString());
-
+    
 private slots:
     void on_insertButton_clicked();
     void on_pushButton_clicked();

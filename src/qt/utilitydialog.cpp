@@ -193,11 +193,11 @@ void OpennameDialog::setModel(WalletModel *model)
 
     this->model = model;
     
-    ui->cmbOpt->addItem("NAME_PREORDER", QVariant(OPENNAME_NAME_PREORDER));
-    ui->cmbOpt->addItem("NAME_REGISTRATION", QVariant(OPENNAME_NAME_REGISTRATION));
-    ui->cmbOpt->addItem("NAME_UPDATE", QVariant(OPENNAME_NAME_UPDATE));
-    ui->cmbOpt->addItem("NAME_TRANSFER", QVariant(OPENNAME_NAME_TRANSFER));
-    ui->cmbOpt->addItem("NAME_RENEWAL", QVariant(OPENNAME_NAME_RENEWAL));
+    ui->cmbOpt->addItem("NAME_PREORDER", QVariant(Ui::OPENNAME_NAME_PREORDER));
+    ui->cmbOpt->addItem("NAME_REGISTRATION", QVariant(Ui::OPENNAME_NAME_REGISTRATION));
+    ui->cmbOpt->addItem("NAME_UPDATE", QVariant(Ui::OPENNAME_NAME_UPDATE));
+    ui->cmbOpt->addItem("NAME_TRANSFER", QVariant(Ui::OPENNAME_NAME_TRANSFER));
+    ui->cmbOpt->addItem("NAME_RENEWAL", QVariant(Ui::OPENNAME_NAME_RENEWAL));
 
 }
 

@@ -1,3 +1,7 @@
 #!/bin/sh
 set -e
-autoreconf -if --warnings=all
+echo running autoreconf .....
+autoreconf  -if --warnings=all
+autoupdate
+echo
+echo running autoupdate completed .....
