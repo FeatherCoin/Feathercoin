@@ -97,6 +97,8 @@ public Q_SLOTS:
     void unlockWallet();
     /** Open comment dialog **/
     void inertBlockChain();
+    /** Open the print paper wallets dialog **/
+    void printPaperWallets();
 
     /** Show used sending addresses */
     void usedSendingAddresses();

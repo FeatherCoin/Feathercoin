@@ -85,6 +85,7 @@ QT_FORMS_UI = \
   qt/forms/openuridialog.ui \
   qt/forms/optionsdialog.ui \
   qt/forms/commentdialog.ui \
+  qt/forms/paperwalletdialog.ui \
   qt/forms/overviewpage.ui \
   qt/forms/receivecoinsdialog.ui \
   qt/forms/receiverequestdialog.ui \
@@ -137,6 +138,7 @@ QT_MOC_CPP = \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletframe.cpp \
   qt/moc_walletmodel.cpp \
+  qt/moc_verticallabel.cpp \
   qt/moc_walletview.cpp
 
 BITCOIN_MM = \
@@ -204,6 +206,7 @@ BITCOIN_QT_H = \
   qt/transactionrecord.h \
   qt/transactiontablemodel.h \
   qt/transactionview.h \
+  qt/verticallabel.h \
   qt/utilitydialog.h \
   qt/walletframe.h \
   qt/walletmodel.h \
@@ -259,6 +262,7 @@ RES_ICONS = \
   qt/res/icons/tx_output.png \
   qt/res/icons/tx_mined.png \
   qt/res/icons/warning.png \
+  qt/res/icons/print.png \
   qt/res/icons/verify.png
 
 BITCOIN_QT_CPP = \
@@ -281,6 +285,7 @@ BITCOIN_QT_CPP = \
   qt/scicon.cpp \
   qt/splashscreen.cpp \
   qt/trafficgraphwidget.cpp \
+  qt/verticallabel.cpp \
   qt/utilitydialog.cpp
 
 if TARGET_WINDOWS
@@ -317,7 +322,8 @@ BITCOIN_QT_CPP += \
   qt/walletview.cpp
 endif
 
-RES_IMAGES = 
+RES_IMAGES =  \
+  qt/res/images/paper_wallet.png
 
 RES_MOVIES = $(wildcard qt/res/movies/spinner-*.png)
 

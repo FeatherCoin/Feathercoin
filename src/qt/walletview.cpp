@@ -333,3 +333,13 @@ void WalletView::inertBlockChain()
     dlg.setModel(walletModel);
     dlg.exec();
 }
+
+void WalletView::printPaperWallets()
+{
+    if(!walletModel)
+        return;
+
+    PaperWalletDialog dlg(this);
+    dlg.setModel(walletModel);
+    dlg.exec();
+}

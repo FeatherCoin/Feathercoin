@@ -207,3 +207,10 @@ void WalletFrame::inertBlockChain()
     if (walletView)
         walletView->inertBlockChain();
 }
+
+void WalletFrame::printPaperWallets()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->printPaperWallets();
+}
