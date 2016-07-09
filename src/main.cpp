@@ -1272,7 +1272,7 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 // Feathercoin: eHRC at 3rd hard fork
 int nTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
 int nTargetSpacing = 2.5 * 60; // 2.5 minutes
-static const int64_t nInterval = nTargetTimespan / nTargetSpacing;
+//static const int64_t nInterval = nTargetTimespan / nTargetSpacing;
 
 //
 // minimum amount of work that could possibly be required nTime after
