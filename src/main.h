@@ -101,6 +101,7 @@ static const int nForkThree = 204639;
 static const int nForkFour = 432000;
 
 static const int nTestnetFork   =  600;
+static const int nTestnetV4   =  17000;
 
 /** blockchain version 4 didn't become active until height and time. */
 static const int MIN_BLOCKHEADER_VERSION4_HEIGHT = 1278297;         //after 2016/07/01

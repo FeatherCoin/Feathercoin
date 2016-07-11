@@ -3077,27 +3077,49 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
             return state.DoS(100, error("%s: forked chain older than last checkpoint (height %d)", __func__, nHeight));
     }
 
+    //拒绝旧的版本和非法版本
     // Reject block.nVersion=1 blocks when 95% (75% on testnet) of the network has upgraded:
     if (block.nVersion < 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s: rejected nVersion=1 block", __func__),
                              REJECT_OBSOLETE, "bad-version");
 
     // Reject block.nVersion=2 blocks when 95% (75% on testnet) of the network has upgraded:
+    //testnet
     if (block.nVersion < 3 && IsSuperMajority(3, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
     {
-    		LogPrintf("rejected nVersion=2: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
-        return state.Invalid(error("%s : rejected nVersion=2 block", __func__),
-                             REJECT_OBSOLETE, "bad-version");
-    }                   
+    		if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetV4))
+    		{
+					LogPrintf("rejected nVersion=2: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
+	        return state.Invalid(error("%s : rejected nVersion=2 block", __func__),
+	                             REJECT_OBSOLETE, "bad-version");
+        }
+        if (chainParams.NetworkIDString()=="main")
+    		{
+					LogPrintf("rejected nVersion=2: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
+	        return state.Invalid(error("%s : rejected nVersion=2 block", __func__),
+	                             REJECT_OBSOLETE, "bad-version");
+        }
+    }
                              
-    if (block.nVersion ==3)
+    if (block.nVersion == 3)
         return state.Invalid(error("%s : rejected nVersion=3 block,block v3 was never enforced.", __func__),
                              REJECT_OBSOLETE, "bad-version");
                              
     // Reject block.nVersion=3 blocks when 95% (75% on testnet) of the network has upgraded:
     if (block.nVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
-        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
-                             REJECT_OBSOLETE, "bad-version");
+    {
+    		if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetV4))
+    		{
+    				LogPrintf("rejected nVersion=3: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
+		        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
+		                             REJECT_OBSOLETE, "bad-version");
+        }
+        if (chainParams.NetworkIDString()=="main")
+        {
+		        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
+		                             REJECT_OBSOLETE, "bad-version");
+        }
+    }
                              
     return true;
 }
@@ -3169,14 +3191,14 @@ bool AcceptBlockHeader(const CBlockHeader& block, CValidationState& state, CBloc
         return true;
     }
 
-		//LogPrintf("AcceptBlockHeader 1\n");
+		LogPrintf("AcceptBlockHeader 1\n");
     int nHeight;
     if (pindex == NULL)
     {
         pindex = AddToBlockIndex(block);		
 				nHeight=pindex->nHeight;
 		}
-		//LogPrintf("AcceptBlockHeader 2,nHeight=%d\n",nHeight);
+		LogPrintf("AcceptBlockHeader 2,nHeight=%d\n",nHeight);
     if (!CheckBlockHeader(block, state, nHeight))
         return false;
 
@@ -3296,7 +3318,7 @@ static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned 
             ++nFound;
         pstart = pstart->pprev;
     }
-    //LogPrintf("IsSuperMajority: minVersion=%d, nFound=%d,nRequired=%d \n",minVersion,nFound,nRequired);
+    LogPrintf("IsSuperMajority: minVersion=%d, nFound=%d,nRequired=%d \n",minVersion,nFound,nRequired);
     return (nFound >= nRequired);
 }
 
@@ -5286,6 +5308,7 @@ bool ProcessMessages(CNode* pfrom)
     //  (x) data
     //
     bool fOk = true;
+    const CChainParams& chainParams = Params();
 		
     if (!pfrom->vRecvGetData.empty())
         ProcessGetData(pfrom);
@@ -5302,10 +5325,9 @@ bool ProcessMessages(CNode* pfrom)
         // get next message
         CNetMessage& msg = *it;
 
-        //if (fDebug)
-        //    LogPrintf("%s(message %u msgsz, %u bytes, complete:%s)\n", __func__,
-        //            msg.hdr.nMessageSize, msg.vRecv.size(),
-        //            msg.complete() ? "Y" : "N");
+        /*LogPrintf("%s(message %u msgsz, %u bytes, complete:%s)\n", __func__,
+                  msg.hdr.nMessageSize, msg.vRecv.size(),
+                  msg.complete() ? "Y" : "N");*/
 
         // end, if an incomplete message is found
         if (!msg.complete())
@@ -5325,6 +5347,20 @@ bool ProcessMessages(CNode* pfrom)
         /* Message start detector */
         unsigned char pchMessageStart[4]    = { 0xfb, 0xc0, 0xb6, 0xdb };
         unsigned char pchMessageStartNew[4] = { 0xfe, 0x46, 0x54, 0x43 };
+        //testnet
+        if(chainParams.NetworkIDString()=="test") 
+        {
+		        pchMessageStart[0] = 0xda;
+		        pchMessageStartNew[0] = 0xaa;
+		        pchMessageStart[1] = 0xaf;
+		        pchMessageStartNew[1] = 0xbb;
+		        pchMessageStart[2] = 0xa5;
+		        pchMessageStartNew[2] = 0xcc;
+		        pchMessageStart[3] = 0xba;
+		        pchMessageStartNew[3] = 0xdd;
+      	}
+        
+        LogPrintf("PROCESSMESSAGE,pfrom->nVersion=%d,vRecvMsg_HexStr=%s \n",pfrom->nVersion,HexStr(vRecvMsg).c_str());
         
         if(pfrom->nVersion) {
 			        if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
