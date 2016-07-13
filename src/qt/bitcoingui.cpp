@@ -214,11 +214,12 @@ BitcoinGUI::BitcoinGUI(bool fIsTestnet, QWidget *parent) :
 
     // Subscribe to notifications from core
     subscribeToCoreSignals();
-    
-    QPalette palette;
-    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/images/mainbg")));
-    this->setPalette(palette);
-    this->setAutoFillBackground(true);    
+  
+    //    Remove background image 
+    //    QPalette palette;
+    //    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/images/mainbg")));
+    //    this->setPalette(palette);
+    //    this->setAutoFillBackground(true);    
 }
 
 BitcoinGUI::~BitcoinGUI()
