@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../../Feathercoin/src/qt/feathercoin.qrc">
+   <iconset resource="../feathercoin.qrc">
     <normaloff>:/icons/bitcoin</normaloff>:/icons/bitcoin</iconset>
   </property>
   <property name="autoFillBackground">
@@ -429,7 +429,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../../../../../Feathercoin/src/qt/feathercoin.qrc">:/images/mainlogo</pixmap>
+          <pixmap resource="../feathercoin.qrc">:/images/mainlogo</pixmap>
          </property>
         </widget>
        </item>
@@ -551,10 +551,10 @@
    <item>
     <widget class="Line" name="line_2">
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Raised</enum>
      </property>
      <property name="lineWidth">
-      <number>2</number>
+      <number>1</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -564,7 +564,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../../Feathercoin/src/qt/feathercoin.qrc"/>
+  <include location="../feathercoin.qrc"/>
  </resources>
  <connections/>
 </ui>
