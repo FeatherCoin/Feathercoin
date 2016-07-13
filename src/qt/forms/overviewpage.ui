@@ -13,6 +13,13 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../../../../Feathercoin/src/qt/feathercoin.qrc">
+    <normaloff>:/icons/bitcoin</normaloff>:/icons/bitcoin</iconset>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="topLayout">
    <item>
     <widget class="QLabel" name="labelAlerts">
@@ -422,7 +429,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="../bitcoin.qrc">:/images/logo</pixmap>
+          <pixmap resource="../../../../../Feathercoin/src/qt/feathercoin.qrc">:/images/mainlogo</pixmap>
          </property>
         </widget>
        </item>
@@ -541,10 +548,23 @@
      </item>
     </layout>
    </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources>
-  <include location="../bitcoin.qrc"/>
+  <include location="../../../../../Feathercoin/src/qt/feathercoin.qrc"/>
  </resources>
  <connections/>
 </ui>
