@@ -25,10 +25,16 @@
      <property name="pixmap">
       <pixmap resource="../feathercoin.qrc">:/images/about</pixmap>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+     </property>
     </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
      <item>
       <spacer name="verticalSpacer_2">
        <property name="orientation">
@@ -51,6 +57,9 @@
          </property>
          <property name="text">
           <string>&lt;b&gt;Feathercoin Core&lt;/b&gt; version</string>
+         </property>
+         <property name="indent">
+          <number>6</number>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -96,6 +105,12 @@
        <property name="textFormat">
         <enum>Qt::RichText</enum>
        </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <property name="indent">
+        <number>6</number>
+       </property>
        <property name="textInteractionFlags">
         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
        </property>
@@ -119,6 +134,9 @@
        <property name="wordWrap">
         <bool>false</bool>
        </property>
+       <property name="indent">
+        <number>6</number>
+       </property>
        <property name="textInteractionFlags">
         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
        </property>
@@ -136,12 +154,18 @@
        <property name="text">
         <string>Distributed under the MIT/X11 software license, see the accompanying file</string>
        </property>
+       <property name="indent">
+        <number>6</number>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>COPYING or http://www.opensource.org/licenses/mit-license.php.</string>
+       </property>
+       <property name="indent">
+        <number>6</number>
        </property>
       </widget>
      </item>
@@ -157,12 +181,18 @@
        <property name="text">
         <string>This product includes software developed by the OpenSSL Project for use</string>
        </property>
+       <property name="indent">
+        <number>6</number>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_7">
        <property name="text">
         <string>in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic</string>
+       </property>
+       <property name="indent">
+        <number>6</number>
        </property>
       </widget>
      </item>
@@ -171,12 +201,18 @@
        <property name="text">
         <string>software written by Eric Young (eay@cryptsoft.com) and UPnP software</string>
        </property>
+       <property name="indent">
+        <number>6</number>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_10">
        <property name="text">
         <string>written by Thomas Bernard.</string>
+       </property>
+       <property name="indent">
+        <number>6</number>
        </property>
       </widget>
      </item>
