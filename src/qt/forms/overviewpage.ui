@@ -21,6 +21,9 @@
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="topLayout">
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QLabel" name="labelAlerts">
      <property name="visible">
@@ -548,8 +551,8 @@
      </item>
     </layout>
    </item>
-   <item>
-    <widget class="Line" name="line_2">
+   <item alignment="Qt::AlignBottom">
+    <widget class="Line" name="StatusBarDividerLine">
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
