@@ -19,7 +19,7 @@
    <string>Feathercoin Core - Command-line options</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
-   <item>
+   <item alignment="Qt::AlignBottom">
     <widget class="QLabel" name="graphic">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
@@ -28,7 +28,7 @@
       </sizepolicy>
      </property>
      <property name="pixmap">
-      <pixmap>:/images/about</pixmap>
+      <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
      </property>
     </widget>
    </item>
@@ -47,8 +47,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>748</width>
-          <height>276</height>
+          <width>665</width>
+          <height>269</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
