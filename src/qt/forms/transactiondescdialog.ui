@@ -34,6 +34,16 @@
      </property>
     </widget>
    </item>
+   <item alignment="Qt::AlignBottom">
+    <widget class="Line" name="lineStatusBarDivide">
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
