@@ -132,6 +132,7 @@ private:
     QAction *unlockWalletAction;
     QAction *inertBlockChainAction;
     QAction *paperWalletAction;
+    QAction *accountReportAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -208,6 +209,9 @@ private Q_SLOTS:
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
+    
+    /** Switch to account report page */
+    void gotoAccountReportPage();
 
     /** Show open dialog */
     void openClicked();

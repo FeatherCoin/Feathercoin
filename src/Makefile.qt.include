@@ -139,6 +139,7 @@ QT_MOC_CPP = \
   qt/moc_walletframe.cpp \
   qt/moc_walletmodel.cpp \
   qt/moc_verticallabel.cpp \
+  qt/moc_reportview.cpp \
   qt/moc_walletview.cpp
 
 BITCOIN_MM = \
@@ -208,6 +209,7 @@ BITCOIN_QT_H = \
   qt/transactionview.h \
   qt/verticallabel.h \
   qt/utilitydialog.h \
+  qt/reportview.h \
   qt/walletframe.h \
   qt/walletmodel.h \
   qt/walletmodeltransaction.h \
@@ -218,6 +220,9 @@ RES_ICONS = \
   qt/res/icons/add.png \
   qt/res/icons/toolbar.png \
   qt/res/icons/address-book.png \
+  qt/res/icons/account-report.png \
+  qt/res/icons/multisig.png \
+  qt/res/icons/openname.png \
   qt/res/icons/about.png \
   qt/res/icons/about_qt.png \
   qt/res/icons/bitcoin.ico \
@@ -316,6 +321,7 @@ BITCOIN_QT_CPP += \
   qt/transactionrecord.cpp \
   qt/transactiontablemodel.cpp \
   qt/transactionview.cpp \
+  qt/reportview.cpp \
   qt/walletframe.cpp \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \

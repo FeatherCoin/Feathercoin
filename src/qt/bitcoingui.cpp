@@ -288,6 +288,13 @@ void BitcoinGUI::createActions()
     historyAction->setCheckable(true);
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
+    
+    accountReportAction = new QAction(QIcon(":/icons/account-report"), tr("&Report"), this);
+    accountReportAction->setStatusTip(tr("Get my account report"));
+    accountReportAction->setToolTip(accountReportAction->statusTip());
+    accountReportAction->setCheckable(true);
+    accountReportAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
+    tabGroup->addAction(accountReportAction);
 
 #ifdef ENABLE_WALLET
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
@@ -304,6 +311,8 @@ void BitcoinGUI::createActions()
     connect(receiveCoinsMenuAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
+    connect(accountReportAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(accountReportAction, SIGNAL(triggered()), this, SLOT(gotoAccountReportPage()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(TextColorIcon(":/icons/quit"), tr("E&xit"), this);
@@ -431,6 +440,8 @@ void BitcoinGUI::createMenuBar()
         settings->addSeparator();
         settings->addAction(openRPCConsoleAction);
         settings->addSeparator();
+        settings->addAction(accountReportAction);
+        settings->addSeparator();
     }
     settings->addAction(optionsAction);
 
@@ -452,6 +463,7 @@ void BitcoinGUI::createToolBars()
         toolbar->addAction(sendCoinsAction);
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
+        toolbar->addAction(accountReportAction);
         overviewAction->setChecked(true);
     }
 }
@@ -540,6 +552,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     openAction->setEnabled(enabled);
     inertBlockChainAction->setEnabled(enabled);
     paperWalletAction->setEnabled(enabled);
+    accountReportAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(const NetworkStyle *networkStyle)
@@ -1072,6 +1085,12 @@ void BitcoinGUI::showProgress(const QString &title, int nProgress)
     }
     else if (progressDialog)
         progressDialog->setValue(nProgress);
+}
+
+void BitcoinGUI::gotoAccountReportPage()
+{
+		accountReportAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoAccountReportPage();
 }
 
 static bool ThreadSafeMessageBox(BitcoinGUI *gui, const std::string& message, const std::string& caption, unsigned int style)

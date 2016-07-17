@@ -251,6 +251,14 @@
         <translation>查看交易历史</translation>
     </message>
     <message>
+        <source>Get my account report</source>
+        <translation>查看我的账户报表</translation>
+    </message>
+    <message>
+        <source>Manage MultiSig transactions</source>
+        <translation>管理多重签名交易</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>退出(&amp;X)</translation>
     </message>
@@ -301,6 +309,10 @@
     <message>
         <source>Feathercoin Core client</source>
         <translation>羽毛币核心钱包</translation>
+    </message>
+    <message>
+        <source>&amp;Report</source>
+        <translation>报表(&amp;R)</translation>
     </message>
     <message>
         <source>Importing blocks from disk...</source>
@@ -1052,8 +1064,16 @@
         <translation>钱包个数？</translation>
     </message>
     <message>
+        <source>Number of Wallets?</source>
+        <translation>钱包个数？</translation>
+    </message>
+    <message>
         <source>So Print</source>
         <translation>开始打印</translation>
+    </message>
+    <message>
+        <source>Print Wallet</source>
+        <translation>打印钱包</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3706,6 +3726,145 @@ rpcpassword=%s
     <message>
         <source>Error</source>
         <translation>错误</translation>
+    </message>
+</context>
+<context>
+    <name>ReportView</name>
+    <message>
+        <source>All</source>
+        <translation>全部</translation>
+    </message>
+    <message>
+        <source>Today</source>
+        <translation>今天</translation>
+    </message>
+    <message>
+        <source>Yesterday</source>
+        <translation>昨天</translation>
+    </message>
+    <message>
+        <source>This week</source>
+        <translation>本周</translation>
+    </message>
+    <message>
+        <source>Last week</source>
+        <translation>上周</translation>
+    </message>
+    <message>
+        <source>This month</source>
+        <translation>本月</translation>
+    </message>
+    <message>
+        <source>Last month</source>
+        <translation>上月</translation>
+    </message>
+    <message>
+        <source>This year</source>
+        <translation>今年</translation>
+    </message>
+    <message>
+        <source>Range...</source>
+        <translation>范围...</translation>
+    </message>
+    <message>
+        <source>Received with</source>
+        <translation>接收于</translation>
+    </message>
+    <message>
+        <source>Sent to</source>
+        <translation>发送给</translation>
+    </message>
+    <message>
+        <source>To yourself</source>
+        <translation>到自己</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>挖矿所得</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>其他</translation>
+    </message>
+    <message>
+        <source>Enter address or label to search</source>
+        <translation>输入地址或标签进行搜索</translation>
+    </message>
+    <message>
+        <source>Min amount</source>
+        <translation>最小金额</translation>
+    </message>
+    <message>
+        <source>Export Transaction History</source>
+        <translation>导出交易历史</translation>
+    </message>
+    <message>
+        <source>Exporting Failed</source>
+        <translation>导出失败</translation>
+    </message>
+    <message>
+        <source>There was an error trying to save the transaction history to %1.</source>
+        <translation>导出交易历史到 %1 时发生错误。</translation>
+    </message>
+    <message>
+        <source>Exporting Successful</source>
+        <translation>导出成功</translation>
+    </message>
+    <message>
+        <source>The transaction history was successfully saved to %1.</source>
+        <translation>交易历史已成功保存到 %1。</translation>
+    </message>
+    <message>
+        <source>Comma separated file (*.csv)</source>
+        <translation>逗号分隔文件 (*.csv)</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>日期</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>类别</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>标签</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>地址</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>金额</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <source>Range:</source>
+        <translation>范围：</translation>
+    </message>
+    <message>
+        <source>to</source>
+        <translation>到</translation>
+    </message>
+    <message>
+        <source>AddressLabel</source>
+        <translation>地址标签名</translation>
+    </message>
+    <message>
+        <source>DateRange</source>
+        <translation>日期范围</translation>
+    </message>
+    <message>
+        <source>Payment amount</source>
+        <translation>支付金额</translation>
+    </message>
+    <message>
+        <source>Number of payments</source>
+        <translation>支付笔数</translation>
     </message>
 </context>
 </TS>

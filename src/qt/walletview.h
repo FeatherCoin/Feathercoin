@@ -17,6 +17,7 @@ class SendCoinsDialog;
 class SendCoinsRecipient;
 class TransactionView;
 class WalletModel;
+class ReportView;
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
@@ -62,6 +63,9 @@ private:
     SendCoinsDialog *sendCoinsPage;
 
     TransactionView *transactionView;
+    
+    QWidget *accountreportPage;
+    ReportView *reportView;		
 
     QProgressDialog *progressDialog;
 
@@ -79,6 +83,9 @@ public Q_SLOTS:
     void gotoSignMessageTab(QString addr = "");
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
+    
+    /** Switch to account report page */
+    void gotoAccountReportPage(); 
 
     /** Show incoming transaction notification for new transactions.
 
