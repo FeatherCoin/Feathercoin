@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>776</width>
-    <height>400</height>
+    <height>409</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,0">
@@ -267,8 +267,8 @@
            <string>Show</string>
           </property>
           <property name="icon">
-           <iconset resource="../bitcoin.qrc">
-            <normaloff>:/icons/edit</normaloff>:/icons/edit</iconset>
+           <iconset>
+            <normaloff>../res/icons/qrcode.png</normaloff>../res/icons/qrcode.png</iconset>
           </property>
           <property name="autoDefault">
            <bool>false</bool>
