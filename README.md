@@ -1,198 +1,102 @@
-Feathercoin 0.9.3.2 
-===================
+Feathercoin Core integration/staging tree
 
-Copyright (c) 2009-2016 Feathercoin Developers
+Feathercoin Core
+================
 
+What is Feathercoin?
+--------------------
 
-Setup
------------
+Feathercoin is now a Fork of the Bitcoin core project. It contains a it's own 
+set up of certain parameters, such as block times and extra features such as 
+enhanced mining difficulty calculations and it's own encryption algorithm.
 
-[Feathercoin Core] is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. 
+Feathercoin is an open source project, additional changes and fixes to those in
+the Bitcoin source code are managed by the forum community as is, depending on
+the change or scale of release.
 
-Example UNIX Build from source
-------------------------------
+http://forum.feathercoin.com/
 
-The Feathercoin wallet contains a number of features which require additional libraries to the Bitcoin build instructions.
+Development mailing list / Forum Thread :
 
-### Quick build example for Ubuntu 16.04  
+http://forum.feathercoin.com/category/71/technical-development
 
-    sudo apt-get update ; sudo apt-get upgrade
 
-    sudo apt-get install git  
+What is Bitcoin?
+----------------
 
-    sudo apt-get install autoconf automake  debhelper dh-autoreconf  
+Bitcoin is an experimental digital currency that enables instant payments to
+anyone, anywhere in the world. Bitcoin uses peer-to-peer technology to operate
+with no central authority: managing transactions and issuing money are carried
+out collectively by the network. Bitcoin Core is the name of open source
+software which enables the use of this currency.
 
-    sudo apt-get install libssl-dev libdb++-dev libminiupnpc-dev binutils  
+For more information, as well as an immediately useable, binary version of
+the Bitcoin Core software, see https://bitcoin.org/en/download, or read the
+[original whitepaper](https://bitcoincore.org/bitcoin.pdf).
 
-    sudo apt-get install autotools-dev  build-essential
 
-    
-### You need the Qt5 run-time libraries to build Feathercoin-Qt.  
+[![Build Status](https://travis-ci.org/bitcoin/bitcoin.svg?branch=master)](https://travis-ci.org/bitcoin/bitcoin)
 
-    sudo apt-get install qtbase5-dev qttools5-dev-tools  
-
-    sudo apt-get install libqt5printsupport5 libqt5opengl5-dev  
-
-    sudo apt-get install libqjson-dev  
-
-    sudo apt-get install libqt5gui5 libqt5core5a libqt5dbus5  
-
-    sudo apt-get install libssl-dev debhelper
-
-    sudo apt-get install libqrencode-dev pkg-config libprotobuf-dev  protobuf-compiler  
-
-    sudo apt-get install libzxing  
-
-    
-### Download the .deb file or install the zxing binaries available after installing the Feathercoin PPA  
-
-
-(http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux)  
-
-As Super user (or sudo) create a file named **opensuse.list** in the directory 
-
-    /etc/apt/sources.list.d 
-
-For your OS, copy the command into /etc/apt/sources.list.d and save it.  
-    
-    deb http://download.opensuse.org/repositories/home:/wellenreiter01/xUbuntu_16.04 ./
-
-download the repository key:
-    wget http://download.opensuse.org/repositories/home:/wellenreiter01/Debian_7.0/Release.key    
-   
-Then add the key to your system:
-
-    sudo apt-key add Release.key
-    
-    sudo apt-get update  
-    sudo apt-get install libzxing  
- 
- 
-### If PPA or .deb does not work, compile the zxing libraries yourself, download the sources from github.com.
-
-Search for zxing-cpp to get the c++ version of the code.   
-
-https://github.com/glassechidna/zxing-cpp
-
-Build command for libzxing :  
-
-sudo apt-get install cmake
-
-cd zxing-cpp
-
-mkdir build
-cd build
-
-export CXXFLAGS="-fPIC"
-cmake -G "Unix Makefiles" .. -D_GLIBCXX_USE_CXX11_ABI=0 -DCMAKE_BUILD_TYPE=Release
-make  
-sudo make install   
-
-   
-### For Ununtu 16.04 - Edit : the zxing files source.  
-
-sudo nano /usr/local/include/zxing/LuminanceSource.h
-
-check Line 30 : is set to public 
-
-### Install boost Libraries
-
-    sudo apt-get install libboost-all-dev  
-
-    sudo apt-get install libmessaging-menu-dev  
-
-    cd Feathercoin  
-    make clean
-    rm configure
-     ./autogen.sh
-    ./configure --with-gui=qt5 --enable-tests=no  --with-incompatible-bdb --enable-upnp-default --with-qrcode=yes
-    make  
-
-    
-Possible issues  
----------------- 
-
-### Enable uPNP.   
-
---enable-upnp-default 
-
-
-### Dependency issues with qr codes and zxing.  
-
---with-qrcode=no
-
-
-### Use alternate database, 4.8 is still most portable.  
-
-sudo apt-get install libdb5.3-dev  
-
---with-incompatible-bdb
-   
-### Build Berkley database version 4.8 from source.     
-
-wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
-tar -xzvf db-4.8.30.NC.tar.gz
-cd db-4.8.30.NC/build_unix/
-…/dist/configure --enable-cxx
-make
-sudo make install
-
-Example config usage :
-
-./configure --disable-upnp-default --disable-tests --with-boost-libdir=/usr/lib/arm-linux-gnueabihf CPPFLAGS="-I/usr/local/BerkeleyDB.4.8/include -O2" LDFLAGS="-L/usr/local/BerkeleyDB.4.8/lib"
-
-     
-Running Feathercoin
----------------------
-The following are some helpful notes on how to run Feathercoin on your native platform. 
-
-### Unix
-
-cd Feathercoin  
-./feathercoin-qt  
-
-### Windows
-
-Unpack the files into a directory, and then run feathercoin-qt.exe.
-
-### OSX
-
-Drag Feathercoin-Qt to your applications folder, and then run Feathercoin-Qt.
-
-### Need Help?
-
-* Ask for support in the support section of https://forum.feathercoin.com
-* If you find a bug, you also may raise an issue at: http://www.github.com/Feathercoin/Feathercoin/issues
-
-Building
----------------------
-The developer documentation can be found on http://www.github.com/Feathercoin/Feathercoin/tree/0.9.3/doc 
-
-check for 
-
-- [OSX Build Notes](build-osx.md)
-- [Unix Build Notes](build-unix.md)
-- [Windows Build Notes](build-msw.md)
-
-Development
----------------------
-The Feathercoin repo's [root README](https://github.com/Feathercoin/Feathercoin/tree/0.9.3/README.md) contains relevant information on the development process and automated testing.
-
-- [Coding Guidelines](coding.md)
-- [Multiwallet Qt Development](multiwallet-qt.md)
-- [Release Notes](release-notes.md)
-- [Release Process](release-process.md)
-- [Source Code Documentation (External Link)](https://dev.visucore.com/feathercoin/doxygen/)
-- [Translation Process](translation_process.md)
-- [Unit Tests](unit-tests.md)
-
-### Resources
-- forum.feathercoin.com
-- chat: forum.feathercoin.com/shoutbox
-
+https://bitcoincore.org
 
 License
----------------------
-Distributed under the [MIT/X11 software license](http://www.opensource.org/licenses/mit-license.php).
-This product includes software developed by the OpenSSL Project for use in the [OpenSSL Toolkit](http://www.openssl.org/). This product includes
-cryptographic software written by Eric Young ([eay@cryptsoft.com](mailto:eay@cryptsoft.com)), and UPnP software written by Thomas Bernard.
+-------
+
+Bitcoin Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
+information or see https://opensource.org/licenses/MIT.
+
+Development Process
+-------------------
+
+The `master` branch is regularly built and tested, but is not guaranteed to be
+completely stable. [Tags](https://github.com/bitcoin/bitcoin/tags) are created
+regularly to indicate new official, stable release versions of Bitcoin Core.
+
+The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+The developer [mailing list](https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev)
+should be used to discuss complicated or controversial changes before working
+on a patch set.
+
+Developer IRC can be found on Freenode at #bitcoin-core-dev.
+
+Testing
+-------
+
+Testing and code review is the bottleneck for development; we get more pull
+requests than we can review and test on short notice. Please be patient and help out by testing
+other people's pull requests, and remember this is a security-critical project where any mistake might cost people
+lots of money.
+
+### Automated Testing
+
+Developers are strongly encouraged to write [unit tests](/doc/unit-tests.md) for new code, and to
+submit new unit tests for old code. Unit tests can be compiled and run
+(assuming they weren't disabled in configure) with: `make check`
+
+There are also [regression and integration tests](/qa) of the RPC interface, written
+in Python, that are run automatically on the build server.
+These tests can be run (if the [test dependencies](/qa) are installed) with: `qa/pull-tester/rpc-tests.py`
+
+The Travis CI system makes sure that every pull request is built for Windows, Linux, and OS X, and that unit/sanity tests are run automatically.
+
+### Manual Quality Assurance (QA) Testing
+
+Changes should be tested by somebody other than the developer who wrote the
+code. This is especially important for large or high-risk changes. It is useful
+to add a test plan to the pull request description if testing the changes is
+not straightforward.
+
+Translations
+------------
+
+Changes to translations as well as new translations can be submitted to
+[Bitcoin Core's Transifex page](https://www.transifex.com/projects/p/bitcoin/).
+
+Translations are periodically pulled from Transifex and merged into the git repository. See the
+[translation process](doc/translation_process.md) for details on how this works.
+
+**Important**: We do not accept translation changes as GitHub pull requests because the next
+pull from Transifex would automatically overwrite them again.
+
+Translators should also subscribe to the [mailing list](https://groups.google.com/forum/#!forum/bitcoin-translators).

@@ -16,7 +16,7 @@ The Feathercoin wallet contains a number of features which require additional li
 
 ### Quick build example for Ubuntu 16.04  
 
-    sudo apt-get update upgrade
+    sudo apt-get update ; sudo apt-get upgrade
 
     sudo apt-get install git  
 
@@ -24,9 +24,7 @@ The Feathercoin wallet contains a number of features which require additional li
 
     sudo apt-get install libssl-dev libdb++-dev libminiupnpc-dev binutils  
 
-    sudo apt-get install autotools-dev  
-    
-    build-essential
+    sudo apt-get install autotools-dev  build-essential
 
     
 ### You need the Qt5 run-time libraries to build Feathercoin-Qt.  
@@ -48,15 +46,33 @@ The Feathercoin wallet contains a number of features which require additional li
     
 ### Download the .deb file or install the zxing binaries available after installing the Feathercoin PPA  
 
-http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux  
+(http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux)  
 
+As Super user (or sudo) create a file named **opensuse.list** in the directory 
+
+    /etc/apt/sources.list.d 
+
+For your OS, copy the command into /etc/apt/sources.list.d and save it.  
+    
+    deb http://download.opensuse.org/repositories/home:/wellenreiter01/xUbuntu_16.04 ./
+
+download the repository key:
+    wget http://download.opensuse.org/repositories/home:/wellenreiter01/Debian_7.0/Release.key    
+   
+Then add the key to your system:
+
+    sudo apt-key add Release.key
+    
     sudo apt-get update  
     sudo apt-get install libzxing  
- 
+  
  
 ### If PPA or .deb does not work, compile the zxing libraries yourself, download the sources from github.com.
 
-Search for zxing-cpp to get the c++ version of the code.   
+    sudo apt-get remove libzxing
+
+
+On Github : search for zxing-cpp to get the c++ version of the code.   
 
 https://github.com/glassechidna/zxing-cpp
 
@@ -71,11 +87,11 @@ make
 sudo make install   
 
    
-### For Ununtu 16.04 - Edit : the zxing files source.  
+### For Ununtu 16.04 - Check the zxing files source.  
 
 sudo nano /usr/local/include/zxing/LuminanceSource.h
 
-On Line 30 : Change public to private:
+check Line 30 : is set to public : 
 
 ### Install boost Libraries
 
@@ -88,7 +104,14 @@ On Line 30 : Change public to private:
      ./autogen.sh
      autoupdate
      ./configure --with-gui=qt5 --enable-tests=no  --with-incompatible-bdb --enable-upnp-default --with-qrcode=yes
-    make  
+    make 
+    make install
+    
+### Creating a Launcher
+
+In Linux based systems, make install
+
+look in /usr/shar/pixmaps and find feathercoin.png for the launcher icon.
 
     
 Possible issues  

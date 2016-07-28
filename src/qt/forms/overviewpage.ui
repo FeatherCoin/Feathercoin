@@ -285,6 +285,9 @@
          <property name="pixmap">
           <pixmap resource="../feathercoin.qrc">:/images/mainlogo</pixmap>
          </property>
+         <property name="indent">
+          <number>0</number>
+         </property>
         </widget>
        </item>
       </layout>
