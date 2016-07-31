@@ -9,6 +9,38 @@ Setup
 
 [Feathercoin Core] is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. 
 
+## BitMessage encrypter peer to peer private messaging
+
+Bitmessage is an open source fully encrypted peer to peer messaging system. Because it does not pass through a central server it is also harder to collect meta data.
+
+In order to pass invoices or addresses privately, a version of BitMessage can be set up to integrate with Feathercoin. 
+
+Currently Bitmessage acts as a plugin with MS Windows, invoice information can be passed straight through to an encrypted message. Install BitMessage for windows and copy the executable to the Feathercoin install directory.
+
+It is still worth considering using Bitmessage to send your public address keys, although that is mostly about privacy not extra security.
+
+https://github.com/cqtenq/PyBitmessage  
+
+
+Installing BitMessage plugin under Linux
+----------------------------------------
+
+In Debian based systems you can create a script file (pybitmessage) and copy it to /usr/bin, make the script executable to activate the Feathercoin wallet BitMessage plugin.
+
+/usr/bin/pybitmessage
+
+#!/bin/sh
+cd /usr/share/pybitmessage
+exec /usr/bin/python2 bitmessagemain.py
+
+
+From BitMessage install directory
+
+#!/bin/sh
+cd ~/PyBitmessage/src
+exec python ~/PyBitmessage/src/bitmessagemain.py
+
+
 Example UNIX Build from source
 ------------------------------
 
