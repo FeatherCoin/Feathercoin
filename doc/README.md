@@ -115,7 +115,7 @@ mkdir build
 cd build
 
 export CXXFLAGS="-fPIC"
-cmake -G “Unix Makefiles”.. -DCMAKE_BUILD_TYPE=Release   
+cmake -G 'Unix Makefiles' .. -DCMAKE_BUILD_TYPE=Release     
 make  
 sudo make install   
 
