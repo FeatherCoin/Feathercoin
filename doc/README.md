@@ -110,6 +110,7 @@ https://github.com/glassechidna/zxing-cpp
 
 Build command for libzxing :  
 
+cd zxing-cpp
 mkdir build
 cd build
 
