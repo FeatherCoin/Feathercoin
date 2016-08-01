@@ -42,7 +42,7 @@ static const int MAX_PAYMENT_REQUEST_SIZE = 50000; // bytes
 #define EXPORT_IMAGE_SIZE 256
 
 /* Number of frames in spinner animation */
-#define SPINNER_FRAMES 35
+#define SPINNER_FRAMES 18
 
 #define QAPP_ORG_NAME "Feathercoin"
 #define QAPP_ORG_DOMAIN "feathercoin.com"
