@@ -26,7 +26,7 @@ def frame_to_filename(frame):
 
 frame_files = []
 for frame in xrange(NUMFRAMES):
-    rotation = (frame + 0.5) / NUMFRAMES * 360.0
+    rotation = (frame + 0.5) / NUMFRAMES * 180.0
     if CLOCKWISE:
         rotation = -rotation
     im_new = im_src.rotate(rotation, Image.BICUBIC)
