@@ -290,7 +290,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     
     if (!(Q = EC_POINT_bn2point(ecgrp, bnQ, NULL, bnCtx)))
     {
-        printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
+        //printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
         rv = 5;
         goto End;
     };
@@ -307,7 +307,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     
     if (!(bnOutQ = EC_POINT_point2bn(ecgrp, Q, POINT_CONVERSION_COMPRESSED, BN_new(), bnCtx)))
     {
-        printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
+        //printf("StealthSecret(): Q EC_POINT_bn2point failed\n");
         rv = 7;
         goto End;
     };
