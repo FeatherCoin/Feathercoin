@@ -46,7 +46,7 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f, bool isTest
     }
 
     QPainter pixPaint(&newPixmap);
-    pixPaint.setPen(QColor(200,200,200));
+    pixPaint.setPen(QColor(54,134,190));
 
 
     pixPaint.setFont(QFont(font, 11*fontFactor));
@@ -94,7 +94,7 @@ static void InitMessage(SplashScreen *splash, const std::string &message)
         Qt::QueuedConnection,
         Q_ARG(QString, QString::fromStdString(message)),
         Q_ARG(int, Qt::AlignBottom|Qt::AlignHCenter),
-        Q_ARG(QColor, QColor(200,200,200)));
+        Q_ARG(QColor, QColor(54,134,190)));
 }
 
 static void ShowProgress(SplashScreen *splash, const std::string &title, int nProgress)
