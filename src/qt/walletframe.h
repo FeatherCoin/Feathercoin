@@ -58,6 +58,8 @@ public Q_SLOTS:
     void gotoSendCoinsPage(QString addr = "");
     /** Switch to account report page */
     void gotoAccountReportPage();
+    /** Switch to multisig page */
+    void gotoMultiSigPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");

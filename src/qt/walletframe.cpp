@@ -221,3 +221,10 @@ void WalletFrame::gotoAccountReportPage()
     for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
         i.value()->gotoAccountReportPage();
 }
+
+void WalletFrame::gotoMultiSigPage()
+{
+    QMap<QString, WalletView*>::const_iterator i;
+    for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
+        i.value()->gotoMultiSigPage();
+}

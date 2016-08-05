@@ -93,7 +93,9 @@ QT_FORMS_UI = \
   qt/forms/sendcoinsdialog.ui \
   qt/forms/sendcoinsentry.ui \
   qt/forms/signverifymessagedialog.ui \
-  qt/forms/transactiondescdialog.ui
+  qt/forms/transactiondescdialog.ui \
+  qt/forms/createmultisigaddrdialog.ui \
+  qt/forms/multisigdialog.ui
 
 QT_MOC_CPP = \
   qt/moc_addressbookpage.cpp \
@@ -140,7 +142,9 @@ QT_MOC_CPP = \
   qt/moc_walletmodel.cpp \
   qt/moc_verticallabel.cpp \
   qt/moc_reportview.cpp \
-  qt/moc_walletview.cpp
+  qt/moc_walletview.cpp \
+  qt/moc_createmultisigaddrdialog.cpp \
+  qt/moc_multisigdialog.cpp
 
 BITCOIN_MM = \
   qt/macdockiconhandler.mm \
@@ -214,7 +218,9 @@ BITCOIN_QT_H = \
   qt/walletmodel.h \
   qt/walletmodeltransaction.h \
   qt/walletview.h \
-  qt/winshutdownmonitor.h
+  qt/winshutdownmonitor.h \
+  qt/createmultisigaddrdialog.h \
+  qt/multisigdialog.h
 
 RES_ICONS = \
   qt/res/icons/add.png \
@@ -325,7 +331,9 @@ BITCOIN_QT_CPP += \
   qt/walletframe.cpp \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
-  qt/walletview.cpp
+  qt/walletview.cpp \
+  qt/createmultisigaddrdialog.cpp \
+  qt/multisigdialog.cpp
 endif
 
 RES_IMAGES =  \

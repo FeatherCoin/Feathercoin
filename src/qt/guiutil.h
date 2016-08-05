@@ -98,6 +98,11 @@ namespace GUIUtil
        @returns If called from the GUI thread, return a Qt::DirectConnection.
                 If called from another thread, return a Qt::BlockingQueuedConnection.
     */
+    
+    QString getLoadFileName(QWidget *parent=0, const QString &caption=QString(),
+                                   const QString &dir=QString(), const QString &filter=QString(),
+                                   QString *selectedSuffixOut=0);
+ 
     Qt::ConnectionType blockingGUIThreadConnection();
 
     // Determine whether a widget is hidden behind other windows

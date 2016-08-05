@@ -133,6 +133,7 @@ private:
     QAction *inertBlockChainAction;
     QAction *paperWalletAction;
     QAction *accountReportAction;
+    QAction *multiSigAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -212,6 +213,8 @@ private Q_SLOTS:
     
     /** Switch to account report page */
     void gotoAccountReportPage();
+    /** Switch to MultiSig page */
+    void gotoMultiSigPage();
 
     /** Show open dialog */
     void openClicked();

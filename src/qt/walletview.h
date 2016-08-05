@@ -18,6 +18,8 @@ class SendCoinsRecipient;
 class TransactionView;
 class WalletModel;
 class ReportView;
+class AddressBookPage;
+class MultiSigDialog;
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
@@ -66,6 +68,9 @@ private:
     
     QWidget *accountreportPage;
     ReportView *reportView;		
+    
+    AddressBookPage *addressBookPage;
+    MultiSigDialog *multiSigPage;
 
     QProgressDialog *progressDialog;
 
@@ -85,7 +90,9 @@ public Q_SLOTS:
     void gotoVerifyMessageTab(QString addr = "");
     
     /** Switch to account report page */
-    void gotoAccountReportPage(); 
+    void gotoAccountReportPage();
+    /** Switch to multisig page */
+    void gotoMultiSigPage();
 
     /** Show incoming transaction notification for new transactions.
 

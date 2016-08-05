@@ -10,13 +10,14 @@
 #include "uint256.h"
 #include "wallet/stealth.h"
 
+#include <boost/foreach.hpp>
 #include <boost/variant.hpp>
 
 #include <stdint.h>
 
-
 class CKeyID;
 class CScript;
+class CKeyStore;
 
 /** A reference to a CScript: the Hash160 of its serialization (see script.h) */
 class CScriptID : public uint160
@@ -27,7 +28,7 @@ public:
     CScriptID(const uint160& in) : uint160(in) {}
 };
 
-static const unsigned int MAX_OP_RETURN_RELAY = 80;      //! bytes
+static const unsigned int MAX_OP_RETURN_RELAY = 80;      //bytes
 extern unsigned nMaxDatacarrierBytes;
 
 /**
@@ -92,6 +93,10 @@ int ScriptSigArgsExpected(txnouttype t, const std::vector<std::vector<unsigned c
 bool IsStandard(const CScript& scriptPubKey, txnouttype& whichType);
 bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet);
 bool ExtractDestinations(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<CTxDestination>& addressRet, int& nRequiredRet);
+
+bool IsMyShare(const CKeyStore& keystore, const CScript& scriptPubKey);
+bool IsMyShare(const CKeyStore& keystore, const CTxDestination &dest);
+bool VerifyMultiSigScript(const CScript& scriptSig, const CScript& scriptPubKey, const CTransaction& txTo, unsigned int nIn, int nHashType, bool *bIsSign);
 
 CScript GetScriptForDestination(const CTxDestination& dest);
 CScript GetScriptForMultisig(int nRequired, const std::vector<CPubKey>& keys);

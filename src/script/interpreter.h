@@ -44,7 +44,7 @@ enum
     SCRIPT_VERIFY_DERSIG    = (1U << 2),
 
     // Passing a non-strict-DER signature or one with S > order/2 to a checksig operation causes script failure
-    // (softfork safe, BIP62 rule 5).
+    // (softfork safe, BIP62 rule 5).SCRIPT_VERIFY_NOCACHE
     SCRIPT_VERIFY_LOW_S     = (1U << 3),
 
     // verify dummy stack item consumed by CHECKMULTISIG is of zero-length (softfork safe, BIP62 rule 7).
@@ -127,5 +127,8 @@ public:
 
 bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& script, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* error = NULL);
 bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* error = NULL);
+
+typedef std::vector<unsigned char> valtype;
+bool CastToBool(const valtype& vch);
 
 #endif // BITCOIN_SCRIPT_INTERPRETER_H

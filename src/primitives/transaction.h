@@ -217,7 +217,7 @@ public:
     bool IsNull() const {
         return vin.empty() && vout.empty();
     }
-
+    
     const uint256& GetHash() const {
         return hash;
     }

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
+    <width>840</width>
     <height>380</height>
    </rect>
   </property>
@@ -57,7 +57,7 @@
         <string>Create a new address</string>
        </property>
        <property name="text">
-        <string>&amp;New</string>
+        <string>&amp;New Address</string>
        </property>
        <property name="icon">
         <iconset resource="../bitcoin.qrc">
@@ -65,6 +65,17 @@
        </property>
        <property name="autoDefault">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="newMultiSigAddress">
+       <property name="text">
+        <string>New &amp;MultiSig</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../bitcoin.qrc">
+         <normaloff>:/icons/verify</normaloff>:/icons/verify</iconset>
        </property>
       </widget>
      </item>
@@ -114,6 +125,28 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="signMessage">
+       <property name="text">
+        <string>Sign Message</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../bitcoin.qrc">
+         <normaloff>:/icons/edit</normaloff>:/icons/edit</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="verifyMessage">
+       <property name="text">
+        <string>Verify Message</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../bitcoin.qrc">
+         <normaloff>:/icons/transaction_confirmed</normaloff>:/icons/transaction_confirmed</iconset>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="exportButton">

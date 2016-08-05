@@ -816,3 +816,138 @@ bool WalletModel::saveReceiveRequest(const std::string &sAddress, const int64_t 
     else
         return wallet->AddDestData(dest, key, sRequest);
 }
+
+qint64 WalletModel::getSharedBalance(const CCoinControl *coinControl) const
+{
+    if (coinControl)
+    {
+        qint64 nBalance = 0;
+        std::vector<COutput> vCoins;
+        wallet->AvailableSharedCoins(vCoins, true, coinControl);
+        BOOST_FOREACH(const COutput& out, vCoins)
+            nBalance += out.tx->vout[out.i].nValue;   
+        
+        return nBalance;
+    }
+
+    return wallet->GetSharedBalance();
+}
+
+qint64 WalletModel::getSharedUnconfirmedBalance() const
+{
+    return wallet->GetSharedUnconfirmedBalance();
+}
+
+qint64 WalletModel::getSharedImmatureBalance() const
+{
+    return wallet->GetSharedImmatureBalance();
+}
+
+WalletModel::SendCoinsReturn WalletModel::createRawTransaction(
+    const QList<SendCoinsRecipient> &recipients, CTransaction& txNew, const CCoinControl *coinControl, bool isMultiSig)
+{
+    qint64 total = 0;
+    QSet<QString> setAddress;
+    QString hex;
+
+    if(recipients.empty())
+    {
+        return OK;
+    }
+
+    // Pre-check input data for validity
+    Q_FOREACH(const SendCoinsRecipient &rcp, recipients)
+    {
+        if(!validateAddress(rcp.address))
+        {
+            return InvalidAddress;
+        }
+        setAddress.insert(rcp.address);
+
+        if(rcp.amount <= 0)
+        {
+            return InvalidAmount;
+        }
+        total += rcp.amount;
+    }
+
+    if(recipients.size() > setAddress.size())
+    {
+        return DuplicateAddress;
+    }
+
+    qint64 nBalance;
+    if ( isMultiSig )
+        nBalance = getSharedBalance(coinControl);
+    else
+        nBalance = getBalance(coinControl);
+
+    if(total > nBalance)
+    {
+        return AmountExceedsBalance;
+    }
+
+    if((total + DEFAULT_TRANSACTION_FEE) > nBalance)
+    {
+        return SendCoinsReturn(AmountWithFeeExceedsBalance, DEFAULT_TRANSACTION_FEE);
+    }
+
+    {
+        LOCK2(cs_main, wallet->cs_wallet);
+
+        // Sendmany
+        std::vector<std::pair<CScript, int64_t> > vecSend;
+        Q_FOREACH(const SendCoinsRecipient &rcp, recipients)
+        {
+            CScript scriptPubKey;
+            //scriptPubKey.SetDestination(CBitcoinAddress(rcp.address.toStdString()).Get());
+            scriptPubKey = GetScriptForDestination(CBitcoinAddress(rcp.address.toStdString()).Get());
+            vecSend.push_back(make_pair(scriptPubKey, rcp.amount));
+        }
+
+        qint64 nFeeRequired = CENT;
+        std::string strFailReason;
+        CReserveKey reservekey(wallet);
+        bool fCreated = wallet->CreateRawTransaction(vecSend, txNew, nFeeRequired, strFailReason, isMultiSig, reservekey, coinControl);
+
+        if(!fCreated)
+        {
+            if((total + nFeeRequired) > nBalance)
+            {
+                return SendCoinsReturn(AmountWithFeeExceedsBalance, nFeeRequired);
+            }
+            Q_EMIT message(tr("Send Coins"), QString::fromStdString(strFailReason),
+                         CClientUIInterface::MSG_ERROR);
+            return TransactionCreationFailed;
+        }
+        /*if(!uiInterface.ThreadSafeAskFee(nFeeRequired))
+        {
+            return Aborted;
+        }*/
+        hex = QString::fromStdString(txNew.GetHash().GetHex());
+    }
+
+    // Add addresses / update labels that we've sent to to the address book
+    Q_FOREACH(const SendCoinsRecipient &rcp, recipients)
+    {
+        std::string strAddress = rcp.address.toStdString();
+        CTxDestination dest = CBitcoinAddress(strAddress).Get();
+        std::string strLabel = rcp.label.toStdString();
+        {
+            LOCK(wallet->cs_wallet);
+
+            //std::map<CTxDestination, std::string>::iterator mi = wallet->mapAddressBook.find(dest);
+            std::map<CTxDestination, CAddressBookData>::iterator mi = wallet->mapAddressBook.find(dest);
+
+            // Check if we have a new address or an updated label
+            if (mi == wallet->mapAddressBook.end() || mi->second.name != strLabel)
+            {
+            		std::string purpose;
+                //wallet->SetAddressBookName(dest, strLabel);
+                wallet->SetAddressBook(dest, strLabel,purpose);
+            }
+        }
+    }
+
+    return SendCoinsReturn(OK, 0, hex);
+}

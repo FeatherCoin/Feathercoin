@@ -7,6 +7,7 @@
 #define BITCOIN_SCRIPT_SCRIPT_H
 
 #include "crypto/common.h"
+#include "pubkey.h"
 
 #include <assert.h>
 #include <climits>
@@ -447,7 +448,14 @@ public:
         return *this;
     }
 
-
+    CScript& operator<<(const CPubKey& key)
+    {
+        assert(key.size() < OP_PUSHDATA1);
+        insert(end(), (unsigned char)key.size());
+        insert(end(), key.begin(), key.end());
+        return *this;
+    }
+    
     bool GetOp(iterator& pc, opcodetype& opcodeRet, std::vector<unsigned char>& vchRet)
     {
          // Wrapper so it can be called with either iterator or const_iterator
@@ -607,6 +615,8 @@ public:
         // The default std::vector::clear() does not release memory.
         std::vector<unsigned char>().swap(*this);
     }
+    
+    void SetMultisig(int nRequired, const std::vector<CPubKey>& keys);
 };
 
 #endif // BITCOIN_SCRIPT_SCRIPT_H

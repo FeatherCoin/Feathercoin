@@ -20,6 +20,7 @@
 #include "walletmodel.h"
 #include "utilitydialog.h"
 #include "reportview.h"
+#include "multisigdialog.h"
 
 #include "ui_interface.h"
 
@@ -72,12 +73,14 @@ WalletView::WalletView(QWidget *parent):
 
     receiveCoinsPage = new ReceiveCoinsDialog();
     sendCoinsPage = new SendCoinsDialog();
+    multiSigPage = new MultiSigDialog();
 
     addWidget(overviewPage);
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
     addWidget(accountreportPage);
+    addWidget(multiSigPage);
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), transactionView, SLOT(focusTransaction(QModelIndex)));
@@ -93,6 +96,13 @@ WalletView::WalletView(QWidget *parent):
     connect(sendCoinsPage, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
     // Pass through messages from transactionView
     connect(transactionView, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
+    
+    // Clicking on "Send Coins" in the address book sends you to the send coins tab
+    connect(transactionView, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString))); 
+    // Clicking on "Verify Message" in the address book opens the verify message tab in the Sign/Verify Message dialog
+    connect(transactionView, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
+    // Clicking on "Sign Message" in the receive coins page opens the sign message tab in the Sign/Verify Message dialog
+    connect(transactionView, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
 }
 
 WalletView::~WalletView()
@@ -135,6 +145,7 @@ void WalletView::setWalletModel(WalletModel *walletModel)
     receiveCoinsPage->setModel(walletModel);
     sendCoinsPage->setModel(walletModel);
     reportView->setModel(walletModel);
+    multiSigPage->setModel(walletModel);
 
     if (walletModel)
     {
@@ -367,4 +378,9 @@ void WalletView::printPaperWallets()
 void WalletView::gotoAccountReportPage()
 {
     setCurrentWidget(accountreportPage); 
+}
+
+void WalletView::gotoMultiSigPage()
+{
+    setCurrentWidget(multiSigPage);
 }

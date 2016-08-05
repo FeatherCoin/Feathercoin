@@ -12,10 +12,6 @@
 
 #include <boost/foreach.hpp>
 
-using namespace std;
-
-typedef vector<unsigned char> valtype;
-
 unsigned int HaveKeys(const vector<valtype>& pubkeys, const CKeyStore& keystore)
 {
     unsigned int nResult = 0;

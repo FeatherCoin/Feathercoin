@@ -2,11 +2,15 @@
 // Copyright (c) 2009-2014 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #include "script.h"
 
 #include "tinyformat.h"
 #include "utilstrencodings.h"
+
+#include <boost/foreach.hpp>
+#include <boost/tuple/tuple.hpp>
+
+using namespace boost;
 
 namespace {
 inline std::string ValueString(const std::vector<unsigned char>& vch)
@@ -259,4 +263,14 @@ std::string CScript::ToString() const
             str += GetOpName(opcode);
     }
     return str;
+}
+
+void CScript::SetMultisig(int nRequired, const std::vector<CPubKey>& keys)
+{
+    this->clear();
+
+    *this << EncodeOP_N(nRequired);
+    BOOST_FOREACH(const CPubKey& key, keys)
+        *this << key;
+    *this << EncodeOP_N(keys.size()) << OP_CHECKMULTISIG;
 }

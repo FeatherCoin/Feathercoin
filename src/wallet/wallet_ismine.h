@@ -9,6 +9,8 @@
 #include "key.h"
 #include "script/standard.h"
 
+using namespace std;
+
 class CKeyStore;
 class CScript;
 
@@ -25,5 +27,8 @@ typedef uint8_t isminefilter;
 
 isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey);
 isminetype IsMine(const CKeyStore& keystore, const CTxDestination& dest);
+
+typedef vector<unsigned char> valtype;
+unsigned int HaveKeys(const vector<valtype>& pubkeys, const CKeyStore& keystore);
 
 #endif // BITCOIN_WALLET_WALLET_ISMINE_H
