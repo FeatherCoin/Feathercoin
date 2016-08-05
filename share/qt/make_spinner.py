@@ -18,15 +18,15 @@ DSIZE=(16,16)
 
 im_src = Image.open(SRC)
 
-if CLOCKWISE:
-    im_src = im_src.transpose(Image.FLIP_LEFT_RIGHT)
+#if CLOCKWISE:
+#    im_src = im_src.transpose(Image.FLIP_LEFT_RIGHT)
 
 def frame_to_filename(frame):
     return path.join(TMPDIR, TMPNAME % frame)
 
 frame_files = []
 for frame in xrange(NUMFRAMES):
-    rotation = (frame + 0.5) / NUMFRAMES * 360.0
+    rotation = (frame + 0.5) / NUMFRAMES * 720
     if CLOCKWISE:
         rotation = -rotation
     im_new = im_src.rotate(rotation, Image.BICUBIC)

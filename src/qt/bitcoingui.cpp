@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin developers
-// Copyright (c) 2013-2015 The Feathercoin developers
+// Copyright (c) 2013-2016 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -214,11 +214,12 @@ BitcoinGUI::BitcoinGUI(bool fIsTestnet, QWidget *parent) :
 
     // Subscribe to notifications from core
     subscribeToCoreSignals();
-    
-    QPalette palette;
-    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/images/mainbg")));
-    this->setPalette(palette);
-    this->setAutoFillBackground(true);    
+  
+    //    Remove background image 
+    //    QPalette palette;
+    //    palette.setBrush(QPalette::Background,QBrush(QPixmap(":/images/mainbg")));
+    //    this->setPalette(palette);
+    //    this->setAutoFillBackground(true);    
 }
 
 BitcoinGUI::~BitcoinGUI()
@@ -353,9 +354,9 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
 
-    usedSendingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Sending addresses..."), this);
+    usedSendingAddressesAction = new QAction(QIcon(":/icons/send"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
-    usedReceivingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Receiving addresses..."), this);
+    usedReceivingAddressesAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
 
     openAction = new QAction(QIcon(":/icons/openurl"), tr("Open &URI..."), this);
@@ -366,7 +367,7 @@ void BitcoinGUI::createActions(bool fIsTestnet)
     bitmessageAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
     	
     shapeshiftAction = new QAction(QIcon(":/icons/shapeshift"), tr("Shapeshift..."), this);
-    shapeshiftAction->setStatusTip(tr("Exchange other coins whit your feathercoin on Shapeshift"));
+    shapeshiftAction->setStatusTip(tr("Exchange other coins with your feathercoin on Shapeshift"));
     shapeshiftAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_8));
     coinnectorAction = new QAction(QIcon(":/icons/coinnector"), tr("Coinnector..."), this);
     coinnectorAction->setStatusTip(tr("Exchange other coins with your feathercoin on Coinnector"));

@@ -97,7 +97,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
         }
     }
 #if QT_VERSION >= 0x040700
-    ui->thirdPartyTxUrls->setPlaceholderText("http://block.ftc-c.com/tx/%s");
+    ui->thirdPartyTxUrls->setPlaceholderText("https://explorer.feathercoin.com/chain/Feathercoin/%s");
 #endif
 
     ui->unit->setModel(new BitcoinUnits(this));

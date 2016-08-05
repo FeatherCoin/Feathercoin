@@ -21,8 +21,8 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f, bool isTest
     setAutoFillBackground(true);
 
     // set reference point, paddings
-    int paddingRight            = 230;
-    int paddingTop              = 300;
+    int paddingRight            = 296;
+    int paddingTop              = 260;
     int titleVersionVSpace      = 13;
     int titleCopyrightVSpace    = 26;
 
@@ -46,10 +46,10 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f, bool isTest
     }
 
     QPainter pixPaint(&newPixmap);
-    pixPaint.setPen(QColor(70,70,70));
+    pixPaint.setPen(QColor(54,134,190));
 
 
-    pixPaint.setFont(QFont(font, 9*fontFactor));
+    pixPaint.setFont(QFont(font, 11*fontFactor));
     QFontMetrics fm = pixPaint.fontMetrics();
     int titleTextWidth  = fm.width(titleText);
     fm = pixPaint.fontMetrics();
@@ -94,7 +94,7 @@ static void InitMessage(SplashScreen *splash, const std::string &message)
         Qt::QueuedConnection,
         Q_ARG(QString, QString::fromStdString(message)),
         Q_ARG(int, Qt::AlignBottom|Qt::AlignHCenter),
-        Q_ARG(QColor, QColor(55,55,55)));
+        Q_ARG(QColor, QColor(54,134,190)));
 }
 
 static void ShowProgress(SplashScreen *splash, const std::string &title, int nProgress)

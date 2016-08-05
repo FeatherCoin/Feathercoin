@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>573</width>
-    <height>342</height>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,6 +21,9 @@
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="topLayout">
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QLabel" name="labelAlerts">
      <property name="visible">
@@ -282,6 +285,9 @@
          <property name="pixmap">
           <pixmap resource="../feathercoin.qrc">:/images/mainlogo</pixmap>
          </property>
+         <property name="indent">
+          <number>0</number>
+         </property>
         </widget>
        </item>
       </layout>
@@ -375,6 +381,19 @@
       </layout>
      </item>
     </layout>
+   </item>
+   <item alignment="Qt::AlignBottom">
+    <widget class="Line" name="StatusBarDividerLine">
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
