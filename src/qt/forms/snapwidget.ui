@@ -3,18 +3,18 @@
  <class>SnapWidget</class>
  <widget class="QWidget" name="SnapWidget">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
-    <height>420</height>
+    <width>381</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string/>
+   <string>Scan QR Code</string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -22,10 +22,10 @@
   <widget class="QPushButton" name="cancelButton">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>130</x>
      <y>0</y>
-     <width>71</width>
-     <height>31</height>
+     <width>111</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="palette">
@@ -452,14 +452,18 @@
    <property name="text">
     <string>Cancel</string>
    </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icons/quit</normaloff>:/icons/quit</iconset>
+   </property>
   </widget>
   <widget class="QPushButton" name="snapButton">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>61</width>
-     <height>31</height>
+     <width>101</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="palette">
@@ -879,6 +883,10 @@
    </property>
    <property name="text">
     <string>Snap</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icons/snap</normaloff>:/icons/snap</iconset>
    </property>
   </widget>
  </widget>

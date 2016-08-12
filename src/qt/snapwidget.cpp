@@ -12,6 +12,7 @@
 #include <zxing/BinaryBitmap.h>
 #include <zxing/MultiFormatReader.h>
 #include "qimagesource.h"
+#include "ui_snapwidget.h"
 
 
 //////////////////  SnapWidget Class
@@ -19,7 +20,7 @@ SnapWidget::SnapWidget(QWidget* _parent)
 #ifdef Q_OS_MAC
    : QDialog( _parent, Qt::Widget | Qt::WindowStaysOnTopHint|  Qt::WindowCloseButtonHint ){
 #else
-   : QDialog(_parent, Qt::Widget | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint) {
+   : QDialog(_parent, Qt::Widget | Qt::WindowCloseButtonHint |  Qt::WindowTitleHint | Qt::WindowStaysOnTopHint) {
 #endif
 
     setupUi(this);
