@@ -245,11 +245,11 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     bool fNegative;
     bool fOverflow;
     arith_uint256 bnTarget;
-
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
     arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     arith_uint256 bnPowScyptLimit = UintToArith256(uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    
     const CChainParams& chainParams = Params();
 		if (chainParams.NetworkIDString()=="main")
 				bnPowLimit = bnPowScyptLimit;
@@ -262,7 +262,10 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     // Check proof of work matches claimed amount
     // if (hash > bnTarget.getuint256())
     if (UintToArith256(hash) > bnTarget)
+    {
+    		LogPrintf("CheckProofOfWork 100,nBits=%d,hash=%s,bnTarget=%s,UintToArith256(hash)=%s\n",nBits,hash.ToString(),bnTarget.GetHex(),UintToArith256(hash).GetHex());
         return error("CheckProofOfWork(): hash doesn't match nBits");
+    }
 
     return true;
 }

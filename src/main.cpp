@@ -1389,7 +1389,7 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
     if (!pindexBestInvalid || pindexNew->nChainWork > pindexBestInvalid->nChainWork)
         pindexBestInvalid = pindexNew;
 
-    LogPrintf("%s: invalid block=%s  height=%d  log2_work=%.8g  date=%s\n", __func__,
+    LogPrintf("InvalidChainFound, %s: invalid block=%s  height=%d  log2_work=%.8g  date=%s\n", __func__,
       pindexNew->GetBlockHash().ToString(), pindexNew->nHeight,
       log(pindexNew->nChainWork.getdouble())/log(2.0), DateTimeStrFormat("%Y-%m-%d %H:%M:%S",
       pindexNew->GetBlockTime()));
@@ -1403,6 +1403,8 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
 
 void static InvalidBlockFound(CBlockIndex *pindex, const CValidationState &state) {
     int nDoS = 0;
+    LogPrintf("InvalidBlockFound 100.\n");
+    
     if (state.IsInvalid(nDoS)) {
         std::map<uint256, NodeId>::iterator it = mapBlockSource.find(pindex->GetBlockHash());
         if (it != mapBlockSource.end() && State(it->second)) {
@@ -1416,6 +1418,8 @@ void static InvalidBlockFound(CBlockIndex *pindex, const CValidationState &state
         pindex->nStatus |= BLOCK_FAILED_VALID;
         setDirtyBlockIndex.insert(pindex);
         setBlockIndexCandidates.erase(pindex);
+        
+        LogPrintf("InvalidBlockFound 200,InvalidChainFound.\n");
         InvalidChainFound(pindex);
     }
 }
@@ -1932,7 +1936,8 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     // blocks, when 75% of the network has upgraded:
     if (pindex->nHeight >=MIN_BLOCKHEADER_VERSION4_HEIGHT)
     {
-		    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+		    //if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+		    if (block.cVersion >= 4) {
 		        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
 		        flags |= SCRIPT_VERIFY_DERSIG;
 		    }
@@ -2198,16 +2203,23 @@ void static UpdateTip(CBlockIndex *pindexNew) {
     if (!IsInitialBlockDownload() && !fWarned)
     {
         int nUpgraded = 0;
+        int cUpgraded = 0;
         const CBlockIndex* pindex = chainActive.Tip();
         for (int i = 0; i < 500 && pindex != NULL; i++)
         {
             if (pindex->nVersion > CBlock::CURRENT_VERSION)
                 ++nUpgraded;
+            if (pindex->cVersion > CBlock::ACTIVE_VERSION)
+            		++cUpgraded;
             pindex = pindex->pprev;
         }
+        
         if (nUpgraded > 0)
-            LogPrintf("%s: %d of last 500 blocks above version %d\n", __func__, nUpgraded, (int)CBlock::CURRENT_VERSION);
-        if (nUpgraded > 500/2)
+            LogPrintf("%s: %d of last 500 blocks above nVersion %d\n", __func__, nUpgraded, (int)CBlock::CURRENT_VERSION);
+        if (cUpgraded > 0)
+            LogPrintf("%s: %d of last 500 blocks above nVersion %d\n", __func__, nUpgraded, (int)CBlock::CURRENT_VERSION);
+            	
+        if ((nUpgraded > 500/2)||(cUpgraded > 500/2))
         {
             // strMiscWarning is read by GetWarnings(), called by Qt and the JSON-RPC code to warn the user:
             strMiscWarning = _("Warning: This version is obsolete; upgrade required!");
@@ -2298,7 +2310,10 @@ bool static ConnectTip(CValidationState &state, CBlockIndex *pindexNew, CBlock *
         GetMainSignals().BlockChecked(*pblock, state);
         if (!rv) {
             if (state.IsInvalid())
+            {
+            		LogPrintf("ConnectTip,InvalidBlockFound\n");
                 InvalidBlockFound(pindexNew, state);
+            }
             return error("ConnectTip(): ConnectBlock %s failed", pindexNew->GetBlockHash().ToString());
         }
         mapBlockSource.erase(inv.hash);
@@ -2491,6 +2506,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
         int64_t nStart = GetTimeMicros();
         if (!ConnectBlock(block, state, pindex, view)) {
             if (state.IsInvalid()) {
+            		LogPrintf("SetBestChain,InvalidChainFound,InvalidBlockFound.\n");
                 InvalidChainFound(pindexNew);
                 InvalidBlockFound(pindex,state);
             }
@@ -2743,6 +2759,7 @@ bool InvalidateBlock(CValidationState& state, CBlockIndex *pindex) {
         it++;
     }
 
+		LogPrintf("InvalidateBlock,InvalidChainFound\n");
     InvalidChainFound(pindex);
     return true;
 }
@@ -2950,9 +2967,9 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nHeight, bool fCheckPOW)
 {
     // Check proof of work matches claimed amount
-    //if (fCheckPOW && !CheckProofOfWork(block.GetHash(), block.nBits, Params().GetConsensus()))  //0.11 bitcoin
-    //if (fCheckPOW && !block.CheckProofOfWork(nHeight))  //0.9  feathercoin
-    	if (fCheckPOW && !CheckHeaderProofOfWork(nHeight,block.GetHashNeoscrypt(),block.GetHashScrypt(),block.nBits,Params().GetConsensus()))
+		LogPrintf("CheckBlockHeader 100 ,nHeight=%d\n",nHeight);
+		
+    if (fCheckPOW && !CheckHeaderProofOfWork(nHeight,block.GetHashNeoscrypt(),block.GetHashScrypt(),block.nBits,Params().GetConsensus()))
         return state.DoS(50, error("CheckBlockHeader(): proof of work failed"),
                          REJECT_INVALID, "high-hash");
 
@@ -3073,6 +3090,9 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
         	
         // Don't accept any forks from the main chain prior to last checkpoint
         CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(chainParams.Checkpoints());
+        if (pcheckpoint) {
+        		LogPrintf("ContextualCheckBlockHeader,Checkpoints,nHeight=%d,pcheckpoint->nHeight=%d\n",nHeight,pcheckpoint->nHeight);
+      	}
         if (pcheckpoint && nHeight < pcheckpoint->nHeight)
             return state.DoS(100, error("%s: forked chain older than last checkpoint (height %d)", __func__, nHeight));
     }
@@ -3120,6 +3140,11 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 		                             REJECT_OBSOLETE, "bad-version");
         }
     }
+    
+    //检查，是否拒绝小于4的版本，达到版本升级的目的
+    if (block.cVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+        return state.Invalid(error("%s: rejected block cVersion < 4.0 ", __func__),
+                             REJECT_OBSOLETE, "bad-version");
                              
     return true;
 }
@@ -3312,14 +3337,17 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned nRequired, const Consensus::Params& consensusParams)
 {
     unsigned int nFound = 0;
+    unsigned int cFound = 0;
     for (int i = 0; i < consensusParams.nMajorityWindow && nFound < nRequired && pstart != NULL; i++)
     {
         if (pstart->nVersion >= minVersion)
             ++nFound;
+        if (pstart->cVersion >= minVersion)
+            ++cFound;
         pstart = pstart->pprev;
     }
-    LogPrintf("IsSuperMajority: minVersion=%d, nFound=%d,nRequired=%d \n",minVersion,nFound,nRequired);
-    return (nFound >= nRequired);
+    LogPrintf("IsSuperMajority: minVersion=%d, nRequired=%d, nFound=%d, cFound=%d\n",minVersion, nRequired, nFound, cFound);
+    return ((nFound >= nRequired)||(cFound >= nRequired));
 }
 
 

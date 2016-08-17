@@ -21,13 +21,15 @@
  * to everyone and the block is added to the block chain.  The first transaction
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
+ * https://github.com/bitcoin/bitcoin/commit/fc7f0ee28caca472d527ecd208d7012a42d94ad9
  */
 class CBlockHeader
 {
 public:
     // header
-    // https://github.com/bitcoin/bitcoin/commit/fc7f0ee28caca472d527ecd208d7012a42d94ad9
-    static const int32_t CURRENT_VERSION=4;
+    static const int32_t ACTIVE_VERSION=4;
+    static const int32_t CURRENT_VERSION=2;  //be locked
+    int32_t cVersion;
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;
@@ -52,9 +54,23 @@ public:
         READWRITE(nBits);
         READWRITE(nNonce);
     }
+    
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion,int cVersion) {
+        READWRITE(this->cVersion);
+        cVersion = this->cVersion;
+        READWRITE(this->nVersion);
+        nVersion = this->nVersion;
+        READWRITE(hashPrevBlock);
+        READWRITE(hashMerkleRoot);
+        READWRITE(nTime);
+        READWRITE(nBits);
+        READWRITE(nNonce);
+    }
 
     void SetNull()
     {
+        cVersion = CBlockHeader::ACTIVE_VERSION;
         nVersion = CBlockHeader::CURRENT_VERSION;
         hashPrevBlock.SetNull();
         hashMerkleRoot.SetNull();
@@ -88,7 +104,7 @@ public:
 		    uint256 thash;
 		    scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
 		    return thash;
-		}    
+		}
 };
 
 
@@ -131,6 +147,7 @@ public:
     {
         CBlockHeader block;
         block.nVersion       = nVersion;
+        block.cVersion       = cVersion;
         block.hashPrevBlock  = hashPrevBlock;
         block.hashMerkleRoot = hashMerkleRoot;
         block.nTime          = nTime;
