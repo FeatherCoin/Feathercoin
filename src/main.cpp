@@ -82,7 +82,7 @@ void EraseOrphansFor(NodeId peer);
  * Returns true if there are nRequired or more blocks of minVersion or above
  * in the last Consensus::Params::nMajorityWindow blocks, starting at pstart and going backwards.
  */
-static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned nRequired, const Consensus::Params& consensusParams);
+static bool IsSuperMajority(int minVersion, int min_cVersion, const CBlockIndex* pstart, unsigned nRequired, const Consensus::Params& consensusParams);
 static void CheckBlockIndex();
 
 /** Constant stuff for coinbase transactions we create: */
@@ -672,7 +672,7 @@ bool IsStandardTx(const CTransaction& tx, string& reason)
     }
 
     unsigned int nDataOut = 0;
-    unsigned int nTxnOut = 0;
+    //unsigned int nTxnOut = 0;
     txnouttype whichType;
     BOOST_FOREACH(const CTxOut& txout, tx.vout) {
         if (!::IsStandard(txout.scriptPubKey, whichType)) {
@@ -3099,13 +3099,13 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     //拒绝旧的版本和非法版本
     // Reject block.nVersion=1 blocks when 95% (75% on testnet) of the network has upgraded:
-    if (block.nVersion < 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+    if (block.nVersion < 2 && IsSuperMajority(2,5, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s: rejected nVersion=1 block", __func__),
                              REJECT_OBSOLETE, "bad-version");
 
     // Reject block.nVersion=2 blocks when 95% (75% on testnet) of the network has upgraded:
     //testnet
-    if (block.nVersion < 3 && IsSuperMajority(3, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+    if (block.nVersion < 3 && IsSuperMajority(3,5, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
     {
     		if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetV4))
     		{
@@ -3126,7 +3126,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
                              REJECT_OBSOLETE, "bad-version");
                              
     // Reject block.nVersion=3 blocks when 95% (75% on testnet) of the network has upgraded:
-    if (block.nVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+    if (block.nVersion < 4 && IsSuperMajority(4,5, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
     {
     		if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetV4))
     		{
@@ -3141,8 +3141,8 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
         }
     }
     
-    //检查，是否拒绝小于4的版本，达到版本升级的目的
-    if (block.cVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+    //检查是否合法升级到5，是否拒绝小于5的版本，达到版本升级的目的。版本4是起点
+    if (block.cVersion < 5 && IsSuperMajority(4,5, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s: rejected block cVersion < 4.0 ", __func__),
                              REJECT_OBSOLETE, "bad-version");
                              
@@ -3171,7 +3171,7 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
     // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):
     // if (block.nVersion >= 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
     if (block.nVersion == 2 && block.nTime > nSwitchV2
-    	                     && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    	                     && IsSuperMajority(2, 5,pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
     {
         CScript expect = CScript() << nHeight;
         if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
@@ -3186,7 +3186,7 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
     		return state.DoS(100, error("%s: block nVersion 3 height mismatch in coinbase,block v3 was never enforced.", __func__), REJECT_INVALID, "bad-cb-height");     
     }
     if (block.nVersion == 4 && block.nTime > MIN_BLOCKHEADER_VERSION4_SwitchTime
-    	                     && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    	                     && IsSuperMajority(4, 5, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
     {
         CScript expect = CScript() << nHeight;
         if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 
@@ -3334,7 +3334,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     return true;
 }
 
-static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned nRequired, const Consensus::Params& consensusParams)
+static bool IsSuperMajority(int minVersion,int min_cVersion, const CBlockIndex* pstart, unsigned nRequired, const Consensus::Params& consensusParams)
 {
     unsigned int nFound = 0;
     unsigned int cFound = 0;
@@ -3342,11 +3342,11 @@ static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned 
     {
         if (pstart->nVersion >= minVersion)
             ++nFound;
-        if (pstart->cVersion >= minVersion)
+        if (pstart->cVersion >= min_cVersion)
             ++cFound;
         pstart = pstart->pprev;
     }
-    LogPrintf("IsSuperMajority: minVersion=%d, nRequired=%d, nFound=%d, cFound=%d\n",minVersion, nRequired, nFound, cFound);
+    LogPrintf("IsSuperMajority: minVersion=%d,min_cVersion=%d, nRequired=%d, nFound=%d, cFound=%d\n",minVersion, min_cVersion, nRequired, nFound, cFound);
     return ((nFound >= nRequired)||(cFound >= nRequired));
 }
 
