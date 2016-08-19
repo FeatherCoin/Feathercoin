@@ -25,6 +25,11 @@
 #include <QScrollBar>
 #include <QSettings>
 #include <QTextDocument>
+#include <QClipboard>
+
+#ifdef USE_ZXING
+#include "snapwidget.h"
+#endif
 
 SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     QDialog(parent),
@@ -40,13 +45,19 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     ui->addButton->setIcon(QIcon());
     ui->clearButton->setIcon(QIcon());
     ui->sendButton->setIcon(QIcon());
+    ui->sendQRButton->setIcon(QIcon());
 #else
     ui->addButton->setIcon(SingleColorIcon(":/icons/add"));
     ui->clearButton->setIcon(SingleColorIcon(":/icons/remove"));
     ui->sendButton->setIcon(SingleColorIcon(":/icons/send"));
+    ui->sendQRButton->setIcon(SingleColorIcon(":/icons/qrcode"));
 #endif
 
     GUIUtil::setupAddressWidget(ui->lineEditCoinControlChange, this);
+
+#ifndef USE_ZXING
+    ui->sendQRButton->hide();
+#endif
 
     addEntry();
 
@@ -813,4 +824,18 @@ void SendCoinsDialog::coinControlUpdateLabels()
         ui->widgetCoinControl->hide();
         ui->labelCoinControlInsuffFunds->hide();
     }
+}
+
+
+void SendCoinsDialog::on_sendQRButton_clicked()
+{
+#ifdef USE_ZXING
+    SnapWidget* snap = new SnapWidget(this);
+    connect(snap, SIGNAL(finished(QString)), this, SLOT(onSnapClosed(QString)));
+#endif
+}
+
+void SendCoinsDialog::onSnapClosed(QString s)
+{
+    Q_EMIT sendCoins(s);
 }

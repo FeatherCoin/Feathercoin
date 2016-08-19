@@ -10,6 +10,8 @@
 
 #include "support/allocators/secure.h"
 
+#pragma warning(disable:4717)  //bogus warning from MS
+
 #include <map>
 #include <vector>
 
@@ -166,6 +168,8 @@ public:
     SendCoinsReturn sendCoins(WalletModelTransaction &transaction);
     SendCoinsReturn createRawTransaction(const QList<SendCoinsRecipient> &recipients, CTransaction& txNew, const CCoinControl *coinControl, bool isMultiSig);
 
+		bool importPrivateKey(QString privKey);
+		
     // Wallet encryption
     bool setWalletEncrypted(bool encrypted, const SecureString &passphrase);
     // Passphrase only needed when unlocking

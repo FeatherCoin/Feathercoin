@@ -951,3 +951,31 @@ WalletModel::SendCoinsReturn WalletModel::createRawTransaction(
 
     return SendCoinsReturn(OK, 0, hex);
 }
+
+
+bool WalletModel::importPrivateKey(QString privKey)
+{
+    CBitcoinSecret vchSecret;
+    bool fGood = vchSecret.SetString(privKey.toStdString());
+    if (!fGood)
+        return false;
+    CKey key = vchSecret.GetKey();
+    CPubKey pubkey = key.GetPubKey();
+    CKeyID vchAddress = pubkey.GetID();
+    //CKey key;
+    //bool fCompressed;
+    //CSecret secret = vchSecret.GetSecret(fCompressed);
+    //key.SetSecret(secret, fCompressed);
+    //CKeyID vchAddress = key.GetPubKey().GetID();
+    {
+        LOCK2(cs_main, wallet->cs_wallet); 
+        wallet->MarkDirty();
+        wallet->SetAddressBook(vchAddress, ("imported wallet"),"send");
+        if (!wallet->AddKeyPubKey(key, pubkey))
+        //if (!pwalletMain->AddKey(key))
+            return false;
+        wallet->ScanForWalletTransactions(chainActive.Genesis(), true);
+        wallet->ReacceptWalletTransactions();
+    }
+    return true;
+}

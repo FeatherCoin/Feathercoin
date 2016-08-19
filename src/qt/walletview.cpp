@@ -103,6 +103,10 @@ WalletView::WalletView(QWidget *parent):
     connect(transactionView, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
     // Clicking on "Sign Message" in the receive coins page opens the sign message tab in the Sign/Verify Message dialog
     connect(transactionView, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
+    
+    connect(receiveCoinsPage, SIGNAL(importWallet(QString)), this, SLOT(importWallet(QString)));
+    // Clicking on "Send to QR" sends you to the send coins tab after snapping and reading image
+    connect(sendCoinsPage, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString)));
 }
 
 WalletView::~WalletView()
@@ -383,4 +387,12 @@ void WalletView::gotoAccountReportPage()
 void WalletView::gotoMultiSigPage()
 {
     setCurrentWidget(multiSigPage);
+}
+
+void WalletView::importWallet(QString privateKey)
+{
+    if(!walletModel)
+        return;
+        
+    bool b =walletModel->importPrivateKey(privateKey);   
 }

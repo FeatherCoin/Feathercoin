@@ -95,7 +95,9 @@ QT_FORMS_UI = \
   qt/forms/signverifymessagedialog.ui \
   qt/forms/transactiondescdialog.ui \
   qt/forms/createmultisigaddrdialog.ui \
-  qt/forms/multisigdialog.ui
+  qt/forms/multisigdialog.ui \
+  qt/forms/qrcodedialog.ui \
+  qt/forms/snapwidget.ui
 
 QT_MOC_CPP = \
   qt/moc_addressbookpage.cpp \
@@ -144,7 +146,9 @@ QT_MOC_CPP = \
   qt/moc_reportview.cpp \
   qt/moc_walletview.cpp \
   qt/moc_createmultisigaddrdialog.cpp \
-  qt/moc_multisigdialog.cpp
+  qt/moc_multisigdialog.cpp \
+  qt/moc_qrcodedialog.cpp \
+  qt/moc_snapwidget.cpp
 
 BITCOIN_MM = \
   qt/macdockiconhandler.mm \
@@ -220,7 +224,10 @@ BITCOIN_QT_H = \
   qt/walletview.h \
   qt/winshutdownmonitor.h \
   qt/createmultisigaddrdialog.h \
-  qt/multisigdialog.h
+  qt/multisigdialog.h \
+  qt/qrcodedialog.h \
+  qt/snapwidget.h \
+  qt/qimagesource.h
 
 RES_ICONS = \
   qt/res/icons/add.png \
@@ -333,7 +340,10 @@ BITCOIN_QT_CPP += \
   qt/walletmodeltransaction.cpp \
   qt/walletview.cpp \
   qt/createmultisigaddrdialog.cpp \
-  qt/multisigdialog.cpp
+  qt/multisigdialog.cpp \
+  qt/qrcodedialog.cpp \
+  qt/snapwidget.cpp \
+  qt/qimagesource.cpp
 endif
 
 RES_IMAGES =  \

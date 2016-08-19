@@ -53,7 +53,9 @@ public Q_SLOTS:
     void updateTabsAndLabels();
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
                     const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
-
+    /** Scan of QR code finished */
+    void onSnapClosed(QString s);
+    
 private:
     Ui::SendCoinsDialog *ui;
     ClientModel *clientModel;
@@ -92,10 +94,14 @@ private Q_SLOTS:
     void updateMinFeeLabel();
     void updateSmartFeeLabel();
     void updateGlobalFeeVariables();
+    void on_sendQRButton_clicked();
 
 Q_SIGNALS:
     // Fired when a message should be reported to the user
     void message(const QString &title, const QString &message, unsigned int style);
+    void signMessage(QString addr);
+    void verifyMessage(QString addr);
+    void sendCoins(QString addr);
 };
 
 #endif // BITCOIN_QT_SENDCOINSDIALOG_H

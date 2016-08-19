@@ -113,6 +113,8 @@ public Q_SLOTS:
     void inertBlockChain();
     /** Open the print paper wallets dialog **/
     void printPaperWallets();
+    /** Import a wallet from a string */
+    void importWallet(QString privateKey);
 
     /** Show used sending addresses */
     void usedSendingAddresses();
