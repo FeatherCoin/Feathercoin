@@ -43,14 +43,18 @@ public:
     ~AddressBookPage();
 
     void setModel(AddressTableModel *model);
+    void setOptionsModel(OptionsModel *optionsModel);
     const QString &getReturnValue() const { return returnValue; }
 
 public Q_SLOTS:
     void done(int retval);
+    /** Scan of QR code finished */
+    void onSnapClosed(QString s);
 
 private:
     Ui::AddressBookPage *ui;
     AddressTableModel *model;
+    OptionsModel *optionsModel;
     Mode mode;
     Tabs tab;
     QString returnValue;
@@ -73,6 +77,10 @@ private Q_SLOTS:
     void onEditAction();
     /** Export button clicked */
     void on_exportButton_clicked();
+    /** Generate a QR Code from the currently selected address */
+    void on_showQRCode_clicked();
+    /** Import from a QR Code into your wallet */
+    void on_importQRCodeButton_clicked();
     
     /** Copy public key of currently selected address to clipboard */
     void on_copyPubKey_clicked();
@@ -99,6 +107,7 @@ Q_SIGNALS:
     void sendCoins(QString addr);
     void signMessage(QString addr);
     void verifyMessage(QString addr);
+    void importWallet(QString addr);
 };
 
 #endif // BITCOIN_QT_ADDRESSBOOKPAGE_H

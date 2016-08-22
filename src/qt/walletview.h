@@ -93,6 +93,8 @@ public Q_SLOTS:
     void gotoAccountReportPage();
     /** Switch to multisig page */
     void gotoMultiSigPage();
+    /** Switch to address book page */
+    void gotoAddressBookPage();
 
     /** Show incoming transaction notification for new transactions.
 

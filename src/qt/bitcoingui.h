@@ -134,6 +134,7 @@ private:
     QAction *paperWalletAction;
     QAction *accountReportAction;
     QAction *multiSigAction;
+    QAction *addressBookAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -215,6 +216,8 @@ private Q_SLOTS:
     void gotoAccountReportPage();
     /** Switch to MultiSig page */
     void gotoMultiSigPage();
+    /** Switch to address book page */
+    void gotoAddressBookPage();
 
     /** Show open dialog */
     void openClicked();

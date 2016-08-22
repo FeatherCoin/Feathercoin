@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2013 The Bitcoin Core developers
+// Copyright (c) 2013-2016 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,6 +11,7 @@
 #include "ui_addressbookpage.h"
 
 #include "addresstablemodel.h"
+#include "optionsmodel.h"
 #include "bitcoingui.h"
 #include "csvmodelwriter.h"
 #include "editaddressdialog.h"
@@ -26,7 +28,14 @@
 #include "walletview.h"
 #include "createmultisigaddrdialog.h"
 
-
+#ifdef USE_QRCODE
+#include "qrcodedialog.h"
+#endif
+#ifdef USE_ZXING
+#include "snapwidget.h"
+#endif
+ 
+ 
 #include <QIcon>
 #include <QMenu>
 #include <QMessageBox>
@@ -43,6 +52,7 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddressBookPage),
     model(0),
+    optionsModel(0),
     mode(mode),
     tab(tab)
 {
@@ -58,6 +68,15 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     ui->copyAddress->setIcon(SingleColorIcon(":/icons/editcopy"));
     ui->deleteAddress->setIcon(SingleColorIcon(":/icons/remove"));
     ui->exportButton->setIcon(SingleColorIcon(":/icons/export"));
+#endif
+
+#ifndef USE_QRCODE
+    ui->showQRCode->setVisible(false);
+#else
+    ui->showQRCode->setVisible(true);
+#endif
+#ifndef USE_ZXING
+    ui->importQRCodeButton->setVisible(false);
 #endif
 
     switch(mode)
@@ -102,6 +121,7 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     QAction *copyLabelAction = new QAction(tr("Copy &Label"), this);
     QAction *editAction = new QAction(tr("&Edit"), this);
     deleteAction = new QAction(ui->deleteAddress->text(), this);
+    QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
     
     QAction *sendCoinsAction = new QAction(tr("Send &Coins"), this);
     QAction *signMessageAction = new QAction(ui->signMessage->text(), this);
@@ -118,8 +138,13 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     {
         contextMenu->addAction(deleteAction);
         contextMenu->addAction(verifyMessageAction);
+        contextMenu->addAction(sendCoinsAction);
      }
     contextMenu->addSeparator();
+#ifdef USE_QRCODE
+    contextMenu->addAction(showQRCodeAction);
+#endif
+
     if(tab == ReceivingTab)
     {
     		contextMenu->addAction(signMessageAction);
@@ -135,7 +160,8 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(onCopyLabelAction()));
     connect(editAction, SIGNAL(triggered()), this, SLOT(onEditAction()));
     connect(deleteAction, SIGNAL(triggered()), this, SLOT(on_deleteAddress_clicked()));
-
+    connect(showQRCodeAction, SIGNAL(triggered()), this, SLOT(on_showQRCode_clicked()));
+    
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextualMenu(QPoint)));
     connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(accept()));
     
@@ -199,6 +225,12 @@ void AddressBookPage::setModel(AddressTableModel *model)
     connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(selectNewAddress(QModelIndex,int,int)));
 
     selectionChanged();
+}
+
+
+void AddressBookPage::setOptionsModel(OptionsModel *optionsModel)
+{
+    this->optionsModel = optionsModel;
 }
 
 void AddressBookPage::on_copyAddress_clicked()
@@ -286,11 +318,14 @@ void AddressBookPage::selectionChanged()
             break;
         }
         ui->copyAddress->setEnabled(true);
+        ui->showQRCode->setEnabled(true);
+        ui->importQRCodeButton->setEnabled(true);  
     }
     else
     {
         ui->deleteAddress->setEnabled(false);
         ui->copyAddress->setEnabled(false);
+        ui->showQRCode->setEnabled(false);
     }
 }
 
@@ -457,15 +492,6 @@ void AddressBookPage::on_verifyMessage_clicked()
     }
 }
 
-/*
-void AddressBookPage::on_importQRCodeButton_clicked()
-{
-#ifdef USE_ZXING
-    SnapWidget* snap = new SnapWidget(this);
-    connect(snap, SIGNAL(finished(QString)), this, SLOT(onSnapClosed(QString))); 
-#endif
-}
-*/
 void AddressBookPage::onSendCoinsAction()
 {
     QTableView *table = ui->tableView;
@@ -475,8 +501,6 @@ void AddressBookPage::onSendCoinsAction()
     {
         QString address = index.data().toString();
         Q_EMIT sendCoins(address);
-        //parent.gotoSendCoinsPage(address);
-        //WalletView(&parent)->gotoSendCoinsPage(address);
         close();
     }
 }
@@ -524,4 +548,44 @@ void AddressBookPage::exportAddress()
         QMessageBox::critical(this, tr("Exporting Failed"), tr("Could not write to file %1.").arg(filename),
                               QMessageBox::Abort, QMessageBox::Abort);
     }
+}
+
+
+void AddressBookPage::on_showQRCode_clicked()
+{
+#ifdef USE_QRCODE
+    if(!model)
+        return;
+        
+    QTableView *table = ui->tableView;
+    QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
+
+    Q_FOREACH (const QModelIndex index, indexes)
+    {
+        QString address = index.data().toString();
+        QString label = index.sibling(index.row(), 0).data(Qt::EditRole).toString();
+
+        QRCodeDialog *dialog = new QRCodeDialog(address, label, tab == ReceivingTab, this);
+        dialog->setModel(optionsModel);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->show();
+    }
+#endif
+}
+
+void AddressBookPage::on_importQRCodeButton_clicked()
+{
+#ifdef USE_ZXING
+    SnapWidget* snap = new SnapWidget(this);
+    connect(snap, SIGNAL(finished(QString)), this, SLOT(onSnapClosed(QString))); 
+#endif
+}
+
+void AddressBookPage::onSnapClosed(QString privKey)
+{
+    if (privKey.size() > 0)
+        //to do : some more parsing and validation is needed here
+        //todo: prompt for a label
+        //todo: display a dialog if it doesn't work
+        Q_EMIT importWallet(privKey);
 }

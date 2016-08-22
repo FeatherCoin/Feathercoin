@@ -60,6 +60,8 @@ public Q_SLOTS:
     void gotoAccountReportPage();
     /** Switch to multisig page */
     void gotoMultiSigPage();
+    /** Switch to address book page */
+    void gotoAddressBookPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");

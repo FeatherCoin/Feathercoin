@@ -260,11 +260,18 @@ void BitcoinGUI::createActions()
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
+		addressBookAction = new QAction(QIcon(":/icons/address-book"), tr("&Addresses"), this);
+    addressBookAction->setStatusTip(tr("Edit the list of stored addresses and labels"));
+    addressBookAction->setToolTip(addressBookAction->statusTip());
+    addressBookAction->setCheckable(true);
+    addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
+    tabGroup->addAction(addressBookAction);
+
     sendCoinsAction = new QAction(SingleColorIcon(":/icons/send"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Bitcoin address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
-    sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
+    sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(sendCoinsAction);
 
     sendCoinsMenuAction = new QAction(TextColorIcon(":/icons/send"), sendCoinsAction->text(), this);
@@ -275,7 +282,7 @@ void BitcoinGUI::createActions()
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and bitcoin: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
-    receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
+    receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(receiveCoinsAction);
 
     receiveCoinsMenuAction = new QAction(TextColorIcon(":/icons/receiving_addresses"), receiveCoinsAction->text(), this);
@@ -286,21 +293,21 @@ void BitcoinGUI::createActions()
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
-    historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
+    historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(historyAction);
     
     accountReportAction = new QAction(QIcon(":/icons/account-report"), tr("&Report"), this);
     accountReportAction->setStatusTip(tr("Get my account report"));
     accountReportAction->setToolTip(accountReportAction->statusTip());
     accountReportAction->setCheckable(true);
-    accountReportAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
+    accountReportAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
     tabGroup->addAction(accountReportAction);
     
     multiSigAction = new QAction(QIcon(":/icons/multisig"), tr("&MultiSig"), this);
     multiSigAction->setStatusTip(tr("Manage MultiSig transactions"));
     multiSigAction->setToolTip(multiSigAction->statusTip());
     multiSigAction->setCheckable(true);
-    multiSigAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    multiSigAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
     tabGroup->addAction(multiSigAction);
 
 #ifdef ENABLE_WALLET
@@ -322,6 +329,8 @@ void BitcoinGUI::createActions()
     connect(accountReportAction, SIGNAL(triggered()), this, SLOT(gotoAccountReportPage()));
     connect(multiSigAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(multiSigAction, SIGNAL(triggered()), this, SLOT(gotoMultiSigPage()));
+    connect(addressBookAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(TextColorIcon(":/icons/quit"), tr("E&xit"), this);
@@ -470,6 +479,7 @@ void BitcoinGUI::createToolBars()
         toolbar->setMovable(false);
         toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         toolbar->addAction(overviewAction);
+        toolbar->addAction(addressBookAction);
         toolbar->addAction(sendCoinsAction);
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
@@ -565,6 +575,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     paperWalletAction->setEnabled(enabled);
     accountReportAction->setEnabled(enabled);
     multiSigAction->setEnabled(enabled);
+    addressBookAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(const NetworkStyle *networkStyle)
@@ -1109,6 +1120,12 @@ void BitcoinGUI::gotoMultiSigPage()
 {
 		multiSigAction->setChecked(true);
     if (walletFrame) walletFrame->gotoMultiSigPage();
+}
+
+void BitcoinGUI::gotoAddressBookPage()
+{
+		addressBookAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoAddressBookPage();
 }
 
 static bool ThreadSafeMessageBox(BitcoinGUI *gui, const std::string& message, const std::string& caption, unsigned int style)

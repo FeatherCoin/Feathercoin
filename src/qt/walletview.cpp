@@ -72,12 +72,14 @@ WalletView::WalletView(QWidget *parent):
     accountreportPage->setLayout(vboxR);
 
     receiveCoinsPage = new ReceiveCoinsDialog();
+    addressBookPage = new AddressBookPage(AddressBookPage::ForEditing, AddressBookPage::SendingTab,0);
     sendCoinsPage = new SendCoinsDialog();
     multiSigPage = new MultiSigDialog();
 
     addWidget(overviewPage);
     addWidget(transactionsPage);
     addWidget(receiveCoinsPage);
+    addWidget(addressBookPage);
     addWidget(sendCoinsPage);
     addWidget(accountreportPage);
     addWidget(multiSigPage);
@@ -99,6 +101,7 @@ WalletView::WalletView(QWidget *parent):
     
     // Clicking on "Send Coins" in the address book sends you to the send coins tab
     connect(transactionView, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString))); 
+    connect(addressBookPage, SIGNAL(sendCoins(QString)), this, SLOT(gotoSendCoinsPage(QString)));
     // Clicking on "Verify Message" in the address book opens the verify message tab in the Sign/Verify Message dialog
     connect(transactionView, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
     // Clicking on "Sign Message" in the receive coins page opens the sign message tab in the Sign/Verify Message dialog
@@ -136,6 +139,7 @@ void WalletView::setClientModel(ClientModel *clientModel)
     this->clientModel = clientModel;
 
     overviewPage->setClientModel(clientModel);
+    addressBookPage->setOptionsModel(clientModel->getOptionsModel());
     sendCoinsPage->setClientModel(clientModel);
 }
 
@@ -147,6 +151,7 @@ void WalletView::setWalletModel(WalletModel *walletModel)
     transactionView->setModel(walletModel);
     overviewPage->setWalletModel(walletModel);
     receiveCoinsPage->setModel(walletModel);
+    addressBookPage->setModel(walletModel->getAddressTableModel());
     sendCoinsPage->setModel(walletModel);
     reportView->setModel(walletModel);
     multiSigPage->setModel(walletModel);
@@ -395,4 +400,9 @@ void WalletView::importWallet(QString privateKey)
         return;
         
     bool b =walletModel->importPrivateKey(privateKey);   
+}
+
+void WalletView::gotoAddressBookPage()
+{
+    setCurrentWidget(addressBookPage);
 }
