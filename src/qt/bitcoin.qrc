@@ -93,5 +93,7 @@
     </qresource>
     <qresource prefix="/images">
         <file alias="paper_wallet">res/images/paper_wallet.png</file>
+        <file alias="about">res/images/about.png</file>
+        <file alias="logo">res/images/logo.png</file>
     </qresource>
 </RCC>
