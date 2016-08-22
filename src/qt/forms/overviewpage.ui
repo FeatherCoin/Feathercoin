@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>596</width>
-    <height>342</height>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -416,6 +416,16 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QLabel" name="labelMainLogo">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../bitcoin.qrc">:/images/logo</pixmap>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -533,6 +543,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../bitcoin.qrc"/>
+ </resources>
  <connections/>
 </ui>
