@@ -1,4 +1,4 @@
-<b> Status of 0.11.2 is beta </b>
+<b> Status of 0.11.2 is beta,It prepares for the individua.</b>
 
 <h1>Feathercoin</h1>
 
@@ -18,7 +18,7 @@
 <h1>Official Wesbite and Downloads</h1>
 <p>
 <ul>
-<li>0.11.2.1 wallet for:<a href="http://www.ftc-c.com/pack4/feathercoin-setup.exe/">windows</a></li>
+<li>0.11.2.4 wallet for:<a href="http://www.ftc-c.com/pack4/feathercoin-setup-0.11.2.4.exe/">windows</a></li>
 </ul>
 
 </p>
