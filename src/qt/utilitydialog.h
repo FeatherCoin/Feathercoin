@@ -16,6 +16,7 @@ class SendCoinsRecipient;
 namespace Ui {
     class HelpMessageDialog;
     class CommentDialog;
+    class DebugDialog;
     class PaperWalletDialog;
 }
 
@@ -98,6 +99,30 @@ private:
 private Q_SLOTS:
     void on_getNewAddress_clicked();
     void on_printButton_clicked();
+};
+
+/** "DebugDialog" dialog box */
+class DebugDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit DebugDialog(QWidget *parent);
+    ~DebugDialog();
+
+    void setModel(WalletModel *model);
+
+private:
+    Ui::DebugDialog *ui;
+    WalletModel *model;
+
+private Q_SLOTS:
+    void on_sxButton_clicked();
+    void on_pushButton_clicked();
+    void on_nameButton_clicked();
+    
+Q_SIGNALS:
+    void message(const QString &title, const QString &message, unsigned int style);
 };
 
 #endif // BITCOIN_QT_UTILITYDIALOG_H

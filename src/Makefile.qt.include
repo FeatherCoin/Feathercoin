@@ -97,7 +97,8 @@ QT_FORMS_UI = \
   qt/forms/createmultisigaddrdialog.ui \
   qt/forms/multisigdialog.ui \
   qt/forms/qrcodedialog.ui \
-  qt/forms/snapwidget.ui
+  qt/forms/snapwidget.ui \
+  qt/forms/debugdialog.ui
 
 QT_MOC_CPP = \
   qt/moc_addressbookpage.cpp \

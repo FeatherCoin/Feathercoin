@@ -7,6 +7,7 @@
 #include "ui_helpmessagedialog.h"
 #include "ui_commentdialog.h"
 #include "ui_paperwalletdialog.h"
+#include "ui_debugdialog.h"
 #include "ui_interface.h"
 
 #include "bitcoingui.h"
@@ -17,6 +18,7 @@
 #include "init.h"
 #include "util.h"
 #include "net.h"
+#include "main.h"
 
 #include "addresstablemodel.h"
 #include "optionsmodel.h"
@@ -726,4 +728,39 @@ void PaperWalletDialog::on_printButton_clicked()
 #endif
     return;
 
+}
+
+
+
+/** "DebugDialog" dialog box */
+DebugDialog::DebugDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DebugDialog)
+{
+    ui->setupUi(this);
+}
+
+void DebugDialog::setModel(WalletModel *model)
+{
+    this->model = model;
+}
+
+DebugDialog::~DebugDialog()
+{
+    delete ui;
+}
+
+void DebugDialog::on_pushButton_clicked()
+{
+    close();
+}
+
+void DebugDialog::on_nameButton_clicked()
+{
+	CBlockIndex *pindex = chainActive.Genesis();
+}
+
+void DebugDialog::on_sxButton_clicked()
+{
+	CBlockIndex *pindex = chainActive.Genesis();
 }

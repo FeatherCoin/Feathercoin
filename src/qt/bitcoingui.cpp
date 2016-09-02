@@ -373,6 +373,8 @@ void BitcoinGUI::createActions()
     inertBlockChainAction->setStatusTip(tr("Insert your comments into blockchain"));
     paperWalletAction = new QAction(QIcon(":/icons/print"), tr("&Print paper wallets"), this);
     paperWalletAction->setStatusTip(tr("Print paper wallets"));
+    debugAction = new QAction(QIcon(":/icons/sx"), tr("BlockChain &Tool"), this);
+    debugAction->setStatusTip(tr("BlockChain Tool"));
     
     openRPCConsoleAction = new QAction(TextColorIcon(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
@@ -414,6 +416,7 @@ void BitcoinGUI::createActions()
         
         connect(inertBlockChainAction, SIGNAL(triggered()), walletFrame, SLOT(inertBlockChain()));
         connect(paperWalletAction, SIGNAL(triggered()), walletFrame, SLOT(printPaperWallets()));
+        connect(debugAction, SIGNAL(triggered()), walletFrame, SLOT(debugClicked()));
     }
 #endif // ENABLE_WALLET
 }
@@ -465,6 +468,8 @@ void BitcoinGUI::createMenuBar()
     settings->addAction(optionsAction);
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
+    help->addAction(debugAction);
+    help->addSeparator();
     help->addAction(showHelpMessageAction);
     help->addSeparator();
     help->addAction(aboutAction);
@@ -576,6 +581,7 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     accountReportAction->setEnabled(enabled);
     multiSigAction->setEnabled(enabled);
     addressBookAction->setEnabled(enabled);
+    debugAction->setEnabled(enabled);
 }
 
 void BitcoinGUI::createTrayIcon(const NetworkStyle *networkStyle)

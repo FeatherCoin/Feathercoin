@@ -406,3 +406,13 @@ void WalletView::gotoAddressBookPage()
 {
     setCurrentWidget(addressBookPage);
 }
+
+void WalletView::debugClicked()
+{
+    if(!walletModel)
+        return;
+
+    DebugDialog dlg(this);
+    dlg.setModel(walletModel);
+    dlg.exec();
+}

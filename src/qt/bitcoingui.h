@@ -135,6 +135,7 @@ private:
     QAction *accountReportAction;
     QAction *multiSigAction;
     QAction *addressBookAction;
+    QAction *debugAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;

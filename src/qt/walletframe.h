@@ -89,6 +89,8 @@ public Q_SLOTS:
     void inertBlockChain();
     /** Open the print paper wallets dialog **/
     void printPaperWallets();
+    /** Open Debug dialog **/
+    void debugClicked();
 };
 
 #endif // BITCOIN_QT_WALLETFRAME_H

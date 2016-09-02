@@ -235,3 +235,10 @@ void WalletFrame::gotoAddressBookPage()
     for (i = mapWalletViews.constBegin(); i != mapWalletViews.constEnd(); ++i)
         i.value()->gotoAddressBookPage();
 }
+
+void WalletFrame::debugClicked()
+{
+    WalletView *walletView = currentWalletView();
+    if (walletView)
+        walletView->debugClicked();
+}

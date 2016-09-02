@@ -117,6 +117,8 @@ public Q_SLOTS:
     void printPaperWallets();
     /** Import a wallet from a string */
     void importWallet(QString privateKey);
+    /** Open Debug dialog **/
+    void debugClicked();
 
     /** Show used sending addresses */
     void usedSendingAddresses();
