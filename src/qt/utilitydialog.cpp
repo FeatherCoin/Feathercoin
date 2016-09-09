@@ -750,17 +750,17 @@ DebugDialog::~DebugDialog()
     delete ui;
 }
 
-void DebugDialog::on_pushButton_clicked()
+void DebugDialog::on_exitButton_clicked()
 {
     close();
 }
 
-void DebugDialog::on_nameButton_clicked()
+void DebugDialog::on_BroadcastBtn_clicked()
 {
 	CBlockIndex *pindex = chainActive.Genesis();
 }
 
-void DebugDialog::on_sxButton_clicked()
+void DebugDialog::on_AddTransBtn_clicked()
 {
 	CBlockIndex *pindex = chainActive.Genesis();
 }

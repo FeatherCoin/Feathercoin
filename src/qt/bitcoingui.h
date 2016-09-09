@@ -136,6 +136,7 @@ private:
     QAction *multiSigAction;
     QAction *addressBookAction;
     QAction *debugAction;
+    QAction *bitmessageAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
@@ -222,7 +223,10 @@ private Q_SLOTS:
 
     /** Show open dialog */
     void openClicked();
+    /** Start Bitmessage Process */
+    void openBitmessageClicked();
 #endif // ENABLE_WALLET
+
     /** Show configuration dialog */
     void optionsClicked();
     /** Show about dialog */

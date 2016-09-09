@@ -94,6 +94,7 @@ private Q_SLOTS:
     void copyTxID();
     void openThirdPartyTxUrl(QString url);
     void updateWatchOnlyColumn(bool fHaveWatchOnly);
+    void sendMess();
 
 Q_SIGNALS:
     void doubleClicked(const QModelIndex&);

@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource prefix="/icons">
+    		<file alias="bitmessage">res/icons/bitmessage.png</file>
     		<file alias="sx">res/icons/sx.png</file>
         <file alias="qrcode">res/icons/qrcode.png</file>
         <file alias="comment">res/icons/toolbar.png</file>

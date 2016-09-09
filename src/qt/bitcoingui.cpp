@@ -50,6 +50,7 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QVBoxLayout>
+#include <QProcess>
 
 #if QT_VERSION < 0x050000
 #include <QTextDocument>
@@ -373,6 +374,7 @@ void BitcoinGUI::createActions()
     inertBlockChainAction->setStatusTip(tr("Insert your comments into blockchain"));
     paperWalletAction = new QAction(QIcon(":/icons/print"), tr("&Print paper wallets"), this);
     paperWalletAction->setStatusTip(tr("Print paper wallets"));
+    
     debugAction = new QAction(QIcon(":/icons/sx"), tr("BlockChain &Tool"), this);
     debugAction->setStatusTip(tr("BlockChain Tool"));
     
@@ -390,6 +392,9 @@ void BitcoinGUI::createActions()
     showHelpMessageAction = new QAction(TextColorIcon(":/icons/info"), tr("&Command-line options"), this);
     showHelpMessageAction->setMenuRole(QAction::NoRole);
     showHelpMessageAction->setStatusTip(tr("Show the Feathercoin Core help message to get a list with possible Feathercoin command-line options"));
+    
+    bitmessageAction = new QAction(TextColorIcon(":/icons/bitmessage"), tr("Run B&itmessage..."), this);
+    bitmessageAction->setStatusTip(tr("Start Bitmessage from feathercoin wallet"));
 
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
@@ -417,6 +422,7 @@ void BitcoinGUI::createActions()
         connect(inertBlockChainAction, SIGNAL(triggered()), walletFrame, SLOT(inertBlockChain()));
         connect(paperWalletAction, SIGNAL(triggered()), walletFrame, SLOT(printPaperWallets()));
         connect(debugAction, SIGNAL(triggered()), walletFrame, SLOT(debugClicked()));
+        connect(bitmessageAction, SIGNAL(triggered()), this, SLOT(openBitmessageClicked()));
     }
 #endif // ENABLE_WALLET
 }
@@ -469,6 +475,7 @@ void BitcoinGUI::createMenuBar()
 
     QMenu *help = appMenuBar->addMenu(tr("&Help"));
     help->addAction(debugAction);
+    help->addAction(bitmessageAction);
     help->addSeparator();
     help->addAction(showHelpMessageAction);
     help->addSeparator();
@@ -1132,6 +1139,15 @@ void BitcoinGUI::gotoAddressBookPage()
 {
 		addressBookAction->setChecked(true);
     if (walletFrame) walletFrame->gotoAddressBookPage();
+}
+
+void BitcoinGUI::openBitmessageClicked()
+{
+    QProcess *process = new QProcess;
+    QString program="./bitmessagemain";
+    QStringList arguments;
+    arguments << "";
+    process->start(program,arguments);
 }
 
 static bool ThreadSafeMessageBox(BitcoinGUI *gui, const std::string& message, const std::string& caption, unsigned int style)

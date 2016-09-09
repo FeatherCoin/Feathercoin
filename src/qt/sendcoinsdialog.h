@@ -69,6 +69,7 @@ private:
     void processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg = QString());
     void minimizeFeeSection(bool fMinimize);
     void updateFeeMinimizedLabel();
+    void sendCoins();
 
 private Q_SLOTS:
     void on_sendButton_clicked();
@@ -95,6 +96,7 @@ private Q_SLOTS:
     void updateSmartFeeLabel();
     void updateGlobalFeeVariables();
     void on_sendQRButton_clicked();
+    void on_hashButton_clicked();
 
 Q_SIGNALS:
     // Fired when a message should be reported to the user

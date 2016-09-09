@@ -117,9 +117,9 @@ private:
     WalletModel *model;
 
 private Q_SLOTS:
-    void on_sxButton_clicked();
-    void on_pushButton_clicked();
-    void on_nameButton_clicked();
+    void on_exitButton_clicked();
+    void on_BroadcastBtn_clicked();
+    void on_AddTransBtn_clicked();
     
 Q_SIGNALS:
     void message(const QString &title, const QString &message, unsigned int style);
