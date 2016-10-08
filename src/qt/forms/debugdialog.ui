@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>348</height>
+    <width>506</width>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="AddTransBtn">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>92</y>
+     <x>321</x>
+     <y>121</y>
      <width>141</width>
      <height>31</height>
     </rect>
@@ -62,8 +62,8 @@
   <widget class="QPushButton" name="exitButton">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>310</y>
+     <x>417</x>
+     <y>343</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -86,8 +86,8 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>320</y>
-     <width>291</width>
+     <y>350</y>
+     <width>311</width>
      <height>23</height>
     </rect>
    </property>
@@ -112,18 +112,18 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>147</y>
-     <width>261</width>
+     <y>177</y>
+     <width>281</width>
      <height>171</height>
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="codeCoins">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>92</y>
-     <width>261</width>
+     <y>122</y>
+     <width>281</width>
      <height>31</height>
     </rect>
    </property>
@@ -131,8 +131,8 @@
   <widget class="QPushButton" name="BroadcastBtn">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>146</y>
+     <x>321</x>
+     <y>175</y>
      <width>141</width>
      <height>31</height>
     </rect>
@@ -149,13 +149,49 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>130</y>
+     <y>160</y>
      <width>151</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Donation Job:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="totalLabel">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>354</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0 FTC</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="targetLine">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>70</y>
+     <width>361</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>70</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Donate to</string>
    </property>
   </widget>
  </widget>

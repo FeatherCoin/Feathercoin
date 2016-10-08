@@ -25,6 +25,8 @@
 #include "script/standard.h"
 #include "amount.h"
 #include "bitcoinunits.h"
+#include "core_io.h"
+#include "rpcserver.h"
 
 #ifdef ENABLE_WALLET
 #include "sendcoinsdialog.h"
@@ -44,6 +46,7 @@
 #include <QTextCursor>
 #include <QVBoxLayout>
 #include <QInputDialog>
+#include <QStringListModel>
 
 // Use QT5's new modular classes
 #include <QtPrintSupport/QPrinter>
@@ -54,6 +57,11 @@
 #ifdef USE_QRCODE
 #include <qrencode.h>
 #endif
+
+using namespace std;
+using namespace json_spirit;
+
+extern void ScriptPubKeyToJSON(const CScript& scriptPubKey, Object& out, bool fIncludeHex);
 
 /** "Help message" or "About" dialog box */
 HelpMessageDialog::HelpMessageDialog(QWidget *parent, bool about) :
@@ -338,7 +346,7 @@ void CommentDialog::on_insertButton_clicked()
     }
     
     // now send the prepared transaction
-    WalletModel::SendCoinsReturn sendStatus = model->sendCoins(currentTransaction);
+    WalletModel::SendCoinsReturn sendStatus = model->sendCoins(currentTransaction,true);
     if (sendStatus.status == WalletModel::OK)
     {
         QMessageBox::information(NULL, tr("Wallet Message"), tr("Insert into blockchain ,Yes!!!"), QMessageBox::Yes , QMessageBox::Yes);
@@ -719,7 +727,7 @@ void PaperWalletDialog::on_printButton_clicked()
         return;
     }
 
-    WalletModel::SendCoinsReturn sendStatus = this->model->sendCoins(*tx);
+    WalletModel::SendCoinsReturn sendStatus = this->model->sendCoins(*tx,true);
 
     if (sendStatus.status == WalletModel::TransactionCommitFailed) {
         QMessageBox::critical(this, tr("Send Coins"), tr("The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here."), QMessageBox::Ok, QMessageBox::Ok);
@@ -738,6 +746,8 @@ DebugDialog::DebugDialog(QWidget *parent) :
     ui(new Ui::DebugDialog)
 {
     ui->setupUi(this);
+    modelList = new QStringListModel(doList);
+    ui->listView->setModel(modelList);
 }
 
 void DebugDialog::setModel(WalletModel *model)
@@ -757,10 +767,65 @@ void DebugDialog::on_exitButton_clicked()
 
 void DebugDialog::on_BroadcastBtn_clicked()
 {
-	CBlockIndex *pindex = chainActive.Genesis();
+		/*  交易合并广播
+		尚未使用私钥对交易进行签名，字段scriptSig是留空的，无签名的交易是无效的。
+		此时的Tx ID并不是最终的Tx ID，填入签名后Tx ID会发生变化。
+		空白交易中vin的scriptSig是空，要将输入的txID中的输出vout中的地址（scriptPubKey的hex）作为参数，
+		进行签名。此后才形成完整交易。 */
+		
 }
 
 void DebugDialog::on_AddTransBtn_clicked()
 {
-	CBlockIndex *pindex = chainActive.Genesis();
+		QString txCode=ui->codeCoins->text();
+		
+		CTransaction tx;
+		if (!DecodeHexTx(tx, txCode.toStdString()))
+		{
+		    QMessageBox::information(NULL, tr("TX Message"), tr("TX decode failed!"), QMessageBox::Yes , QMessageBox::Yes);
+		    return;
+		}
+		
+		double dCoin = 0;
+		CScript scriptTxOut;
+		BOOST_FOREACH(const CTxOut& txout, tx.vout)
+		{
+				scriptTxOut = txout.scriptPubKey;
+				//(TxToJSON/ScriptPubKeyToJSON)，找出我的addresses,n=0
+				Object obj;
+        ScriptPubKeyToJSON(txout.scriptPubKey, obj, true);
+        LogPrintf("on_AddTransBtn_clicked,obj.size=%d\n", obj.size());
+				const json_spirit::Pair& pair = obj[4];
+				const string& name  = pair.name_;
+				const json_spirit::Value&  vvalue = pair.value_;
+				LogPrintf("on_AddTransBtn_clicked,obj[4].name=%s\n", name); //addresses
+				const Array& a = vvalue.get_array();
+				string addresses = a[0].get_str();
+				LogPrintf("on_AddTransBtn_clicked,addresses=%s\n", addresses);
+				
+				//哪一笔输出是我的？排除找零交易
+				QString strDoAddress=ui->targetLine->text();
+				if (addresses == strDoAddress.toStdString())
+				{
+		    	dCoin += (double)txout.nValue / (double)COIN;
+		    	LogPrintf("on_AddTransBtn_clicked,pay to addresses=%s,value=%d\n", addresses, dCoin);
+		  	}
+		}
+		nowCoins += dCoin;
+		LogPrintf("on_AddTransBtn_clicked,nowCoins=%d,dCoin=%d,vout.size=%d\n",nowCoins, dCoin, tx.vout.size());
+		
+		ui->progressBar->setRange(0,500);
+		ui->progressBar->setValue(nowCoins);
+		
+		QString nowAmount = tr("%1 FTC").arg(nowCoins);
+		ui->totalLabel->setText(nowAmount);
+		LogPrintf("on_AddTransBtn_clicked,nowAmount=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
+		
+		QString amount = tr("%1 FTC").arg(dCoin);
+		doList << amount;
+		modelList->setStringList(doList);
+		ui->listView->setModel(modelList);
+		
+		QMessageBox::information(NULL, tr("TX Message"), tr("TX decode success!"), QMessageBox::Yes , QMessageBox::Yes);
+		ui->codeCoins->setText("");
 }

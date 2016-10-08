@@ -18,6 +18,7 @@
 #include "ui_interface.h"
 #include "wallet/wallet.h"
 #include "wallet/walletdb.h" // for BackupWallet
+#include "core_io.h"
 
 #include <stdint.h>
 
@@ -404,6 +405,8 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         CWalletTx *newTx = transaction.getTransaction();
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
         bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, nChangePosRet, strFailReason, coinControl);
+        //此时交易已经填写输入、输出和签名
+        
         transaction.setTransactionFee(nFeeRequired);
         if (fSubtractFeeFromAmount && fCreated)
             transaction.reassignAmounts(nChangePosRet);
@@ -419,7 +422,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             return TransactionCreationFailed;
         }
 
-        // reject absurdly high fee > 0.1 bitcoin
+        // reject absurdly high fee > 0.1 feathercoin
         if (nFeeRequired > 10000000)
             return AbsurdFee;
     }
@@ -427,7 +430,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
     return SendCoinsReturn(OK);
 }
 
-WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &transaction)
+WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &transaction,bool fSend)
 {
     QByteArray transaction_array; /* store serialized transaction */
 
@@ -450,11 +453,12 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
                 rcp.paymentRequest.SerializeToString(&value);
                 newTx->vOrderForm.push_back(make_pair(key, value));
             }
-            else if (!rcp.message.isEmpty()) // Message from normal feathercoin:URI (bitcoin:123...?message=example)
+            else if (!rcp.message.isEmpty()) // Message from normal feathercoin:URI (feathercoin:123...?message=example)
                 newTx->vOrderForm.push_back(make_pair("Message", rcp.message.toStdString()));
         }
 
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
+        //广播交易
         if(!wallet->CommitTransaction(*newTx, *keyChange))
             return TransactionCommitFailed;
 
@@ -497,9 +501,60 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
         }
         Q_EMIT coinsSent(wallet, rcp, transaction_array);
     }
+   
     checkBalanceChanged(); // update balance immediately, otherwise there could be a short noticeable delay until pollBalanceChanged hits
 
     return SendCoinsReturn(OK);
+}
+
+QString WalletModel::hashCoins(WalletModelTransaction &transaction,bool fSend)
+{
+    //获取交易hash
+    QString strHash;
+    
+    {
+        LOCK2(cs_main, wallet->cs_wallet);
+        CWalletTx *newTx = transaction.getTransaction();
+        uint256 hashTx = newTx->GetHash();
+        strHash = QString::fromStdString(hashTx.ToString());
+    }
+    
+    return strHash;
+}
+
+QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
+{
+    //获取交易的二进制码
+    QString strCode;
+    
+    {
+        LOCK2(cs_main, wallet->cs_wallet);
+        CWalletTx *newTx = transaction.getTransaction();
+        uint256 hashTx = newTx->GetHash();
+        
+        //1.创建交易
+        CMutableTransaction rawTx;
+        rawTx.nVersion = newTx->nVersion;
+        BOOST_FOREACH(const CTxIn& txin, newTx->vin)
+        {
+        	rawTx.vin.push_back(txin);
+        }
+        BOOST_FOREACH(const CTxOut& txout, newTx->vout)
+        {
+        	rawTx.vout.push_back(txout);
+        }
+        rawTx.nLockTime = newTx->nLockTime;
+        std::string strHex = EncodeHexTx(rawTx);
+        	
+        //2.交易签名，已经签在vin，是整单签名
+				vector<unsigned char> txData(ParseHex(strHex));
+        
+        
+        //3.最终的二进制码
+        strCode = QString::fromStdString(strHex);
+    }
+    
+    return strCode;
 }
 
 OptionsModel *WalletModel::getOptionsModel()

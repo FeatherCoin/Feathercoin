@@ -26,6 +26,7 @@
 #include <QSettings>
 #include <QTextDocument>
 #include <QClipboard>
+#include <QProcess>
 
 #ifdef USE_ZXING
 #include "snapwidget.h"
@@ -205,7 +206,7 @@ SendCoinsDialog::~SendCoinsDialog()
 
 void SendCoinsDialog::on_sendButton_clicked()
 {
-	sendCoins();
+	sendCoins(true);
 }
 
 void SendCoinsDialog::clear()
@@ -700,10 +701,10 @@ void SendCoinsDialog::onSnapClosed(QString s)
 
 void SendCoinsDialog::on_hashButton_clicked()
 {
-	sendCoins();
+	sendCoins(false);
 }
 
-void SendCoinsDialog::sendCoins()
+void SendCoinsDialog::sendCoins(bool fSend)
 {
     if(!model || !model->getOptionsModel())
         return;
@@ -756,7 +757,8 @@ void SendCoinsDialog::sendCoins()
     if(prepareStatus.status != WalletModel::OK) {
         fNewRecipientAllowed = true;
         return;
-    }
+    }    
+    //此时交易已经完整、已经签名
 
     CAmount txFee = currentTransaction.getTransactionFee();
 
@@ -835,9 +837,49 @@ void SendCoinsDialog::sendCoins()
         fNewRecipientAllowed = true;
         return;
     }
+    
+    if (!fSend)
+    {
+    	QString txHash = model->hashCoins(currentTransaction,fSend);
+    	//GUIUtil::setClipboard(txHash);
+    	LogPrintf("sendCoins,fSend=%d,txHash=%s\n",fSend,txHash.toStdString());
+    	//sendCoins,fSend=0,txHash=95ec8dac2c67a8426569f9c710352306006051eef5ce9976039553ffa17e19f0
+    	
+    	QString txCode = model->codeCoins(currentTransaction,fSend);
+    	GUIUtil::setClipboard(txCode);
+    	LogPrintf("sendCoins,fSend=%d,txCode=%s\n",fSend,txCode.toStdString());
+    	//sendCoins,fSend=0,txCode=010000000161f6c79f3f083dded042da2579f6e41f7e19785ae93dc7cb3101972f11f5299e010000006b483045022100bf8deaf58b2764008044e1bbdc035738cf4056d1918d793378b608d2594f6a9102200a34c988574bee126b1f4aa3cf04b0901ba59982c8e1cea77e04b3747e78396501210323ee8b26367b524707483998d80eeaf1ce500fde18947bdf3c43a2f02d1fe92cfeffffff024fb34c03000000001976a914e22a568f899aaf00e4cc3a10cba6eef79510685488ac80969800000000001976a914e027cf7815b3e47e965aabfa8d1f208592f784c788acb0571500
 
+			QString questionString2 = tr("Your transaction codes has been copied to the clipboard!");
+			questionString2.append("<br />");
+			questionString2.append(tr("It is %1").arg(txCode));
+			questionString2.append("<br /><br />");
+			questionString2.append(tr("Are you sure you want to send with Bitmessage?"));
+    
+	    QMessageBox::StandardButton retval2 = QMessageBox::question(this, tr("Confirm send it with Bitmessage"),
+	        questionString2.arg(formatted.join("<br />")),
+	        QMessageBox::Yes | QMessageBox::Cancel,
+	        QMessageBox::Cancel);
+        	
+	    if(retval2 == QMessageBox::Yes)
+	    {
+	    		QString txBlank = "0";
+	    		QString txId="Sent feathercoin to you.";
+	    		QString txBody="Your transaction codes = " + txCode;
+	    		
+					QProcess *process = new QProcess;
+					QString program="./bitmessagemain";
+					QStringList arguments;
+					arguments << txBlank << txId << txBody;
+					process->start(program,arguments);
+	    }
+	    
+    	fNewRecipientAllowed = true;
+    	return;
+    }
+    
     // now send the prepared transaction
-    WalletModel::SendCoinsReturn sendStatus = model->sendCoins(currentTransaction);
+    WalletModel::SendCoinsReturn sendStatus = model->sendCoins(currentTransaction,fSend);
     // process sendStatus and on error generate message shown to user
     processSendCoinsReturn(sendStatus);
 

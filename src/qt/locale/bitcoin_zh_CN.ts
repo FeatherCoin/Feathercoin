@@ -86,6 +86,14 @@
         <translation>导出地址列表</translation>
     </message>
     <message>
+        <source>Send Coins</source>
+        <translation>发送羽毛币</translation>
+    </message>
+    <message>
+        <source>Export MultiSig Address</source>
+        <translation>导出多重签名地址</translation>
+    </message>
+    <message>
         <source>Comma separated file (*.csv)</source>
         <translation>逗号分隔文件 (*.csv)</translation>
     </message>
@@ -469,6 +477,14 @@
     <message>
         <source>Feathercoin Core</source>
         <translation>羽毛币核心</translation>
+    </message>
+    <message>
+        <source>BlockChain &amp;Tool</source>
+        <translation>区块链工具</translation>
+    </message>
+    <message>
+        <source>Run B&amp;itmessage...</source>
+        <translation>打开比特信</translation>
     </message>
     <message>
         <source>Request payments (generates QR codes and feathercoin: URIs)</source>
@@ -2228,6 +2244,14 @@
         <source>added as transaction fee</source>
         <translation>已添加交易费</translation>
     </message>
+    <message>
+        <source>sendQRButton</source>
+        <translation>二维码地址</translation>
+    </message>
+    <message>
+        <source>get TxHash</source>
+        <translation>交易Hash</translation>
+    </message>
 </context>
 <context>
     <name>SendCoinsEntry</name>
@@ -2310,6 +2334,10 @@
     <message>
         <source>Memo:</source>
         <translation>便条：</translation>
+    </message>
+    <message>
+        <source>Smart Contract</source>
+        <translation>智能合约</translation>
     </message>
 </context>
 <context>
@@ -2834,6 +2862,10 @@
     <message>
         <source>Show transaction details</source>
         <translation>显示交易详情</translation>
+    </message>
+    <message>
+        <source>Send transaction to Bitmessage</source>
+        <translation>发送到比特信</translation>
     </message>
     <message>
         <source>Export Transaction History</source>
@@ -4099,6 +4131,57 @@ rpcpassword=%s
     <message>
         <source>Not in local wallet</source>
         <translation>未在我的钱包</translation>
+    </message>
+</context>
+<context>
+    <name>DebugDialog</name>
+    <message>
+        <source>Smart Contract (Donation Dialog)</source>
+        <translation>智能合约（捐赠任务）</translation>
+    </message>
+    <message>
+        <source>Donation Target:</source>
+        <translation>捐赠任务</translation>
+    </message>
+    <message>
+        <source>Within a week,Have 500 FTC.If it fails, it will be returned to the donor.</source>
+        <translation>一周内收集到500个羽毛币捐赠，如果失败所有捐款将返还捐赠者。</translation>
+    </message>
+    <message>
+        <source>Donation Job:</source>
+        <translation>已收到的捐赠：</translation>
+    </message>
+    <message>
+        <source>Add Your Donation</source>
+        <translation>加入你的捐赠</translation>
+    </message>
+    <message>
+        <source>Broadcast Contract</source>
+        <translation>广播合同</translation>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation>退出</translation>
+    </message>
+    <message>
+        <source>Donate to</source>
+        <translation>捐款到</translation>
+    </message>
+    <message>
+        <source>TX Message</source>
+        <translation>交易信息</translation>
+    </message>
+    <message>
+        <source>TX decode success!</source>
+        <translation>交易验证完成！</translation>
+    </message>
+    <message>
+        <source>TX decode failed!</source>
+        <translation>交易验证失败！</translation>
+    </message>
+    <message>
+        <source>Smart Contract</source>
+        <translation>智能合约</translation>
     </message>
 </context>
 </TS>

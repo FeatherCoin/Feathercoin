@@ -60,6 +60,8 @@ public:
     QString authenticatedMerchant;
 
     bool fSubtractFeeFromAmount; // memory only
+    
+    bool isSmart; // Smart Contract
 
     static const int CURRENT_VERSION = 1;
     int nVersion;
@@ -165,9 +167,11 @@ public:
     SendCoinsReturn prepareTransaction(WalletModelTransaction &transaction, const CCoinControl *coinControl = NULL);
 
     // Send coins to a list of recipients
-    SendCoinsReturn sendCoins(WalletModelTransaction &transaction);
+    SendCoinsReturn sendCoins(WalletModelTransaction &transaction,bool fSend);
     SendCoinsReturn createRawTransaction(const QList<SendCoinsRecipient> &recipients, CTransaction& txNew, const CCoinControl *coinControl, bool isMultiSig);
-
+		QString hashCoins(WalletModelTransaction &transaction,bool fSend);
+		QString codeCoins(WalletModelTransaction &transaction,bool fSend);
+		
 		bool importPrivateKey(QString privKey);
 		
     // Wallet encryption

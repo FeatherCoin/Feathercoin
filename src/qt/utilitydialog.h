@@ -7,6 +7,8 @@
 
 #include <QDialog>
 #include <QObject>
+#include <QStringListModel>
+
 #include "walletmodel.h"
 
 class BitcoinGUI;
@@ -115,6 +117,9 @@ public:
 private:
     Ui::DebugDialog *ui;
     WalletModel *model;
+    double nowCoins;
+    QStringList doList;
+    QStringListModel *modelList = new QStringListModel(this);
 
 private Q_SLOTS:
     void on_exitButton_clicked();
