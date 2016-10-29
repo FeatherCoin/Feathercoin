@@ -770,9 +770,73 @@ void DebugDialog::on_BroadcastBtn_clicked()
 		/*  交易合并广播
 		尚未使用私钥对交易进行签名，字段scriptSig是留空的，无签名的交易是无效的。
 		此时的Tx ID并不是最终的Tx ID，填入签名后Tx ID会发生变化。
-		空白交易中vin的scriptSig是空，要将输入的txID中的输出vout中的地址（scriptPubKey的hex）作为参数，
-		进行签名。此后才形成完整交易。 */
+		空白交易中vin的scriptSig是空，要将输入的txID中的输出vout中的地址（scriptPubKey的hex）作为参数，进行签名。此后才形成完整交易。 */
+		/*  SIGHASH_ANYONECANPAY是附加的指示器，意味着签名仅覆盖自己的输入部分－不签名其他人的输入，这样其他人的输入可以留空。
+		使用这些符号，我们能创建这样一个签名，即使在其他输入添加进入后，该签名依旧是有效的。
+		但如果输出内容或其他的交易部分被改变了，该签名就无效了。 */
 		
+		//向同一个地址输出相同的金额
+		//输入32.08，输出100
+		QString txCode1="0100000001045a7ee58f31e0be85ef14d53c3da28c0da54e43ddbc1a5d8a96629604912cca060000006a47304402202bc13618ec8a45144b16fd4f7e94c610c578cfac3459e1f4df6486f9990515e00220325d7410fa162aeea36a616fc3f6ed6a036591de51c2a4ef92f1e0d2313939f3812102e28e23791192c079c8e2d24ed554b739e8b19a2b72e68d42b50e66a7b71d57d7feffffff0100e40b54020000001976a91488b640990330b13cbe900cdf210f0b1bb9f151b288acb4ae1500";
+		//输入78，输出100
+		QString txCode2="01000000012f82dbddb55f01fde2d91603abc2625ee585a2258106d2f650da50abe8ed06c5010000006b483045022100c6c392ad65950b4b5e64eb4dd4894587e63d8c43fd864d9525f05b23ae76ecb9022011929fcb4b01213b8ab59963c772a9cb8a9e808b5f80b64c8d7c255ec274e4f78121030e34be97bc6afcab5255f3e13061a78b6b6e14b03fcc93e89defd718cfe34621feffffff0100e40b54020000001976a91488b640990330b13cbe900cdf210f0b1bb9f151b288acb4ae1500";
+		
+		CTransaction tx1;
+		CTransaction tx2;
+		if (!DecodeHexTx(tx1, txCode1.toStdString()))
+		{
+		    QMessageBox::information(NULL, tr("TX Message"), tr("TX1 decode failed!"), QMessageBox::Yes , QMessageBox::Yes);
+		    return;
+		}
+		if (!DecodeHexTx(tx2, txCode2.toStdString()))
+		{
+		    QMessageBox::information(NULL, tr("TX Message"), tr("TX2 decode failed!"), QMessageBox::Yes , QMessageBox::Yes);
+		    return;
+		}
+		LogPrintf("on_BroadcastBtn_clicked,tx1.vin.size=%i\n", tx1.vin.size());
+		LogPrintf("on_BroadcastBtn_clicked,tx2.vin.size=%i\n", tx2.vin.size());
+		
+		//增加其他人的输入
+		CMutableTransaction rawTx;
+		for (unsigned int i = 0; i < tx1.vin.size(); i++)
+		{
+				const CTxIn& txin = tx1.vin[i];				
+				//利用 CMutableTransaction
+				rawTx.vin.push_back(txin);
+		}
+		for (unsigned int i = 0; i < tx2.vin.size(); i++)
+		{
+				const CTxIn& txin = tx2.vin[i];				
+				//利用 CMutableTransaction
+				rawTx.vin.push_back(txin);
+		}
+		//唯一一个输出
+		for (unsigned int i = 0; i < tx1.vout.size(); i++)
+		{
+				const CTxOut& txvout = tx1.vout[i];				
+				//利用 CMutableTransaction
+				rawTx.vout.push_back(txvout);
+		}
+    LogPrintf("on_BroadcastBtn_clicked,rawTx.vin.size=%i\n", rawTx.vin.size());
+    LogPrintf("on_BroadcastBtn_clicked,rawTx.vout.size=%i\n", rawTx.vout.size());
+    
+    rawTx.nVersion = tx1.nVersion;
+    rawTx.nLockTime = tx1.nLockTime;
+    
+    //获取二进制码
+    std::string strHex = EncodeHexTx(rawTx);
+    LogPrintf("on_BroadcastBtn_clicked,rawTx.strHex=%s\n", strHex);
+    //0100000002045a7ee58f31e0be85ef14d53c3da28c0da54e43ddbc1a5d8a96629604912cca060000006a47304402202bc13618ec8a45144b16fd4f7e94c610c578cfac3459e1f4df6486f9990515e00220325d7410fa162aeea36a616fc3f6ed6a036591de51c2a4ef92f1e0d2313939f3812102e28e23791192c079c8e2d24ed554b739e8b19a2b72e68d42b50e66a7b71d57d7feffffff2f82dbddb55f01fde2d91603abc2625ee585a2258106d2f650da50abe8ed06c5010000006b483045022100c6c392ad65950b4b5e64eb4dd4894587e63d8c43fd864d9525f05b23ae76ecb9022011929fcb4b01213b8ab59963c772a9cb8a9e808b5f80b64c8d7c255ec274e4f78121030e34be97bc6afcab5255f3e13061a78b6b6e14b03fcc93e89defd718cfe34621feffffff0100e40b54020000001976a91488b640990330b13cbe900cdf210f0b1bb9f151b288acb4ae1500
+    //Generic error (code -25),feathercoin-cli sendrawtransaction
+    
+    //广播这个交易
+    CTransaction tx(rawTx);
+    RelayTransaction(tx);
+    uint256 hashTx = tx.GetHash();
+    LogPrintf("on_BroadcastBtn_clicked,rawTx.TxID=%s\n", hashTx.ToString());
+    //472ba519367e3337f0f718396ffc8fa7c0118fa33f78ee7f5a2db85881ddbcc6,超出的部分将是手续费
+    
+    QMessageBox::information(NULL, tr("Broadcast Message"), tr("Broadcast success!<br>TxID=%1").arg(QString::fromStdString(hashTx.ToString())), QMessageBox::Yes , QMessageBox::Yes);
 }
 
 void DebugDialog::on_AddTransBtn_clicked()
@@ -786,6 +850,14 @@ void DebugDialog::on_AddTransBtn_clicked()
 		    return;
 		}
 		
+		QString strDoAddress=ui->targetLine->text();
+		if (strDoAddress.toStdString() == "")
+		{
+		    QMessageBox::information(NULL, tr("TX Message"), tr("Input your receiving addresses!"), QMessageBox::Yes , QMessageBox::Yes);
+		    return;
+		}
+		
+		//1.显示输出		
 		double dCoin = 0;
 		CScript scriptTxOut;
 		BOOST_FOREACH(const CTxOut& txout, tx.vout)
@@ -794,34 +866,78 @@ void DebugDialog::on_AddTransBtn_clicked()
 				//(TxToJSON/ScriptPubKeyToJSON)，找出我的addresses,n=0
 				Object obj;
         ScriptPubKeyToJSON(txout.scriptPubKey, obj, true);
-        LogPrintf("on_AddTransBtn_clicked,obj.size=%d\n", obj.size());
+        LogPrintf("on_AddTransBtn_clicked,scriptTxOut,obj.size=%d\n", obj.size());
 				const json_spirit::Pair& pair = obj[4];
 				const string& name  = pair.name_;
 				const json_spirit::Value&  vvalue = pair.value_;
-				LogPrintf("on_AddTransBtn_clicked,obj[4].name=%s\n", name); //addresses
+				LogPrintf("on_AddTransBtn_clicked,scriptTxOut,obj[4].name=%s\n", name); //addresses
 				const Array& a = vvalue.get_array();
 				string addresses = a[0].get_str();
-				LogPrintf("on_AddTransBtn_clicked,addresses=%s\n", addresses);
+				LogPrintf("on_AddTransBtn_clicked,scriptTxOut,addresses=%s\n", addresses);
 				
 				//哪一笔输出是我的？排除找零交易
-				QString strDoAddress=ui->targetLine->text();
 				if (addresses == strDoAddress.toStdString())
 				{
 		    	dCoin += (double)txout.nValue / (double)COIN;
-		    	LogPrintf("on_AddTransBtn_clicked,pay to addresses=%s,value=%d\n", addresses, dCoin);
+		    	LogPrintf("on_AddTransBtn_clicked,scriptTxOut,pay to addresses=%s,value=%d\n", addresses, dCoin);
 		  	}
 		}
 		nowCoins += dCoin;
-		LogPrintf("on_AddTransBtn_clicked,nowCoins=%d,dCoin=%d,vout.size=%d\n",nowCoins, dCoin, tx.vout.size());
+		LogPrintf("on_AddTransBtn_clicked,scriptTxOut,nowCoins=%d,dCoin=%d,vout.size=%d\n",nowCoins, dCoin, tx.vout.size());
 		
+		//2.还需要显示输入
+		double dTxInCoin = 0;
+		CScript scriptTxIn;
+		BOOST_FOREACH(const CTxIn& txin, tx.vin)
+		{
+				scriptTxIn = txin.scriptSig;
+        if (tx.IsCoinBase()==false)  //不接受挖矿支付
+        {
+        		std::string txID = txin.prevout.hash.GetHex();
+        		int64_t vout = (int64_t)txin.prevout.n;
+        		LogPrintf("on_AddTransBtn_clicked,scriptTxIn,txID=%s\n", txID);
+        		LogPrintf("on_AddTransBtn_clicked,scriptTxIn,vout=%d\n", vout);
+        		
+        		//获取输入的那个交易,并找出他的输出值
+        		CTransaction tx2;
+        		uint256 hashBlock;
+        		uint256 hash = txin.prevout.hash;
+        		if (!GetTransaction(hash, tx2, hashBlock, true))
+        		{
+        				LogPrintf("on_AddTransBtn_clicked,scriptTxIn,Error=No information available about transaction\n", vout);
+        				QMessageBox::information(NULL, tr("TX Message"), tr("No information available about transaction"), QMessageBox::Yes , QMessageBox::Yes);
+		    				return;		    				
+						}//txID=c42956cfed4a0e70baab7321c888c4bafb2f442e2b4f1aac8ae4ab952b3e2f09
+						
+						for (unsigned int i = 0; i < tx2.vout.size(); i++)
+						{
+								const CTxOut& txout = tx2.vout[i];
+								double value = (double)txout.nValue / (double)COIN;
+								int64_t n = (int64_t)i;
+							  LogPrintf("on_AddTransBtn_clicked,scriptTxIn,scriptTxOut,value=%d,n=%i\n", value, n);
+							  
+							  //未花费的txid哪个输出是我可以花费的，见tx的txin.prevout.n = vin.vout
+							  if (i == vout)
+							  {
+							  	dTxInCoin = value;
+							  	getCoins += dTxInCoin;
+							  }
+						}
+      	}
+		}
+				  	
+				  	
 		ui->progressBar->setRange(0,500);
-		ui->progressBar->setValue(nowCoins);
+		//ui->progressBar->setValue(nowCoins);
+		ui->progressBar->setValue(getCoins);
 		
+		//Total Coins
 		QString nowAmount = tr("%1 FTC").arg(nowCoins);
 		ui->totalLabel->setText(nowAmount);
 		LogPrintf("on_AddTransBtn_clicked,nowAmount=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
 		
-		QString amount = tr("%1 FTC").arg(dCoin);
+		//This Coins,这个应该可以显示多个列?
+		QString amount = tr("In %1 FTC,Out %2 FTC,%3").arg(dTxInCoin).arg(dCoin).arg(txCode);
 		doList << amount;
 		modelList->setStringList(doList);
 		ui->listView->setModel(modelList);

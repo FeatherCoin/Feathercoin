@@ -213,7 +213,7 @@ bool WalletModel::validateAddress(const QString &address)
     return addressParsed.IsValid();
 }
 
-WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransaction &transaction, const CCoinControl *coinControl)
+WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransaction &transaction, const CCoinControl *coinControl, int nHashType)
 {
     CAmount total = 0;
     bool fSubtractFeeFromAmount = false;
@@ -388,8 +388,10 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
     CAmount nBalance = getBalance(coinControl);
 
-    if(total > nBalance)
+		//合约交易不验证输出，nHashType = SIGHASH_ALL|SIGHASH_ANYONECANPAY
+    if((total > nBalance) && (nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY)))
     {
+    		LogPrintf("prepareTransaction,total=%d,nBalance=%d,nHashType=%i\n",total, nBalance, nHashType);
         return AmountExceedsBalance;
     }
 
@@ -404,8 +406,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
         CWalletTx *newTx = transaction.getTransaction();
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
-        bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, nChangePosRet, strFailReason, coinControl);
+        bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, nChangePosRet, strFailReason, coinControl, nHashType);
         //此时交易已经填写输入、输出和签名
+        LogPrintf("prepareTransaction,fCreated=%i\n",fCreated);
         
         transaction.setTransactionFee(nFeeRequired);
         if (fSubtractFeeFromAmount && fCreated)
@@ -937,6 +940,8 @@ WalletModel::SendCoinsReturn WalletModel::createRawTransaction(
     else
         nBalance = getBalance(coinControl);
 
+
+		LogPrintf("createRawTransaction,500\n");
     if(total > nBalance)
     {
         return AmountExceedsBalance;

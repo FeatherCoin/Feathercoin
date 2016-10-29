@@ -4183,5 +4183,9 @@ rpcpassword=%s
         <source>Smart Contract</source>
         <translation>智能合约</translation>
     </message>
+    <message>
+        <source>Input your receiving addresses!</source>
+        <translation>输入你的地址！</translation>
+    </message>
 </context>
 </TS>

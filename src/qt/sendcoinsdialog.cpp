@@ -742,23 +742,39 @@ void SendCoinsDialog::sendCoins(bool fSend)
         return;
     }
 
+		int nHashType = SIGHASH_ALL;
+		if (!fSend)
+		{
+			LogPrintf("sendCoins,SIGHASH_ALL=%i, SIGHASH_ANYONECANPAY=%i, SIGHASH_ALL|SIGHASH_ANYONECANPAY=%i\n",int(SIGHASH_ALL), int(SIGHASH_ANYONECANPAY), int(SIGHASH_ALL|SIGHASH_ANYONECANPAY));
+			nHashType = SIGHASH_ALL|SIGHASH_ANYONECANPAY;  //按位或运算符(|)
+		}
+		LogPrintf("sendCoins,nHashType=%i\n",nHashType);
+		
     // prepare transaction for getting txFee earlier
     WalletModelTransaction currentTransaction(recipients);
     WalletModel::SendCoinsReturn prepareStatus;
+   	//是否能正常准备交易？？
     if (model->getOptionsModel()->getCoinControlFeatures()) // coin control enabled
-        prepareStatus = model->prepareTransaction(currentTransaction, CoinControlDialog::coinControl);
+        prepareStatus = model->prepareTransaction(currentTransaction, CoinControlDialog::coinControl, nHashType);
     else
         prepareStatus = model->prepareTransaction(currentTransaction);
 
+		LogPrintf("sendCoins,200\n");		
     // process prepareStatus and on error generate message shown to user
-    processSendCoinsReturn(prepareStatus,
-        BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), currentTransaction.getTransactionFee()));
-
+    if(nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY))
+    {
+    	processSendCoinsReturn(prepareStatus, BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), currentTransaction.getTransactionFee()));
+    }
+		LogPrintf("sendCoins,210\n");
     if(prepareStatus.status != WalletModel::OK) {
-        fNewRecipientAllowed = true;
-        return;
-    }    
+    		if(nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY))
+    		{	
+        	fNewRecipientAllowed = true;
+        	return;
+      	}
+    }
     //此时交易已经完整、已经签名
+    LogPrintf("sendCoins,300\n");
 
     CAmount txFee = currentTransaction.getTransactionFee();
 

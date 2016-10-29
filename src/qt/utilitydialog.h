@@ -118,6 +118,7 @@ private:
     Ui::DebugDialog *ui;
     WalletModel *model;
     double nowCoins;
+    double getCoins;
     QStringList doList;
     QStringListModel *modelList = new QStringListModel(this);
 
