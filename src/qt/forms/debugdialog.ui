@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>506</width>
+    <width>500</width>
     <height>377</height>
    </rect>
   </property>
@@ -51,18 +51,18 @@
     <rect>
      <x>10</x>
      <y>27</y>
-     <width>151</width>
+     <width>191</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Donation Target:</string>
+    <string>Co-Payment : Donation Target</string>
    </property>
   </widget>
   <widget class="QPushButton" name="exitButton">
    <property name="geometry">
     <rect>
-     <x>417</x>
+     <x>400</x>
      <y>343</y>
      <width>81</width>
      <height>31</height>
@@ -100,22 +100,12 @@
     <rect>
      <x>30</x>
      <y>50</y>
-     <width>451</width>
+     <width>461</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Within a week,Have 500 FTC.If it fails, it will be returned to the donor.</string>
-   </property>
-  </widget>
-  <widget class="QListView" name="listView">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>177</y>
-     <width>281</width>
-     <height>171</height>
-    </rect>
+    <string>Within a week,Have enough FTC.If it fails, it will be returned to the donor.</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="codeCoins">
@@ -131,8 +121,8 @@
   <widget class="QPushButton" name="BroadcastBtn">
    <property name="geometry">
     <rect>
-     <x>321</x>
-     <y>175</y>
+     <x>320</x>
+     <y>180</y>
      <width>141</width>
      <height>31</height>
     </rect>
@@ -192,6 +182,58 @@
    </property>
    <property name="text">
     <string>Donate to</string>
+   </property>
+  </widget>
+  <widget class="QTableView" name="tableView">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>180</y>
+     <width>281</width>
+     <height>161</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Smart Contract</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineFTC">
+   <property name="geometry">
+    <rect>
+     <x>187</x>
+     <y>26</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>500</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>274</x>
+     <y>27</y>
+     <width>41</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>FTC</string>
    </property>
   </widget>
  </widget>

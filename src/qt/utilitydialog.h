@@ -8,6 +8,7 @@
 #include <QDialog>
 #include <QObject>
 #include <QStringListModel>
+#include <QStandardItemModel>
 
 #include "walletmodel.h"
 
@@ -119,8 +120,7 @@ private:
     WalletModel *model;
     double nowCoins;
     double getCoins;
-    QStringList doList;
-    QStringListModel *modelList = new QStringListModel(this);
+    QStandardItemModel  *modelTable = new QStandardItemModel();
 
 private Q_SLOTS:
     void on_exitButton_clicked();

@@ -47,6 +47,7 @@
 #include <QVBoxLayout>
 #include <QInputDialog>
 #include <QStringListModel>
+#include <QClipboard>
 
 // Use QT5's new modular classes
 #include <QtPrintSupport/QPrinter>
@@ -746,8 +747,17 @@ DebugDialog::DebugDialog(QWidget *parent) :
     ui(new Ui::DebugDialog)
 {
     ui->setupUi(this);
-    modelList = new QStringListModel(doList);
-    ui->listView->setModel(modelList);
+    
+    modelTable->setColumnCount(2);
+    modelTable->setHeaderData(0,Qt::Horizontal,tr("CHARGE"));
+    modelTable->setHeaderData(1,Qt::Horizontal,tr("TXCODE"));
+    ui->tableView->setModel(modelTable);
+    ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+    ui->tableView->setEditTriggers(QTableView::NoEditTriggers);
+    ui->tableView->setSelectionBehavior(QTableView::SelectRows);
+    ui->tableView->setAlternatingRowColors(true);
+    ui->tableView->horizontalHeader()->resizeSection(0, 80);
+    ui->tableView->horizontalHeader()->resizeSection(1, 200);
 }
 
 void DebugDialog::setModel(WalletModel *model)
@@ -776,65 +786,57 @@ void DebugDialog::on_BroadcastBtn_clicked()
 		但如果输出内容或其他的交易部分被改变了，该签名就无效了。 */
 		
 		//向同一个地址输出相同的金额
-		//输入32.08，输出100
-		QString txCode1="0100000001045a7ee58f31e0be85ef14d53c3da28c0da54e43ddbc1a5d8a96629604912cca060000006a47304402202bc13618ec8a45144b16fd4f7e94c610c578cfac3459e1f4df6486f9990515e00220325d7410fa162aeea36a616fc3f6ed6a036591de51c2a4ef92f1e0d2313939f3812102e28e23791192c079c8e2d24ed554b739e8b19a2b72e68d42b50e66a7b71d57d7feffffff0100e40b54020000001976a91488b640990330b13cbe900cdf210f0b1bb9f151b288acb4ae1500";
-		//输入78，输出100
-		QString txCode2="01000000012f82dbddb55f01fde2d91603abc2625ee585a2258106d2f650da50abe8ed06c5010000006b483045022100c6c392ad65950b4b5e64eb4dd4894587e63d8c43fd864d9525f05b23ae76ecb9022011929fcb4b01213b8ab59963c772a9cb8a9e808b5f80b64c8d7c255ec274e4f78121030e34be97bc6afcab5255f3e13061a78b6b6e14b03fcc93e89defd718cfe34621feffffff0100e40b54020000001976a91488b640990330b13cbe900cdf210f0b1bb9f151b288acb4ae1500";
-		
-		CTransaction tx1;
-		CTransaction tx2;
-		if (!DecodeHexTx(tx1, txCode1.toStdString()))
-		{
-		    QMessageBox::information(NULL, tr("TX Message"), tr("TX1 decode failed!"), QMessageBox::Yes , QMessageBox::Yes);
-		    return;
-		}
-		if (!DecodeHexTx(tx2, txCode2.toStdString()))
-		{
-		    QMessageBox::information(NULL, tr("TX Message"), tr("TX2 decode failed!"), QMessageBox::Yes , QMessageBox::Yes);
-		    return;
-		}
-		LogPrintf("on_BroadcastBtn_clicked,tx1.vin.size=%i\n", tx1.vin.size());
-		LogPrintf("on_BroadcastBtn_clicked,tx2.vin.size=%i\n", tx2.vin.size());
-		
-		//增加其他人的输入
 		CMutableTransaction rawTx;
-		for (unsigned int i = 0; i < tx1.vin.size(); i++)
+		
+		//遍历model中的所有数据
+		for(int i=0; i<modelTable->rowCount(); i++)
 		{
-				const CTxIn& txin = tx1.vin[i];				
-				//利用 CMutableTransaction
-				rawTx.vin.push_back(txin);
+				QString txCode = modelTable->data(modelTable->index(i,1)).toString();
+				
+				CTransaction tx;
+				if (!DecodeHexTx(tx, txCode.toStdString()))
+				{
+				    QMessageBox::information(NULL, tr("TX Message"), tr("TX%1 decode failed!").arg(i), QMessageBox::Yes , QMessageBox::Yes);
+				    return;
+				}
+				LogPrintf("on_BroadcastBtn_clicked,i=%i,txCode=%s\n", i, txCode.toStdString());
+				LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vin.size=%i\n", i, tx.vin.size());
+				
+				//增加其他人的输入
+				for (unsigned int i = 0; i < tx.vin.size(); i++)
+				{
+						const CTxIn& txin = tx.vin[i];
+						rawTx.vin.push_back(txin);
+				}
+				
+				if (i==0) 
+				{
+						//唯一一个输出
+						for (unsigned int i = 0; i < tx.vout.size(); i++)
+						{
+								const CTxOut& txvout = tx.vout[i];				
+								//利用 CMutableTransaction
+								rawTx.vout.push_back(txvout);
+						}
+						
+						rawTx.nVersion = tx.nVersion;
+		    		rawTx.nLockTime = tx.nLockTime;
+    		}
 		}
-		for (unsigned int i = 0; i < tx2.vin.size(); i++)
-		{
-				const CTxIn& txin = tx2.vin[i];				
-				//利用 CMutableTransaction
-				rawTx.vin.push_back(txin);
-		}
-		//唯一一个输出
-		for (unsigned int i = 0; i < tx1.vout.size(); i++)
-		{
-				const CTxOut& txvout = tx1.vout[i];				
-				//利用 CMutableTransaction
-				rawTx.vout.push_back(txvout);
-		}
-    LogPrintf("on_BroadcastBtn_clicked,rawTx.vin.size=%i\n", rawTx.vin.size());
-    LogPrintf("on_BroadcastBtn_clicked,rawTx.vout.size=%i\n", rawTx.vout.size());
-    
-    rawTx.nVersion = tx1.nVersion;
-    rawTx.nLockTime = tx1.nLockTime;
-    
-    //获取二进制码
+		LogPrintf("on_BroadcastBtn_clicked,rawTx.vin.size=%i\n",  rawTx.vin.size());
+		LogPrintf("on_BroadcastBtn_clicked,rawTx.vout.size=%i\n", rawTx.vout.size());
+		
+		//获取二进制码
     std::string strHex = EncodeHexTx(rawTx);
     LogPrintf("on_BroadcastBtn_clicked,rawTx.strHex=%s\n", strHex);
-    //0100000002045a7ee58f31e0be85ef14d53c3da28c0da54e43ddbc1a5d8a96629604912cca060000006a47304402202bc13618ec8a45144b16fd4f7e94c610c578cfac3459e1f4df6486f9990515e00220325d7410fa162aeea36a616fc3f6ed6a036591de51c2a4ef92f1e0d2313939f3812102e28e23791192c079c8e2d24ed554b739e8b19a2b72e68d42b50e66a7b71d57d7feffffff2f82dbddb55f01fde2d91603abc2625ee585a2258106d2f650da50abe8ed06c5010000006b483045022100c6c392ad65950b4b5e64eb4dd4894587e63d8c43fd864d9525f05b23ae76ecb9022011929fcb4b01213b8ab59963c772a9cb8a9e808b5f80b64c8d7c255ec274e4f78121030e34be97bc6afcab5255f3e13061a78b6b6e14b03fcc93e89defd718cfe34621feffffff0100e40b54020000001976a91488b640990330b13cbe900cdf210f0b1bb9f151b288acb4ae1500
-    //Generic error (code -25),feathercoin-cli sendrawtransaction
-    
+    		
     //广播这个交易
     CTransaction tx(rawTx);
     RelayTransaction(tx);
     uint256 hashTx = tx.GetHash();
     LogPrintf("on_BroadcastBtn_clicked,rawTx.TxID=%s\n", hashTx.ToString());
-    //472ba519367e3337f0f718396ffc8fa7c0118fa33f78ee7f5a2db85881ddbcc6,超出的部分将是手续费
+    GUIUtil::setClipboard(QString::fromStdString(hashTx.ToString()));
+    //超出的部分将是手续费
     
     QMessageBox::information(NULL, tr("Broadcast Message"), tr("Broadcast success!<br>TxID=%1").arg(QString::fromStdString(hashTx.ToString())), QMessageBox::Yes , QMessageBox::Yes);
 }
@@ -926,21 +928,25 @@ void DebugDialog::on_AddTransBtn_clicked()
       	}
 		}
 				  	
-				  	
-		ui->progressBar->setRange(0,500);
-		//ui->progressBar->setValue(nowCoins);
+		double maxCharge = ui->lineFTC->text().toDouble();
+		ui->progressBar->setRange(0,maxCharge);
 		ui->progressBar->setValue(getCoins);
 		
 		//Total Coins
-		QString nowAmount = tr("%1 FTC").arg(nowCoins);
+		QString nowAmount = tr("%1 FTC").arg(getCoins);
 		ui->totalLabel->setText(nowAmount);
 		LogPrintf("on_AddTransBtn_clicked,nowAmount=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
 		
 		//This Coins,这个应该可以显示多个列?
 		QString amount = tr("In %1 FTC,Out %2 FTC,%3").arg(dTxInCoin).arg(dCoin).arg(txCode);
-		doList << amount;
-		modelList->setStringList(doList);
-		ui->listView->setModel(modelList);
+		QStandardItem* item1 = new QStandardItem(tr("%1").arg(dTxInCoin));
+		QStandardItem* item2 = new QStandardItem(tr("%1").arg(txCode));
+		QList<QStandardItem*> item;
+		item << item1 << item2;
+		modelTable->appendRow(item);
+		ui->tableView->setModel(modelTable);
+		ui->tableView->setColumnWidth(0,80);
+    ui->tableView->setColumnWidth(1,200);
 		
 		QMessageBox::information(NULL, tr("TX Message"), tr("TX decode success!"), QMessageBox::Yes , QMessageBox::Yes);
 		ui->codeCoins->setText("");

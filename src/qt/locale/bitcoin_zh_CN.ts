@@ -4140,12 +4140,12 @@ rpcpassword=%s
         <translation>智能合约（捐赠任务）</translation>
     </message>
     <message>
-        <source>Donation Target:</source>
-        <translation>捐赠任务</translation>
+        <source>Co-Payment : Donation Target</source>
+        <translation>共同付款：捐赠任务</translation>
     </message>
     <message>
-        <source>Within a week,Have 500 FTC.If it fails, it will be returned to the donor.</source>
-        <translation>一周内收集到500个羽毛币捐赠，如果失败所有捐款将返还捐赠者。</translation>
+        <source>Within a week,Have enough FTC.If it fails, it will be returned to the donor.</source>
+        <translation>一周内收集到足够的羽毛币捐赠，如果失败所有捐款将返还捐赠者。</translation>
     </message>
     <message>
         <source>Donation Job:</source>
@@ -4186,6 +4186,18 @@ rpcpassword=%s
     <message>
         <source>Input your receiving addresses!</source>
         <translation>输入你的地址！</translation>
+    </message>
+    <message>
+        <source>CHARGE</source>
+        <translation>金额</translation>
+    </message>
+    <message>
+        <source>TXCODE</source>
+        <translation>交易代码</translation>
+    </message>
+    <message>
+        <source>Broadcast success!&lt;br /&gt;TxID=(=%1)</source>
+        <translation>广播交易完成！&lt;br /&gt;TxID=(=%1)</translation>
     </message>
 </context>
 </TS>
