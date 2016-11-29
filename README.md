@@ -1,7 +1,13 @@
 Feathercoin Core integration/staging tree
 
+
+
 Feathercoin Core
 ================
+Status 0.9.3.6: 
+--------------
+release candidate
+
 
 What is Feathercoin?
 --------------------
