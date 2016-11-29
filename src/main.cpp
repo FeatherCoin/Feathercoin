@@ -1090,6 +1090,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
         // This is done last to help prevent CPU exhaustion denial-of-service attacks.
         if (!CheckInputs(tx, state, view, true, STANDARD_SCRIPT_VERIFY_FLAGS, true))
         {
+        		LogPrintf("AcceptToMemoryPool,STANDARD_SCRIPT_VERIFY_FLAGS=%i\n", STANDARD_SCRIPT_VERIFY_FLAGS);
             return error("AcceptToMemoryPool: ConnectInputs failed %s", hash.ToString());
         }
 
@@ -1458,10 +1459,31 @@ void UpdateCoins(const CTransaction& tx, CValidationState &state, CCoinsViewCach
 }
 
 bool CScriptCheck::operator()() {
-    const CScript &scriptSig = ptxTo->vin[nIn].scriptSig;
+    const CScript &scriptSig = ptxTo->vin[nIn].scriptSig;    
+    //´òÓ¡´Ë½Å±¾
+    LogPrintf("CScriptCheck,nIn=%i,scriptSig=%s\n", nIn, scriptSig.ToString());
+    LogPrintf("CScriptCheck,nIn=%i,scriptPubKey=%s\n", nIn, scriptPubKey.ToString());
     if (!VerifyScript(scriptSig, scriptPubKey, nFlags, CachingTransactionSignatureChecker(ptxTo, nIn, cacheStore), &error)) {
         return ::error("CScriptCheck(): %s:%d VerifySignature failed: %s", ptxTo->GetHash().ToString(), nIn, ScriptErrorString(error));
     }
+    /*bool r1=VerifyScript(scriptSig, scriptPubKey, nFlags, CachingTransactionSignatureChecker(ptxTo, nIn, cacheStore), &error);
+    LogPrintf("CScriptCheck,nIn=%i,VerifyScript.r1=%i\n", nIn, r1);
+    return r1;*/
+    
+    /*vector<vector<unsigned char> > stack;
+    bool r2=EvalScript(stack, scriptSig, nFlags, CachingTransactionSignatureChecker(ptxTo, nIn, cacheStore), &error);
+    LogPrintf("CScriptCheck,nIn=%i, EvalScript.r2=%i,stack.size=%i\n", nIn, r2, stack.size());
+    for(int i=0;i<stack.size();i++) {
+    	LogPrintf("CScriptCheck,nIn=%i, stack.size=%i, stack.i=%i,stack=%s\n", nIn, stack.size(), i, HexStr(stack.at(i)).c_str());
+  	}
+    bool r3=EvalScript(stack, scriptPubKey, nFlags, CachingTransactionSignatureChecker(ptxTo, nIn, cacheStore), &error);
+    LogPrintf("CScriptCheck,nIn=%i, EvalScript.r3=%i,stack.size=%i\n", nIn, r3, stack.size());    
+    for(int i=0;i<stack.size();i++) {
+    	LogPrintf("CScriptCheck,nIn=%i, stack.size=%i, stack.back=%s\n", nIn, stack.size(), HexStr(stack.back()).c_str());
+    	LogPrintf("CScriptCheck,nIn=%i, stack.size=%i, stack.i=%i,stack=%s\n", nIn, stack.size(), i, HexStr(stack.at(i)).c_str());
+  	}
+    return r2;*/
+    
     return true;
 }
 
@@ -1478,6 +1500,7 @@ int GetRequiredMaturityDepth(int nHeight)
     }
 }
 
+           //if (!CheckInputs(tx,                     state,                        view,              true,         STANDARD_SCRIPT_VERIFY_FLAGS, true))
 bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsViewCache &inputs, bool fScriptChecks, unsigned int flags, bool cacheStore, std::vector<CScriptCheck> *pvChecks)
 {
     if (!tx.IsCoinBase())
@@ -1541,6 +1564,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
         // Skip ECDSA signature verification when connecting blocks
         // before the last block chain checkpoint. This is safe because block merkle hashes are
         // still computed and checked, and any change will be caught at the next checkpoint.
+        LogPrintf("CheckInputs,fScriptChecks=%i\n", fScriptChecks);
         if (fScriptChecks) {
             for (unsigned int i = 0; i < tx.vin.size(); i++) {
                 const COutPoint &prevout = tx.vin[i].prevout;
@@ -1549,11 +1573,17 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
 
                 // Verify signature
                 CScriptCheck check(*coins, tx, i, flags, cacheStore);
-                if (pvChecks) {
+                LogPrintf("CheckInputs,1,i=%i, pvChecks=%i,vin.size=%i\n", i, pvChecks, tx.vin.size());
+                LogPrintf("CheckInputs,1,i=%i, tx.vin[i].prevout=%s\n", i, tx.vin[i].prevout.ToString());
+                LogPrintf("CheckInputs,1,i=%i, txHash=%s\n", i, tx.GetHash().ToString());
+                LogPrintf("CheckInputs,1,i=%i,flags=%i\n", i, flags);
+                
+                if (pvChecks) {                		
                     pvChecks->push_back(CScriptCheck());
                     check.swap(pvChecks->back());
-                } else if (!check()) {
+                } else if (!check()) {                		
                     if (flags & STANDARD_NOT_MANDATORY_VERIFY_FLAGS) {
+                    		LogPrintf("CheckInputs,3,i=%i,STANDARD_NOT_MANDATORY_VERIFY_FLAGS=%i\n", i, STANDARD_NOT_MANDATORY_VERIFY_FLAGS);
                         // Check whether the failure was caused by a
                         // non-mandatory script verification check, such as
                         // non-standard DER encodings or non-null dummy
@@ -1562,8 +1592,10 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
                         // non-upgraded nodes.
                         CScriptCheck check(*coins, tx, i,
                                 flags & ~STANDARD_NOT_MANDATORY_VERIFY_FLAGS, cacheStore);
-                        if (check())
+                        if (check()) {
+                        	  LogPrintf("CheckInputs,4,i=%i\n", i);
                             return state.Invalid(false, REJECT_NONSTANDARD, strprintf("non-mandatory-script-verify-flag (%s)", ScriptErrorString(check.GetScriptError())));
+                        }
                     }
                     // Failures of other flags indicate a transaction that is
                     // invalid in new blocks, e.g. a invalid P2SH. We DoS ban
@@ -1572,6 +1604,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
                     // as to the correct behavior - we may want to continue
                     // peering with non-upgraded nodes even after a soft-fork
                     // super-majority vote has passed.
+                    LogPrintf("CheckInputs,5,i=%i\n", i);
                     return state.DoS(100,false, REJECT_INVALID, strprintf("mandatory-script-verify-flag-failed (%s)", ScriptErrorString(check.GetScriptError())));
                 }
             }

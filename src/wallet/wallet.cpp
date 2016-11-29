@@ -1840,7 +1840,7 @@ bool CWallet::SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int
     return true;
 }
 
-bool CWallet::SelectCoins(const CAmount& nTargetValue, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, CAmount& nValueRet, const CCoinControl* coinControl) const
+bool CWallet::SelectCoins(const CAmount& nTargetValue, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, CAmount& nValueRet, const CCoinControl* coinControl, int nHashType) const
 {
     vector<COutput> vCoins;
     AvailableCoins(vCoins, true, coinControl);
@@ -1855,7 +1855,14 @@ bool CWallet::SelectCoins(const CAmount& nTargetValue, set<pair<const CWalletTx*
             nValueRet += out.tx->vout[out.i].nValue;
             setCoinsRet.insert(make_pair(out.tx, out.i));
         }
-        return (nValueRet >= nTargetValue);
+        if (nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY))
+        {
+        		return (nValueRet >= nTargetValue);
+        }
+        else 
+        {
+        		return	nTargetValue;
+        }
     }
 
     return (SelectCoinsMinConf(nTargetValue, 1, 6, vCoins, setCoinsRet, nValueRet) ||
@@ -1864,7 +1871,7 @@ bool CWallet::SelectCoins(const CAmount& nTargetValue, set<pair<const CWalletTx*
 }
 
 bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
-                                CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRet, int& nChangePosRet, std::string& strFailReason, const CCoinControl* coinControl)
+                                CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRet, int& nChangePosRet, std::string& strFailReason, const CCoinControl* coinControl, int nHashType)
 {
     CAmount nValue = 0;
     unsigned int nSubtractFeeFromAmount = 0;
@@ -1873,6 +1880,7 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
         if (nValue < 0 || recipient.nAmount < 0)
         {
             strFailReason = _("Transaction amounts must be positive");
+            LogPrintf("CreateTransaction,false=100\n");
             return false;
         }
         nValue += recipient.nAmount;
@@ -1883,6 +1891,7 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
     if (vecSend.empty() || nValue < 0)
     {
         strFailReason = _("Transaction amounts must be positive");
+        LogPrintf("CreateTransaction,false=200\n");
         return false;
     }
 
@@ -1890,6 +1899,13 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
     wtxNew.BindWallet(this);
     CMutableTransaction txNew;
 
+		int nLockTime=0;
+		BOOST_FOREACH (const CRecipient& recipient, vecSend)
+		{
+				if (recipient.heightSmart>0) {
+					nLockTime = recipient.heightSmart;
+				}
+		}
     // Discourage fee sniping.
     //
     // However because of a off-by-one-error in previous versions we need to
@@ -1909,6 +1925,12 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
     if (GetRandInt(10) == 0)
         txNew.nLockTime = std::max(0, (int)txNew.nLockTime - GetRandInt(100));
 
+		if (nHashType == int(SIGHASH_ALL|SIGHASH_ANYONECANPAY))   {
+				txNew.nLockTime = nLockTime;
+		}
+		//Time(UTC):	1480245414/2016/11/27 19:16:54  /http://tool.chinaz.com/Tools/unixtime.aspx
+		LogPrintf("CreateTransaction,nLockTime=%d\n",txNew.nLockTime);//1484594 "lock_time": 1484594, heightEdit
+		
     assert(txNew.nLockTime <= (unsigned int)chainActive.Height());
     assert(txNew.nLockTime < LOCKTIME_THRESHOLD);
 
@@ -1962,6 +1984,7 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
                         {
                             strFailReason = _("Transaction amount too small");
                         }
+                        LogPrintf("CreateTransaction,false=300\n");
                         return false;
                     }
                     txNew.vout.push_back(txout);
@@ -1970,9 +1993,10 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
                 // Choose coins to use
                 set<pair<const CWalletTx*,unsigned int> > setCoins;
                 CAmount nValueIn = 0;
-                if (!SelectCoins(nTotalValue, setCoins, nValueIn, coinControl))
+                if (!SelectCoins(nTotalValue, setCoins, nValueIn, coinControl, nHashType))
                 {
                     strFailReason = _("Insufficient funds");
+                    LogPrintf("CreateTransaction,false=400\n");
                     return false;
                 }
                 BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
@@ -2039,6 +2063,7 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
                                 if (txNew.vout[i].IsDust(::minRelayTxFee))
                                 {
                                     strFailReason = _("The transaction amount is too small to send after the fee has been deducted");
+                                    LogPrintf("CreateTransaction,false=500\n");
                                     return false;
                                 }
                                 break;
@@ -2076,9 +2101,10 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
                 // Sign
                 int nIn = 0;
                 BOOST_FOREACH(const PAIRTYPE(const CWalletTx*,unsigned int)& coin, setCoins)
-                    if (!SignSignature(*this, *coin.first, txNew, nIn++))
+                    if (!SignSignature(*this, *coin.first, txNew, nIn++, nHashType))
                     {
                         strFailReason = _("Signing transaction failed");
+                        LogPrintf("CreateTransaction,false=600\n");
                         return false;
                     }
 
@@ -2090,6 +2116,7 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
                 if (nBytes >= MAX_STANDARD_TX_SIZE)
                 {
                     strFailReason = _("Transaction too large");
+                    LogPrintf("CreateTransaction,false=700\n");
                     return false;
                 }
                 dPriority = wtxNew.ComputePriority(dPriority, nBytes);
@@ -2115,6 +2142,7 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
                 if (nFeeNeeded < ::minRelayTxFee.GetFee(nBytes))
                 {
                     strFailReason = _("Transaction too large for fee policy");
+                    LogPrintf("CreateTransaction,false=800\n");
                     return false;
                 }
 
@@ -2142,7 +2170,7 @@ bool CWallet::CreateTransaction(CScript scriptPubKey, int64_t nValue, CWalletTx&
     
     int32_t nChangePos;
     string strError;
-    bool rv = CreateTransaction(vecSend, wtxNew, reservekey, nFeeRet, nChangePos, strError, coinControl);
+    bool rv = CreateTransaction(vecSend, wtxNew, reservekey, nFeeRet, nChangePos, strError, coinControl, SIGHASH_ALL);
     return rv;
 }
 

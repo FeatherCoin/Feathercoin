@@ -704,6 +704,7 @@ void SendCoinsDialog::on_hashButton_clicked()
 	sendCoins(false);
 }
 
+//合约交易时，fSend=0
 void SendCoinsDialog::sendCoins(bool fSend)
 {
     if(!model || !model->getOptionsModel())
@@ -746,7 +747,7 @@ void SendCoinsDialog::sendCoins(bool fSend)
 		if (!fSend)
 		{
 			LogPrintf("sendCoins,SIGHASH_ALL=%i, SIGHASH_ANYONECANPAY=%i, SIGHASH_ALL|SIGHASH_ANYONECANPAY=%i\n",int(SIGHASH_ALL), int(SIGHASH_ANYONECANPAY), int(SIGHASH_ALL|SIGHASH_ANYONECANPAY));
-			nHashType = SIGHASH_ALL|SIGHASH_ANYONECANPAY;  //按位或运算符(|)
+			nHashType = SIGHASH_ALL|SIGHASH_ANYONECANPAY;  //合约签名方式，按位或运算符(|)
 		}
 		LogPrintf("sendCoins,nHashType=%i\n",nHashType);
 		

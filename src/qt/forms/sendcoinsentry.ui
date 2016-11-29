@@ -163,7 +163,7 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayoutAmount" stretch="0,1,0,0">
+     <layout class="QHBoxLayout" name="horizontalLayoutAmount" stretch="0,1,0,0,0">
       <item>
        <widget class="BitcoinAmountField" name="payAmount"/>
       </item>
@@ -181,6 +181,16 @@
        <widget class="QCheckBox" name="checkSmart">
         <property name="text">
          <string>Smart Contract</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="heightEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>1484594</string>
         </property>
        </widget>
       </item>

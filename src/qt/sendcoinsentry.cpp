@@ -50,6 +50,7 @@ SendCoinsEntry::SendCoinsEntry(QWidget *parent) :
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteClicked()));
     connect(ui->deleteButton_is, SIGNAL(clicked()), this, SLOT(deleteClicked()));
     connect(ui->deleteButton_s, SIGNAL(clicked()), this, SLOT(deleteClicked()));
+    connect(ui->checkSmart, SIGNAL(clicked()), this, SLOT(on_checkSmart_clicked()));
 }
 
 SendCoinsEntry::~SendCoinsEntry()
@@ -177,6 +178,13 @@ SendCoinsRecipient SendCoinsEntry::getValue()
     else
         recipient.typeInd = AddressTableModel::AT_Normal;
         	
+    if (ui->checkSmart->checkState() == Qt::Checked) {
+        recipient.isSmart = true;
+        recipient.heightSmart = ui->heightEdit->text().toInt();
+  	} else { 
+        recipient.isSmart = false;
+  	}
+        	
     qDebug() << "SendCoinsEntry::getValue,recipient.typeInd ="+QString::number(recipient.typeInd);
     
     return recipient;
@@ -301,4 +309,13 @@ void SendCoinsEntry::setFieldEnable(bool enable)
     ui->addressBookButton->setEnabled(enable);
     ui->pasteButton->setEnabled(enable);
     ui->deleteButton->setEnabled(enable);
+}
+
+void SendCoinsEntry::on_checkSmart_clicked()
+{
+		if (ui->checkSmart->checkState() == Qt::Checked) {
+    	ui->heightEdit->setEnabled(true);
+  	} else {
+  		ui->heightEdit->setEnabled(false);
+  	}
 }

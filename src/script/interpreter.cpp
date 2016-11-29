@@ -14,9 +14,9 @@
 #include "script/script.h"
 #include "uint256.h"
 
+
 using namespace std;
 
-typedef vector<unsigned char> valtype;
 
 namespace {
 
@@ -844,11 +844,12 @@ bool EvalScript(vector<vector<unsigned char> >& stack, const CScript& script, un
                         //serror is set
                         return false;
                     }
-                    bool fSuccess = checker.CheckSig(vchSig, vchPubKey, scriptCode);
-
+                    bool fSuccess = checker.CheckSig(vchSig, vchPubKey, scriptCode);//Debug
+                    //return fSuccess;//Debug
+                    
                     popstack(stack);
-                    popstack(stack);
-                    stack.push_back(fSuccess ? vchTrue : vchFalse);
+                    popstack(stack);                    
+                    stack.push_back(fSuccess ? vchTrue : vchFalse);//Debug
                     if (opcode == OP_CHECKSIGVERIFY)
                     {
                         if (fSuccess)
@@ -1121,7 +1122,7 @@ bool TransactionSignatureChecker::CheckSig(const vector<unsigned char>& vchSigIn
     uint256 sighash = SignatureHash(scriptCode, *txTo, nIn, nHashType);
 
     if (!VerifySignature(vchSig, pubkey, sighash))
-        return false;
+        return false;//Debug
 
     return true;
 }
@@ -1177,13 +1178,18 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, unsigne
         return false;
     if (flags & SCRIPT_VERIFY_P2SH)
         stackCopy = stack;
-    if (!EvalScript(stack, scriptPubKey, flags, checker, serror))
+    if (!EvalScript(stack, scriptPubKey, flags, checker, serror)) //Debug_TRUE
         // serror is set
         return false;
-    if (stack.empty())
+        
+    if (stack.empty()) {
+    		//return true;//Debug
         return set_error(serror, SCRIPT_ERR_EVAL_FALSE);
-    if (CastToBool(stack.back()) == false)
+       }
+    if (CastToBool(stack.back()) == false) {
+    		//return true;//Debug_TRUE
         return set_error(serror, SCRIPT_ERR_EVAL_FALSE);
+       }
 
     // Additional validation for spend-to-script-hash transactions:
     if ((flags & SCRIPT_VERIFY_P2SH) && scriptPubKey.IsPayToScriptHash())
@@ -1207,10 +1213,14 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, unsigne
         if (!EvalScript(stack, pubKey2, flags, checker, serror))
             // serror is set
             return false;
-        if (stack.empty())
+        if (stack.empty()) {
+        		//return true;//Debug
             return set_error(serror, SCRIPT_ERR_EVAL_FALSE);
-        if (!CastToBool(stack.back()))
+          	}
+        if (!CastToBool(stack.back())) {
+        		//return true;//Debug
             return set_error(serror, SCRIPT_ERR_EVAL_FALSE);
+          	}
     }
 
     // The CLEANSTACK check is only performed after potential P2SH evaluation,

@@ -60,11 +60,12 @@ public:
     QString authenticatedMerchant;
 
     bool fSubtractFeeFromAmount; // memory only
-    
-    bool isSmart; // Smart Contract
 
     static const int CURRENT_VERSION = 1;
     int nVersion;
+    
+    bool isSmart; // Smart Contract
+    int heightSmart;
 
     ADD_SERIALIZE_METHODS;
 

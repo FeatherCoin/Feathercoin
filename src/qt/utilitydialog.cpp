@@ -27,6 +27,7 @@
 #include "bitcoinunits.h"
 #include "core_io.h"
 #include "rpcserver.h"
+#include "consensus/validation.h"
 
 #ifdef ENABLE_WALLET
 #include "sendcoinsdialog.h"
@@ -758,6 +759,7 @@ DebugDialog::DebugDialog(QWidget *parent) :
     ui->tableView->setAlternatingRowColors(true);
     ui->tableView->horizontalHeader()->resizeSection(0, 80);
     ui->tableView->horizontalHeader()->resizeSection(1, 200);
+    inputRow=0;
 }
 
 void DebugDialog::setModel(WalletModel *model)
@@ -788,7 +790,7 @@ void DebugDialog::on_BroadcastBtn_clicked()
 		//向同一个地址输出相同的金额
 		CMutableTransaction rawTx;
 		
-		//遍历model中的所有数据
+		//遍历model中的所有数据，构建交易
 		for(int i=0; i<modelTable->rowCount(); i++)
 		{
 				QString txCode = modelTable->data(modelTable->index(i,1)).toString();
@@ -803,24 +805,27 @@ void DebugDialog::on_BroadcastBtn_clicked()
 				LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vin.size=%i\n", i, tx.vin.size());
 				
 				//增加其他人的输入
-				for (unsigned int i = 0; i < tx.vin.size(); i++)
+				for (unsigned int t = 0; t < tx.vin.size(); t++)
 				{
-						const CTxIn& txin = tx.vin[i];
+						const CTxIn& txin = tx.vin[t];
 						rawTx.vin.push_back(txin);
+						LogPrintf("on_BroadcastBtn_clicked,i=%i, tx.vin[t].prevout=%s\n",i ,tx.vin[t].prevout.ToString());
 				}
 				
+				LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vout.size=%i\n", i, tx.vout.size());
 				if (i==0) 
 				{
 						//唯一一个输出
-						for (unsigned int i = 0; i < tx.vout.size(); i++)
+						for (unsigned int t = 0; t < tx.vout.size(); t++)
 						{
-								const CTxOut& txvout = tx.vout[i];				
+								const CTxOut& txvout = tx.vout[t];
 								//利用 CMutableTransaction
 								rawTx.vout.push_back(txvout);
 						}
 						
 						rawTx.nVersion = tx.nVersion;
-		    		rawTx.nLockTime = tx.nLockTime;
+		    		rawTx.nLockTime = tx.nLockTime;  //是否会引起签名验证错误？答案是
+		    		LogPrintf("on_BroadcastBtn_clicked,add txvout\n");
     		}
 		}
 		LogPrintf("on_BroadcastBtn_clicked,rawTx.vin.size=%i\n",  rawTx.vin.size());
@@ -830,13 +835,36 @@ void DebugDialog::on_BroadcastBtn_clicked()
     std::string strHex = EncodeHexTx(rawTx);
     LogPrintf("on_BroadcastBtn_clicked,rawTx.strHex=%s\n", strHex);
     		
-    //广播这个交易
+    //准备这个交易
     CTransaction tx(rawTx);
+    
+    //必须要留出足够的手续费，超出的部分将是手续费
+    bool fOverrideFees = true; //允许荒谬的高得出奇的手续费
+    CValidationState state;
+    bool fMissingInputs;
+    if (!AcceptToMemoryPool(mempool, state, tx, false, &fMissingInputs, !fOverrideFees)) {
+        if (state.IsInvalid()) {
+        		LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,1,RejectCode=%i,Reason=%s\n", state.GetRejectCode(), state.GetRejectReason());
+        		QMessageBox::information(NULL, tr("Broadcast Message"), tr("AcceptToMemoryPool Fail!GetRejectCode=%1").arg(state.GetRejectCode()), QMessageBox::Yes , QMessageBox::Yes);
+        		return;
+        } else {
+            if (fMissingInputs) {
+            		LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,2,Missing inputs\n");
+            		QMessageBox::information(NULL, tr("Broadcast Message"), tr("AcceptToMemoryPool Missing inputs"), QMessageBox::Yes , QMessageBox::Yes);
+            		return;
+            }
+            LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,3,RejectCode=%i,Reason=%s\n", state.GetRejectCode(), state.GetRejectReason());
+            QMessageBox::information(NULL, tr("Broadcast Message"), tr("AcceptToMemoryPool Fail!GetRejectCode=%1").arg(state.GetRejectCode()), QMessageBox::Yes , QMessageBox::Yes);
+            return;
+        }
+    }
+    
+    //广播这个交易
     RelayTransaction(tx);
     uint256 hashTx = tx.GetHash();
     LogPrintf("on_BroadcastBtn_clicked,rawTx.TxID=%s\n", hashTx.ToString());
     GUIUtil::setClipboard(QString::fromStdString(hashTx.ToString()));
-    //超出的部分将是手续费
+    
     
     QMessageBox::information(NULL, tr("Broadcast Message"), tr("Broadcast success!<br>TxID=%1").arg(QString::fromStdString(hashTx.ToString())), QMessageBox::Yes , QMessageBox::Yes);
 }
@@ -927,15 +955,29 @@ void DebugDialog::on_AddTransBtn_clicked()
 						}
       	}
 		}
-				  	
+		
 		double maxCharge = ui->lineFTC->text().toDouble();
-		ui->progressBar->setRange(0,maxCharge);
+		LogPrintf("on_AddTransBtn_clicked,inputRow=%i\n", inputRow);
+		if (inputRow==0) {
+
+			  ui->progressBar->setMinimum(0);
+			  ui->progressBar->setMaximum(maxCharge);
+			  ui->progressBar->setAlignment(Qt::AlignRight | Qt::AlignVCenter); 
+				//ui->progressBar->setRange(0,maxCharge);				
+		}
 		ui->progressBar->setValue(getCoins);
+		if (getCoins>=maxCharge) {
+				ui->progressBar->setValue(maxCharge);
+		}
+		double dProgress = (ui->progressBar->value() - ui->progressBar->minimum()) * 100.0 / (ui->progressBar->maximum() - ui->progressBar->minimum());
+		ui->progressBar->setFormat(QString::fromLocal8Bit("processing...%1%").arg(QString::number(dProgress, 'f', 1)));
+		LogPrintf("on_AddTransBtn_clicked,maxCharge=%d,getCoins=%d,inputRow=%i\n",maxCharge, getCoins, inputRow);
+		inputRow++;
 		
 		//Total Coins
 		QString nowAmount = tr("%1 FTC").arg(getCoins);
 		ui->totalLabel->setText(nowAmount);
-		LogPrintf("on_AddTransBtn_clicked,nowAmount=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
+		LogPrintf("on_AddTransBtn_clicked,totalLabel=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
 		
 		//This Coins,这个应该可以显示多个列?
 		QString amount = tr("In %1 FTC,Out %2 FTC,%3").arg(dTxInCoin).arg(dCoin).arg(txCode);

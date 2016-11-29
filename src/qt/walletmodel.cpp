@@ -352,9 +352,16 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                 }; // else drop through to normal
             }
             
+            LogPrintf("rcp.isSmart=%i\n", rcp.isSmart);
+            LogPrintf("rcp.heightSmart=%i\n", rcp.heightSmart);
             
             CScript scriptPubKey = GetScriptForDestination(CBitcoinAddress(sAddr).Get());
-						CRecipient recipient = {scriptPubKey, rcp.amount, rcp.fSubtractFeeFromAmount};
+						CRecipient recipient ;
+						if (rcp.heightSmart ==0) {
+								recipient = {scriptPubKey, rcp.amount, rcp.fSubtractFeeFromAmount};
+						} else {
+								recipient = {scriptPubKey, rcp.amount, rcp.fSubtractFeeFromAmount, rcp.heightSmart};
+						}
             vecSend.push_back(recipient);
             
             //insert message into blockchain
@@ -536,8 +543,7 @@ QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
         uint256 hashTx = newTx->GetHash();
         
         //1.创建交易
-        CMutableTransaction rawTx;
-        rawTx.nVersion = newTx->nVersion;
+        CMutableTransaction rawTx;        
         BOOST_FOREACH(const CTxIn& txin, newTx->vin)
         {
         	rawTx.vin.push_back(txin);
@@ -546,6 +552,7 @@ QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
         {
         	rawTx.vout.push_back(txout);
         }
+        rawTx.nVersion = newTx->nVersion;
         rawTx.nLockTime = newTx->nLockTime;
         std::string strHex = EncodeHexTx(rawTx);
         	

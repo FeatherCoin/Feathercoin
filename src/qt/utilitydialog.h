@@ -120,6 +120,7 @@ private:
     WalletModel *model;
     double nowCoins;
     double getCoins;
+    int inputRow;
     QStandardItemModel  *modelTable = new QStandardItemModel();
 
 private Q_SLOTS:
