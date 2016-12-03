@@ -17,7 +17,7 @@
   <string>APPL</string>
 
   <key>CFBundleGetInfoString</key>
-  <string>0.9, Copyright © 2009-2014 The Bitcoin Core developers</string>
+  <string>0.9, Copyright © 2013-2016 The Feathercoin Core developers</string>
 
   <key>CFBundleShortVersionString</key>
   <string>0.9</string>
@@ -29,7 +29,7 @@
   <string>????</string>
 
   <key>CFBundleExecutable</key>
-  <string>Bitcoin-Qt</string>
+  <string>Feathercoin-Qt</string>
 
   <key>CFBundleIdentifier</key>
   <string>org.bitcoinfoundation.Bitcoin-Qt</string>
@@ -43,7 +43,7 @@
       <string>org.bitcoin.BitcoinPayment</string>
       <key>CFBundleURLSchemes</key>
       <array>
-        <string>bitcoin</string>
+        <string>feathercoin</string>
       </array>
     </dict>
   </array>
