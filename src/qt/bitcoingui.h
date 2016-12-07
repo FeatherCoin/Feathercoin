@@ -115,14 +115,14 @@ private:
     QAction *showHelpMessageAction;
     QAction *accountReportAction;
     QAction *bitmessageAction;
-    QAction *shapeshiftAction;
+//   QAction *shapeshiftAction;
     QAction *lockWalletAction;
     QAction *unlockWalletAction;
     QAction *inertBlockChainAction;
     QAction *opennameAction;
     QAction *debugAction;
     QAction *multiSigAction;
-    QAction *coinnectorAction;
+//  QAction *coinnectorAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -208,9 +208,9 @@ private slots:
     /** Start Bitmessage Process */
     void openBitmessageClicked();
     /** Visit Shapeshift' API */
-    void openShapeshiftClicked();
+ //   void openShapeshiftClicked();
     /** Visit Coinnector' API */
-    void openCoinnectorClicked();
+//    void openCoinnectorClicked();
         
 #endif
     /** Show configuration dialog */
