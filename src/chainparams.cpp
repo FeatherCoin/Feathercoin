@@ -18,7 +18,7 @@ using namespace boost::assign;
 // Main network
 //
 
-unsigned int pnSeed[] = 
+unsigned int pnSeed[] =
 {
     0xc49c0ed8, 0x1df9d243, 0xd9b75a40, 0xdc525e46, 0x72c321b1, 0x4eedeeb2, 0x18271787, 0xce725232,
     0x892aafc0, 0x979f6751, 0x2210f618, 0xfb529ed8, 0x66a74b3e, 0xef5d132e, 0x3b7a116c, 0x2fe45f55,
@@ -69,7 +69,7 @@ public:
         genesis.nTime    = 1317972665;
         genesis.nBits    = 0x1e0ffff0;
         genesis.nNonce   = 2084524493;
-        
+
         hashGenesisBlock = genesis.GetHash();
         assert(genesis.hashMerkleRoot == uint256("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
         assert(hashGenesisBlock == uint256("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2"));
@@ -82,15 +82,15 @@ public:
 
 
         //how to do feathercoin ?
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(14); // FeatherCoin addresses start with F
-        base58Prefixes[SCRIPT_ADDRESS_OLD] = list_of(5);
+        base58Prefixes[PUBKEY_ADDRESS] = boost::assign::list_of(14).convert_to_container<std::vector<unsigned char> >(); // FeatherCoin addresses start with F
+        base58Prefixes[SCRIPT_ADDRESS_OLD] = boost::assign::list_of(5).convert_to_container<std::vector<unsigned char> >();
       //  base58Prefixes[SCRIPT_ADDRESS] = list_of(96);
-        base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
-        base58Prefixes[SECRET_KEY] =     list_of(142);// 14+128
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xBC)(0x26);
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xDA)(0xEE);
+        base58Prefixes[SCRIPT_ADDRESS] = boost::assign::list_of(5).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[SECRET_KEY] =     boost::assign::list_of(142).convert_to_container<std::vector<unsigned char> >();// 14+128
+        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x88)(0xBC)(0x26).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x88)(0xDA)(0xEE).convert_to_container<std::vector<unsigned char> >();
         //base58Prefixes[EXT_SCRIPT_ADDRESS] = list_of(96);
-        
+
         // Convert the pnSeeds array into usable address objects.
         for (unsigned int i = 0; i < ARRAYLEN(pnSeed); i++)
         {
@@ -153,12 +153,12 @@ public:
         vSeeds.push_back(CDNSSeedData("feathercoin.com", "testnet-dnsseed.feathercoin.com"));
 
         // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
-        
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(65);
-        base58Prefixes[SCRIPT_ADDRESS] = list_of(196);
-        base58Prefixes[SECRET_KEY]     = list_of(193);//65+128
-        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x35)(0x87)(0xCF);
-        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x35)(0x83)(0x94);
+
+        base58Prefixes[PUBKEY_ADDRESS] = boost::assign::list_of(65).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[SCRIPT_ADDRESS] = boost::assign::list_of(196).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[SECRET_KEY]     = boost::assign::list_of(193).convert_to_container<std::vector<unsigned char> >();//65+128
+        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x35)(0x87)(0xCF).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x35)(0x83)(0x94).convert_to_container<std::vector<unsigned char> >();
     }
     virtual const CBlock& GenesisBlock() const { return genesis; }
     virtual Network NetworkID() const { return CChainParams::TESTNET; }
