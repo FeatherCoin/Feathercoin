@@ -1,11 +1,11 @@
-Feathercoin 0.9.3.2 
-===================
+Feathercoin 0.9.6
+=================
 
 Copyright (c) 2009-2016 Feathercoin Developers
 
 
 Setup
------------
+-------
 
 [Feathercoin Core] is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. 
 
@@ -110,14 +110,14 @@ https://github.com/glassechidna/zxing-cpp
 
 Build command for libzxing :  
 
-cd zxing-cpp
-mkdir build
-cd build
+    cd zxing-cpp   
+    mkdir build   
+    cd build   
 
-export CXXFLAGS="-fPIC"
-cmake -G 'Unix Makefiles' .. -DCMAKE_BUILD_TYPE=Release     
-make  
-sudo make install   
+    export CXXFLAGS="-fPIC"   
+    cmake -G 'Unix Makefiles' .. -DCMAKE_BUILD_TYPE=Release       
+    make   
+    sudo make install   
 
    
 ### For Ununtu 16.04 - Check the zxing files source.  
