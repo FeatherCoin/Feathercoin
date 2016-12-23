@@ -150,6 +150,7 @@ TransactionView::TransactionView(QWidget *parent) :
     contextMenu->addAction(showDetailsAction);
     contextMenu->addAction(showTotalAction);
     contextMenu->addAction(sendMesslAction);
+    
 
     mapperThirdPartyTxUrls = new QSignalMapper(this);
 
@@ -464,7 +465,11 @@ void TransactionView::sendMess()
     		QString txDesc="Sent "+amount+" FTC to you, TransactionID="+txid;
     		
         QProcess *process = new QProcess;
-        QString program="./bitmessagemain ";
+	#if defined(Q_OS_LINUX)
+	  QString program="pybitmessage";
+	#else
+	  QString program="./bitmessagemain";
+	#endif
         QStringList arguments;
         arguments << amount << txid << txDesc;
         process->start(program,arguments);
