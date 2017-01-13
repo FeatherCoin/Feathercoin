@@ -1,9 +1,7 @@
  **Feathercoin production branch.**
  
  ** Do not merge any commits into this branch**
- 
  **use latest release candidate branch for bug fixes**
- 
  **create new fork/branch for enhancements/new features**
  
 This is the production version of the Feathercoin code
