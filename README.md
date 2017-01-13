@@ -5,7 +5,7 @@ Feathercoin Core
 
 Status 0.9.3.6
 --------------
-drelease candidate
+release candidate
 
 What is Feathercoin?
 --------------------
