@@ -7,6 +7,7 @@
 
 #include "net.h"
 #include "util.h"
+#include "main.h"
 
 class uint256;
 class CBlock;
@@ -33,7 +34,7 @@ bool SetCheckpointPrivKey(std::string strPrivKey);
 bool SendSyncCheckpoint(uint256 hashCheckpoint);
 bool IsMatureSyncCheckpoint();
 bool IsSyncCheckpointTooOld(unsigned int nSeconds);
-uint256 WantedByOrphan(const CBlock* pblockOrphan);
+uint256 WantedByOrphan(const COrphanBlock* pblockOrphan);
 
 // Synchronized checkpoint (introduced first in ppcoin)
 class CUnsignedSyncCheckpoint
@@ -112,11 +113,11 @@ public:
 
     bool RelayTo(CNode* pnode) const
     {
-        // returns true if wasn't already sent
+        // returns true if wasn't already sent 如果不是已经发送（未发送返回true）
         if (pnode->hashCheckpointKnown != hashCheckpoint)
         {
             pnode->hashCheckpointKnown = hashCheckpoint;
-            pnode->PushMessage("checkpoint", *this);
+            pnode->PushMessage("checkpoint", *this);  //发送CSyncCheckpoint
             return true;
         }
         return false;

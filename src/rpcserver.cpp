@@ -313,6 +313,7 @@ static const CRPCCommand vRPCCommands[] =
     { "getcheckpoint",          &getcheckpoint,          true,      false,      true },
     { "sendcheckpoint",         &sendcheckpoint,         true,      false,      true },
     { "enforcecheckpoint",      &enforcecheckpoint,      true,      false,      true },
+    { "makekeypair",     				&makekeypair,      			 true,      false,      true },
 
     /* Wallet-enabled mining */
     { "getgenerate",            &getgenerate,            true,      false,      false },
