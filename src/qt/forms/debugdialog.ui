@@ -61,6 +61,9 @@
    <property name="statusTip">
     <string>Block Number</string>
    </property>
+   <property name="text">
+    <string>556535</string>
+   </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
