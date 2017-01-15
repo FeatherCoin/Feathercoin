@@ -153,6 +153,7 @@ void DebugDialog::on_sxButton_clicked()
             pindex = pindex->pprev;
     };
     
+    int numberSxTransaction = 0;
     while (pindex->nHeight >= nFromHeight)
     {
 		    LogPrintf("Scan sx transaction at %d ................\n",pindex->nHeight); 
@@ -171,13 +172,14 @@ void DebugDialog::on_sxButton_clicked()
 		        		LogPrintf("Standard transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason);
 		            continue; // leave out coinbase and others       
 		        }
-		        LogPrintf("Find a stealth transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason); 
+		        LogPrintf("Found stealth transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason); 
 		        pwalletMain->AddToWalletIfInvolvingMe(tx.GetHash(), tx, &block, fUpdate);
+			numberSxTransaction++;
 		    };
 		    pindex = pindex->pprev;
     }
     
-    QMessageBox::information(NULL, tr("Wallet Message"), tr("Scan stealth transactions on blockchain,Yes!!!"), QMessageBox::Yes , QMessageBox::Yes);
+    QMessageBox::information(NULL, tr("Wallet Message"), tr("%1 stealth transactions found on blockchain.").arg(numberSxTransaction), QMessageBox::Yes , QMessageBox::Yes);
 }
 
 
