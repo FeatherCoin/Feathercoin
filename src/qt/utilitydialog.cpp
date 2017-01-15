@@ -97,7 +97,11 @@ DebugDialog::DebugDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DebugDialog)
 {
+    CBlockIndex *pindex = chainActive.Genesis();
     ui->setupUi(this);
+    pindex = mapBlockIndex[chainActive.Tip()->GetBlockHash()];
+    ui->addrEdit2->insert(QString("%1").arg(pindex->nHeight));
+    
 }
 
 void DebugDialog::setModel(WalletModel *model)
