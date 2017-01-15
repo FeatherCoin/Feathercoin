@@ -44,7 +44,6 @@ MultiSigDialog::MultiSigDialog(QWidget *parent) :
     ui->sendButton->setIcon(QIcon());
     ui->btnExportDraft->setIcon(QIcon());
     ui->btnImportDraft->setIcon(QIcon());
-    ui->btnCreateAddr->setIcon(QIcon());
 #endif
 
     addEntry();
