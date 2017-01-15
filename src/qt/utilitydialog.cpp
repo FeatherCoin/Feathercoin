@@ -149,8 +149,7 @@ void DebugDialog::on_sxButton_clicked()
             pindex = pindex->pprev;
     };
     
-    int i;
-    for(i=nFromHeight2;i>=nFromHeight;i--)
+    while (pindex->nHeight >= nFromHeight)
     {
 		    LogPrintf("Scan sx transaction at %d ................\n",pindex->nHeight); 
 		    CBlock block;
