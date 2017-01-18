@@ -2357,8 +2357,8 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     reverse(vConnect.begin(), vConnect.end());
     
     if (vDisconnect.size() > 0) {
-        LogPrintf("SetBestChain:120: Disconnect %"PRIszu" blocks; %s...\n", vDisconnect.size(), pfork->GetBlockHash().ToString());
-        LogPrintf("SetBestChain:120: Connect %"PRIszu" blocks; ...%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString());
+        LogPrintf("SetBestChain:120: Disconnect %" PRIszu " blocks; %s...\n", vDisconnect.size(), pfork->GetBlockHash().ToString());
+        LogPrintf("SetBestChain:120: Connect %" PRIszu " blocks; ...%s\n", vConnect.size(), pindexNew->GetBlockHash().ToString());
     }
     
     

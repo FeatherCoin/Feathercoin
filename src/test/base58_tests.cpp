@@ -13,6 +13,7 @@
 #include "uint256.h"
 #include "util.h"
 
+#include "stealth.h"
 #include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 #include "json/json_spirit_reader_template.h"
@@ -40,8 +41,8 @@ BOOST_AUTO_TEST_CASE(base58_EncodeBase58)
         std::vector<unsigned char> sourcedata = ParseHex(test[0].get_str());
         std::string base58string = test[1].get_str();
         BOOST_CHECK_MESSAGE(
-                    EncodeBase58(&sourcedata[0], &sourcedata[sourcedata.size()]) == base58string,
-                    strTest);
+                            EncodeBase58(&sourcedata[0], &sourcedata[sourcedata.size()]) == base58string,
+                            strTest);
     }
 }
 
@@ -50,7 +51,7 @@ BOOST_AUTO_TEST_CASE(base58_DecodeBase58)
 {
     Array tests = read_json(std::string(json_tests::base58_encode_decode, json_tests::base58_encode_decode + sizeof(json_tests::base58_encode_decode)));
     std::vector<unsigned char> result;
-
+    
     BOOST_FOREACH(Value& tv, tests)
     {
         Array test = tv.get_array();
@@ -65,9 +66,9 @@ BOOST_AUTO_TEST_CASE(base58_DecodeBase58)
         BOOST_CHECK_MESSAGE(DecodeBase58(base58string, result), strTest);
         BOOST_CHECK_MESSAGE(result.size() == expected.size() && std::equal(result.begin(), result.end(), expected.begin()), strTest);
     }
-
+    
     BOOST_CHECK(!DecodeBase58("invalid", result));
-
+    
     // check that DecodeBase58 skips whitespace, but still fails with unexpected non-whitespace at the end.
     BOOST_CHECK(!DecodeBase58(" \t\n\v\f\r skip \r\f\v\n\t a", result));
     BOOST_CHECK( DecodeBase58(" \t\n\v\f\r skip \r\f\v\n\t ", result));
@@ -93,6 +94,10 @@ public:
     bool operator()(const CNoDestination &no) const
     {
         return (exp_addrType == "none");
+    }
+    bool operator()(const CStealthAddress &id) const
+    {
+        return (exp_addrType == "stealthaddress");
     }
 };
 
@@ -126,7 +131,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_parse)
     std::vector<unsigned char> result;
     CBitcoinSecret secret;
     CBitcoinAddress addr;
-
+    
     BOOST_FOREACH(Value& tv, tests)
     {
         Array test = tv.get_array();
@@ -152,10 +157,13 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_parse)
             // Note: CBitcoinSecret::SetString tests isValid, whereas CBitcoinAddress does not!
             BOOST_CHECK_MESSAGE(secret.SetString(exp_base58string), "!SetString:"+ strTest);
             BOOST_CHECK_MESSAGE(secret.IsValid(), "!IsValid:" + strTest);
-            CKey privkey = secret.GetKey();
+            CKey privkey;
+            bool fCompressed;
+            CSecret secret1  = secret.GetSecret(fCompressed);
+            privkey.SetSecret(secret1, fCompressed);
             BOOST_CHECK_MESSAGE(privkey.IsCompressed() == isCompressed, "compressed mismatch:" + strTest);
-            BOOST_CHECK_MESSAGE(privkey.size() == exp_payload.size() && std::equal(privkey.begin(), privkey.end(), exp_payload.begin()), "key mismatch:" + strTest);
-
+            BOOST_CHECK_MESSAGE(secret1.size() == exp_payload.size() && std::equal(secret1.begin(), secret1.end(), exp_payload.begin()), "key mismatch:" + strTest);
+            
             // Private key must be invalid public key
             addr.SetString(exp_base58string);
             BOOST_CHECK_MESSAGE(!addr.IsValid(), "IsValid privkey as pubkey:" + strTest);
@@ -169,7 +177,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_parse)
             BOOST_CHECK_MESSAGE(addr.IsScript() == (exp_addrType == "script"), "isScript mismatch" + strTest);
             CTxDestination dest = addr.Get();
             BOOST_CHECK_MESSAGE(boost::apply_visitor(TestAddrTypeVisitor(exp_addrType), dest), "addrType mismatch" + strTest);
-
+            
             // Public key must be invalid private key
             secret.SetString(exp_base58string);
             BOOST_CHECK_MESSAGE(!secret.IsValid(), "IsValid pubkey as privkey:" + strTest);
@@ -205,10 +213,11 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen)
         {
             bool isCompressed = find_value(metadata, "isCompressed").get_bool();
             CKey key;
-            key.Set(exp_payload.begin(), exp_payload.end(), isCompressed);
+            CSecret secret2;
+            key.SetSecret(secret2);
             assert(key.IsValid());
             CBitcoinSecret secret;
-            secret.SetKey(key);
+            secret.SetSecret(secret2, isCompressed);
             BOOST_CHECK_MESSAGE(secret.ToString() == exp_base58string, "result mismatch: " + strTest);
         }
         else
@@ -233,16 +242,16 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen)
                 continue;
             }
             CBitcoinAddress addrOut;
-            BOOST_CHECK_MESSAGE(boost::apply_visitor(CBitcoinAddressVisitor(&addrOut), dest), "encode dest: " + strTest);
+            BOOST_CHECK_MESSAGE(addrOut.Set(dest), "encode dest: " + strTest);
             BOOST_CHECK_MESSAGE(addrOut.ToString() == exp_base58string, "mismatch: " + strTest);
         }
     }
-
+    
     // Visiting a CNoDestination must fail
     CBitcoinAddress dummyAddr;
     CTxDestination nodest = CNoDestination();
-    BOOST_CHECK(!boost::apply_visitor(CBitcoinAddressVisitor(&dummyAddr), nodest));
-
+    BOOST_CHECK(!dummyAddr.Set(nodest));
+    
     SelectParams(CChainParams::MAIN);
 }
 
@@ -253,7 +262,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_invalid)
     std::vector<unsigned char> result;
     CBitcoinSecret secret;
     CBitcoinAddress addr;
-
+    
     BOOST_FOREACH(Value& tv, tests)
     {
         Array test = tv.get_array();
@@ -264,7 +273,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_invalid)
             continue;
         }
         std::string exp_base58string = test[0].get_str();
-
+        
         // must be invalid as public and as private key
         addr.SetString(exp_base58string);
         BOOST_CHECK_MESSAGE(!addr.IsValid(), "IsValid pubkey:" + strTest);

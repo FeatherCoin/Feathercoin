@@ -50,6 +50,7 @@ BOOST_AUTO_TEST_SUITE(script_P2SH_tests)
 
 BOOST_AUTO_TEST_CASE(sign)
 {
+    LOCK(cs_main);
     // Pay-to-script-hash looks like this:
     // scriptSig:    <sig> <sig...> <serialized_script>
     // scriptPubKey: HASH160 <hash> EQUAL
@@ -147,22 +148,23 @@ BOOST_AUTO_TEST_CASE(norecurse)
 
 BOOST_AUTO_TEST_CASE(set)
 {
+    LOCK(cs_main);
     // Test the CScript::Set* methods
     CBasicKeyStore keystore;
     CKey key[4];
-    std::vector<CPubKey> keys;
+    std::vector<CKey> keys;
     for (int i = 0; i < 4; i++)
     {
         key[i].MakeNewKey(true);
         keystore.AddKey(key[i]);
-        keys.push_back(key[i].GetPubKey());
+        keys.push_back(key[i]);
     }
 
     CScript inner[4];
     inner[0].SetDestination(key[0].GetPubKey().GetID());
-    inner[1].SetMultisig(2, std::vector<CPubKey>(keys.begin(), keys.begin()+2));
-    inner[2].SetMultisig(1, std::vector<CPubKey>(keys.begin(), keys.begin()+2));
-    inner[3].SetMultisig(2, std::vector<CPubKey>(keys.begin(), keys.begin()+3));
+    inner[1].SetMultisig(2, std::vector<CKey>(keys.begin(), keys.begin()+2));
+    inner[2].SetMultisig(1, std::vector<CKey>(keys.begin(), keys.begin()+2));
+    inner[3].SetMultisig(2, std::vector<CKey>(keys.begin(), keys.begin()+3));
 
     CScript outer[4];
     for (int i = 0; i < 4; i++)
@@ -250,16 +252,17 @@ BOOST_AUTO_TEST_CASE(switchover)
 
 BOOST_AUTO_TEST_CASE(AreInputsStandard)
 {
+    LOCK(cs_main);
     CCoinsView coinsDummy;
     CCoinsViewCache coins(coinsDummy);
     CBasicKeyStore keystore;
     CKey key[3];
-    vector<CPubKey> keys;
+    vector<CKey> keys;
     for (int i = 0; i < 3; i++)
     {
         key[i].MakeNewKey(true);
         keystore.AddKey(key[i]);
-        keys.push_back(key[i].GetPubKey());
+        keys.push_back(key[i]);
     }
 
     CTransaction txFrom;

@@ -1939,9 +1939,9 @@ bool CWallet::SendStealthMoneyToDestination(CStealthAddress& sxAddress, int64_t 
     
     if (fDebug)
     {
-        printf("Stealth send to generated pubkey %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
+        printf("Stealth send to generated pubkey %" PRIszu ": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
         printf("hash %s\n", addrTo.ToString().c_str());
-        printf("ephem_pubkey %"PRIszu": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
+        printf("ephem_pubkey %" PRIszu ": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
     };
     
     
@@ -2050,7 +2050,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
                 LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? 为空，pubkey是个问题
                 LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //
                 LogPrintf("sShared.e=%s\n",HexStr(&sShared.e[0],&sShared.e[32]).c_str());  //为空
-                LogPrintf("pkExtracted=%"PRIszu":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//为空
+                LogPrintf("pkExtracted=%" PRIszu ":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//为空
                  
                 int rv=StealthSecret(sScan, vchEphemPK, it->spend_pubkey, sShared, pkExtracted);
                      //StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
@@ -2061,7 +2061,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
                     continue;
                 };
                 LogPrintf("StealthSecret ok.rv=%d \n",rv);
-                LogPrintf("pkExtracted= %"PRIszu": %s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//pkOut
+                LogPrintf("pkExtracted= %" PRIszu ": %s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//pkOut
                 
                 CPubKey cpkE(pkExtracted);                
                 if (!cpkE.IsValid())
