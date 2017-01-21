@@ -12,13 +12,19 @@ BOOST_AUTO_TEST_SUITE(main_tests)
 BOOST_AUTO_TEST_CASE(subsidy_limit_test)
 {
     uint64_t nSum = 0;
-    for (int nHeight = 0; nHeight < 21000000; nHeight += 1000) {
+    for (int nHeight = 0 ; nHeight < 204638; nHeight += 1000) {
         uint64_t nSubsidy = GetBlockValue(nHeight, 0);
         BOOST_CHECK(nSubsidy <= 200 * COIN);
         nSum += nSubsidy * 1000;
         BOOST_CHECK(MoneyRange(nSum));
     }
-    BOOST_CHECK_EQUAL(nSum, 33581578125000000ULL);
+    for (int nHeight = 204639 ; nHeight < 23919999; nHeight += 1000) {
+        uint64_t nSubsidy = GetBlockValue(nHeight, 0);
+        BOOST_CHECK(nSubsidy <= 80 * COIN);
+        nSum += nSubsidy * 1000;
+        BOOST_CHECK(MoneyRange(nSum));
+    }
+    BOOST_CHECK_EQUAL(nSum, 33599996093750000ULL);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
