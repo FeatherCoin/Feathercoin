@@ -97,7 +97,15 @@ Then add the key to your system:
     
     sudo apt-get update  
     sudo apt-get install libzxing  
-  
+
+Copy the zxing headers directory back to Feathercoin source.
+
+From:
+    /usr/include/zxing
+    
+To:
+    ~/Feathercoin/src/zxing    
+    
  
 ### If PPA or .deb does not work, compile the zxing libraries yourself, download the sources from github.com.
 
@@ -119,7 +127,11 @@ Build command for libzxing :
     make   
     sudo make install   
 
-   
+Copy the zxing directory to Feathercoin/src, this time it will be located :
+
+    /usr/local/include/zxing
+    
+    
 ### For Ununtu 16.04 - Check the zxing files source.  
 
 sudo nano /usr/local/include/zxing/LuminanceSource.h
