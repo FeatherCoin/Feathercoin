@@ -141,13 +141,14 @@ check Line 30 : is set to public :
 ### Install boost Libraries
 
     sudo apt-get install libboost-all-dev  
-
     sudo apt-get install libmessaging-menu-dev  
 
+    
+### Build the Feathercoin binaries  
+    
     cd Feathercoin  
     make clean  
      ./autogen.sh
-     autoupdate
      ./configure --with-gui=qt5 --enable-tests=no  --with-incompatible-bdb --enable-upnp-default --with-qrcode=yes
     make 
     make install
