@@ -211,15 +211,18 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen)
             SelectParams(CChainParams::MAIN);
         if(isPrivkey)
         {
+            
             bool isCompressed = find_value(metadata, "isCompressed").get_bool();
+            CSecret privkey(exp_payload.begin(), exp_payload.end());
             CKey key;
-            CSecret secret2;
-            key.SetSecret(secret2);
+            key.SetSecret(privkey, isCompressed);
             assert(key.IsValid());
             CBitcoinSecret secret;
-            secret.SetSecret(secret2, isCompressed);
-            BOOST_CHECK_MESSAGE(secret.ToString() == exp_base58string, "result mismatch: " + strTest);
+            bool fCompressed=false;
+            secret.SetSecret(privkey, isCompressed);
+            BOOST_CHECK_MESSAGE(secret.ToString().c_str() == exp_base58string, "result mismatch: " + strTest);
         }
+        
         else
         {
             std::string exp_addrType = find_value(metadata, "addrType").get_str();
