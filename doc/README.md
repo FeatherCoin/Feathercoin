@@ -179,9 +179,39 @@ Example config usage :
 
 ./configure --disable-upnp-default --disable-tests --with-boost-libdir=/usr/lib/arm-linux-gnueabihf CPPFLAGS="-I/usr/local/BerkeleyDB.4.8/include -O2" LDFLAGS="-L/usr/local/BerkeleyDB.4.8/lib"
 
-     
+
+### Build Feathercoin using  openSSL  from source
+
+cd ~/Feathercoin/
+mkdir openSSL
+cd openSSL
+wget https://www.openssl.org/source/openssl-1.0.1l.tar.gz
+tar zxvf openssl-1.0.1l.tar.gz
+cd openssl-1.0.1l
+export CFLAGS="-fPIC"
+./config --prefix=~/Feathercoin/openSSL/build shared enable-ec enable-ecdh enable-ecdsa -lanl -ldl
+sudo make
+sudo make install
+
+
+**Build with custom openSSL builds**
+
+cd /Feathercoin
+
+make clean
+
+./autogen.sh
+
+./configure --prefix=/home/aciddude/Feathercoin/build CPPFLAGS="-I${BDB_PREFIX}/include/ -O2" LDFLAGS="-L${BDB_PREFIX}/lib/" PKG_CONFIG_PATH=/home/aciddude/Feathercoin/openSSL/build/lib/pkgconfig LIBS=-Wl,-rpath=/home/aciddude/Feathercoin/openSSL/build/lib --disable-tests SSL_LIBS="/home/aciddude/Feathercoin/openSSL/build/lib/libssl.a /home/aciddude/Feathercoin/openSSL/build/lib/libcrypto.a -ldl" --with-gui
+
+time make
+
+sudo make install
+
+
 Running Feathercoin
----------------------
+-------------------
+
 The following are some helpful notes on how to run Feathercoin on your native platform. 
 
 ### Unix
