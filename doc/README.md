@@ -215,11 +215,29 @@ make clean
 
 ./autogen.sh
 
-./configure --prefix=/home/aciddude/Feathercoin/build CPPFLAGS="-I${BDB_PREFIX}/include/ -O2" LDFLAGS="-L${BDB_PREFIX}/lib/" PKG_CONFIG_PATH=/home/aciddude/Feathercoin/openSSL/build/lib/pkgconfig LIBS=-Wl,-rpath=/home/aciddude/Feathercoin/openSSL/build/lib --disable-tests SSL_LIBS="/home/aciddude/Feathercoin/openSSL/build/lib/libssl.a /home/aciddude/Feathercoin/openSSL/build/lib/libcrypto.a -ldl" --with-gui
+./configure --prefix=/home/USER/Feathercoin/build CPPFLAGS="-I${BDB_PREFIX}/include/ -O2" LDFLAGS="-L${BDB_PREFIX}/lib/" PKG_CONFIG_PATH=/home/USER/Feathercoin/openSSL/build/lib/pkgconfig LIBS=-Wl,-rpath=/home/USER/Feathercoin/openSSL/build/lib --disable-tests SSL_LIBS="/home/USER/Feathercoin/openSSL/build/lib/libssl.a /home/USERe/Feathercoin/openSSL/build/lib/libcrypto.a -ldl" --with-gui
 
 time make
 
 sudo make install
+
+
+### Problems building with moc
+
+If you get a moc error:
+
+error: #error "This file was generated using the moc from 4.8.7.
+
+If you get :
+
+Qt Meta Object Compiler version 63 (Qt 4.8.7)
+
+Reset moc to Qt5:
+
+export QT_SELECT=5
+moc -version
+
+check anaconda is in the path .bashrc . It can install an old moc.
 
 
 Running Feathercoin
