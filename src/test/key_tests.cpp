@@ -16,17 +16,17 @@
 
 using namespace std;
 
-static const string strSecret1     ("5HxWvvfubhXpYYpS3tJkw6fq9jE9j18THftkZjHHfmFiWtmAbrj");
-static const string strSecret2     ("5KC4ejrDjv152FGwP386VD1i2NYc5KkfSMyv1nGy1VGDxGHqVY3");
-static const string strSecret1C    ("Kwr371tjA9u2rFSMZjTNun2PXXP3WPZu2afRHTcta6KxEUdm1vEw");
-static const string strSecret2C    ("L3Hq7a8FEQwJkW1M2GNKDW28546Vp5miewcCzSqUD9kCAXrJdS3g");
-static const CBitcoinAddress addr1 ("1QFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ");
-static const CBitcoinAddress addr2 ("1F5y5E5FMc5YzdJtB9hLaUe43GDxEKXENJ");
-static const CBitcoinAddress addr1C("1NoJrossxPBKfCHuJXT4HadJrXRE9Fxiqs");
-static const CBitcoinAddress addr2C("1CRj2HyM1CXWzHAXLQtiGLyggNT9WQqsDs");
+static const string strSecret1     ("5mDrMmqC7Rg32vN5REY55krG8L5sYtvjouhQFT2fJSWf6YNoAQF");
+static const string strSecret2     ("5nEw8kna8rJtg3geRwVBZc1eErJDzdHSabLT1F4yrVUdmYhPHC1");
+static const string strSecret1C    ("N2Birgsi3MuHyUY2Vxk91zYRmMEW7nCBx3bKcmtL3ybu95ZRtUa5");
+static const string strSecret2C    ("N6gVwEG9Fedy5LqzD5VPcuXqN8b2MM9ZuGYqn56ZwSgyHPTHUrLB");
+static const CBitcoinAddress addr1 ("6mBjfXRA89XeSjTc1rzDQ1cWmggBvJ59NB");
+static const CBitcoinAddress addr2 ("6jZqmkFVLY9LBgawnLqXUN5uj1NEHT3vc3");
+static const CBitcoinAddress addr1C("71N4eaVLuWaqkQmBh64Pj9FtrHTRyauYwy");
+static const CBitcoinAddress addr2C("6jBJB4kS8tWVCV85e5EfeV8UEB6rAEXRfX");
 
 
-static const string strAddressBad("1HV9Lc3sNHZxwj4Zk6fB38tEmBryq2cBiF");
+static const string strAddressBad("6j67A8CE6DMgKMY4q3fgjC4UQoNzrNUdXX");
 
 
 #ifdef KEY_TESTS_DUMPINFO
@@ -67,15 +67,29 @@ BOOST_AUTO_TEST_CASE(key_test1)
     BOOST_CHECK( bsecret1C.SetString(strSecret1C));
     BOOST_CHECK( bsecret2C.SetString(strSecret2C));
     BOOST_CHECK(!baddress1.SetString(strAddressBad));
-
-    CKey key1  = bsecret1.GetKey();
+    
+    bool fCompressed;
+    
+    CSecret secret1 = bsecret1.GetSecret(fCompressed);
+    CKey key1;
+    key1.SetSecret(secret1);
     BOOST_CHECK(key1.IsCompressed() == false);
-    CKey key2  = bsecret2.GetKey();
+    
+    CSecret secret2 = bsecret2.GetSecret(fCompressed);
+    CKey key2;
+    key2.SetSecret(secret2);
     BOOST_CHECK(key2.IsCompressed() == false);
-    CKey key1C = bsecret1C.GetKey();
+    
+    
+    CSecret secret1C = bsecret1C.GetSecret(fCompressed);
+    CKey key1C;
+    key1C.SetSecret(secret1C, fCompressed);
     BOOST_CHECK(key1C.IsCompressed() == true);
-    CKey key2C = bsecret2C.GetKey();
-    BOOST_CHECK(key1C.IsCompressed() == true);
+    
+    CSecret secret2C = bsecret2C.GetSecret(fCompressed);
+    CKey key2C;
+    key2C.SetSecret(secret2C, fCompressed);
+    BOOST_CHECK(key2C.IsCompressed() == true);
 
     CPubKey pubkey1  = key1. GetPubKey();
     CPubKey pubkey2  = key2. GetPubKey();
@@ -101,25 +115,25 @@ BOOST_AUTO_TEST_CASE(key_test1)
         BOOST_CHECK(key1C.Sign(hashMsg, sign1C));
         BOOST_CHECK(key2C.Sign(hashMsg, sign2C));
 
-        BOOST_CHECK( pubkey1.Verify(hashMsg, sign1));
-        BOOST_CHECK(!pubkey1.Verify(hashMsg, sign2));
-        BOOST_CHECK( pubkey1.Verify(hashMsg, sign1C));
-        BOOST_CHECK(!pubkey1.Verify(hashMsg, sign2C));
+        BOOST_CHECK( key1.Verify(hashMsg, sign1));
+        BOOST_CHECK(!key1.Verify(hashMsg, sign2));
+        BOOST_CHECK( key1.Verify(hashMsg, sign1C));
+        BOOST_CHECK(!key1.Verify(hashMsg, sign2C));
 
-        BOOST_CHECK(!pubkey2.Verify(hashMsg, sign1));
-        BOOST_CHECK( pubkey2.Verify(hashMsg, sign2));
-        BOOST_CHECK(!pubkey2.Verify(hashMsg, sign1C));
-        BOOST_CHECK( pubkey2.Verify(hashMsg, sign2C));
+        BOOST_CHECK(!key2.Verify(hashMsg, sign1));
+        BOOST_CHECK( key2.Verify(hashMsg, sign2));
+        BOOST_CHECK(!key2.Verify(hashMsg, sign1C));
+        BOOST_CHECK( key2.Verify(hashMsg, sign2C));
 
-        BOOST_CHECK( pubkey1C.Verify(hashMsg, sign1));
-        BOOST_CHECK(!pubkey1C.Verify(hashMsg, sign2));
-        BOOST_CHECK( pubkey1C.Verify(hashMsg, sign1C));
-        BOOST_CHECK(!pubkey1C.Verify(hashMsg, sign2C));
+        BOOST_CHECK( key1C.Verify(hashMsg, sign1));
+        BOOST_CHECK(!key1C.Verify(hashMsg, sign2));
+        BOOST_CHECK( key1C.Verify(hashMsg, sign1C));
+        BOOST_CHECK(!key1C.Verify(hashMsg, sign2C));
 
-        BOOST_CHECK(!pubkey2C.Verify(hashMsg, sign1));
-        BOOST_CHECK( pubkey2C.Verify(hashMsg, sign2));
-        BOOST_CHECK(!pubkey2C.Verify(hashMsg, sign1C));
-        BOOST_CHECK( pubkey2C.Verify(hashMsg, sign2C));
+        BOOST_CHECK(!key2C.Verify(hashMsg, sign1));
+        BOOST_CHECK( key2C.Verify(hashMsg, sign2));
+        BOOST_CHECK(!key2C.Verify(hashMsg, sign1C));
+        BOOST_CHECK( key2C.Verify(hashMsg, sign2C));
 
         // compact signatures (with key recovery)
 
@@ -130,17 +144,17 @@ BOOST_AUTO_TEST_CASE(key_test1)
         BOOST_CHECK(key1C.SignCompact(hashMsg, csign1C));
         BOOST_CHECK(key2C.SignCompact(hashMsg, csign2C));
 
-        CPubKey rkey1, rkey2, rkey1C, rkey2C;
+        CKey rkey1, rkey2, rkey1C, rkey2C;
 
-        BOOST_CHECK(rkey1.RecoverCompact (hashMsg, csign1));
-        BOOST_CHECK(rkey2.RecoverCompact (hashMsg, csign2));
-        BOOST_CHECK(rkey1C.RecoverCompact(hashMsg, csign1C));
-        BOOST_CHECK(rkey2C.RecoverCompact(hashMsg, csign2C));
+        BOOST_CHECK(rkey1.SetCompactSignature (hashMsg, csign1));
+        BOOST_CHECK(rkey2.SetCompactSignature (hashMsg, csign2));
+        BOOST_CHECK(rkey1C.SetCompactSignature(hashMsg, csign1C));
+        BOOST_CHECK(rkey2C.SetCompactSignature(hashMsg, csign2C));
 
-        BOOST_CHECK(rkey1  == pubkey1);
-        BOOST_CHECK(rkey2  == pubkey2);
-        BOOST_CHECK(rkey1C == pubkey1C);
-        BOOST_CHECK(rkey2C == pubkey2C);
+        BOOST_CHECK(rkey1.IsCompressed() == pubkey1.IsCompressed());
+        BOOST_CHECK(rkey2.IsCompressed()  == pubkey2.IsCompressed());
+        BOOST_CHECK(rkey1C.IsCompressed() == pubkey1C.IsCompressed());
+        BOOST_CHECK(rkey2C.IsCompressed() == pubkey2C.IsCompressed());
     }
 }
 
