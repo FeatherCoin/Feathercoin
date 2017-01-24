@@ -5,7 +5,7 @@ Copyright (c) 2009-2016 Feathercoin Developers
 
 
 Setup
--------
+-----
 
 [Feathercoin Core] is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. 
 
@@ -80,7 +80,7 @@ The Feathercoin wallet contains a number of features which require additional li
 
 (http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux)  
 
-As Super user (or sudo) create a file named **opensuse.list** in the directory 
+As Super user (or sudo) create a file named **OpenSuse.list** in the directory 
 
     /etc/apt/sources.list.d 
 
@@ -122,12 +122,12 @@ Build command for libzxing :
     mkdir build   
     cd build   
 
-    export CXXFLAGS="-fPIC"   
-    cmake -G 'Unix Makefiles' .. -DCMAKE_BUILD_TYPE=Release       
+    export CXXFLAGS="-fPIC"
+    cmake -G "Unix Makefiles" -DCMAKE_CXX_FLAGS="-fPIC -D_GLIBCXX_USE_CXX11_ABI=1" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=ON ..
     make   
     sudo make install   
 
-Copy the zxing directory to Feathercoin/src, this time it will be located :
+Copy the zxing directory to ~/Feathercoin/src, this time it will be located :
 
     /usr/local/include/zxing
     
@@ -237,7 +237,8 @@ Reset moc to Qt5:
 export QT_SELECT=5
 moc -version
 
-check anaconda is in the path .bashrc . It can install an old moc.
+
+Check if Anaconda is in the path .bashrc . It can install an old moc.
 
 
 Running Feathercoin
