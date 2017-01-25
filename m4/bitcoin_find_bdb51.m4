@@ -1,5 +1,5 @@
 AC_DEFUN([BITCOIN_FIND_BDB51],[
-  AC_MSG_CHECKING([for Berkeley DB C++ headers])
+  AC_MSG_CHECKING([for Berkeley DB C++ headers 5.x 4.8])
   BDB_CPPFLAGS=
   BDB_LIBS=
   bdbpath=X
