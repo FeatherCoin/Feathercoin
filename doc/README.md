@@ -5,7 +5,7 @@ Copyright (c) 2009-2016 Feathercoin Developers
 
 
 Setup
--------
+-----
 
 [Feathercoin Core] is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. 
 
@@ -80,7 +80,7 @@ The Feathercoin wallet contains a number of features which require additional li
 
 (http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux)  
 
-As Super user (or sudo) create a file named **opensuse.list** in the directory 
+As Super user (or sudo) create a file named **OpenSuse.list** in the directory 
 
     /etc/apt/sources.list.d 
 
@@ -97,7 +97,15 @@ Then add the key to your system:
     
     sudo apt-get update  
     sudo apt-get install libzxing  
-  
+
+Copy the zxing headers directory back to Feathercoin source.
+
+From:
+    /usr/include/zxing
+    
+To:
+    ~/Feathercoin/src/zxing    
+    
  
 ### If PPA or .deb does not work, compile the zxing libraries yourself, download the sources from github.com.
 
@@ -114,12 +122,16 @@ Build command for libzxing :
     mkdir build   
     cd build   
 
-    export CXXFLAGS="-fPIC"   
-    cmake -G 'Unix Makefiles' .. -DCMAKE_BUILD_TYPE=Release       
+    export CXXFLAGS="-fPIC"
+    cmake -G "Unix Makefiles" -DCMAKE_CXX_FLAGS="-fPIC -D_GLIBCXX_USE_CXX11_ABI=1" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=ON ..
     make   
     sudo make install   
 
-   
+Copy the zxing directory to ~/Feathercoin/src, this time it will be located :
+
+    /usr/local/include/zxing
+    
+    
 ### For Ununtu 16.04 - Check the zxing files source.  
 
 sudo nano /usr/local/include/zxing/LuminanceSource.h
@@ -129,13 +141,14 @@ check Line 30 : is set to public :
 ### Install boost Libraries
 
     sudo apt-get install libboost-all-dev  
-
     sudo apt-get install libmessaging-menu-dev  
 
+    
+### Build the Feathercoin binaries  
+    
     cd Feathercoin  
     make clean  
      ./autogen.sh
-     autoupdate
      ./configure --with-gui=qt5 --enable-tests=no  --with-incompatible-bdb --enable-upnp-default --with-qrcode=yes
     make 
     make install
@@ -179,9 +192,58 @@ Example config usage :
 
 ./configure --disable-upnp-default --disable-tests --with-boost-libdir=/usr/lib/arm-linux-gnueabihf CPPFLAGS="-I/usr/local/BerkeleyDB.4.8/include -O2" LDFLAGS="-L/usr/local/BerkeleyDB.4.8/lib"
 
-     
+
+### Build Feathercoin using  openSSL  from source
+
+cd ~/Feathercoin/
+mkdir openSSL
+cd openSSL
+wget https://www.openssl.org/source/openssl-1.0.1l.tar.gz
+tar zxvf openssl-1.0.1l.tar.gz
+cd openssl-1.0.1l
+export CFLAGS="-fPIC"
+./config --prefix=~/Feathercoin/openSSL/build shared enable-ec enable-ecdh enable-ecdsa -lanl -ldl
+sudo make
+sudo make install
+
+
+**Build with custom openSSL builds**
+
+cd /Feathercoin
+
+make clean
+
+./autogen.sh
+
+./configure --prefix=/home/USER/Feathercoin/build CPPFLAGS="-I${BDB_PREFIX}/include/ -O2" LDFLAGS="-L${BDB_PREFIX}/lib/" PKG_CONFIG_PATH=/home/USER/Feathercoin/openSSL/build/lib/pkgconfig LIBS=-Wl,-rpath=/home/USER/Feathercoin/openSSL/build/lib --disable-tests SSL_LIBS="/home/USER/Feathercoin/openSSL/build/lib/libssl.a /home/USERe/Feathercoin/openSSL/build/lib/libcrypto.a -ldl" --with-gui
+
+time make
+
+sudo make install
+
+
+### Problems building with moc
+
+If you get a moc error:
+
+error: #error "This file was generated using the moc from 4.8.7.
+
+If you get :
+
+Qt Meta Object Compiler version 63 (Qt 4.8.7)
+
+Reset moc to Qt5:
+
+export QT_SELECT=5
+moc -version
+
+
+Check if Anaconda is in the path .bashrc . It can install an old moc.
+
+
 Running Feathercoin
----------------------
+-------------------
+
 The following are some helpful notes on how to run Feathercoin on your native platform. 
 
 ### Unix
