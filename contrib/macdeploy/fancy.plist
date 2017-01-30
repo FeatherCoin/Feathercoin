@@ -7,12 +7,12 @@
 		<integer>300</integer>
 		<integer>300</integer>
 		<integer>800</integer>
-		<integer>620</integer>
+		<integer>720</integer>
 	</array>
 	<key>background_picture</key>
 	<string>background.png</string>
 	<key>icon_size</key>
-	<integer>96</integer>
+	<integer>128</integer>
 	<key>applications_symlink</key>
 	<true/>
 	<key>items_position</key>
@@ -20,12 +20,12 @@
 		<key>Applications</key>
 		<array>
 			<integer>370</integer>
-			<integer>156</integer>
+			<integer>111</integer>
 		</array>
 		<key>Feathercoin-Qt.app</key>
 		<array>
 			<integer>128</integer>
-			<integer>156</integer>
+			<integer>111</integer>
 		</array>
 	</dict>
 </dict>
