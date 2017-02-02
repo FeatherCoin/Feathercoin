@@ -3902,7 +3902,7 @@ string GetWarnings(string strFor)
             if (alert.AppliesToMe() && alert.nPriority > nPriority)
             {
                 nPriority = alert.nPriority;
-                strStatusBar = alert.strStatusBar;
+                strStatusBar = strprintf("%s: #%s\n",alert.strStatusBaralert.nID);
             }
         }
     }
