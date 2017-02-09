@@ -461,9 +461,12 @@ Value sendalert(const Array& params, bool fHelp)
 
     // Prepare master key and sign alert message
     CBitcoinSecret vchSecret;
+	bool fCompressed;
     if (!vchSecret.SetString(params[1].get_str()))
         throw runtime_error("Invalid alert master key");
-    CKey key = vchSecret.GetKey(); // if key is not correct openssl may crash
+    CKey key;
+	CSecret secret = vchSecret.GetSecret(fCompressed);
+	key.SetSecret(secret, fCompressed); // if key is not correct openssl may crash
     if (!key.Sign(Hash(alert.vchMsg.begin(), alert.vchMsg.end()), alert.vchSig))
         throw runtime_error(
             "Unable to sign alert, check alert master key?\n");
