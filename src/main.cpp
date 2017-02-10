@@ -2666,7 +2666,7 @@ bool CBlockHeader::CheckProofOfWork(int nHeight) const
 					}
 					return true;
 			}			
-			if (nHeight>=10)
+			if (nHeight>=600)
 			{
 				if (!::CheckProofOfWork(GetPoWHash(), nBits))
 				{
