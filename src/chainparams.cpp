@@ -75,10 +75,9 @@ public:
         assert(hashGenesisBlock == uint256("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2"));
 
         vSeeds.push_back(CDNSSeedData("feathercoin.com", "dnsseed.feathercoin.com"));
-        vSeeds.push_back(CDNSSeedData("ftc-c.com", "www.ftc-c.com"));
-        vSeeds.push_back(CDNSSeedData("ftc-c.com", "block.ftc-c.com"));
-        vSeeds.push_back(CDNSSeedData("ftc-c.com", "pool.ftc-c.com"));
+        vSeeds.push_back(CDNSSeedData("explorer2.feathercoin.com", "explorer2.feathercoin.com"));
         vSeeds.push_back(CDNSSeedData("alltheco.in", "dnsseed.alltheco.in"));
+        vSeeds.push_back(CDNSSeedData("ftc-c.com", "block.ftc-c.com"));
 
 
         //how to do feathercoin ?
@@ -149,8 +148,8 @@ public:
         vSeeds.clear();
         //how to do feathercoin
         //vSeeds.push_back(CDNSSeedData("bitcoin.petertodd.org", "testnet-seed.bitcoin.petertodd.org"));
-        vSeeds.push_back(CDNSSeedData("115.29.37.248", "115.29.37.248"));//ftc-c.com
-        vSeeds.push_back(CDNSSeedData("feathercoin.com", "testnet-dnsseed.feathercoin.com"));
+        vSeeds.push_back(CDNSSeedData("explorer2.feathercoin.com","feathercoin.com"));
+        vSeeds.push_back(CDNSSeedData("testnet-dnsseed.feathercoin.com","feathercoin.com"));
 
         // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
         
