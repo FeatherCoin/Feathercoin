@@ -2464,6 +2464,12 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 		LogPrintf("SetBestChain:100 chainActive nHeight=%d,BlockHash=%s\n",pindexOldTip->nHeight,pindexOldTip->GetBlockHash().ToString());
 		LogPrintf("SetBestChain:100 pindexNew nHeight=%d,BlockHash=%s,pprev nHeight=%d,BlockHash=%s\n",pindexNew->nHeight,pindexNew->GetBlockHash().ToString(),pindexNew->pprev->nHeight,pindexNew->pprev->GetBlockHash().ToString());
 		
+		//hard retuen 
+		if (pindexNew->GetBlockHash() == hardhashCheckpoint) {
+				LogPrintf("SetBestChain:101  hard return\n");	
+				return true;
+		}
+				
     // Check whether we have something to do.
     if (pindexNew == NULL) 
     		return true;
@@ -2511,7 +2517,11 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
 
     // Disconnect shorter branch
     vector<CTransaction> vResurrect;
-    BOOST_FOREACH(CBlockIndex* pindex, vDisconnect) {
+    BOOST_FOREACH(CBlockIndex* pindex, vDisconnect) {        
+        LogPrintf("SetBestChain:121,pindex->nHeight=%d,pindex->blockhash=%s\n",pindex->nHeight,pindex->GetBlockHash().ToString());
+        CDiskBlockPos pos = pindex->GetUndoPos();
+        LogPrintf("SetBestChain:122,pos=%s\n",pos.ToString());
+        
         CBlock block;
         if (!ReadBlockFromDisk(block, pindex))
             return AbortNode(state, "Failed to read block");
@@ -5251,9 +5261,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     else if (strCommand == "checkpoint") // ppcoin synchronized checkpoint
     {
         CSyncCheckpoint checkpoint;
-        vRecv >> checkpoint;
+        vRecv >> checkpoint;  //赋值了hashCheckpoint
 
 				LogPrintf("Receive checkpoint, hashCheckpoint=%s\n",checkpoint.hashCheckpoint.ToString().c_str());
+				//是否不再接收60008的消息
         if (checkpoint.ProcessSyncCheckpoint(pfrom))
         {
         		LogPrintf("checkpoint.ProcessSyncCheckpoint(pfrom)=true, hashCheckpoint=%s\n",checkpoint.hashCheckpoint.ToString().c_str());

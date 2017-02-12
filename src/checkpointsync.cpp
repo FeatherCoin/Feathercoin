@@ -158,6 +158,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
     }
 
     // Received checkpoint should be a descendant block of the current checkpoint. Trace back to the same height of current checkpoint to verify.
+    //可以从 1575535 到 1576929 走到
     if (pindexSyncCheckpoint->nHeight>0) 
     {
 		    CBlockIndex* pindex = pindexCheckpointRecv;
@@ -211,11 +212,11 @@ bool AcceptPendingSyncCheckpoint()
     
     if ((hashPendingCheckpoint.IsNull()==false) && mapBlockIndex.count(hashPendingCheckpoint))
     {
-    		LogPrintf("AcceptPendingSyncCheckpoint hashPendingCheckpoint=%s,IsNull=%d \n",hashPendingCheckpoint.ToString().c_str(),hashPendingCheckpoint.IsNull());
+    		LogPrintf("AcceptPendingSyncCheckpoint 100 hashPendingCheckpoint=%s,IsNull=%d \n",hashPendingCheckpoint.ToString().c_str(),hashPendingCheckpoint.IsNull());
         //是否该执行
         if (mapBlockIndex[hashPendingCheckpoint]->nHeight>0)
         {
-        			LogPrintf("AcceptPendingSyncCheckpoint hashPendingCheckpoint.nHeight = %d \n",mapBlockIndex[hashPendingCheckpoint]->nHeight);
+        			LogPrintf("AcceptPendingSyncCheckpoint 200 hashPendingCheckpoint.nHeight = %d \n",mapBlockIndex[hashPendingCheckpoint]->nHeight);
 			        if (!ValidateSyncCheckpoint(hashPendingCheckpoint))
 			        {
 			            hashPendingCheckpoint = uint256();
@@ -223,14 +224,15 @@ bool AcceptPendingSyncCheckpoint()
 			            return false;
 			        }
 
-
+							LogPrintf("AcceptPendingSyncCheckpoint 201 hashPendingCheckpoint=%s\n",hashPendingCheckpoint.ToString().c_str());
 			        CBlockIndex* pindexCheckpoint = mapBlockIndex[hashPendingCheckpoint];
 			        if (IsSyncCheckpointEnforced() && !pindexCheckpoint->IsInMainChain())
 			        {
+			        		LogPrintf("AcceptPendingSyncCheckpoint 300 pindexCheckpoint.nHeight=%d,IsInMainChain=%d\n",pindexCheckpoint->nHeight,pindexCheckpoint->IsInMainChain());
 			            CValidationState state;
 			            if (!SetBestChain(state, pindexCheckpoint))
 			            {
-			            		LogPrintf("AcceptPendingSyncCheckpoint SetBestChain hashInvalidCheckpoint .\n");
+			            		LogPrintf("AcceptPendingSyncCheckpoint 400 SetBestChain hashInvalidCheckpoint.\n");
 			                hashInvalidCheckpoint = hashPendingCheckpoint;
 			                return error("AcceptPendingSyncCheckpoint: SetBestChain failed for sync checkpoint %s", hashPendingCheckpoint.ToString().c_str());
 			            }
@@ -469,7 +471,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 
 		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 100,hashCheckpoint=%s,mapBlockIndex.count=%d \n",hashCheckpoint.ToString().c_str(),mapBlockIndex.count(hashCheckpoint));
     LOCK(cs_hashSyncCheckpoint);
-    if (!mapBlockIndex.count(hashCheckpoint))
+    if (!mapBlockIndex.count(hashCheckpoint))   //count=0
     {
     		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 110,mapBlockIndex.count=%d \n",mapBlockIndex.count(hashCheckpoint));
         
@@ -480,7 +482,8 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
         // Ask this guy to fill in what we're missing
         if (pfrom)
         {
-            //pfrom->PushGetBlocks(pindexBestHeader, hashCheckpoint);
+            //f8208e44c06669e4c93d0aa3a9fdcc882341740db716f2ffd39bac134eadab67
+            pfrom->PushGetBlocks(pindexBestHeader, hashCheckpoint);
             // ask directly as well in case rejected earlier by duplicate proof-of-stake because getblocks may not get it this time
             LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 140 ,AskFor %s.\n", hashCheckpoint.ToString().c_str());
             //pfrom->AskFor(CInv(MSG_BLOCK, hashCheckpoint));  //count=0,区块链错位造成count=1
@@ -506,7 +509,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 		    {
 		        // checkpoint chain received but not yet main chain
 		        CValidationState state;
-		        if (!SetBestChain(state, pindexCheckpoint))
+		        if (!SetBestChain(state, pindexCheckpoint))  //检查这里
 		        {
 		        		LogPrintf("ProcessSyncCheckpoint 220,SetBestChain hashInvalidCheckpoint .\n");
 		            hashInvalidCheckpoint = hashCheckpoint;
