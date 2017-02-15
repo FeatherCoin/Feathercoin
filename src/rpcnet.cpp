@@ -11,6 +11,7 @@
 #include "sync.h"
 #include "util.h"
 #include "base58.h"
+#include "alert.h"
 
 #include <boost/foreach.hpp>
 #include "json/json_spirit_value.h"
