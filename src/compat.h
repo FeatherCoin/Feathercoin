@@ -18,7 +18,7 @@
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <sys/fcntl.h>
+#include <fcntl.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <net/if.h>
@@ -44,6 +44,18 @@ typedef int socklen_t;
 #define WSAENOTSOCK         EBADF
 #define INVALID_SOCKET      (SOCKET)(~0)
 #define SOCKET_ERROR        -1
+#endif
+
+// As Solaris does not have the MSG_NOSIGNAL flag for send(2) syscall, it is defined as 0
+#if !defined(HAVE_MSG_NOSIGNAL) && !defined(MSG_NOSIGNAL)
+#define MSG_NOSIGNAL 0
+#endif
+
+#ifndef WIN32
+// PRIO_MAX is not defined on Solaris
+#ifndef PRIO_MAX
+#define PRIO_MAX 20
+#endif
 #endif
 
 inline int myclosesocket(SOCKET& hSocket)

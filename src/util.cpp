@@ -68,8 +68,8 @@ namespace boost {
 
 using namespace std;
 
-map<string, string> mapArgs;
-map<string, vector<string> > mapMultiArgs;
+std::map<string, string> mapArgs;
+std::map<string, vector<string> > mapMultiArgs;
 bool fDebug = false;
 bool fDebugNet = false;
 bool fPrintToConsole = false;
@@ -525,7 +525,7 @@ vector<unsigned char> ParseHex(const string& str)
     return ParseHex(str.c_str());
 }
 
-static void InterpretNegativeSetting(string name, map<string, string>& mapSettingsRet)
+static void InterpretNegativeSetting(string name, std::map<string, string>& mapSettingsRet)
 {
     // interpret -nofoo as -foo=0 (and -nofoo=0 as -foo=1) as long as -foo not set
     if (name.find("-no") == 0)
@@ -1100,8 +1100,8 @@ boost::filesystem::path GetConfigFile()
     return pathConfigFile;
 }
 
-void ReadConfigFile(map<string, string>& mapSettingsRet,
-                    map<string, vector<string> >& mapMultiSettingsRet)
+void ReadConfigFile(std::map<string, string>& mapSettingsRet,
+                    std::map<string, vector<string> >& mapMultiSettingsRet)
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good())

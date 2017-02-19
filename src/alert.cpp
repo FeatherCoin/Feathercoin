@@ -16,7 +16,7 @@
 
 using namespace std;
 
-map<uint256, CAlert> mapAlerts;
+std::map<uint256, CAlert> mapAlerts;
 CCriticalSection cs_mapAlerts;
 
 static const char* pszMainKey = "043c19a29fe8f763369aea68107e82854af7b072fc7d2d2adb87d2a3b40b51ab0d0e77805096e255a87388b175fd4a49d93d9b6c878004975e41222a3b85086eef";
@@ -159,7 +159,7 @@ CAlert CAlert::getAlertByHash(const uint256 &hash)
     CAlert retval;
     {
         LOCK(cs_mapAlerts);
-        map<uint256, CAlert>::iterator mi = mapAlerts.find(hash);
+        std::map<uint256, CAlert>::iterator mi = mapAlerts.find(hash);
         if(mi != mapAlerts.end())
             retval = mi->second;
     }
@@ -198,7 +198,7 @@ bool CAlert::ProcessAlert(bool fThread)
     {
         LOCK(cs_mapAlerts);
         // Cancel previous alerts
-        for (map<uint256, CAlert>::iterator mi = mapAlerts.begin(); mi != mapAlerts.end();)
+        for (std::map<uint256, CAlert>::iterator mi = mapAlerts.begin(); mi != mapAlerts.end();)
         {
             const CAlert& alert = (*mi).second;
             if (Cancels(alert))
