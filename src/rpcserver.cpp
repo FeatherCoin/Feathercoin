@@ -311,10 +311,10 @@ static const CRPCCommand vRPCCommands[] =
     { "walletpassphrasechange", &walletpassphrasechange, false,     false,      true },
     { "walletpassphrase",       &walletpassphrase,       true,      false,      true },
     /* Wallet-ACP */
-    { "getcheckpoint",          &getcheckpoint,          true,      false,      true },
-    { "sendcheckpoint",         &sendcheckpoint,         true,      false,      true },
-    { "enforcecheckpoint",      &enforcecheckpoint,      true,      false,      true },
-    { "makekeypair",     				&makekeypair,      			 true,      false,      true },
+    { "getcheckpoint",          &getcheckpoint,          true,      false,      false },
+    { "sendcheckpoint",         &sendcheckpoint,         true,      false,      false },
+    { "enforcecheckpoint",      &enforcecheckpoint,      true,      false,      false },
+    { "makekeypair",     	&makekeypair,      	 true,      false,      false },
 
     /* Wallet-enabled mining */
     { "getgenerate",            &getgenerate,            true,      false,      false },
