@@ -2935,10 +2935,7 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
         nHeight = pindexPrev->nHeight+1;
         LogPrintf("AcceptBlockHeader,nHeight=%d \n",nHeight);
 
-        /* Reset checkpoint to last hardened checkpoint
-	   after block 1576929, which has an invalid checkpoint due to 0.9.3.2 failing ACP */
-	if (nHeight == 1576940)
-	  ResetSyncCheckpoint();
+
 	
         /* Don't accept blocks with bogus nVersion numbers after this point */
         if (nHeight >= nForkFour)  {
@@ -2968,6 +2965,8 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
             return state.DoS(100, error("AcceptBlock() : rejected by checkpoint lock-in at %d", nHeight),
                              REJECT_CHECKPOINT, "checkpoint mismatch");
                              
+
+
         // ppcoin: check that the block satisfies synchronized checkpoint
         // checkpoint advisory mode
         if (!IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
