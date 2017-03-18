@@ -2161,7 +2161,7 @@ void static UpdateTip(CBlockIndex *pindexNew) {
     
     if (!IsSyncCheckpointEnforced()) // checkpoint advisory mode    
     {
-    	if (pindexBest->pprev && !CheckSyncCheckpoint(pindexBest->GetBlockHash(), pindexBest->pprev))
+    	if (pindexNew->pprev && !CheckSyncCheckpoint(pindexNew->GetBlockHash(), pindexNew->pprev))
     		strCheckpointWarning = _("Warning: checkpoint on different blockchain fork, contact developers to resolve the issue");
     	else
     		strCheckpointWarning = "";
