@@ -27,8 +27,7 @@ class CBlockHeader
 {
 public:
     // header
-    static const int32_t ACTIVE_VERSION=4;
-    static const int32_t CURRENT_VERSION=2;  //be locked
+    static const int32_t CURRENT_VERSION=4;  //active new version
     int32_t cVersion;
     int32_t nVersion;
     uint256 hashPrevBlock;
@@ -70,7 +69,6 @@ public:
 
     void SetNull()
     {
-        cVersion = CBlockHeader::ACTIVE_VERSION;
         nVersion = CBlockHeader::CURRENT_VERSION;
         hashPrevBlock.SetNull();
         hashMerkleRoot.SetNull();

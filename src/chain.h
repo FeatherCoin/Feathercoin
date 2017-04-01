@@ -144,7 +144,6 @@ public:
     unsigned int nStatus;
 
     //! block header
-    int cVersion;
     int nVersion;
     uint256 hashMerkleRoot;
     unsigned int nTime;
@@ -174,7 +173,6 @@ public:
         nStatus = 0;
         nSequenceId = 0;
 
-				cVersion       = 0;
         nVersion       = 0;
         hashMerkleRoot = uint256();
         nTime          = 0;
@@ -193,7 +191,6 @@ public:
     {
         SetNull();
 
-				cVersion       = block.cVersion;
         nVersion       = block.nVersion;
         hashMerkleRoot = block.hashMerkleRoot;
         nTime          = block.nTime;
@@ -224,7 +221,6 @@ public:
     CBlockHeader GetBlockHeader() const
     {
         CBlockHeader block;
-        block.cVersion       = cVersion;
         block.nVersion       = nVersion;
         if (pprev)
             block.hashPrevBlock = pprev->GetBlockHash();
@@ -334,7 +330,6 @@ public:
             READWRITE(VARINT(nUndoPos));
 
         // block header
-        READWRITE(this->cVersion);
         READWRITE(this->nVersion);
         READWRITE(hashPrev);
         READWRITE(hashMerkleRoot);
@@ -348,7 +343,6 @@ public:
     uint256 GetBlockHash() const
     {
         CBlockHeader block;
-        block.cVersion        = cVersion;
         block.nVersion        = nVersion;
         block.hashPrevBlock   = hashPrev;
         block.hashMerkleRoot  = hashMerkleRoot;
