@@ -4849,11 +4849,19 @@ bool ProcessMessages(CNode* pfrom)
         it++;
 
         // Scan for message start
-        if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
-            LogPrintf("\n\nPROCESSMESSAGE: INVALID MESSAGESTART\n\n");
-            fOk = false;
-            break;
-        }
+	
+	/* Message start detector */
+        
+        
+        
+	 if ((memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) && (memcmp(msg.hdr.pchMessageStart, Params().MessageStartNew(), MESSAGE_START_SIZE) != 0)) {
+
+	   	LogPrintf("\n\nPROCESSMESSAGE: INVALID MESSAGESTART\n\n");
+		fOk = false;
+		break;
+	   }
+	  
+
 
         // Read header
         CMessageHeader& hdr = msg.hdr;

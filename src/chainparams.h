@@ -53,6 +53,7 @@ public:
 
     const uint256& HashGenesisBlock() const { return hashGenesisBlock; }
     const MessageStartChars& MessageStart() const { return pchMessageStart; }
+    const MessageStartChars& MessageStartNew() const { return pchMessageStartNew; }
     const vector<unsigned char>& AlertKey() const { return vAlertPubKey; }
     int GetDefaultPort() const { return nDefaultPort; }
     const CBigNum& ProofOfWorkLimit() const { return bnProofOfWorkLimit; }
@@ -70,6 +71,7 @@ protected:
 
     uint256 hashGenesisBlock;
     MessageStartChars pchMessageStart;
+    MessageStartChars pchMessageStartNew;
     // Raw pub key bytes for the broadcast alert signing key.
     vector<unsigned char> vAlertPubKey;
     int nDefaultPort;
