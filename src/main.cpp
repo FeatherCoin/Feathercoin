@@ -2968,8 +2968,8 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
 
 
         // ppcoin: check that the block satisfies synchronized checkpoint
-        // checkpoint advisory mode
-        if (!IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
+        // if not in checkpoint advisory mode
+        if (IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
         	return error("checkpoint AcceptBlock() : rejected by synchronized checkpoint");
 
         // Don't accept any forks from the main chain prior to last checkpoint
