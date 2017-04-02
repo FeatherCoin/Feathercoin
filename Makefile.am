@@ -1,6 +1,12 @@
-ACLOCAL_AMFLAGS = -I src/m4
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+ACLOCAL_AMFLAGS = -I build-aux/m4
 SUBDIRS = src
-.PHONY: deploy
+if ENABLE_MAN
+SUBDIRS += doc/man
+endif
+.PHONY: deploy FORCE
 
 GZIP_ENV="-9n"
 
@@ -152,14 +158,14 @@ total.coverage/.dirstamp: total_coverage.info
 	$(GENHTML) -s $< -o $(@D)
 	@touch $@
 
-cov: test_bitcoin.coverage/.dirstamp total.coverage/.dirstamp
-
-endif
-
 if USE_COMPARISON_TOOL
 check-local:
 	$(MKDIR_P) qa/tmp
 	@qa/pull-tester/run-bitcoind-for-test.sh $(JAVA) -jar $(JAVA_COMPARISON_TOOL) qa/tmp/compTool $(COMPARISON_TOOL_REORG_TESTS)
+endif
+
+cov: test_bitcoin.coverage/.dirstamp total.coverage/.dirstamp
+
 endif
 
 EXTRA_DIST = $(top_srcdir)/share/genbuild.sh qa/pull-tester/pull-tester.sh qa/rpc-tests $(DIST_DOCS) $(WINDOWS_PACKAGING) $(OSX_PACKAGING)
