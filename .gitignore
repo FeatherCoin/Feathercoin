@@ -1,8 +1,6 @@
-*.tar.gz
+
 *.exe
 *.directory
-Makefile*
-*.in
 
 #ignore binaries
 src/feathercoin
@@ -51,7 +49,6 @@ configure
 *.orig
 *.o
 *.o-*
-*.patch
 .bitcoin
 *.a
 *.pb.cc
@@ -66,7 +63,6 @@ configure
 
 # Compilation and Qt preprocessor part
 *.qm
-Makefile
 feathercoin-qt
 Feathercoin-Qt.app
 
@@ -99,3 +95,13 @@ qa/pull-tester/run-bitcoind-for-test.sh
 qa/pull-tester/build-tests.sh
 
 !src/leveldb*/Makefile
+src/**Makefile
+/src/test/Makefile
+/src/qt/test/Makefile
+/src/qt/Makefile
+/src/Makefile
+/src/config/stamp-h1
+/src/config/bitcoin-config.h.in
+/src/config/bitcoin-config.h
+/Makefile
+/libtool
