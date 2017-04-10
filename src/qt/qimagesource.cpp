@@ -16,11 +16,11 @@ ArrayRef<char> QImageLuminanceSource::getRow(int y, ArrayRef<char> _row) const
 
 ArrayRef<char> QImageLuminanceSource::getMatrix() const
 {
-    ArrayRef<char> mymatrix(width*height);
-    for (int y = 0; y < height; y++)
+    ArrayRef<char> mymatrix(this->getWidth()*this->getHeight());
+    for (int y = 0; y < this->getHeight(); y++)
     {
-        for (int x = 0; x < width; x++) {
-            mymatrix[y*width+x] = qGray(image.pixel(x, y));
+        for (int x = 0; x < this->getWidth(); x++) {
+            mymatrix[y*this->getWidth()+x] = qGray(image.pixel(x, y));
         }
     }
     return mymatrix;
