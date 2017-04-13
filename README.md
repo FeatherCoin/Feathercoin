@@ -3,7 +3,7 @@ Feathercoin Core integration/staging tree
 Feathercoin Core
 ================
 
-Status - Feathercoin 0.9.6.x  production release version line.
+Status - Feathercoin 0.9.6.1  Release Candidate.
 --------------------------------------------------------------
 
 

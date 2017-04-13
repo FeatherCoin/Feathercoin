@@ -12,6 +12,7 @@ src/bitcoin-config.h
 src/bitcoin-config.h
 src/Makefile.in
 Makefile.in
+Makefile
 share/qt/Info.plist
 share/setup.nsi
 src/Makefile.in

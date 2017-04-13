@@ -724,8 +724,8 @@ if test x$bitcoin_enable_qt != xno; then
   dnl enable qr support
   AC_MSG_CHECKING([whether to build GUI with support for QR codes])
   if test x$have_zxing = xno; then
-    if test x$use_zxing == xyes; then
-     AC_MSG_ERROR("QR support requested but cannot be built. use --without-zxing")
+    if test x$use_qr == xyes; then
+     AC_MSG_ERROR("QR support requested but cannot be built. use --without-qrencode")
     fi
     AC_MSG_RESULT(no)
   else
