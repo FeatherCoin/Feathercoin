@@ -33,7 +33,7 @@
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 27
+#serial 22
 
 AC_DEFUN([AX_BOOST_BASE],
 [
@@ -92,10 +92,7 @@ if test "x$want_boost" = "xyes"; then
     libsubdirs="lib"
     ax_arch=`uname -m`
     case $ax_arch in
-      x86_64)
-        libsubdirs="lib64 libx32 lib lib64"
-        ;;
-      ppc64|s390x|sparc64|aarch64|ppc64le)
+      x86_64|ppc64|s390x|sparc64|aarch64)
         libsubdirs="lib64 lib lib64"
         ;;
     esac
@@ -105,18 +102,6 @@ if test "x$want_boost" = "xyes"; then
     dnl are almost assuredly the ones desired.
     AC_REQUIRE([AC_CANONICAL_HOST])
     libsubdirs="lib/${host_cpu}-${host_os} $libsubdirs"
-
-    case ${host_cpu} in
-      i?86)
-        libsubdirs="lib/i386-${host_os} $libsubdirs"
-        ;;
-    esac
-
-    dnl some arches may advertise a cpu type that doesn't line up with their
-    dnl prefix's cpu type. For example, uname may report armv7l while libs are
-    dnl installed to /usr/lib/arm-linux-gnueabihf. Try getting the compiler's
-    dnl value for an extra chance of finding the correct path.
-    libsubdirs="lib/`$CXX -dumpmachine 2>/dev/null` $libsubdirs"
 
     dnl first we check the system location for boost libraries
     dnl this location ist chosen if boost libraries are installed with the --layout=system option
@@ -170,7 +155,7 @@ if test "x$want_boost" = "xyes"; then
         AC_MSG_RESULT(yes)
     succeeded=yes
     found_system=yes
-        ],[
+        ],[:
         ])
     AC_LANG_POP([C++])
 
@@ -179,10 +164,6 @@ if test "x$want_boost" = "xyes"; then
     dnl if we found no boost with system layout we search for boost libraries
     dnl built and installed without the --layout=system option or for a staged(not installed) version
     if test "x$succeeded" != "xyes"; then
-        CPPFLAGS="$CPPFLAGS_SAVED"
-        LDFLAGS="$LDFLAGS_SAVED"
-        BOOST_CPPFLAGS=
-        BOOST_LDFLAGS=
         _version=0
         if test "$ac_boost_path" != ""; then
             if test -d "$ac_boost_path" && test -r "$ac_boost_path"; then
@@ -195,12 +176,6 @@ if test "x$want_boost" = "xyes"; then
                     VERSION_UNDERSCORE=`echo $_version | sed 's/\./_/'`
                     BOOST_CPPFLAGS="-I$ac_boost_path/include/boost-$VERSION_UNDERSCORE"
                 done
-                dnl if nothing found search for layout used in Windows distributions
-                if test -z "$BOOST_CPPFLAGS"; then
-                    if test -d "$ac_boost_path/boost" && test -r "$ac_boost_path/boost"; then
-                        BOOST_CPPFLAGS="-I$ac_boost_path"
-                    fi
-                fi
             fi
         else
             if test "$cross_compiling" != yes; then
@@ -263,7 +238,7 @@ if test "x$want_boost" = "xyes"; then
             AC_MSG_RESULT(yes)
         succeeded=yes
         found_system=yes
-            ],[
+            ],[:
             ])
         AC_LANG_POP([C++])
     fi
