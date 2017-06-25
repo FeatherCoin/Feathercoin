@@ -8,6 +8,8 @@ Makefile*
 src/feathercoin
 src/feathercoind
 src/feathercoin-cli
+src/qt/feathercoin-qt
+src/test/test-feathercoin
 
 # ignore files created by autoconf and conf
 src/bitcoin-config.h
