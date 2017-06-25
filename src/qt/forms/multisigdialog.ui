@@ -100,11 +100,11 @@
              </font>
             </property>
             <property name="text">
-             <string>Total balance:</string>
+             <string>Total Balance:  </string>
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
            <widget class="QLabel" name="labelBalance">
             <property name="cursor">
              <cursorShape>IBeamCursor</cursorShape>
@@ -112,12 +112,18 @@
             <property name="text">
              <string>0.00000 FTC</string>
             </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <property name="indent">
+             <number>-1</number>
+            </property>
             <property name="textInteractionFlags">
              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QLabel" name="labelAddresses">
             <property name="font">
              <font>
@@ -126,11 +132,14 @@
              </font>
             </property>
             <property name="text">
-             <string>    Addresses:</string>
+             <string>    Addresses:  </string>
+            </property>
+            <property name="indent">
+             <number>-1</number>
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QLabel" name="labelAddressesNum">
             <property name="minimumSize">
              <size>
@@ -140,6 +149,9 @@
             </property>
             <property name="text">
              <string>0</string>
+            </property>
+            <property name="indent">
+             <number>-1</number>
             </property>
            </widget>
           </item>
@@ -625,8 +637,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>834</width>
-        <height>78</height>
+        <width>824</width>
+        <height>99</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
