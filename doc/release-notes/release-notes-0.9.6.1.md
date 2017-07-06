@@ -1,6 +1,6 @@
 Feathercoin Core version 0.9.0 is now available from:
 
-  https://feathercoin.org/bin/0.9.0/
+  https://feathercoin.com  (scroll to the bottom of the page)
 
 This is a new minor version release, bringing bug fixes.
 
@@ -11,11 +11,29 @@ Please report bugs using the issue tracker at github:
 How to Upgrade
 --------------
 
-If you are running an older version, shut it down. Wait until it has completely
-shut down (which might take a few minutes for older versions), uninstall all
-earlier versions of Feathercoin, then run the installer (on Windows/Linux/Mac) or just copy
-over /Applications/Feathercoin-Qt (on Mac) or feathercoind/feathercoin-qt (on Linux).
+Always backup your private keys before upgrading!
 
+If you are running an older version, shut it down. Wait until it has completely
+shut down (which might take a few minutes for older versions)
+
+For Linux
+---------
+If you have previously installed the Core using the procedure decribed here:
+https://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux
+or use http://software.opensuse.org for OpenSuse distributions, the upgrade 
+should happen automatically, if configured, or can be triggered by issuing the
+commands:
+    -  'apt-get update'
+    -  'apt-get upgrade'
+
+For Windows and MAC
+------------------- 
+Uninstall all older versions of the Feathercoin Core, then 
+use the installer packages of the latest release from https://github.com/FeatherCoin/Feathercoin/releases
+to install the software.
+
+Other remarks
+-------------
 If you are upgrading from version 0.8.x or earlier, the first time you run
 0.9.6.1 your blockchain files will be re-indexed, which will take anywhere from 
 30 minutes to several hours, depending on the speed of your machine.
