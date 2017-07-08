@@ -20,8 +20,6 @@
 
 #ifdef USE_QRCODE
 #include "qrcodedialog.h"
-#endif
-#ifdef USE_ZXING
 #include "snapwidget.h"
 #endif
 

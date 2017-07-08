@@ -8,12 +8,16 @@ Makefile*
 src/feathercoin
 src/feathercoind
 src/feathercoin-cli
+src/qt/test/test_feathercoin-qt
+src/test/test_feathercoin
+
 
 # ignore files created by autoconf and conf
 src/bitcoin-config.h
 src/bitcoin-config.h
 src/Makefile.in
 Makefile.in
+Makefile
 share/qt/Info.plist
 share/setup.nsi
 src/Makefile.in
@@ -24,6 +28,7 @@ src/test/Makefile.in
 src/test/Makefile.in
 src/test/test_bitcoin
 src/build-aux/
+build-aux/
 src/stamp-h1
 
 #ignore files created during make

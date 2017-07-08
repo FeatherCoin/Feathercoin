@@ -2161,7 +2161,7 @@ void static UpdateTip(CBlockIndex *pindexNew) {
     
     if (!IsSyncCheckpointEnforced()) // checkpoint advisory mode    
     {
-    	if (pindexBest->pprev && !CheckSyncCheckpoint(pindexBest->GetBlockHash(), pindexBest->pprev))
+    	if (pindexNew->pprev && !CheckSyncCheckpoint(pindexNew->GetBlockHash(), pindexNew->pprev))
     		strCheckpointWarning = _("Warning: checkpoint on different blockchain fork, contact developers to resolve the issue");
     	else
     		strCheckpointWarning = "";
@@ -2329,7 +2329,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     // Only when all have succeeded, we push it to pcoinsTip.
     CCoinsViewCache view(*pcoinsTip, true);
 
-    // Find the fork (´ÓpindexOldTipÍËµ½pindexNew)  
+    // Find the fork (ä»ŽpindexOldTipé€€åˆ°pindexNew)  
     CBlockIndex* pfork = pindexOldTip;
     CBlockIndex* plonger = pindexNew;
     while (pfork && pfork != plonger)
@@ -2345,7 +2345,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     }
     LogPrintf("SetBestChain:110 pfork nHeight=%d,BlockHash=%s\n",pfork->nHeight,pfork->GetBlockHash().ToString());
 
-    // List of what to disconnect (´ÓpindexOldTipÍËµ½pindexNew=pfork)
+    // List of what to disconnect (ä»ŽpindexOldTipé€€åˆ°pindexNew=pfork)
     vector<CBlockIndex*> vDisconnect;
     for (CBlockIndex* pindex = pindexOldTip; pindex != pfork; pindex = pindex->pprev)
         vDisconnect.push_back(pindex);
@@ -2666,7 +2666,7 @@ bool CBlockHeader::CheckProofOfWork(int nHeight) const
 					}
 					return true;
 			}			
-			if (nHeight>=10)
+			if (nHeight>=600)
 			{
 				if (!::CheckProofOfWork(GetPoWHash(), nBits))
 				{
@@ -2935,7 +2935,8 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
         nHeight = pindexPrev->nHeight+1;
         LogPrintf("AcceptBlockHeader,nHeight=%d \n",nHeight);
 
-       
+
+	
         /* Don't accept blocks with bogus nVersion numbers after this point */
         if (nHeight >= nForkFour)  {
             if ((block.nVersion !=2)&&(block.nVersion !=4)) 
@@ -2964,9 +2965,11 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
             return state.DoS(100, error("AcceptBlock() : rejected by checkpoint lock-in at %d", nHeight),
                              REJECT_CHECKPOINT, "checkpoint mismatch");
                              
+
+
         // ppcoin: check that the block satisfies synchronized checkpoint
-        // checkpoint advisory mode
-        if (!IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
+        // if not in checkpoint advisory mode
+        if (IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
         	return error("checkpoint AcceptBlock() : rejected by synchronized checkpoint");
 
         // Don't accept any forks from the main chain prior to last checkpoint
@@ -3099,7 +3102,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
 {
     // Feathercoin: temporarily disable v2 block lockin until we are ready for v2 transition
-    // 1000¸öÖÐÓÐ750¸öÐÂ°æ±¾
+    // 1000ä¸ªä¸­æœ‰750ä¸ªæ–°ç‰ˆæœ¬
     // return false;
     
     unsigned int nFound = 0;
@@ -3902,7 +3905,7 @@ string GetWarnings(string strFor)
             if (alert.AppliesToMe() && alert.nPriority > nPriority)
             {
                 nPriority = alert.nPriority;
-                strStatusBar = alert.strStatusBar;
+                strStatusBar = strprintf("%s: #%s\n",alert.strStatusBar, alert.nID);
             }
         }
     }
@@ -4702,7 +4705,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     else if (strCommand == "checkpoint") // ppcoin synchronized checkpoint
     {
         CSyncCheckpoint checkpoint;
-        vRecv >> checkpoint;  //ÊÕµ½µÄ¼ì²éµã
+        vRecv >> checkpoint;  //æ”¶åˆ°çš„æ£€æŸ¥ç‚¹
         LogPrintf("Receive checkpoint,hashCheckpoint=%s\n.",checkpoint.hashCheckpoint.ToString().c_str());
 
         if (checkpoint.ProcessSyncCheckpoint(pfrom))
@@ -4846,11 +4849,19 @@ bool ProcessMessages(CNode* pfrom)
         it++;
 
         // Scan for message start
-        if (memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) {
-            LogPrintf("\n\nPROCESSMESSAGE: INVALID MESSAGESTART\n\n");
-            fOk = false;
-            break;
-        }
+	
+	/* Message start detector */
+        
+        
+        
+	 if ((memcmp(msg.hdr.pchMessageStart, Params().MessageStart(), MESSAGE_START_SIZE) != 0) && (memcmp(msg.hdr.pchMessageStart, Params().MessageStartNew(), MESSAGE_START_SIZE) != 0)) {
+
+	   	LogPrintf("\n\nPROCESSMESSAGE: INVALID MESSAGESTART\n\n");
+		fOk = false;
+		break;
+	   }
+	  
+
 
         // Read header
         CMessageHeader& hdr = msg.hdr;
