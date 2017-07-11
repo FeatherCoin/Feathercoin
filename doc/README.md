@@ -1,7 +1,7 @@
-Feathercoin 0.9.6
-=================
+Feathercoin 0.9.6.x
+===================
 
-Copyright (c) 2009-2016 Feathercoin Developers
+Copyright (c) 2009-2017 Feathercoin Developers
 
 
 Setup
