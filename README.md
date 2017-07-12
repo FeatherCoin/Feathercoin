@@ -2,7 +2,6 @@
 
 <h1>Feathercoin</h1>
 
-<p><center><img src="http://www.ftc-c.com/pack4/F2_240.jpg"></center></p>
 <p>Feathercoin bypasses the old banking system by using peer-to-peer technology. Payments are borderless and can be processed by anyone with affordable computer hardware using free software. This work is rewarded with new feathercoins which are issued by the network. </p>
 
 <ul>
