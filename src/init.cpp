@@ -1204,6 +1204,14 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                     strLoadError = _("Corrupted block database detected");
                     break;
                 }
+                
+                // Check if the ACP public key has changed in this code version
+		// and reset the ACP root to the last hardcoded checkpoint
+		uiInterface.InitMessage(_("Checking ACP ..."));
+		if (!CheckCheckpointPubKey()) {
+		    strLoadError = _("Checking ACP pubkey failed");
+		    break;
+	}
             } catch (const std::exception& e) {
                 if (fDebug) LogPrintf("%s\n", e.what());
                 strLoadError = _("Error opening block database");
@@ -1231,6 +1239,10 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             }
         }
     }
+    
+    
+                
+
 
     // As LoadBlockIndex can take several minutes, it's possible the user
     // requested to kill the GUI during the last operation. If so, exit.
