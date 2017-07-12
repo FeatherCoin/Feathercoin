@@ -20,6 +20,8 @@ build-aux/install-sh
 build-aux/ltmain.sh
 build-aux/missing
 build-aux/test-driver
+src/config/bitcoin-config.h.in
+
 .directory
 .libs
 libtool
