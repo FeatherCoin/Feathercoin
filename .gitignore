@@ -27,8 +27,6 @@ src/qt/test/Makefile.in
 src/test/Makefile.in
 src/test/Makefile.in
 src/test/test_bitcoin
-src/build-aux/
-build-aux/
 src/stamp-h1
 
 #ignore files created during make
