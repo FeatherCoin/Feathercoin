@@ -9,6 +9,7 @@ FORMS += \
     ../src/qt/forms/openuridialog.ui \
     ../src/qt/forms/optionsdialog.ui \
     ../src/qt/forms/overviewpage.ui \
+    ../src/qt/forms/qrcodedialog.ui \
     ../src/qt/forms/receivecoinsdialog.ui \
     ../src/qt/forms/receiverequestdialog.ui \
     ../src/qt/forms/rpcconsole.ui \
