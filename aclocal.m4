@@ -338,10 +338,9 @@ _AM_IF_OPTION([no-dependencies],, [_AM_DEPENDENCIES([CCAS])])dnl
 # configured tree to be moved without reconfiguration.
 
 AC_DEFUN([AM_AUX_DIR_EXPAND],
-[dnl Rely on autoconf to set up CDPATH properly.
-AC_PREREQ([2.50])dnl
-# expand $ac_aux_dir to an absolute path
-am_aux_dir=`cd $ac_aux_dir && pwd`
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+# Expand $ac_aux_dir to an absolute path.
+am_aux_dir=`cd "$ac_aux_dir" && pwd`
 ])
 
 # AM_CONDITIONAL                                            -*- Autoconf -*-
@@ -1320,7 +1319,7 @@ m4_include([build-aux/m4/ax_check_link_flag.m4])
 m4_include([build-aux/m4/ax_check_preproc_flag.m4])
 m4_include([build-aux/m4/ax_gcc_func_attribute.m4])
 m4_include([build-aux/m4/ax_pthread.m4])
-m4_include([build-aux/m4/bitcoin_find_bdb61.m4])
+m4_include([build-aux/m4/bitcoin_find_bdb48.m4])
 m4_include([build-aux/m4/bitcoin_qt.m4])
 m4_include([build-aux/m4/bitcoin_subdir_to_include.m4])
 m4_include([build-aux/m4/libtool.m4])
