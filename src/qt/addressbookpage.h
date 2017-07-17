@@ -102,7 +102,7 @@ private Q_SLOTS:
     void createAddress();
     void exportAddress();
 
-signals:
+Q_SIGNALS:
     void signMessage(QString addr);
     void verifyMessage(QString addr);
     void sendCoins(QString addr);
