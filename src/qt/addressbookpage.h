@@ -46,7 +46,7 @@ public:
     void setOptionsModel(OptionsModel *optionsModel);
     const QString &getReturnValue() const { return returnValue; }
 
-public slots:
+public Q_SLOTS:
     void done(int retval);
 
 private:
@@ -62,7 +62,7 @@ private:
     QAction *deleteAction; // to be able to explicitly disable it
     QString newAddressToSelect;
 
-private slots:
+private Q_SLOTS:
     /** Delete currently selected address entry */
     void on_deleteAddress_clicked();
     /** Create a new address for receiving coins and / or add a new address book entry */
