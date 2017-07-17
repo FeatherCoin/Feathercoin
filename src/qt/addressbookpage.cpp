@@ -72,10 +72,10 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
 
 
 #ifdef USE_QRCODE
-    ui->showQRCode->setVisible(true);
+//    ui->showQRCode->setVisible(true);
 #endif
 #ifndef USE_ZXING
-    ui->importQRCodeButton->setVisible(false);
+ //   ui->importQRCodeButton->setVisible(false);
 #endif
 
     switch(mode)
@@ -121,7 +121,7 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     QAction *editAction = new QAction(tr("&Edit"), this);
     deleteAction = new QAction(ui->deleteAddress->text(), this);
     #ifdef USE_QRCODE
-        QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
+       // QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
     #endif
     QAction *sendCoinsAction = new QAction(tr("Send &Coins"), this);
     QAction *signMessageAction = new QAction(ui->signMessage->text(), this);
@@ -319,10 +319,10 @@ void AddressBookPage::selectionChanged()
         }
         ui->copyAddress->setEnabled(true);
         #ifdef USE_QRCODE
-           ui->showQRCode->setEnabled(true);
+         //  ui->showQRCode->setEnabled(true);
         #endif
         #ifdef USE_ZXING
-           ui->importQRCodeButton->setEnabled(true);
+         //  ui->importQRCodeButton->setEnabled(true);
         #endif
     }
     else
@@ -330,7 +330,7 @@ void AddressBookPage::selectionChanged()
         ui->deleteAddress->setEnabled(false);
         ui->copyAddress->setEnabled(false);
         #ifdef USE_QRCODE
-            ui->showQRCode->setEnabled(false);
+          //  ui->showQRCode->setEnabled(false);
         #endif
     }
 }
