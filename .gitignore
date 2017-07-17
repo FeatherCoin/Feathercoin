@@ -73,7 +73,7 @@ src/secp256k1/src/libsecp256k1-config.h.in~
 stamp-h1
 .deps
 src/test/*
-src/qt/forms/ui_*
+#src/qt/forms/ui_*
 src/qt/*.pb.*
 # quality assurance is currenty broken, so don't track
 qa/
