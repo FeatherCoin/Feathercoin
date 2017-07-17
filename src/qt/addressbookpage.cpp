@@ -72,10 +72,10 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
 
 
 #ifdef USE_QRCODE
-    ui->showQRCode->setVisible(true);
+//    ui->showQRCode->setVisible(true);
 #endif
 #ifndef USE_ZXING
-    ui->importQRCodeButton->setVisible(false);
+//    ui->importQRCodeButton->setVisible(false);
 #endif
 
     switch(mode)
@@ -160,8 +160,9 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(onCopyLabelAction()));
     connect(editAction, SIGNAL(triggered()), this, SLOT(onEditAction()));
     connect(deleteAction, SIGNAL(triggered()), this, SLOT(on_deleteAddress_clicked()));
-    connect(showQRCodeAction, SIGNAL(triggered()), this, SLOT(on_showQRCode_clicked()));
-    
+#ifdef USE_QRCODE
+   // connect(showQRCodeAction, SIGNAL(triggered()), this, SLOT(on_showQRCode_clicked()));
+#endif    
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextualMenu(QPoint)));
     connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(accept()));
     
