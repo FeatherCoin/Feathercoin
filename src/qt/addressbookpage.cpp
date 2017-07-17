@@ -75,7 +75,7 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
 //    ui->showQRCode->setVisible(true);
 #endif
 #ifndef USE_ZXING
-//    ui->importQRCodeButton->setVisible(false);
+ //   ui->importQRCodeButton->setVisible(false);
 #endif
 
     switch(mode)
@@ -121,7 +121,7 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     QAction *editAction = new QAction(tr("&Edit"), this);
     deleteAction = new QAction(ui->deleteAddress->text(), this);
     #ifdef USE_QRCODE
-        QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
+       // QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
     #endif
     QAction *sendCoinsAction = new QAction(tr("Send &Coins"), this);
     QAction *signMessageAction = new QAction(ui->signMessage->text(), this);
@@ -160,9 +160,8 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(onCopyLabelAction()));
     connect(editAction, SIGNAL(triggered()), this, SLOT(onEditAction()));
     connect(deleteAction, SIGNAL(triggered()), this, SLOT(on_deleteAddress_clicked()));
-#ifdef USE_QRCODE
-   // connect(showQRCodeAction, SIGNAL(triggered()), this, SLOT(on_showQRCode_clicked()));
-#endif    
+    connect(showQRCodeAction, SIGNAL(triggered()), this, SLOT(on_showQRCode_clicked()));
+    
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextualMenu(QPoint)));
     connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(accept()));
     
@@ -320,10 +319,10 @@ void AddressBookPage::selectionChanged()
         }
         ui->copyAddress->setEnabled(true);
         #ifdef USE_QRCODE
-           ui->showQRCode->setEnabled(true);
+         //  ui->showQRCode->setEnabled(true);
         #endif
         #ifdef USE_ZXING
-           ui->importQRCodeButton->setEnabled(true);
+         //  ui->importQRCodeButton->setEnabled(true);
         #endif
     }
     else
@@ -331,7 +330,7 @@ void AddressBookPage::selectionChanged()
         ui->deleteAddress->setEnabled(false);
         ui->copyAddress->setEnabled(false);
         #ifdef USE_QRCODE
-            ui->showQRCode->setEnabled(false);
+          //  ui->showQRCode->setEnabled(false);
         #endif
     }
 }
