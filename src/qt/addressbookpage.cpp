@@ -24,7 +24,7 @@
 #endif
 
 // wallet.h is in the directory above
-#include "../wallet.h"
+#include "../wallet/wallet.h"
 #include "walletmodel.h"
 #include "init.h"
 #include "base58.h"
