@@ -23,7 +23,8 @@
 #include "snapwidget.h"
 #endif
 
-#include "wallet.h"
+// wallet.h is in the directory above
+#include "../wallet.h"
 #include "walletmodel.h"
 #include "init.h"
 #include "base58.h"
