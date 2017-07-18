@@ -342,7 +342,7 @@ void AddressBookPage::done(int retval)
     QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
 
     Q_FOREACH (QModelIndex index, indexes)
-    foreach (QModelIndex index, indexes)
+    //foreach (QModelIndex index, indexes)
     {
         QVariant address = table->model()->data(index);
         returnValue = address.toString();
