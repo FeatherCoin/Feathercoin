@@ -120,9 +120,9 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     QAction *copyLabelAction = new QAction(tr("Copy &Label"), this);
     QAction *editAction = new QAction(tr("&Edit"), this);
     deleteAction = new QAction(ui->deleteAddress->text(), this);
-    #ifdef USE_QRCODE
-       // QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
-    #endif
+    
+    QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
+    
     QAction *sendCoinsAction = new QAction(tr("Send &Coins"), this);
     QAction *signMessageAction = new QAction(ui->signMessage->text(), this);
     QAction *verifyMessageAction = new QAction(ui->verifyMessage->text(), this);
