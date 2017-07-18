@@ -389,7 +389,7 @@ void AddressBookPage::on_showQRCode_clicked()
     QTableView *table = ui->tableView;
     QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
 
-    foreach (QModelIndex index, indexes)
+   Q_FOREACH (QModelIndex index, indexes)
     {
         QString address = index.data().toString();
         QString label = index.sibling(index.row(), 0).data(Qt::EditRole).toString();
@@ -528,7 +528,7 @@ void AddressBookPage::on_signMessage_clicked()
     QTableView *table = ui->tableView;
     QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
 
-    foreach (QModelIndex index, indexes)
+   Q_FOREACH (QModelIndex index, indexes)
     {
         QString address = index.data().toString();
         //emit signMessage(address);
@@ -547,7 +547,7 @@ void AddressBookPage::on_verifyMessage_clicked()
     QTableView *table = ui->tableView;
     QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
 
-    foreach (QModelIndex index, indexes)
+   Q_FOREACH (QModelIndex index, indexes)
     {
         QString address = index.data().toString();
         //emit verifyMessage(address);
@@ -578,7 +578,7 @@ void AddressBookPage::contextualMenu(const QPoint &point)
         QTableView *table = ui->tableView;
         QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Category);
 
-        foreach (QModelIndex index1, indexes){
+       Q_FOREACH (QModelIndex index1, indexes){
             QString Category = index1.data().toString();
             if ( Category == "MultiSig" )
                 contextMenuMultiSig->exec(QCursor::pos());
@@ -607,7 +607,7 @@ void AddressBookPage::onSendCoinsAction()
     QTableView *table = ui->tableView;
     QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
 
-    foreach (QModelIndex index, indexes)
+   Q_FOREACH (QModelIndex index, indexes)
     {
         QString address = index.data().toString();
         emit sendCoins(address);
