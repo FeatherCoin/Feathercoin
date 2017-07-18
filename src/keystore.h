@@ -33,7 +33,7 @@ public:
     virtual bool GetKey(const CKeyID &address, CKey& keyOut) const =0;
     virtual void GetKeys(std::set<CKeyID> &setAddress) const =0;
     virtual bool GetPubKey(const CKeyID &address, CPubKey& vchPubKeyOut) const;
-    virtual bool GetSecret(const CKeyID &address, CSecret& vchSecret, bool &fCompressed) const
+    virtual bool GetSecret(const CKeyID &address, CSecret& vchSecret, bool &fCompressed) const;
 
     //! Support for BIP 0013 : see https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki
     virtual bool AddCScript(const CScript& redeemScript) =0;
