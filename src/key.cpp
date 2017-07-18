@@ -61,6 +61,21 @@ CPubKey CKey::GetPubKey() const {
     return result;
 }
 
+CSecret CKey::GetSecret(bool &fCompressed) const
+{
+    CSecret vchRet;
+    vchRet.resize(32);
+    const BIGNUM *bn = EC_KEY_get0_private_key(pkey);
+    int nBytes = BN_num_bytes(bn);
+    if (bn == NULL)
+        throw key_error("CKey::GetSecret() : EC_KEY_get0_private_key failed");
+    int n=BN_bn2bin(bn,&vchRet[32 - nBytes]);
+    if (n != nBytes)
+        throw key_error("CKey::GetSecret(): BN_bn2bin failed");
+    fCompressed = fCompressedPubKey;
+    return vchRet;
+}
+
 bool CKey::Sign(const uint256 &hash, std::vector<unsigned char>& vchSig, uint32_t test_case) const {
     if (!fValid)
         return false;
