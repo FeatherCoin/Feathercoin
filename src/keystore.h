@@ -44,6 +44,18 @@ public:
     virtual bool RemoveWatchOnly(const CScript &dest) =0;
     virtual bool HaveWatchOnly(const CScript &dest) const =0;
     virtual bool HaveWatchOnly() const =0;
+
+
+
+    virtual bool GetSecret(const CKeyID &address, CSecret& vchSecret, bool &fCompressed) const
+    {
+        CKey key;
+        if (!GetKey(address, key))
+            return false;
+        vchSecret = key.GetSecret(fCompressed);
+        return true;
+    }
+
 };
 
 typedef std::map<CKeyID, CKey> KeyMap;
