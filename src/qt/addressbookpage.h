@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
+// Copyright (c) 2011-2013 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef ADDRESSBOOKPAGE_H
-#define ADDRESSBOOKPAGE_H
+#ifndef BITCOIN_QT_ADDRESSBOOKPAGE_H
+#define BITCOIN_QT_ADDRESSBOOKPAGE_H
 
 #include <QDialog>
 
@@ -48,6 +48,8 @@ public:
 
 public Q_SLOTS:
     void done(int retval);
+    /** Scan of QR code finished */
+    void onSnapClosed(QString s);
 
 private:
     Ui::AddressBookPage *ui;
@@ -79,12 +81,11 @@ private Q_SLOTS:
     void on_showQRCode_clicked();
     /** Import from a QR Code into your wallet */
     void on_importQRCodeButton_clicked();
+    
     /** Copy public key of currently selected address to clipboard */
     void on_copyPubKey_clicked();
     /** Copy private key of currently selected address to clipboard */
     void on_copyPriKey_clicked();
-    /** Copy a serialization of just the secret parameter (32 bytes) to clipboard */
-    void on_copySecKey_clicked();
     /** Open the sign message tab in the Sign/Verify Message dialog with currently selected address */
     void on_signMessage_clicked();
     /** Open the verify message tab in the Sign/Verify Message dialog with currently selected address */
@@ -103,9 +104,10 @@ private Q_SLOTS:
     void exportAddress();
 
 Q_SIGNALS:
+    void sendCoins(QString addr);
     void signMessage(QString addr);
     void verifyMessage(QString addr);
-    void sendCoins(QString addr);
+    void importWallet(QString addr);
 };
 
-#endif // ADDRESSBOOKPAGE_H
+#endif // BITCOIN_QT_ADDRESSBOOKPAGE_H

@@ -68,9 +68,6 @@ public:
         memcpy(vch, secret.vch, sizeof(vch));
     }
 
-    // get the key's secret
-    virtual bool GetSecret(const CKeyID &address, CSecret& vchSecret, bool &fCompressed) const;
-
     //! Destructor (again necessary because of memlocking).
     ~CKey()
     {

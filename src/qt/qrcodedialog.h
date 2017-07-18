@@ -19,7 +19,7 @@ public:
 
     void setModel(OptionsModel *model);
 
-private Q_SLOTS:
+private slots:
     void on_lnReqAmount_textChanged();
     void on_lnLabel_textChanged();
     void on_lnMessage_textChanged();
