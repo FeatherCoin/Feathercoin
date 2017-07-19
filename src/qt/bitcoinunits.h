@@ -54,15 +54,19 @@ public:
     /** Bitcoin units.
       @note Source: https://en.bitcoin.it/wiki/Units . Please add only sensible ones
      */
-    enum Unit
+   enum Unit
     {
         MBTC,
         kBTC,
         BTC,
         mBTC,
-        uBTC
+        uBTC, 
+        MFTC,
+        kFTC,
+        FTC,
+        mFTC,
+        uFTC
     };
-
     enum SeparatorStyle
     {
         separatorNever,
