@@ -113,9 +113,6 @@ public:
 
         vSeeds.push_back(CDNSSeedData("feathercoin.com", "dnsseed.feathercoin.com"));
         vSeeds.push_back(CDNSSeedData("ftc-c.com", "dnsseed.ftc-c.com"));
-        vSeeds.push_back(CDNSSeedData("block.ftc-c.com", "block.ftc-c.com"));
-        vSeeds.push_back(CDNSSeedData("pool.ftc-c.com", "pool.ftc-c.com"));
-        vSeeds.push_back(CDNSSeedData("testnet.ftc-c.com", "testnet.ftc-c.com"));
         
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,14);
