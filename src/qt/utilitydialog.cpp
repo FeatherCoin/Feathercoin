@@ -50,10 +50,20 @@
 #include <QStringListModel>
 #include <QClipboard>
 
+
 // Use QT5's new modular classes
+#if QT_VERSION >= 0x050000
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
+
+#else
+
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+
+#endif
 #include <QPainter>
 
 #ifdef USE_QRCODE
