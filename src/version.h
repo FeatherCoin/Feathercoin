@@ -9,8 +9,8 @@
  * network protocol versioning
  */
 
-static const int PROTOCOL_VERSION = 70102;
-static const int NEW_MAGIC_VERSION = 70102;
+static const int PROTOCOL_VERSION = 70010;
+static const int NEW_MAGIC_VERSION = 70010;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
