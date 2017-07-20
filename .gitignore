@@ -25,6 +25,16 @@ modified:   aclocal.m4
 build-aux/m4/libtool.m4
 src/config/bitcoin-config.h.in
 src/secp256k1/aclocal.m4
+src/bitcoin-config
+src/qt/forms/ui_commentdialog.h
+src/qt/forms/ui_createmultisigaddrdialog.h
+src/qt/forms/ui_debugdialog.h
+src/qt/forms/ui_multisigdialog.h
+src/qt/forms/ui_paperwalletdialog.h
+src/qt/forms/ui_snapwidget.h
+src/qt/qrc_feathercoin.cpp
+src/qt/test/test_feathercoin-qt
+src/secp256k1/tests
 
 .directory
 .libs
