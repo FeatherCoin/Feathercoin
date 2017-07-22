@@ -779,18 +779,20 @@ void DebugDialog::on_exitButton_clicked()
 
 void DebugDialog::on_BroadcastBtn_clicked()
 {
-		/*  交易合并广播
-		尚未使用私钥对交易进行签名，字段scriptSig是留空的，无签名的交易是无效的。
-		此时的Tx ID并不是最终的Tx ID，填入签名后Tx ID会发生变化。
-		空白交易中vin的scriptSig是空，要将输入的txID中的输出vout中的地址（scriptPubKey的hex）作为参数，进行签名。此后才形成完整交易。 */
-		/*  SIGHASH_ANYONECANPAY是附加的指示器，意味着签名仅覆盖自己的输入部分－不签名其他人的输入，这样其他人的输入可以留空。
-		使用这些符号，我们能创建这样一个签名，即使在其他输入添加进入后，该签名依旧是有效的。
-		但如果输出内容或其他的交易部分被改变了，该签名就无效了。 */
+		/* Transaction merge broadcast
+The transaction is not signed using the private key, the field scriptSig is blank, and the unsigned transaction is invalid.
+The Tx ID is not the final Tx ID, and the Tx ID will change after filling in the signature.
+In the blank transaction, the scriptSig of vin is empty, and the address of the input vout in the input txID (hex of the scriptPubKey) is used as the argument. After which a complete transaction was formed. 
+* /
+
+/ * SIGHASH_ANYONECANPAY is an additional indicator, meaning that the signature only covers its own input part - do not sign other people's input, so that other people's input can be left blank.
+Using these symbols, we can create such a signature, even after the other input is added, the signature is still valid.
+But if the output or other part of the transaction has been changed, the signature is invalid. * /
+
+// The following are the same as the Output the same amount to the same address
+        CMutableTransaction rawTx;
 		
-		//向同一个地址输出相同的金额
-		CMutableTransaction rawTx;
-		
-		//遍历model中的所有数据，构建交易
+		//Traverse all the data in the model to build the transaction
 		for(int i=0; i<modelTable->rowCount(); i++)
 		{
 				QString txCode = modelTable->data(modelTable->index(i,1)).toString();
@@ -804,7 +806,7 @@ void DebugDialog::on_BroadcastBtn_clicked()
 				LogPrintf("on_BroadcastBtn_clicked,i=%i,txCode=%s\n", i, txCode.toStdString());
 				LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vin.size=%i\n", i, tx.vin.size());
 				
-				//增加其他人的输入
+				//Increase the input of other people
 				for (unsigned int t = 0; t < tx.vin.size(); t++)
 				{
 						const CTxIn& txin = tx.vin[t];
@@ -815,31 +817,31 @@ void DebugDialog::on_BroadcastBtn_clicked()
 				LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vout.size=%i\n", i, tx.vout.size());
 				if (i==0) 
 				{
-						//唯一一个输出
+						//Only one output
 						for (unsigned int t = 0; t < tx.vout.size(); t++)
 						{
 								const CTxOut& txvout = tx.vout[t];
-								//利用 CMutableTransaction
+								// CMutableTransaction
 								rawTx.vout.push_back(txvout);
 						}
 						
 						rawTx.nVersion = tx.nVersion;
-		    		rawTx.nLockTime = tx.nLockTime;  //是否会引起签名验证错误？答案是
+		    		rawTx.nLockTime = tx.nLockTime;  // Does it cause signature verification errors? the answer is
 		    		LogPrintf("on_BroadcastBtn_clicked,add txvout\n");
     		}
 		}
 		LogPrintf("on_BroadcastBtn_clicked,rawTx.vin.size=%i\n",  rawTx.vin.size());
 		LogPrintf("on_BroadcastBtn_clicked,rawTx.vout.size=%i\n", rawTx.vout.size());
 		
-		//获取二进制码
+		//Get the binary code
     std::string strHex = EncodeHexTx(rawTx);
     LogPrintf("on_BroadcastBtn_clicked,rawTx.strHex=%s\n", strHex);
     		
-    //准备这个交易
+    //Prepare the deal
     CTransaction tx(rawTx);
     
-    //必须要留出足够的手续费，超出的部分将是手续费
-    bool fOverrideFees = true; //允许荒谬的高得出奇的手续费
+    //You must set aside a fee, the excess will be a fee
+    bool fOverrideFees = true; // Allow ridiculous ridiculous fees
     CValidationState state;
     bool fMissingInputs;
     if (!AcceptToMemoryPool(mempool, state, tx, false, &fMissingInputs, !fOverrideFees)) {
@@ -859,7 +861,7 @@ void DebugDialog::on_BroadcastBtn_clicked()
         }
     }
     
-    //广播这个交易
+    //Broadcast this deal
     RelayTransaction(tx);
     uint256 hashTx = tx.GetHash();
     LogPrintf("on_BroadcastBtn_clicked,rawTx.TxID=%s\n", hashTx.ToString());
@@ -887,14 +889,14 @@ void DebugDialog::on_AddTransBtn_clicked()
 		    return;
 		}
 		
-		//1.显示输出		
+		//1. Display the output	
 		double dCoin = 0;
 		CScript scriptTxOut;
 		BOOST_FOREACH(const CTxOut& txout, tx.vout)
 		{
 				scriptTxOut = txout.scriptPubKey;
-				//(TxToJSON/ScriptPubKeyToJSON)，找出我的addresses,n=0
-				Object obj;
+				// (TxToJSON/ScriptPubKeyToJSON) Find my addresses, n = 0
+                Object obj;
         ScriptPubKeyToJSON(txout.scriptPubKey, obj, true);
         LogPrintf("on_AddTransBtn_clicked,scriptTxOut,obj.size=%d\n", obj.size());
 				const json_spirit::Pair& pair = obj[4];
@@ -905,7 +907,7 @@ void DebugDialog::on_AddTransBtn_clicked()
 				string addresses = a[0].get_str();
 				LogPrintf("on_AddTransBtn_clicked,scriptTxOut,addresses=%s\n", addresses);
 				
-				//哪一笔输出是我的？排除找零交易
+				// Which one is my output? Eliminate change trading 
 				if (addresses == strDoAddress.toStdString())
 				{
 		    	dCoin += (double)txout.nValue / (double)COIN;
@@ -915,20 +917,20 @@ void DebugDialog::on_AddTransBtn_clicked()
 		nowCoins += dCoin;
 		LogPrintf("on_AddTransBtn_clicked,scriptTxOut,nowCoins=%d,dCoin=%d,vout.size=%d\n",nowCoins, dCoin, tx.vout.size());
 		
-		//2.还需要显示输入
+		//2. You also need to display the input
 		double dTxInCoin = 0;
 		CScript scriptTxIn;
 		BOOST_FOREACH(const CTxIn& txin, tx.vin)
 		{
 				scriptTxIn = txin.scriptSig;
-        if (tx.IsCoinBase()==false)  //不接受挖矿支付
+        if (tx.IsCoinBase()==false)  //Do not accept mining pay
         {
         		std::string txID = txin.prevout.hash.GetHex();
         		int64_t vout = (int64_t)txin.prevout.n;
         		LogPrintf("on_AddTransBtn_clicked,scriptTxIn,txID=%s\n", txID);
         		LogPrintf("on_AddTransBtn_clicked,scriptTxIn,vout=%d\n", vout);
         		
-        		//获取输入的那个交易,并找出他的输出值
+        		//Get the input of the transaction and find out his output value
         		CTransaction tx2;
         		uint256 hashBlock;
         		uint256 hash = txin.prevout.hash;
@@ -946,7 +948,7 @@ void DebugDialog::on_AddTransBtn_clicked()
 								int64_t n = (int64_t)i;
 							  LogPrintf("on_AddTransBtn_clicked,scriptTxIn,scriptTxOut,value=%d,n=%i\n", value, n);
 							  
-							  //未花费的txid哪个输出是我可以花费的，见tx的txin.prevout.n = vin.vout
+							  //Not spent txid which output is what i can spend, see tx txin.prevout.n = vin.vout
 							  if (i == vout)
 							  {
 							  	dTxInCoin = value;
@@ -979,7 +981,7 @@ void DebugDialog::on_AddTransBtn_clicked()
 		ui->totalLabel->setText(nowAmount);
 		LogPrintf("on_AddTransBtn_clicked,totalLabel=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
 		
-		//This Coins,这个应该可以显示多个列?
+		//This Coins This should be able to display multiple columns?
 		QString amount = tr("In %1 FTC,Out %2 FTC,%3").arg(dTxInCoin).arg(dCoin).arg(txCode);
 		QStandardItem* item1 = new QStandardItem(tr("%1").arg(dTxInCoin));
 		QStandardItem* item2 = new QStandardItem(tr("%1").arg(txCode));
