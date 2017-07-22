@@ -55,6 +55,7 @@ share/setup.nsi
 src/.deps/
 src/Makefile
 src/bitcoin-config.h.in
+src/qt/forms/ui_intro.h
 src/build-aux/
 src/compat/.deps/
 src/config/bitcoin-config.h
