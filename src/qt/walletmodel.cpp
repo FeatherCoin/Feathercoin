@@ -378,9 +378,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             //commit openname
 						if ((rcp.message.length()>=1)&&(rcp.label=="openname"))
 						{		
-								std::string strMess = rcp.message.toStdString();//已经是16进制码流
+								std::string strMess = rcp.message.toStdString();  // Is already a hexadecimal stream
                 CScript scriptP = CScript() << OP_RETURN << ParseHex(strMess);
-                LogPrintf("openname scriptP=%s\n",scriptP.ToString().c_str());//scriptP=OP_RETURN 580861e00414720684e88cb7943fc6751527a94b2e0cdd2a9148d8b13939723d2aca16c75c6d68
+                LogPrintf("openname scriptP=%s\n",scriptP.ToString().c_str());    // scriptP=OP_RETURN 580861e00414720684e88cb7943fc6751527a94b2e0cdd2a9148d8b13939723d2aca16c75c6d68
                	recipient = {scriptP, CENT, true };
                	vecSend.push_back(recipient);
              }
@@ -395,7 +395,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
     CAmount nBalance = getBalance(coinControl);
 
-		//合约交易不验证输出，nHashType = SIGHASH_ALL|SIGHASH_ANYONECANPAY
+		// Contract transaction does not verify output, nHashType = SIGHASH_ALL | SIGHASH_ANYONECANPAY
     if((total > nBalance) && (nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY)))
     {
     		LogPrintf("prepareTransaction,total=%d,nBalance=%d,nHashType=%i\n",total, nBalance, nHashType);
@@ -414,7 +414,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         CWalletTx *newTx = transaction.getTransaction();
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
         bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, nChangePosRet, strFailReason, coinControl, nHashType);
-        //此时交易已经填写输入、输出和签名
+        // At this point the transaction has filled in the input, output and signature 
         LogPrintf("prepareTransaction,fCreated=%i\n",fCreated);
         
         transaction.setTransactionFee(nFeeRequired);
@@ -468,7 +468,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
         }
 
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
-        //广播交易
+        // Broadcasting 
         if(!wallet->CommitTransaction(*newTx, *keyChange))
             return TransactionCommitFailed;
 
@@ -519,7 +519,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
 
 QString WalletModel::hashCoins(WalletModelTransaction &transaction,bool fSend)
 {
-    //获取交易hash
+    // Get the transaction hash
     QString strHash;
     
     {
@@ -534,7 +534,7 @@ QString WalletModel::hashCoins(WalletModelTransaction &transaction,bool fSend)
 
 QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
 {
-    //获取交易的二进制码
+    // Get the binary code for the transaction 
     QString strCode;
     
     {
@@ -542,7 +542,7 @@ QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
         CWalletTx *newTx = transaction.getTransaction();
         uint256 hashTx = newTx->GetHash();
         
-        //1.创建交易
+        // 1. Create a transaction
         CMutableTransaction rawTx;        
         BOOST_FOREACH(const CTxIn& txin, newTx->vin)
         {
@@ -556,11 +556,11 @@ QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
         rawTx.nLockTime = newTx->nLockTime;
         std::string strHex = EncodeHexTx(rawTx);
         	
-        //2.交易签名，已经签在vin，是整单签名
+        //2. Transaction signature, has been signed in vin, is the whole single signature 
 				vector<unsigned char> txData(ParseHex(strHex));
         
         
-        //3.最终的二进制码
+        // 3. The final binary code 
         strCode = QString::fromStdString(strHex);
     }
     
