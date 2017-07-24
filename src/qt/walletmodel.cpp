@@ -377,10 +377,10 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             
             //commit openname
 						if ((rcp.message.length()>=1)&&(rcp.label=="openname"))
-						{		
-								std::string strMess = rcp.message.toStdString();//\D2Ѿ\AD\CA\C716\BD\F8\D6\C6\C2\EB\C1\F7
+						{
+								std::string strMess = rcp.message.toStdString();  // Is already a hexadecimal stream
                 CScript scriptP = CScript() << OP_RETURN << ParseHex(strMess);
-                LogPrintf("openname scriptP=%s\n",scriptP.ToString().c_str());//scriptP=OP_RETURN 580861e00414720684e88cb7943fc6751527a94b2e0cdd2a9148d8b13939723d2aca16c75c6d68
+                LogPrintf("openname scriptP=%s\n",scriptP.ToString().c_str());    // scriptP=OP_RETURN 580861e00414720684e88cb7943fc6751527a94b2e0cdd2a9148d8b13939723d2aca16c75c6d68
                	recipient = {scriptP, CENT, true };
                	vecSend.push_back(recipient);
              }
@@ -395,7 +395,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
     CAmount nBalance = getBalance(coinControl);
 
-		//\BA\CFԼ\BD\BB\D2ײ\BB\D1\E9֤\CA\E4\B3\F6\A3\ACnHashType = SIGHASH_ALL|SIGHASH_ANYONECANPAY
+
+		// Contract transaction does not verify output, nHashType = SIGHASH_ALL | SIGHASH_ANYONECANPAY
+
     if((total > nBalance) && (nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY)))
     {
     		LogPrintf("prepareTransaction,total=%d,nBalance=%d,nHashType=%i\n",total, nBalance, nHashType);
@@ -414,7 +416,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         CWalletTx *newTx = transaction.getTransaction();
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
         bool fCreated = wallet->CreateTransaction(vecSend, *newTx, *keyChange, nFeeRequired, nChangePosRet, strFailReason, coinControl, nHashType);
-        //\B4\CBʱ\BD\BB\D2\D7\D2Ѿ\AD\CC\EEд\CA\E4\C8롢\CA\E4\B3\F6\BA\CDǩ\C3\FB
+
+        // At this point the transaction has filled in the input, output and signature 
+
         LogPrintf("prepareTransaction,fCreated=%i\n",fCreated);
         
         transaction.setTransactionFee(nFeeRequired);
@@ -468,7 +472,10 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
         }
 
         CReserveKey *keyChange = transaction.getPossibleKeyChange();
-        //\B9㲥\BD\BB\D2\D7
+
+        // Broadcasting 
+
+
         if(!wallet->CommitTransaction(*newTx, *keyChange))
             return TransactionCommitFailed;
 
@@ -519,7 +526,9 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction &tran
 
 QString WalletModel::hashCoins(WalletModelTransaction &transaction,bool fSend)
 {
-    //\BB\F1ȡ\BD\BB\D2\D7hash
+
+    // Get the transaction hash
+
     QString strHash;
     
     {
@@ -534,15 +543,19 @@ QString WalletModel::hashCoins(WalletModelTransaction &transaction,bool fSend)
 
 QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
 {
-    //\BB\F1ȡ\BD\BB\D2׵Ķ\FE\BD\F8\D6\C6\C2\EB
+
+    // Get the binary code for the transaction 
+
+
     QString strCode;
     
     {
         LOCK2(cs_main, wallet->cs_wallet);
         CWalletTx *newTx = transaction.getTransaction();
         uint256 hashTx = newTx->GetHash();
-        
-        //1.\B4\B4\BD\A8\BD\BB\D2\D7
+     
+        // 1. Create a transaction
+
         CMutableTransaction rawTx;        
         BOOST_FOREACH(const CTxIn& txin, newTx->vin)
         {
@@ -556,11 +569,13 @@ QString WalletModel::codeCoins(WalletModelTransaction &transaction,bool fSend)
         rawTx.nLockTime = newTx->nLockTime;
         std::string strHex = EncodeHexTx(rawTx);
         	
-        //2.\BD\BB\D2\D7ǩ\C3\FB\A3\AC\D2Ѿ\ADǩ\D4\DAvin\A3\AC\CA\C7\D5\FB\B5\A5ǩ\C3\FB
+
+        //2. Transaction signature, has been signed in vin, is the whole single signature 
 				vector<unsigned char> txData(ParseHex(strHex));
         
         
-        //3.\D7\EE\D6յĶ\FE\BD\F8\D6\C6\C2\EB
+        // 3. The final binary code 
+
         strCode = QString::fromStdString(strHex);
     }
     

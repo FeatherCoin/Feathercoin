@@ -121,7 +121,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
         return error("ValidateSyncCheckpoint: block index missing for received sync-checkpoint %s", hashCheckpoint.ToString().c_str());
 
     CBlockIndex* pindexSyncCheckpoint = mapBlockIndex[hashSyncCheckpoint];  //Block #0 is OK
-    CBlockIndex* pindexCheckpointRecv = mapBlockIndex[hashCheckpoint];  //Block #1230546 = 0,当前检查点
+    CBlockIndex* pindexCheckpointRecv = mapBlockIndex[hashCheckpoint]; // Block # 1230546 = 0, the current checkpoint
 
 		LogPrintf("ValidateSyncCheckpoint hashSyncCheckpoint=%s,pindexSyncCheckpoint Height=%d \n",hashSyncCheckpoint.ToString().c_str(),pindexSyncCheckpoint->nHeight);
 		LogPrintf("ValidateSyncCheckpoint hashCheckpoint=%s,pindexCheckpointRecv Height=%d \n",hashCheckpoint.ToString().c_str(),pindexCheckpointRecv->nHeight);
@@ -130,7 +130,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
     {
         // Received an older checkpoint, trace back from current checkpoint to the same height of the received checkpoint to verify that current checkpoint should be a descendant block
         CBlockIndex* pindex = pindexSyncCheckpoint;
-        //收到旧块(当前检查点)，从同步检查点(现有的)返回当前检查点(收到的)
+        //Receive the old checkpoint (the current checkpoint), return the current checkpoint (received) from the sync checkpoint (existing)
         while (pindex->nHeight > pindexCheckpointRecv->nHeight)
         {
             if (pindex->pprev != NULL)
@@ -142,7 +142,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
          }
         
         LogPrintf("ValidateSyncCheckpoint debug.100 \n");
-        //这时两个块的高度应该相等      
+       // The height of the two blocks should be equal       
         if (pindex->GetBlockHash() != hashCheckpoint)
         {
         		LogPrintf("ValidateSyncCheckpoint debug.110 \n");
@@ -160,7 +160,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
     }
 
     // Received checkpoint should be a descendant block of the current checkpoint. Trace back to the same height of current checkpoint to verify.
-    //可以从 1575535 到 1576929 走到
+    // from 1575535 to 1576929  
     if (pindexSyncCheckpoint->nHeight>0) 
     {
 		    CBlockIndex* pindex = pindexCheckpointRecv;
@@ -215,7 +215,7 @@ bool AcceptPendingSyncCheckpoint()
     if ((hashPendingCheckpoint.IsNull()==false) && mapBlockIndex.count(hashPendingCheckpoint))
     {
     		LogPrintf("AcceptPendingSyncCheckpoint 100 hashPendingCheckpoint=%s,IsNull=%d \n",hashPendingCheckpoint.ToString().c_str(),hashPendingCheckpoint.IsNull());
-        //是否该执行
+        // Whether to execute
         if (mapBlockIndex[hashPendingCheckpoint]->nHeight>0)
         {
         			LogPrintf("AcceptPendingSyncCheckpoint 200 hashPendingCheckpoint.nHeight = %d \n",mapBlockIndex[hashPendingCheckpoint]->nHeight);
@@ -488,7 +488,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
             pfrom->PushGetBlocks(pindexBestHeader, hashCheckpoint);
             // ask directly as well in case rejected earlier by duplicate proof-of-stake because getblocks may not get it this time
             LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 140 ,AskFor %s.\n", hashCheckpoint.ToString().c_str());
-            //pfrom->AskFor(CInv(MSG_BLOCK, hashCheckpoint));  //count=0,区块链错位造成count=1
+            //pfrom->AskFor(CInv(MSG_BLOCK, hashCheckpoint));  // count = 0, block chain offset caused by count = 1 
             LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 150 ,AskFor.\n");
         }
         return false;
@@ -500,7 +500,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 		{
 				LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 202 nHeight=%d\n", mapBlockIndex[hashCheckpoint]->nHeight);
 				
-				//同步块大于0
+				// sync block is greater than 0
 		    if (!ValidateSyncCheckpoint(hashCheckpoint))
 		        return false;
 		
@@ -511,7 +511,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 		    {
 		        // checkpoint chain received but not yet main chain
 		        CValidationState state;
-		        if (!SetBestChain(state, pindexCheckpoint))  //检查这里
+		        if (!SetBestChain(state, pindexCheckpoint))  // check here
 		        {
 		        		LogPrintf("ProcessSyncCheckpoint 220,SetBestChain hashInvalidCheckpoint .\n");
 		            hashInvalidCheckpoint = hashCheckpoint;

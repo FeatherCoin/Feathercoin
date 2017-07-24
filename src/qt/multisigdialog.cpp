@@ -578,7 +578,7 @@ void MultiSigDialog::signTransaction(QString *addrStr)
             const CScript& prevPubKey = coins.vout[txin.prevout.n].scriptPubKey;
 
             txin.scriptSig.clear();
-            SignSignature(keystore, prevPubKey, mergedTx, i, SIGHASH_ALL); //签名的内容是否填充到交易体中
+            SignSignature(keystore, prevPubKey, mergedTx, i, SIGHASH_ALL);  // Whether the signed content is filled into the transaction
             
             // ... and merge in other signatures:
             BOOST_FOREACH(const CTransaction& txv, txVariants) {
@@ -593,7 +593,7 @@ void MultiSigDialog::signTransaction(QString *addrStr)
                 LogPrintf("signTransaction: isComplete.200=%d\n", isComplete);
              }
         }
-        //mergedTx未能返回给rawTx,要赋值
+       // mergedTx failed to return to rawTx, to assign value  
         CTransaction txv2(mergedTx);
         *rawTx=txv2;
     

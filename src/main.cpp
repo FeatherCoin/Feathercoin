@@ -1460,7 +1460,7 @@ void UpdateCoins(const CTransaction& tx, CValidationState &state, CCoinsViewCach
 
 bool CScriptCheck::operator()() {
     const CScript &scriptSig = ptxTo->vin[nIn].scriptSig;    
-    //打印此脚本
+    // Print this script 
     LogPrintf("CScriptCheck,nIn=%i,scriptSig=%s\n", nIn, scriptSig.ToString());
     LogPrintf("CScriptCheck,nIn=%i,scriptPubKey=%s\n", nIn, scriptPubKey.ToString());
     if (!VerifyScript(scriptSig, scriptPubKey, nFlags, CachingTransactionSignatureChecker(ptxTo, nIn, cacheStore), &error)) {
@@ -2036,7 +2036,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     int64_t nTime1 = GetTimeMicros(); nTimeConnect += nTime1 - nTimeStart;
     LogPrint("bench", "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs]\n", (unsigned)block.vtx.size(), 0.001 * (nTime1 - nTimeStart), 0.001 * (nTime1 - nTimeStart) / block.vtx.size(), nInputs <= 1 ? 0 : 0.001 * (nTime1 - nTimeStart) / (nInputs-1), nTimeConnect * 0.000001);
 
-		//每个块限定blockReward
+		//  BlockReward
     CAmount blockReward = nFees + GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
     if (block.vtx[0].GetValueOut() > blockReward)
         return state.DoS(100,
@@ -2478,7 +2478,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     // Only when all have succeeded, we push it to pcoinsTip.
     CCoinsViewCache view(pcoinsTip);
     
-    // Find the fork (从pindexOldTip退到pindexNew)  
+    // Find the fork (pindexOldTip pindexNew) 
     CBlockIndex* pfork = pindexOldTip;
     CBlockIndex* plonger = pindexNew;
     while (pfork && pfork != plonger)
@@ -2494,7 +2494,7 @@ bool SetBestChain(CValidationState &state, CBlockIndex* pindexNew)
     }
     LogPrintf("SetBestChain:110 pfork nHeight=%d,BlockHash=%s\n",pfork->nHeight,pfork->GetBlockHash().ToString());
 
-    // List of what to disconnect (从pindexOldTip退到pindexNew=pfork)
+    // List of what to disconnect (From pindexOldTip Retreated pindexNew=pfork)
     vector<CBlockIndex*> vDisconnect;
     for (CBlockIndex* pindex = pindexOldTip; pindex != pfork; pindex = pindex->pprev)
         vDisconnect.push_back(pindex);
@@ -3135,7 +3135,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
             return state.DoS(100, error("%s: forked chain older than last checkpoint (height %d)", __func__, nHeight));
     }
 
-    //拒绝旧的版本和非法版本
+    //Reject old version and illegal version 
     // Reject block.nVersion=1 blocks when 95% (75% on testnet) of the network has upgraded:
     if (block.nVersion < 2 && IsSuperMajority(2, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s: rejected nVersion=1 block", __func__),
@@ -3179,7 +3179,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
         }
     }
     
-    //检查是否合法升级到5，是否拒绝小于5的版本，达到版本升级的目的。版本4是起点
+    // Check whether the legal upgrade to 5, whether to reject less than 5 versions, to achieve the purpose of version upgrade. Version 4 is the starting point
     if (block.cVersion < 5 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
         return state.Invalid(error("%s: rejected block cVersion < 4.0 ", __func__),
                              REJECT_OBSOLETE, "bad-version");
@@ -5253,10 +5253,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     else if (strCommand == "checkpoint") // ppcoin synchronized checkpoint
     {
         CSyncCheckpoint checkpoint;
-        vRecv >> checkpoint;  //赋值了hashCheckpoint
+        vRecv >> checkpoint;  //
 
 				LogPrintf("Receive checkpoint, hashCheckpoint=%s\n",checkpoint.hashCheckpoint.ToString().c_str());
-				//是否不再接收60008的消息
+				//Assigned hashCheckpoint
         if (checkpoint.ProcessSyncCheckpoint(pfrom))
         {
         		LogPrintf("checkpoint.ProcessSyncCheckpoint(pfrom)=true, hashCheckpoint=%s\n",checkpoint.hashCheckpoint.ToString().c_str());

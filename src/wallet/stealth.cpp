@@ -232,7 +232,7 @@ int StealthSecret(ec_secret& secret, ec_point& pubkey, const ec_point& pkSpend, 
     R = public spend key
     f = private spend key
 
-    Q = dG  //单次使用的私钥
+    Q = dG  // Single use of private key
     R = fG
     
     Sender (has Q and R, not d or f):
