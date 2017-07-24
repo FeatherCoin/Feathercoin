@@ -2081,7 +2081,9 @@ bool CWallet::CreateTransaction(const vector<CRecipient>& vecSend,
                     else
                     {
                         // Insert change txn at random position:
-                        //已经实现
+
+                       // has been achieved  
+
                         nChangePosRet = GetRandInt(txNew.vout.size()+1);
                         vector<CTxOut>::iterator position = txNew.vout.begin()+nChangePosRet;
                         txNew.vout.insert(position, newTxOut);
@@ -2396,7 +2398,10 @@ bool CWallet::UnlockStealthAddresses(const CKeyingMaterial& vMasterKeyIn)
     		CKey ckey;
         try {
             //ckey.SetSecret(vchSecret, true);
-            ckey.Set(&out[0], &out[32], true);   //压缩
+
+            ckey.Set(&out[0], &out[32], true);   //compression
+
+
             if (!ckey.IsValid()) {
                printf("Private key outside allowed range");
             }
@@ -2668,16 +2673,18 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
         LogPrintf("BOOST_FOREACH nOutputIdOuter=%d ,find txout...\n", nOutputIdOuter);
         LogPrintf("txout scriptPubKey= %s\n",  txout.scriptPubKey.ToString().c_str()); //OP_RETURN 02fe58a19a83c9ce0fc129bfa0a6a53b3440b6f9eac357143b23be38b7779c53d2
         LogPrintf("txout hash = %s\n",  txout.GetHash().GetHex().c_str());  //5bada4eca0588e4dbb33ec37bd658dfdd7b9bce1e3ad3aa68461151f2e835597
-        CScript::const_iterator itTxA = txout.scriptPubKey.begin();//迭代器，第一个元素
+
+        CScript::const_iterator itTxA = txout.scriptPubKey.begin();    // iterator, the first element
         
         if (!txout.scriptPubKey.GetOp(itTxA, opCode, vchEphemPK) || opCode != OP_RETURN)
             continue;
-        LogPrintf("Note: txout.scriptPubKey,check vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //这个输出不能是空，应该是ephem_pubkey
+        LogPrintf("Note: txout.scriptPubKey,check vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); // This output can not be empty, it should be ephem_pubkey
         LogPrintf("Note: opCode=%i\n", (int)opCode);//=106
-        LogPrintf("Note: itTxA=%s\n", HexStr(itTxA,itTxA).c_str());//使用迭代器
-        *itTxA++;//跨过操作符
+        LogPrintf("Note: itTxA=%s\n", HexStr(itTxA,itTxA).c_str());  // use iterators
+        *itTxA++;// across the operator
         vchEphemPKtt.assign(itTxA, itTxA + 33);
-        vchEphemPK.assign(itTxA, itTxA + 33);  //我补充的代码，关键，这个输出不能是空，应该是ephem_pubkey
+        vchEphemPK.assign(itTxA, itTxA + 33);  // I added the code, the key, this output can not be empty, it should be ephem_pubkey
+
         LogPrintf("Note: txout.scriptPubKey,again vchEphemPKtt=%s\n", HexStr(vchEphemPKtt).c_str());
         LogPrintf("Note: txout.scriptPubKey,again vchEphemPK=%s\n", HexStr(vchEphemPK).c_str());
         
@@ -2688,7 +2695,9 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
             nOutputId++;
             LogPrintf("BOOST_FOREACH nOutputId=%d ,print param.....\n", nOutputId);
             
-            if (&txoutB == &txout)  //把OP_RETURN交易分别与另2个执行
+
+            if (&txoutB == &txout)  // OP_RETURN transactions are executed separately with the other two
+
                 continue;
             
             bool txnMatch = false; // only 1 txn will match an ephem pk
@@ -2718,24 +2727,24 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
                 if (it->scan_secret.size() != ec_secret_size)
                     continue; // stealth address is not owned
                 LogPrintf("it->scan_secret.size() %d\n",  it->scan_secret.size());
-                LogPrintf("it->Encodeded() %s\n",  it->Encoded().c_str());  //找到收款人隐身公匙地址
-                memcpy(&sScan.e[0], &it->scan_secret[0], ec_secret_size);  //??? 33u
-                
+
+                LogPrintf("it->Encodeded() %s\n",  it->Encoded().c_str());  // find the recipient's stealthy key address
+                memcpy(&sScan.e[0], &it->scan_secret[0], ec_secret_size);  // ??? 33u                
+
                 LogPrintf("StealthAddress Label=%s\n",it->label);
                 LogPrintf("StealthAddress Address=%s\n",it->Encoded());
                 LogPrintf("StealthAddress Scan Secret=%s\n",HexStr(it->scan_secret.begin(), it->scan_secret.end()));//f1e76e169c05b00ad755ef6128a1fe2ccc1f2351383f5a5969f4040994d3f25e
                 LogPrintf("StealthAddress Scan Pubkey=%s\n",HexStr(it->scan_pubkey.begin(), it->scan_pubkey.end()));//038cf92caa6f1fe56b19e09cca0bdc52a81e46007bc12622688c0feda804f9d073
                 LogPrintf("StealthAddress Spend Secret=%s\n",HexStr(it->spend_secret.begin(), it->spend_secret.end()));//117a9e4a428e7549eeeaa1dc3deb5cab2696518e2af0849fc6b7d675fe0a10ee
-                LogPrintf("StealthAddress Spend Pubkey=%s\n",HexStr(it->spend_pubkey.begin(), it->spend_pubkey.end()));
-                    //02ffae1e8fda48c5ff6824ac0d497ea3c3b1ef3a438832bd5e5edc0bf4f93172d6,与OP_RETURN不匹配
-                
+
+                LogPrintf("StealthAddress Spend Pubkey=%s\n",HexStr(it->spend_pubkey.begin(), it->spend_pubkey.end())); // 02ffae1e8fda48c5ff6824ac0d497ea3c3b1ef3a438832bd5e5edc0bf4f93172d6, does not match OP_RETURN
                 LogPrintf("StealthSecret.....");
-                LogPrintf("sScan.e=%s\n",HexStr(&sScan.e[0],&sScan.e[32]).c_str());   //收款人隐身公匙地址,Scan Secret:scan_secret
-                LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? 为空，pubkey是个问题
+                LogPrintf("sScan.e=%s\n",HexStr(&sScan.e[0],&sScan.e[32]).c_str());   // Payee stealth key address, Scan Secret: scan_secret 
+                LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? Is empty, pubkey is a problem
                 LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //
-                LogPrintf("sShared.e=%s\n",HexStr(&sShared.e[0],&sShared.e[32]).c_str());  //为空
-                LogPrintf("pkExtracted=%" PRIszu ":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//为空
-                 
+                LogPrintf("sShared.e=%s\n",HexStr(&sShared.e[0],&sShared.e[32]).c_str());  //Is empty
+                LogPrintf("pkExtracted=%"PRIszu":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str()); //Is empty                 
+
                 int rv=StealthSecret(sScan, vchEphemPK, it->spend_pubkey, sShared, pkExtracted);
                      //StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
                      //receive:secret = scan_secret, pubkey = ephem_pubkey(vchEphemPK)
@@ -2812,7 +2821,9 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
                     
                     try {
                         //ckey.SetSecret(vchSecret, true);
-                        ckey.Set(&out[0], &out[32], true);   //压缩
+
+                        ckey.Set(&out[0], &out[32], true);   //compression
+
 						            if (!ckey.IsValid()) {
 						               printf("Private key outside allowed range");
 						            }
