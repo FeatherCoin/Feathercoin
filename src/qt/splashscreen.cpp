@@ -49,9 +49,6 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QSize splashSize(480*devicePixelRatio,320*devicePixelRatio);
     pixmap = QPixmap(splashSize);
 
-    QPainter pixPaint(&newPixmap);
-    pixPaint.setPen(QColor(70,70,70));
-
     QPainter pixPaint(&pixmap);
     pixPaint.setPen(QColor(100,100,100));
 

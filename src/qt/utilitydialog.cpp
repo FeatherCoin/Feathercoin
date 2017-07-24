@@ -793,11 +793,11 @@ void DebugDialog::on_BroadcastBtn_clicked()
 The transaction is not signed using the private key, the field scriptSig is blank, and the unsigned transaction is invalid.
 The Tx ID is not the final Tx ID, and the Tx ID will change after filling in the signature.
 In the blank transaction, the scriptSig of vin is empty, and the address of the input vout in the input txID (hex of the scriptPubKey) is used as the argument. After which a complete transaction was formed. 
-* /
+*/
 
-/ * SIGHASH_ANYONECANPAY is an additional indicator, meaning that the signature only covers its own input part - do not sign other people's input, so that other people's input can be left blank.
+/* SIGHASH_ANYONECANPAY is an additional indicator, meaning that the signature only covers its own input part - do not sign other people's input, so that other people's input can be left blank.
 Using these symbols, we can create such a signature, even after the other input is added, the signature is still valid.
-But if the output or other part of the transaction has been changed, the signature is invalid. * /
+But if the output or other part of the transaction has been changed, the signature is invalid. */
 
 // The following are the same as the Output the same amount to the same address
         CMutableTransaction rawTx;
