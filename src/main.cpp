@@ -3366,9 +3366,9 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
 		LogPrintf("AcceptBlock sync-checkpoint,nHeight=%d.\n",nHeight);
     // ppcoin: check pending sync-checkpoint
-    AcceptPendingSyncCheckpoint();
+    if ( AcceptPendingSyncCheckpoint() ) {
 		LogPrintf("AcceptBlock OK,nHeight=%d.\n",nHeight);
-		
+		}
     return true;
 }
 
