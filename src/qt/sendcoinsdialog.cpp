@@ -754,7 +754,7 @@ void SendCoinsDialog::sendCoins(bool fSend)
     // prepare transaction for getting txFee earlier
     WalletModelTransaction currentTransaction(recipients);
     WalletModel::SendCoinsReturn prepareStatus;
-   	/ / Whether the normal preparation of the transaction? The ??
+   	// Whether the normal preparation of the transaction? The ??
     if (model->getOptionsModel()->getCoinControlFeatures())    // coin control enabled
         prepareStatus = model->prepareTransaction(currentTransaction, CoinControlDialog::coinControl, nHashType);
     else
