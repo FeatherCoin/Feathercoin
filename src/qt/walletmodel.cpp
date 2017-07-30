@@ -295,7 +295,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 			                LogPrintf("sxAddr.spend_secret= %s\n", HexStr(sxAddr.spend_secret).c_str()); //
 			                LogPrintf("sxAddr.spend_pubkey= %s\n",HexStr(sxAddr.spend_pubkey).c_str()); //pkSpend[0]
 			                LogPrintf("secretShared.e=%s \n",HexStr(&secretShared.e[0],&secretShared.e[32]).c_str());  //sharedSOut
-			                LogPrintf("pkSendTo= %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());//pkOut
+                                        LogPrintf("pkSendTo= %" PRIszu ": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());//pkOut
 			                LogPrintf("send:  secret = ephem_secret, pubkey = scan_pubkey....\n");
                     };
                     
@@ -312,7 +312,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 			                LogPrintf("sxAddr.spend_secret= %s\n", HexStr(sxAddr.spend_secret).c_str()); //
 			                LogPrintf("sxAddr.spend_pubkey= %s\n",HexStr(sxAddr.spend_pubkey).c_str()); //pkSpend[0]
 			                LogPrintf("secretShared.e=%s \n",HexStr(&secretShared.e[0],&secretShared.e[32]).c_str());  //sharedSOut
-			                LogPrintf("pkSendTo= %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());//pkOut
+                                        LogPrintf("pkSendTo= %" PRIszu ": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());//pkOut
                     };
                     
                     CPubKey cpkTo(pkSendTo);
@@ -334,9 +334,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                     
                     if (true)
                     {
-                        LogPrintf("Stealth send to generated pubkey,pkSendTo= %"PRIszu": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
+                        LogPrintf("Stealth send to generated pubkey,pkSendTo= %" PRIszu ": %s\n", pkSendTo.size(), HexStr(pkSendTo).c_str());
                         LogPrintf("hash, Address= %s\n", addrTo.ToString().c_str());
-                        LogPrintf("enerate ephem public key,ephem_pubkey= %"PRIszu": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
+                        LogPrintf("enerate ephem public key,ephem_pubkey= %" PRIszu ": %s\n", ephem_pubkey.size(), HexStr(ephem_pubkey).c_str());
                     };
                     
                     CScript scriptPubKey = GetScriptForDestination(addrTo.Get());
