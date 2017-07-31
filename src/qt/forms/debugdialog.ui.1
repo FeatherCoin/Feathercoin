@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CommentDialog</class>
- <widget class="QDialog" name="CommentDialog">
+ <class>DebugDialog</class>
+ <widget class="QDialog" name="DebugDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,23 +11,23 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Insert your comments into our blockchain</string>
+   <string>Stealth Transaction Tool (experts only!)</string>
   </property>
-  <widget class="QPushButton" name="insertButton">
+  <widget class="QPushButton" name="sxButton">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>140</y>
-     <width>171</width>
+     <y>130</y>
+     <width>191</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Insert into BlockChain</string>
+    <string>Scan Stealth Transactions</string>
    </property>
    <property name="icon">
-    <iconset resource="../bitcoin.qrc">
-     <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
+    <iconset resource="../feathercoin.qrc">
+     <normaloff>:/icons/sx</normaloff>:/icons/sx</iconset>
    </property>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
@@ -50,16 +50,19 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>40</y>
-     <width>491</width>
+     <y>80</y>
+     <width>131</width>
      <height>20</height>
     </rect>
    </property>
    <property name="toolTip">
-    <string>Recipient address</string>
+    <string>Block Number</string>
    </property>
    <property name="statusTip">
-    <string>Recipient address</string>
+    <string>Block Number</string>
+   </property>
+   <property name="text">
+    <string>556535</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -67,32 +70,19 @@
     <rect>
      <x>30</x>
      <y>20</y>
-     <width>111</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Pay to Address :</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>71</y>
-     <width>171</width>
+     <width>191</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Comments (35 Characters) :</string>
+    <string>Find My Stealth Transactions : </string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>140</y>
+     <x>240</x>
+     <y>130</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -107,23 +97,68 @@
     <string>Exit</string>
    </property>
    <property name="icon">
-    <iconset resource="../bitcoin.qrc">
+    <iconset resource="../feathercoin.qrc">
      <normaloff>:/icons/quit</normaloff>:/icons/quit</iconset>
    </property>
   </widget>
-  <widget class="QLineEdit" name="txtComment">
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>60</y>
+     <width>21</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>To</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="addrEdit2">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>80</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Block Number</string>
+   </property>
+   <property name="statusTip">
+    <string>Block Number</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>100</y>
-     <width>491</width>
-     <height>21</height>
+     <y>60</y>
+     <width>121</width>
+     <height>16</height>
     </rect>
+   </property>
+   <property name="text">
+    <string>From block Height:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>60</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>End Height:</string>
    </property>
   </widget>
  </widget>
  <resources>
-  <include location="../bitcoin.qrc"/>
+  <include location="../feathercoin.qrc"/>
  </resources>
  <connections/>
 </ui>
