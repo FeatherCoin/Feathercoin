@@ -383,7 +383,7 @@ void BitcoinGUI::createActions()
 
     usedSendingAddressesAction = new QAction(TextColorIcon(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
-    usedReceivingAddressesAction = new QAction(TextColorIcon(":/icons/address-book"), tr("&Receiving addresses..."), this);
+    usedReceivingAddressesAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
 
     openAction = new QAction(TextColorIcon(":/icons/open"), tr("Open &URI..."), this);
