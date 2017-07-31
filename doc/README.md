@@ -74,6 +74,8 @@ The Feathercoin wallet contains a number of features which require additional li
     sudo apt-get install libzxing libqrencode-dev pkg-config libprotobuf-dev  protobuf-compiler  
 
     sudo apt-get install debhelper  
+    
+    sudo apt-get libevent-2.0-5 libevent-dev libevent-extra-2.0-5 libevent-openssl-2.0-5 libevent-pthreads-2.0-5
 
     
 ### Download the .deb file or install the zxing binaries available after installing the Feathercoin PPA  
@@ -97,15 +99,7 @@ Then add the key to your system:
     
     sudo apt-get update  
     sudo apt-get install libzxing  
-
-Copy the zxing headers directory back to Feathercoin source.
-
-From:
-    /usr/include/zxing
-    
-To:
-    ~/Feathercoin/src/zxing    
-    
+   
  
 ### If PPA or .deb does not work, compile the zxing libraries yourself, download the sources from github.com.
 

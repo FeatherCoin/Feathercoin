@@ -48,6 +48,7 @@
         <file alias="comment">res/icons/comment.png</file>
         <file alias="sx">res/icons/sx.png</file>
         <file alias="snap">res/icons/snap.png</file>
+        <file alias="open">res/icons/open.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
