@@ -337,7 +337,7 @@
                   <string>Import Raw Tx</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../bitcoin.qrc">
+                  <iconset resource="../feathercoin.qrc">
                    <normaloff>:/icons/editpaste</normaloff>:/icons/editpaste</iconset>
                  </property>
                 </widget>
@@ -357,7 +357,7 @@
                   <string>Export Raw Tx</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="../bitcoin.qrc">
+                  <iconset resource="../feathercoin.qrc">
                    <normaloff>:/icons/editcopy</normaloff>:/icons/editcopy</iconset>
                  </property>
                 </widget>
@@ -421,7 +421,7 @@
                     <string>Sign</string>
                    </property>
                    <property name="icon">
-                    <iconset resource="../bitcoin.qrc">
+                    <iconset resource="../feathercoin.qrc">
                      <normaloff>:/icons/key</normaloff>:/icons/key</iconset>
                    </property>
                    <property name="toolButtonStyle">
@@ -484,7 +484,7 @@
                     <string>Sign</string>
                    </property>
                    <property name="icon">
-                    <iconset resource="../bitcoin.qrc">
+                    <iconset resource="../feathercoin.qrc">
                      <normaloff>:/icons/key</normaloff>:/icons/key</iconset>
                    </property>
                    <property name="toolButtonStyle">
@@ -547,7 +547,7 @@
                     <string>Sign</string>
                    </property>
                    <property name="icon">
-                    <iconset resource="../bitcoin.qrc">
+                    <iconset resource="../feathercoin.qrc">
                      <normaloff>:/icons/key</normaloff>:/icons/key</iconset>
                    </property>
                    <property name="toolButtonStyle">
@@ -677,7 +677,7 @@
         <string>Add &amp;Recipient</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
        </property>
        <property name="autoDefault">
@@ -700,7 +700,7 @@
         <string>Clear &amp;All</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
        </property>
        <property name="autoRepeatDelay">
@@ -746,7 +746,7 @@
         <string>S&amp;end</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/send</normaloff>:/icons/send</iconset>
        </property>
        <property name="default">
@@ -769,7 +769,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../bitcoin.qrc"/>
+  <include location="../feathercoin.qrc"/>
  </resources>
  <connections/>
 </ui>

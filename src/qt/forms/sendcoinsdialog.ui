@@ -1329,7 +1329,7 @@
         <string>get TxHash</string>
        </property>
        <property name="icon">
-        <iconset resource="../bitcoin.qrc">
+        <iconset resource="../feathercoin.qrc">
          <normaloff>:/icons/transaction_conflicted</normaloff>:/icons/transaction_conflicted</iconset>
        </property>
       </widget>

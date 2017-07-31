@@ -18,7 +18,7 @@ FORMS += \
     ../src/qt/forms/transactiondescdialog.ui \
 
 RESOURCES += \
-    ../src/qt/bitcoin.qrc
+    ../src/qt/feathercoin.qrc
 
 QT += \
     printsupport
