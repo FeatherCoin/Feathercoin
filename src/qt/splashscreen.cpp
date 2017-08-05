@@ -68,8 +68,9 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QRect rectIcon(QPoint(0,0), QSize(585,350));
 
     const QSize requiredSize(584,350);
-    QPixmap icon(networkStyle->getAppIcon().pixmap(requiredSize));
-
+//  QPixmap icon(networkStyle->getAppIcon().pixmap(requiredSize));
+//  Feathercoin Fix for networkStyle calling bitcoin.png image / icon for Splashscreen
+    QPixmap icon(":/images/splash", "QSize");
 
     pixPaint.drawPixmap(rectIcon, icon);
 
