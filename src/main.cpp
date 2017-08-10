@@ -1959,22 +1959,17 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
    	bool fStrictPayToScriptHash =true;
     unsigned int flags = SCRIPT_VERIFY_P2SH;
 
-    // Start enforcing the DERSIG (BIP66) rules, for block.nVersion=3 blocks,
-    // when 75% of the network has upgraded:
-    /*if (block.nVersion >= 3 && IsSuperMajority(3, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
-        flags |= SCRIPT_VERIFY_DERSIG;
-    }*/
-    
-    // Start enforcing the DERSIG (BIP66) rules and CHECKLOCKTIMEVERIFY, (BIP65) for block.nVersion=4
-    // blocks, when 75% of the network has upgraded:
+    // Start enforcing the DERSIG (BIP66) rules after block 1278297
     if (pindex->nHeight >=MIN_BLOCKHEADER_VERSION4_HEIGHT)
     {
-		    //if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
-		    if (block.cVersion >= 4) {
-		        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
-		        flags |= SCRIPT_VERIFY_DERSIG;
-		    }
-		}
+		flags |= SCRIPT_VERIFY_DERSIG;
+	}
+    
+    // Start enforcing the CHECKLOCKTIMEVERIFY (BIP65) for block.nVersion=4
+    // blocks, when 75% of the network has upgraded:
+    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+	    flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+	}
 
     CBlockUndo blockundo;
 
