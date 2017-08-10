@@ -3157,22 +3157,6 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if (block.nVersion == 3)
         return state.Invalid(error("%s : rejected nVersion=3 block,block v3 was never enforced.", __func__),
                              REJECT_OBSOLETE, "bad-version");
-                             
-    // Reject block.nVersion=3 blocks when 95% (75% on testnet) of the network has upgraded:
-    if (block.nVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
-    {
-    		if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetV4))
-    		{
-    				LogPrintf("rejected nVersion=3: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
-		        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
-		                             REJECT_OBSOLETE, "bad-version");
-        }
-        if (chainParams.NetworkIDString()=="main")
-        {
-		        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
-		                             REJECT_OBSOLETE, "bad-version");
-        }
-    }
     
     // Check whether the legal upgrade to 5, whether to reject less than 5 versions, to achieve the purpose of version upgrade. Version 4 is the starting point
     if (block.cVersion < 5 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
