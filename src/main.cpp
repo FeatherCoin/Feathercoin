@@ -3223,8 +3223,7 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
     {
     		return state.DoS(100, error("%s: block nVersion 3 height mismatch in coinbase,block v3 was never enforced.", __func__), REJECT_INVALID, "bad-cb-height");     
     }
-    if (block.nVersion == 4 && block.nTime > MIN_BLOCKHEADER_VERSION4_SwitchTime
-    	                     && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    if (block.nVersion == 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
     {
         CScript expect = CScript() << nHeight;
         if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 

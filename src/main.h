@@ -105,7 +105,6 @@ static const int nTestnetV4   =  17000;
 
 /** blockchain version 4 didn't become active until height and time. */
 static const int MIN_BLOCKHEADER_VERSION4_HEIGHT = 1278297;         //after 2016/07/01
-static const unsigned int MIN_BLOCKHEADER_VERSION4_SwitchTime = 1467302400;  //2016/07/01 10:00:00  http://tool.chinaz.com/Tools/unixtime.aspx
 
 static const uint256 hardhashCheckpoint = uint256S("0xf8208e44c06669e4c93d0aa3a9fdcc882341740db716f2ffd39bac134eadab67");
 
