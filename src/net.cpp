@@ -363,6 +363,7 @@ bool GetMyExternalIP2(const CService& addrConnect, const char* pszGet, const cha
      if (fDebug)
         LogPrintf("GetMyExternalIP() : connection closed");
     return true;
+    }
 }
 
 bool GetMyExternalIP(CNetAddr& ipRet)
