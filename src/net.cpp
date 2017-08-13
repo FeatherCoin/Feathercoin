@@ -315,7 +315,11 @@ bool GetMyExternalIP2(const CService& addrConnect, const char* pszGet, const cha
 {
     SOCKET hSocket;
     if (!ConnectSocket(addrConnect, hSocket))
-        return error("GetMyExternalIP() : connection to %s failed", addrConnect.ToString());
+    {
+        if (fDebug)
+            LogPrintf("GetMyExternalIP() : connection to %s failed", addrConnect.ToString());
+        return true;
+    }
     
     send(hSocket, pszGet, strlen(pszGet), MSG_NOSIGNAL);
 
@@ -355,7 +359,10 @@ bool GetMyExternalIP2(const CService& addrConnect, const char* pszGet, const cha
         }
     }
     closesocket(hSocket);
-    return error("GetMyExternalIP() : connection closed");
+    {
+     if (fDebug)
+        LogPrintf("GetMyExternalIP() : connection closed");
+    return true;
 }
 
 bool GetMyExternalIP(CNetAddr& ipRet)
