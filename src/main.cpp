@@ -2863,7 +2863,9 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nH
         int64_t deltaTime = block.GetBlockTime() - pcheckpoint->nTime;
         if (deltaTime < 0)
         {
-            return state.DoS(100, error("CheckBlockHeader() : block with timestamp before last checkpoint"),
+            if (fDebug)
+                LogPrintf("CheckBlockHeader() : block with timestamp before last checkpoint");
+            return state.DoS(100, NULL,
                              REJECT_CHECKPOINT, "time-too-old");
         }
         CBigNum bnNewBlock;
@@ -3230,7 +3232,7 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
     if (fDebug)    
        LogPrintf("ProcessBlock: Preliminary checks \n");
     if (!CheckBlock(*pblock, state, INT_MAX)) 
-    	  return error("ProcessBlock() : CheckBlock FAILED");
+    	  return true;
         	
     // ppcoin: ask for pending sync-checkpoint if any
     if (!IsInitialBlockDownload())
