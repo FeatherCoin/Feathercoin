@@ -52,11 +52,11 @@ CLevelDBWrapper::CLevelDBWrapper(const boost::filesystem::path &path, size_t nCa
             leveldb::DestroyDB(path.string(), options);
         }
         TryCreateDirectory(path);
-        LogPrintf("Opening LevelDB in %s\n", path.string());
+  //      LogPrintf("Opening LevelDB in %s\n", path.string());
     }
     leveldb::Status status = leveldb::DB::Open(options, path.string(), &pdb);
     HandleError(status);
-    LogPrintf("Opened LevelDB successfully\n");
+  //  LogPrintf("Opened LevelDB successfully\n");
 }
 
 CLevelDBWrapper::~CLevelDBWrapper() {
