@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -236,8 +237,8 @@ bool AddLocal(const CService& addr, int nScore)
 
     if (IsLimited(addr))
         return false;
-
-    LogPrintf("AddLocal(%s,%i)\n", addr.ToString(), nScore);
+    if (fDebug)
+       LogPrintf("AddLocal(%s,%i)\n", addr.ToString(), nScore);
 
     {
         LOCK(cs_mapLocalHost);
@@ -315,7 +316,7 @@ bool GetMyExternalIP2(const CService& addrConnect, const char* pszGet, const cha
     SOCKET hSocket;
     if (!ConnectSocket(addrConnect, hSocket))
         return error("GetMyExternalIP() : connection to %s failed", addrConnect.ToString());
-
+    
     send(hSocket, pszGet, strlen(pszGet), MSG_NOSIGNAL);
 
     string strLine;
@@ -345,7 +346,8 @@ bool GetMyExternalIP2(const CService& addrConnect, const char* pszGet, const cha
             while (strLine.size() > 0 && isspace(strLine[strLine.size()-1]))
                 strLine.resize(strLine.size()-1);
             CService addr(strLine,0,true);
-            LogPrintf("GetMyExternalIP() received [%s] %s\n", strLine, addr.ToString());
+            if (fDebug)
+                LogPrintf("GetMyExternalIP() received [%s] %s\n", strLine, addr.ToString());
             if (!addr.IsValid() || !addr.IsRoutable())
                 return false;
             ipRet.SetIP(addr);
@@ -420,7 +422,8 @@ void ThreadGetMyExternalIP()
     CNetAddr addrLocalHost;
     if (GetMyExternalIP(addrLocalHost))
     {
-        LogPrintf("GetMyExternalIP() returned %s\n", addrLocalHost.ToStringIP());
+        if (fDebug)
+            LogPrintf("GetMyExternalIP() returned %s\n", addrLocalHost.ToStringIP());
         AddLocal(addrLocalHost, LOCAL_HTTP);
     }
 }
@@ -486,7 +489,7 @@ CNode* ConnectNode(CAddress addrConnect, const char *pszDest)
 
 
     /// debug print
-    LogPrint("net", "trying connection %s lastseen=%.1fhrs\n",
+        LogPrint("net", "trying connection %s lastseen=%.1fhrs\n",
         pszDest ? pszDest : addrConnect.ToString(),
         pszDest ? 0 : (double)(GetAdjustedTime() - addrConnect.nTime)/3600.0);
 
@@ -495,7 +498,6 @@ CNode* ConnectNode(CAddress addrConnect, const char *pszDest)
     if (pszDest ? ConnectSocketByName(addrConnect, hSocket, pszDest, Params().GetDefaultPort()) : ConnectSocket(addrConnect, hSocket))
     {
         addrman.Attempt(addrConnect);
-
         LogPrint("net", "connected %s\n", pszDest ? pszDest : addrConnect.ToString());
 
         // Set to non-blocking
@@ -954,7 +956,8 @@ void ThreadSocketHandler()
             }
             else if (CNode::IsBanned(addr))
             {
-                LogPrintf("connection from %s dropped (banned)\n", addr.ToString());
+                if (fDebug)
+                    LogPrintf("connection from %s dropped (banned)\n", addr.ToString());
                 closesocket(hSocket);
             }
             else
@@ -1113,16 +1116,23 @@ void ThreadMapPort()
             char externalIPAddress[40];
             r = UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, externalIPAddress);
             if(r != UPNPCOMMAND_SUCCESS)
-                LogPrintf("UPnP: GetExternalIPAddress() returned %d\n", r);
+            {
+                if (fDebug)
+                    LogPrintf("UPnP: GetExternalIPAddress() returned %d\n", r);
+            }
             else
             {
                 if(externalIPAddress[0])
                 {
-                    LogPrintf("UPnP: ExternalIPAddress = %s\n", externalIPAddress);
+                    if (fDebug)
+                       LogPrintf("UPnP: ExternalIPAddress = %s\n", externalIPAddress);
                     AddLocal(CNetAddr(externalIPAddress), LOCAL_UPNP);
                 }
                 else
-                    LogPrintf("UPnP: GetExternalIPAddress failed.\n");
+                {
+                    if (fDebug)
+                       LogPrintf("UPnP: GetExternalIPAddress failed.\n");
+                }
             }
         }
 
@@ -1144,15 +1154,18 @@ void ThreadMapPort()
                     LogPrintf("AddPortMapping(%s, %s, %s) failed with code %d (%s)\n",
                         port, port, lanaddr, r, strupnperror(r));
                 else
-                    LogPrintf("UPnP Port Mapping successful.\n");;
-
+                {
+                    if (fDebug)
+                        LogPrintf("UPnP Port Mapping successful.\n");;
+                }
                 MilliSleep(20*60*1000); // Refresh every 20 minutes
             }
         }
         catch (boost::thread_interrupted)
         {
             r = UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, port.c_str(), "TCP", 0);
-            LogPrintf("UPNP_DeletePortMapping() returned : %d\n", r);
+            if (fDebug)
+                LogPrintf("UPNP_DeletePortMapping() returned : %d\n", r);
             freeUPNPDevlist(devlist); devlist = 0;
             FreeUPNPUrls(&urls);
             throw;
@@ -1207,7 +1220,8 @@ void ThreadDNSAddressSeed()
 
         LOCK(cs_vNodes);
         if (vNodes.size() >= 2) {
-            LogPrintf("P2P peers available. Skipped DNS seeding.\n");
+            if (fDebug)
+                LogPrintf("P2P peers available. Skipped DNS seeding.\n");
             return;
         }
     }
@@ -1215,7 +1229,8 @@ void ThreadDNSAddressSeed()
     const vector<CDNSSeedData> &vSeeds = Params().DNSSeeds();
     int found = 0;
 
-    LogPrintf("Loading addresses from DNS seeds (could take a while)\n");
+    if (fDebug)
+       LogPrintf("Loading addresses from DNS seeds (could take a while)\n");
 
     BOOST_FOREACH(const CDNSSeedData &seed, vSeeds) {
         if (HaveNameProxy()) {
@@ -1237,8 +1252,8 @@ void ThreadDNSAddressSeed()
             addrman.Add(vAdd, CNetAddr(seed.name, true));
         }
     }
-
-    LogPrintf("%d addresses found from DNS seeds\n", found);
+   if (fDebug)
+       LogPrintf("%d addresses found from DNS seeds\n", found);
 }
 
 
@@ -1669,7 +1684,8 @@ bool BindListenPort(const CService &addrBind, string& strError)
         LogPrintf("%s\n", strError);
         return false;
     }
-    LogPrintf("Bound to %s\n", addrBind.ToString());
+    if (fDebug) 
+         LogPrintf("Bound to %s\n", addrBind.ToString());
 
     // Listen for incoming connections
     if (listen(hListenSocket, SOMAXCONN) == SOCKET_ERROR)
@@ -1722,7 +1738,9 @@ void static Discover(boost::thread_group& threadGroup)
                 struct sockaddr_in* s4 = (struct sockaddr_in*)(ifa->ifa_addr);
                 CNetAddr addr(s4->sin_addr);
                 if (AddLocal(addr, LOCAL_IF))
-                    LogPrintf("IPv4 %s: %s\n", ifa->ifa_name, addr.ToString());
+                {
+                    LogPrint("IPv4 %s: %s\n", ifa->ifa_name, addr.ToString());
+                }
             }
             else if (ifa->ifa_addr->sa_family == AF_INET6)
             {
@@ -1759,10 +1777,14 @@ void StartNode(boost::thread_group& threadGroup)
     //
 
     if (!GetBoolArg("-dnsseed", true))
-        LogPrintf("DNS seeding disabled\n");
-    else
+         {
+         if (fDebug)    
+            LogPrintf("DNS seeding disabled\n");
+         }
+     else
+     {
         threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "dnsseed", &ThreadDNSAddressSeed));
-
+     }
 #ifdef USE_UPNP
     // Map ports with UPnP
     MapPort(GetBoolArg("-upnp", USE_UPNP));
@@ -1786,7 +1808,8 @@ void StartNode(boost::thread_group& threadGroup)
 
 bool StopNode()
 {
-    LogPrintf("StopNode()\n");
+    if (fDebug)
+        LogPrintf("StopNode()\n");
     MapPort(false);
     if (semOutbound)
         for (int i=0; i<MAX_OUTBOUND_CONNECTIONS; i++)
