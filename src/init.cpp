@@ -109,7 +109,8 @@ static CCoinsViewDB *pcoinsdbview;
 
 void Shutdown()
 {
-    LogPrintf("Shutdown : In progress...\n");
+    if (fDebug)
+       LogPrintf("Shutdown : In progress...\n");
     static CCriticalSection cs_Shutdown;
     TRY_LOCK(cs_Shutdown, lockShutdown);
     if (!lockShutdown) return;
@@ -149,7 +150,8 @@ void Shutdown()
     if (pwalletMain)
         delete pwalletMain;
 #endif
-    LogPrintf("Shutdown : done\n");
+    if (fDebug)
+        LogPrintf("Shutdown : done\n");
 }
 
 //
@@ -637,21 +639,29 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     if (GetBoolArg("-shrinkdebugfile", !fDebug))
         ShrinkDebugFile();
-    LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("Feathercoin version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
-    LogPrintf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
+    if (fDebug)
+        {
+          LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+          LogPrintf("Feathercoin version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
+          LogPrintf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
+        }
 #ifdef ENABLE_WALLET
-    LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
+    if (fDebug) 
+        LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
 #endif
-    if (!fLogTimestamps)
-        LogPrintf("Startup time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
-    LogPrintf("Default data directory %s\n", GetDefaultDataDir().string());
-    LogPrintf("Using data directory %s\n", strDataDir);
-    LogPrintf("Using at most %i connections (%i file descriptors available)\n", nMaxConnections, nFD);
+    if (fDebug)
+        {
+              if (!fLogTimestamps)
+                  LogPrintf("Startup time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
+              LogPrintf("Default data directory %s\n", GetDefaultDataDir().string());
+              LogPrintf("Using data directory %s\n", strDataDir);
+              LogPrintf("Using at most %i connections (%i file descriptors available)\n", nMaxConnections, nFD);
+        }     
     std::ostringstream strErrors;
 
     if (nScriptCheckThreads) {
-        LogPrintf("Using %u threads for script verification\n", nScriptCheckThreads);
+        if (fDebug)
+            LogPrintf("Using %u threads for script verification\n", nScriptCheckThreads);
         for (int i=0; i<nScriptCheckThreads-1; i++)
             threadGroup.create_thread(&ThreadScriptCheck);
     }
@@ -661,7 +671,8 @@ bool AppInit2(boost::thread_group& threadGroup)
     // ********************************************************* Step 5: verify wallet database integrity
 #ifdef ENABLE_WALLET
     if (!fDisableWallet) {
-        LogPrintf("Using wallet %s\n", strWalletFile);
+        if (fDebug)
+             LogPrintf("Using wallet %s\n", strWalletFile);
         uiInterface.InitMessage(_("Verifying wallet..."));
 
         if (!bitdb.Open(GetDataDir()))
@@ -935,10 +946,12 @@ bool AppInit2(boost::thread_group& threadGroup)
     // As the program has not fully started yet, Shutdown() is possibly overkill.
     if (fRequestShutdown)
     {
-        LogPrintf("Shutdown requested. Exiting.\n");
+        if (fDebug) 
+            LogPrintf("Shutdown requested. Exiting.\n");
         return false;
     }
-    LogPrintf(" block index %15dms\n", GetTimeMillis() - nStart);
+    if (fDebug)
+        LogPrintf(" block index %15dms\n", GetTimeMillis() - nStart);
 
     if (GetBoolArg("-printblockindex", false) || GetBoolArg("-printblocktree", false))
     {
@@ -960,7 +973,8 @@ bool AppInit2(boost::thread_group& threadGroup)
                 ReadBlockFromDisk(block, pindex);
                 block.BuildMerkleTree();
                 block.print();
-                LogPrintf("\n");
+                if (fDebug)
+                   LogPrintf("\n");
                 nFound++;
             }
         }
@@ -1047,10 +1061,11 @@ bool AppInit2(boost::thread_group& threadGroup)
 
             pwalletMain->SetBestChain(chainActive.GetLocator());
         }
-
-        LogPrintf("%s", strErrors.str());
-        LogPrintf(" wallet      %15dms\n", GetTimeMillis() - nStart);
-
+        if (fDebug)
+        {
+             LogPrintf("%s", strErrors.str());
+             LogPrintf(" wallet      %15dms\n", GetTimeMillis() - nStart);
+        }
         RegisterWallet(pwalletMain);
 
         CBlockIndex *pindexRescan = chainActive.Tip();
@@ -1068,10 +1083,12 @@ bool AppInit2(boost::thread_group& threadGroup)
         if (chainActive.Tip() && chainActive.Tip() != pindexRescan)
         {
             uiInterface.InitMessage(_("Rescanning..."));
-            LogPrintf("Rescanning last %i blocks (from block %i)...\n", chainActive.Height() - pindexRescan->nHeight, pindexRescan->nHeight);
+            if (fDebug)
+                LogPrintf("Rescanning last %i blocks (from block %i)...\n", chainActive.Height() - pindexRescan->nHeight, pindexRescan->nHeight);
             nStart = GetTimeMillis();
             pwalletMain->ScanForWalletTransactions(pindexRescan, true);
-            LogPrintf(" rescan      %15dms\n", GetTimeMillis() - nStart);
+            if (fDebug)
+                LogPrintf(" rescan      %15dms\n", GetTimeMillis() - nStart);
             pwalletMain->SetBestChain(chainActive.GetLocator());
             nWalletDBUpdated++;
         }
@@ -1105,9 +1122,8 @@ bool AppInit2(boost::thread_group& threadGroup)
         if (!adb.Read(addrman))
             LogPrintf("Invalid or missing peers.dat; recreating\n");
     }
-
-    LogPrintf("Loaded %i addresses from peers.dat  %dms\n",
-           addrman.size(), GetTimeMillis() - nStart);
+    if (fDebug) 
+        LogPrintf("Loaded %i addresses from peers.dat  %dms\n", addrman.size(), GetTimeMillis() - nStart);
 
     // ********************************************************* Step 11: start node
 
@@ -1120,12 +1136,18 @@ bool AppInit2(boost::thread_group& threadGroup)
     RandAddSeedPerfmon();
 
     //// debug print
-    LogPrintf("mapBlockIndex.size() = %u\n",   mapBlockIndex.size());
-    LogPrintf("nBestHeight = %d\n",                   chainActive.Height());
+    if (fDebug)
+         {
+           LogPrintf("mapBlockIndex.size() = %u\n",   mapBlockIndex.size());
+           LogPrintf("nBestHeight = %d\n", chainActive.Height());
+         }
 #ifdef ENABLE_WALLET
+    if (fDebug)
+         {
     LogPrintf("setKeyPool.size() = %u\n",      pwalletMain ? pwalletMain->setKeyPool.size() : 0);
     LogPrintf("mapWallet.size() = %u\n",       pwalletMain ? pwalletMain->mapWallet.size() : 0);
     LogPrintf("mapAddressBook.size() = %u\n",  pwalletMain ? pwalletMain->mapAddressBook.size() : 0);
+         }
 #endif
 
     StartNode(threadGroup);
