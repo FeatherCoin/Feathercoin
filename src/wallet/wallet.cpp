@@ -2743,7 +2743,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
                 LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? Is empty, pubkey is a problem
                 LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //
                 LogPrintf("sShared.e=%s\n",HexStr(&sShared.e[0],&sShared.e[32]).c_str());  //Is empty
-                LogPrintf("pkExtracted=%"PRIszu":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str()); //Is empty                 
+                LogPrintf("pkExtracted=%" PRIszu ":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str()); //Is empty
 
                 int rv=StealthSecret(sScan, vchEphemPK, it->spend_pubkey, sShared, pkExtracted);
                      //StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
