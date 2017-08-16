@@ -9,8 +9,6 @@
 #ifndef UI_INTRO_H
 #define UI_INTRO_H
 
-// Use QT5's new modular classes
-#if QT_VERSION >= 0x050000
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
@@ -26,24 +24,6 @@
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
 
-#else
-
-#include <QVariant>
-#include <QAction>
-#include <QApplication>
-#include <QButtonGroup>
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QHBoxLayout>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QSpacerItem>
-#include <QVBoxLayout>
-
-#endif
 QT_BEGIN_NAMESPACE
 
 class Ui_Intro
