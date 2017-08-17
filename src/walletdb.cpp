@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -692,12 +693,12 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
     // upgrading, we don't want to make it worse.
     if (result != DB_LOAD_OK)
         return result;
-
-    LogPrintf("nFileVersion = %d\n", wss.nFileVersion);
-
-    LogPrintf("Keys: %u plaintext, %u encrypted, %u w/ metadata, %u total\n",
-           wss.nKeys, wss.nCKeys, wss.nKeyMeta, wss.nKeys + wss.nCKeys);
-
+    if (fDebug)
+    {
+         LogPrintf("nFileVersion = %d\n", wss.nFileVersion);
+         LogPrintf("Keys: %u plaintext, %u encrypted, %u w/ metadata, %u total\n",
+               wss.nKeys, wss.nCKeys, wss.nKeyMeta, wss.nKeys + wss.nCKeys);
+    }
     // nTimeFirstKey is only reliable if all keys have metadata
     if ((wss.nKeys + wss.nCKeys) != wss.nKeyMeta)
         pwallet->nTimeFirstKey = 1; // 0 would be considered 'no value'

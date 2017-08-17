@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -260,7 +261,8 @@ bool CWallet::ChangeWalletPassphrase(const SecureString& strOldWalletPassphrase,
                 if (pMasterKey.second.nDeriveIterations < 25000)
                     pMasterKey.second.nDeriveIterations = 25000;
 
-                LogPrintf("Wallet passphrase changed to an nDeriveIterations of %i\n", pMasterKey.second.nDeriveIterations);
+                if (fDebug)
+                    LogPrintf("Wallet passphrase changed to an nDeriveIterations of %i\n", pMasterKey.second.nDeriveIterations);
 
                 if (!crypter.SetKeyFromPassphrase(strNewWalletPassphrase, pMasterKey.second.vchSalt, pMasterKey.second.nDeriveIterations, pMasterKey.second.nDerivationMethod))
                     return false;
@@ -449,7 +451,8 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
     if (kMasterKey.nDeriveIterations < 25000)
         kMasterKey.nDeriveIterations = 25000;
 
-    LogPrintf("Encrypting Wallet with an nDeriveIterations of %i\n", kMasterKey.nDeriveIterations);
+    if (fDebug)
+        LogPrintf("Encrypting Wallet with an nDeriveIterations of %i\n", kMasterKey.nDeriveIterations);
 
     if (!crypter.SetKeyFromPassphrase(strWalletPassphrase, kMasterKey.vchSalt, kMasterKey.nDeriveIterations, kMasterKey.nDerivationMethod))
         return false;
@@ -669,7 +672,7 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet)
         }
 
         //// debug print
-        LogPrintf("AddToWallet %s  %s%s\n", wtxIn.GetHash().ToString(), (fInsertedNew ? "new" : ""), (fUpdated ? "update" : ""));
+        //   LogPrintf("AddToWallet %s  %s%s\n", wtxIn.GetHash().ToString(), (fInsertedNew ? "new" : ""), (fUpdated ? "update" : ""));
 
         // Write to disk
         if (fInsertedNew || fUpdated)
@@ -705,13 +708,13 @@ bool CWallet::AddToWalletIfInvolvingMe(const uint256 &hash, const CTransaction& 
         bool fExisted = mapWallet.count(hash);
         if (fExisted && !fUpdate) return false;
         	
-        LogPrintf("AddToWalletIfInvolvingMe,hash=%s .\n",hash.ToString()); 
+        //   LogPrintf("AddToWalletIfInvolvingMe,hash=%s .\n",hash.ToString()); 
         FindStealthTransactions(tx);
         
         if (fExisted || IsMine(tx) || IsFromMe(tx))
         {
             CWalletTx wtx(this,tx);
-            // Get merkle branch if transaction was found in a block
+         // Get merkle branch if transaction was found in a block
             if (pblock)
                 wtx.SetMerkleBranch(pblock);
             return AddToWallet(wtx);
@@ -1009,7 +1012,7 @@ void CWalletTx::RelayWalletTransaction()
     {
         if (GetDepthInMainChain() == 0) {
             uint256 hash = GetHash();
-            LogPrintf("Relaying wtx %s\n", hash.ToString());
+        //     LogPrintf("Relaying wtx %s\n", hash.ToString());
             RelayTransaction((CTransaction)*this, hash);
         }
     }
@@ -1044,7 +1047,7 @@ void CWallet::ResendWalletTransactions()
     nLastResend = GetTime();
 
     // Rebroadcast any of our txes that aren't in a block yet
-    LogPrintf("ResendWalletTransactions()\n");
+    //   LogPrintf("ResendWalletTransactions()\n");
     {
         LOCK(cs_wallet);
         // Sort them in chronological order
@@ -1290,11 +1293,11 @@ bool CWallet::SelectCoinsMinConf(int64_t nTargetValue, int nConfMine, int nConfT
                 nValueRet += vValue[i].first;
             }
 
-        LogPrint("selectcoins", "SelectCoins() best subset: ");
+    //    LogPrint("selectcoins", "SelectCoins() best subset: ");
         for (unsigned int i = 0; i < vValue.size(); i++)
             if (vfBest[i])
                 LogPrint("selectcoins", "%s ", FormatMoney(vValue[i].first));
-        LogPrint("selectcoins", "total %s\n", FormatMoney(nBest));
+    //   LogPrint("selectcoins", "total %s\n", FormatMoney(nBest));
     }
 
     return true;
@@ -1958,7 +1961,7 @@ bool CWallet::SendStealthMoneyToDestination(CStealthAddress& sxAddress, int64_t 
 
 bool CWallet::FindStealthTransactions(const CTransaction& tx)
 {
-    LogPrintf("FindStealthTransactions() tx:%s,", tx.GetHash().GetHex().c_str());    
+  //  LogPrintf("FindStealthTransactions() tx:%s,", tx.GetHash().GetHex().c_str());    
     /*if (tx.GetHash().GetHex().compare("85568ae1dacfdc6730b0d2ddeb2c4d7d07b0ac702e6d9a7f408293e2cd628d57")==1)
    	{
    		LogPrintf("no debug.\n");
@@ -1981,35 +1984,35 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
         nOutputIdOuter++;
         // -- for each OP_RETURN need to check all other valid outputs
         
-        LogPrintf("BOOST_FOREACH nOutputIdOuter=%d ,find txout...\n", nOutputIdOuter);
-        LogPrintf("txout scriptPubKey= %s\n",  txout.scriptPubKey.ToString().c_str()); //OP_RETURN 02fe58a19a83c9ce0fc129bfa0a6a53b3440b6f9eac357143b23be38b7779c53d2
-        LogPrintf("txout hash = %s\n",  txout.GetHash().GetHex().c_str());  //5bada4eca0588e4dbb33ec37bd658dfdd7b9bce1e3ad3aa68461151f2e835597
-        CScript::const_iterator itTxA = txout.scriptPubKey.begin();//迭代器，第一个元素
+    //    LogPrintf("BOOST_FOREACH nOutputIdOuter=%d ,find txout...\n", nOutputIdOuter);
+    //    LogPrintf("txout scriptPubKey= %s\n",  txout.scriptPubKey.ToString().c_str()); //OP_RETURN 02fe58a19a83c9ce0fc129bfa0a6a53b3440b6f9eac357143b23be38b7779c53d2
+    //    LogPrintf("txout hash = %s\n",  txout.GetHash().GetHex().c_str());  //5bada4eca0588e4dbb33ec37bd658dfdd7b9bce1e3ad3aa68461151f2e835597
+        CScript::const_iterator itTxA = txout.scriptPubKey.begin();  // An iterator, the first element
         
         if (!txout.scriptPubKey.GetOp(itTxA, opCode, vchEphemPK) || opCode != OP_RETURN)
             continue;
-        LogPrintf("Note: txout.scriptPubKey,check vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //这个输出不能是空，应该是ephem_pubkey
-        LogPrintf("Note: opCode=%i\n", (int)opCode);//=106
-        LogPrintf("Note: itTxA=%s\n", HexStr(itTxA,itTxA).c_str());//使用迭代器
-        *itTxA++;//跨过操作符
+    //    LogPrintf("Note: txout.scriptPubKey,check vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); // This output can not be empty, should be  ephem_pubkey
+    //    LogPrintf("Note: opCode=%i\n", (int)opCode);// =106
+    //    LogPrintf("Note: itTxA=%s\n", HexStr(itTxA,itTxA).c_str());//  Use iterator
+        *itTxA++; // Cross the operator
         vchEphemPKtt.assign(itTxA, itTxA + 33);
-        vchEphemPK.assign(itTxA, itTxA + 33);  //我补充的代码，关键，这个输出不能是空，应该是ephem_pubkey
-        LogPrintf("Note: txout.scriptPubKey,again vchEphemPKtt=%s\n", HexStr(vchEphemPKtt).c_str());
-        LogPrintf("Note: txout.scriptPubKey,again vchEphemPK=%s\n", HexStr(vchEphemPK).c_str());
+        vchEphemPK.assign(itTxA, itTxA + 33);  // I added the code to the key that this output can not be empty and should be  ephem_pubkey
+    //    LogPrintf("Note: txout.scriptPubKey,again vchEphemPKtt=%s\n", HexStr(vchEphemPKtt).c_str());
+    //    LogPrintf("Note: txout.scriptPubKey,again vchEphemPK=%s\n", HexStr(vchEphemPK).c_str());
         
         int32_t nOutputId = -1;
         nStealth++;
         BOOST_FOREACH(const CTxOut& txoutB, tx.vout) //tx.vout again
         {
             nOutputId++;
-            LogPrintf("BOOST_FOREACH nOutputId=%d ,print param.....\n", nOutputId);
+     //       LogPrintf("BOOST_FOREACH nOutputId=%d ,print param.....\n", nOutputId);
             
-            if (&txoutB == &txout)  //把OP_RETURN交易分别与另2个执行
+            if (&txoutB == &txout)  //To put OP_RETURN The transaction is executed separately from the other two
                 continue;
             
             bool txnMatch = false; // only 1 txn will match an ephem pk
-            LogPrintf("CTxOut: %s\n", txoutB.ToString().c_str());
-            LogPrintf("only 1 txn will match an ephem pk,tx.vout scriptPubKey %s\n",  txoutB.scriptPubKey.ToString().c_str());    
+      //      LogPrintf("CTxOut: %s\n", txoutB.ToString().c_str());
+      //      LogPrintf("only 1 txn will match an ephem pk,tx.vout scriptPubKey %s\n",  txoutB.scriptPubKey.ToString().c_str());    
                //OP_DUP OP_HASH160 d0ae59f757fc9ce14559413e2d00ac8fede6f9a2 OP_EQUALVERIFY OP_CHECKSIG        
             
             CTxDestination address;
@@ -2022,7 +2025,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
             CKeyID ckidMatch = boost::get<CKeyID>(address);            
             if (HaveKey(ckidMatch)) // no point checking if already have key
                 continue;           
-            LogPrintf("CTxDestination=CKeyID,ckidMatch=%s \n", ckidMatch.ToString().c_str());
+      //      LogPrintf("CTxDestination=CKeyID,ckidMatch=%s \n", ckidMatch.ToString().c_str());
              //a2f9e6ed8fac002d3e415945e19cfc57f759aed0
             
             int i=0;
@@ -2030,38 +2033,39 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
             for (it = stealthAddresses.begin(); it != stealthAddresses.end(); ++it)
             {
                 i++;
-                LogPrintf("StealthAddress iterator=%d \n", i); //
+          //      LogPrintf("StealthAddress iterator=%d \n", i); //
                 if (it->scan_secret.size() != ec_secret_size)
                     continue; // stealth address is not owned
-                LogPrintf("it->scan_secret.size() %d\n",  it->scan_secret.size());
-                LogPrintf("it->Encodeded() %s\n",  it->Encoded().c_str());  //找到收款人隐身公匙地址
+           //     LogPrintf("it->scan_secret.size() %d\n",  it->scan_secret.size());
+           //     LogPrintf("it->Encodeded() %s\n",  it->Encoded().c_str());  // Find the recipient's stealth key address
                 memcpy(&sScan.e[0], &it->scan_secret[0], ec_secret_size);  //??? 33u
                 
-                LogPrintf("StealthAddress Label=%s\n",it->label);
-                LogPrintf("StealthAddress Address=%s\n",it->Encoded());
-                LogPrintf("StealthAddress Scan Secret=%s\n",HexStr(it->scan_secret.begin(), it->scan_secret.end()));//f1e76e169c05b00ad755ef6128a1fe2ccc1f2351383f5a5969f4040994d3f25e
-                LogPrintf("StealthAddress Scan Pubkey=%s\n",HexStr(it->scan_pubkey.begin(), it->scan_pubkey.end()));//038cf92caa6f1fe56b19e09cca0bdc52a81e46007bc12622688c0feda804f9d073
-                LogPrintf("StealthAddress Spend Secret=%s\n",HexStr(it->spend_secret.begin(), it->spend_secret.end()));//117a9e4a428e7549eeeaa1dc3deb5cab2696518e2af0849fc6b7d675fe0a10ee
-                LogPrintf("StealthAddress Spend Pubkey=%s\n",HexStr(it->spend_pubkey.begin(), it->spend_pubkey.end()));
-                    //02ffae1e8fda48c5ff6824ac0d497ea3c3b1ef3a438832bd5e5edc0bf4f93172d6,与OP_RETURN不匹配
+             //   LogPrintf("StealthAddress Label=%s\n",it->label);
+             //   LogPrintf("StealthAddress Address=%s\n",it->Encoded());
+             //   LogPrintf("StealthAddress Scan Secret=%s\n",HexStr(it->scan_secret.begin(), it->scan_secret.end()));//f1e76e169c05b00ad755ef6128a1fe2ccc1f2351383f5a5969f4040994d3f25e
+             //   LogPrintf("StealthAddress Scan Pubkey=%s\n",HexStr(it->scan_pubkey.begin(), it->scan_pubkey.end()));//038cf92caa6f1fe56b19e09cca0bdc52a81e46007bc12622688c0feda804f9d073
+             //   LogPrintf("StealthAddress Spend Secret=%s\n",HexStr(it->spend_secret.begin(), it->spend_secret.end()));//117a9e4a428e7549eeeaa1dc3deb5cab2696518e2af0849fc6b7d675fe0a10ee
+             //   LogPrintf("StealthAddress Spend Pubkey=%s\n",HexStr(it->spend_pubkey.begin(), it->spend_pubkey.end()));
+                    //02ffae1e8fda48c5ff6824ac0d497ea3c3b1ef3a438832bd5e5edc0bf4f93172d6,  versus  OP_RETURN Mismatch
                 
-                LogPrintf("StealthSecret.....");
-                LogPrintf("sScan.e=%s\n",HexStr(&sScan.e[0],&sScan.e[32]).c_str());   //收款人隐身公匙地址,Scan Secret:scan_secret
-                LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? 为空，pubkey是个问题
-                LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //
-                LogPrintf("sShared.e=%s\n",HexStr(&sShared.e[0],&sShared.e[32]).c_str());  //为空
-                LogPrintf("pkExtracted=%" PRIszu ":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//为空
+         //       LogPrintf("StealthSecret.....");
+             //   LogPrintf("sScan.e=%s\n",HexStr(&sScan.e[0],&sScan.e[32]).c_str());   //,Payee stealth public key address    Scan Secret:scan_secret
+             //   LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? Is empty pubkey  Is a problem
+             //   LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //
+             //   LogPrintf("sShared.e=%s\n",HexStr(&sShared.e[0],&sShared.e[32]).c_str());  // Is empty
+             //   LogPrintf("pkExtracted=%" PRIszu ":%s\n", pkExtracted.size(), HexStr(pkExtracted).c_str()); // Is empty
                  
                 int rv=StealthSecret(sScan, vchEphemPK, it->spend_pubkey, sShared, pkExtracted);
                      //StealthSecret(ephem_secret, sxAddr.scan_pubkey, sxAddr.spend_pubkey, secretShared, pkSendTo) != 0)
                      //receive:secret = scan_secret, pubkey = ephem_pubkey(vchEphemPK)
                 if (rv!= 0)
                 {
-                    LogPrintf("StealthSecret failed.rv=%d \n",rv);
+                    if (fDebug)
+                        LogPrintf("StealthSecret failed.rv=%d \n",rv);
                     continue;
                 };
-                LogPrintf("StealthSecret ok.rv=%d \n",rv);
-                LogPrintf("pkExtracted= %" PRIszu ": %s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//pkOut
+               // LogPrintf("StealthSecret ok.rv=%d \n",rv);
+               // LogPrintf("pkExtracted= %" PRIszu ": %s\n", pkExtracted.size(), HexStr(pkExtracted).c_str());//pkOut
                 
                 CPubKey cpkE(pkExtracted);                
                 if (!cpkE.IsValid())
@@ -2071,7 +2075,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
                 if (ckidMatch != ckidE)
                     continue;
                 
-                //if (fDebug)
+                if (fDebug)
                     LogPrintf("Found stealth txn to address %s\n", it->Encoded().c_str());
                 
                 if (IsLocked())
@@ -2182,8 +2186,8 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey)
     
     {
         LOCK2(cs_main, cs_wallet);
-        LogPrintf("CommitTransaction start................\n");
-        LogPrintf("CommitTransaction:\n%s", wtxNew.ToString());
+     //   LogPrintf("CommitTransaction start................\n");
+     //   LogPrintf("CommitTransaction:\n%s", wtxNew.ToString());
         {
             // This is only to keep the database open to defeat the auto-flush for the
             // duration of this scope.  This is the only place where this optimization
@@ -2214,7 +2218,7 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey)
         mapRequestCount[wtxNew.GetHash()] = 0;
 
         // Broadcast
-        LogPrintf("CommitTransaction Broadcast start.............\n");
+     //   LogPrintf("CommitTransaction Broadcast start.............\n");
         if (!wtxNew.AcceptToMemoryPool(false))
         {
             // This must not fail. The transaction has already been signed and recorded.
@@ -2222,7 +2226,7 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey)
             return false;
         }
         wtxNew.RelayWalletTransaction();
-        LogPrintf("CommitTransaction RelayWalletTransaction............\n");
+     //    LogPrintf("CommitTransaction RelayWalletTransaction............\n");
     }
     return true;
 }
@@ -2239,7 +2243,7 @@ string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNe
     if (IsLocked())
     {
         string strError = _("Error: Wallet locked, unable to create transaction!");
-        LogPrintf("SendMoney() : %s", strError);
+   //   LogPrintf("SendMoney() : %s", strError);
         return strError;
     }
     string strError;
@@ -2247,7 +2251,7 @@ string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNe
     {
         if (nValue + nFeeRequired > GetBalance())
             strError = strprintf(_("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!"), FormatMoney(nFeeRequired));
-        LogPrintf("SendMoney() : %s\n", strError);
+    //  LogPrintf("SendMoney() : %s\n", strError);
         return strError;
     }
 
@@ -2255,7 +2259,7 @@ string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNe
     if (fAskFee && !uiInterface.ThreadSafeAskFee(nFeeRequired, _("Sending...")))
         return "ABORTED";
         
-    LogPrintf("SendMoney, scriptPubKey=%s \n",scriptPubKey.ToString());
+  //  LogPrintf("SendMoney, scriptPubKey=%s \n",scriptPubKey.ToString());
     
     if (!CommitTransaction(wtxNew, reservekey))
         return _("Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
@@ -2278,7 +2282,7 @@ string CWallet::SendMoneyToDestination(const CTxDestination& address, int64_t nV
     CScript scriptPubKey;
     scriptPubKey.SetDestination(address);
 
-		LogPrintf("SendMoneyToDestination.....................\n");
+	//	LogPrintf("SendMoneyToDestination.....................\n");
 		
     return SendMoney(scriptPubKey, nValue, wtxNew, fAskFee);
 }
@@ -2420,7 +2424,7 @@ bool CWallet::NewKeyPool()
             walletdb.WritePool(nIndex, CKeyPool(GenerateNewKey()));
             setKeyPool.insert(nIndex);
         }
-        LogPrintf("CWallet::NewKeyPool wrote %d new keys\n", nKeys);
+    //    LogPrintf("CWallet::NewKeyPool wrote %d new keys\n", nKeys);
     }
     return true;
 }
@@ -2450,7 +2454,7 @@ bool CWallet::TopUpKeyPool(unsigned int kpSize)
             if (!walletdb.WritePool(nEnd, CKeyPool(GenerateNewKey())))
                 throw runtime_error("TopUpKeyPool() : writing generated key failed");
             setKeyPool.insert(nEnd);
-            LogPrintf("keypool added key %d, size=%u\n", nEnd, setKeyPool.size());
+        //    LogPrintf("keypool added key %d, size=%u\n", nEnd, setKeyPool.size());
         }
     }
     return true;
@@ -2479,7 +2483,7 @@ void CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool)
         if (!HaveKey(keypool.vchPubKey.GetID()))
             throw runtime_error("ReserveKeyFromKeyPool() : unknown key in key pool");
         assert(keypool.vchPubKey.IsValid());
-        LogPrintf("keypool reserve %d\n", nIndex);
+    //    LogPrintf("keypool reserve %d\n", nIndex);
     }
 }
 
@@ -2506,7 +2510,7 @@ void CWallet::KeepKey(int64_t nIndex)
         CWalletDB walletdb(strWalletFile);
         walletdb.ErasePool(nIndex);
     }
-    LogPrintf("keypool keep %d\n", nIndex);
+ //   LogPrintf("keypool keep %d\n", nIndex);
 }
 
 void CWallet::ReturnKey(int64_t nIndex)
@@ -2516,7 +2520,7 @@ void CWallet::ReturnKey(int64_t nIndex)
         LOCK(cs_wallet);
         setKeyPool.insert(nIndex);
     }
-    LogPrintf("keypool return %d\n", nIndex);
+   // LogPrintf("keypool return %d\n", nIndex);
 }
 
 bool CWallet::GetKeyFromPool(CPubKey& result)
