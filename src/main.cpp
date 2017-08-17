@@ -895,9 +895,12 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
 
     // Rather not work on nonstandard transactions (unless -testnet/-regtest)
     string reason;
-             if (fDebug)
+    if (Params().NetworkID() == CChainParams::MAIN && !IsStandardTx(tx, reason))
+    {
+        if (fDebug)
                   LogPrintf("AcceptToMemoryPool : nonstandard transaction: %s");
-             return state.DoS(0,NULL, REJECT_NONSTANDARD, reason);
+    }
+    return state.DoS(0,NULL, REJECT_NONSTANDARD, reason);
 
     // is it already in the memory pool?
     uint256 hash = tx.GetHash();
