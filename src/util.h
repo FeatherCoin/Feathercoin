@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -215,13 +216,13 @@ template <typename Callable> void TraceThread(const char* name,  Callable func)
     RenameThread(s.c_str());
     try
     {
-        LogPrintf("%s thread start\n", name);
+        // if (fDebug) LogPrintf("%s thread start\n", name);
         func();
-        LogPrintf("%s thread exit\n", name);
+        // if (fDebug) LogPrintf("%s thread exit\n", name);
     }
     catch (const boost::thread_interrupted&)
     {
-        LogPrintf("%s thread interrupt\n", name);
+        // if (fDebug) LogPrintf("%s thread interrupt\n", name);
         throw;
     }
     catch (const std::exception& e) {
