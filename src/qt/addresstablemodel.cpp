@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2013 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -298,7 +299,7 @@ bool AddressTableModel::setData(const QModelIndex &index, const QVariant &value,
             std::string sTemp = value.toString().toStdString();
             if (IsStealthAddress(sTemp))
             {
-                printf("IsStealthAddress = INVALID_ADDRESS\n");
+                // if (fDebug) printf("IsStealthAddress = INVALID_ADDRESS\n");
                 editStatus = INVALID_ADDRESS;
                 return false;
             }
@@ -386,7 +387,7 @@ QString AddressTableModel::addRow(const QString &type, const QString &label, con
 
     editStatus = OK;
     
-    LogPrintf("Address addRow 1:strLabel=%s,strAddress=%s,type=%s,addressType=%d \n",strLabel,strAddress,type.toStdString(),addressType);
+    // if (fDebug) LogPrintf("Address addRow 1:strLabel=%s,strAddress=%s,type=%s,addressType=%d \n",strLabel,strAddress,type.toStdString(),addressType);
     //strLabel=sx200,strAddress=,type=R,addressType=2 
 
     if(type == Send)
@@ -473,7 +474,7 @@ QString AddressTableModel::addRow(const QString &type, const QString &label, con
             editStatus = WALLET_UNLOCK_FAILURE;
             return QString();
         }
-        LogPrintf("Address addRow 2: go to Receive \n");
+        // if (fDebug) LogPrintf("Address addRow 2: go to Receive \n");
         if (addressType == AT_Stealth)
         {
             CStealthAddress newStealthAddr;
@@ -482,11 +483,11 @@ QString AddressTableModel::addRow(const QString &type, const QString &label, con
                 || !wallet->AddStealthAddress(newStealthAddr))
             {
                 editStatus = KEY_GENERATION_FAILURE;
-                LogPrintf("Address addRow 3: KEY_GENERATION_FAILURE \n");
+                // if (fDebug) LogPrintf("Address addRow 3: KEY_GENERATION_FAILURE \n");
                 return QString();
             }
             strAddress = newStealthAddr.Encoded();
-            LogPrintf("Address addRow 4: strAddress=%s \n",strAddress);
+            // if (fDebug) LogPrintf("Address addRow 4: strAddress=%s \n",strAddress);
             
         } else {
             CPubKey newKey;
