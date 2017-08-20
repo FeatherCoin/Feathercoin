@@ -20,11 +20,11 @@ struct CDiskTxPos;
 class uint256;
 
 //! -dbcache default (MiB)
-static const int64_t nDefaultDbCache = 100;
+static const int64_t nDefaultDbCache = 500;
 //! max. -dbcache in (MiB)
 static const int64_t nMaxDbCache = sizeof(void*) > 4 ? 16384 : 1024;
 //! min. -dbcache in (MiB)
-static const int64_t nMinDbCache = 4;
+static const int64_t nMinDbCache = 10;
 
 /** CCoinsView backed by the LevelDB coin database (chainstate/) */
 class CCoinsViewDB : public CCoinsView
