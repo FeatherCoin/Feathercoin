@@ -228,7 +228,7 @@ void CreateMultiSigAddrDialog::importAddress()
     const json_spirit::Value& addressV = json_spirit::find_value(addrJson, "address");
     const json_spirit::Value& scriptV  = json_spirit::find_value(addrJson, "redeemScript");
 
-    printf("importAddress redeemScript=%s\n", scriptV.get_str().c_str());
+    // if (fDebug) printf("importAddress redeemScript=%s\n", scriptV.get_str().c_str());
     std::vector<unsigned char> scriptData(ParseHex(scriptV.get_str()));
     CScript scriptPubKey(scriptData.begin(), scriptData.end());
 
@@ -290,7 +290,7 @@ void CreateMultiSigAddrDialog::importAddress()
     CBitcoinAddress address(innerID);
     if ( addressV.get_str() == address.ToString() )
     {
-        printf("importAddress %s\n", address.ToString().c_str());
+        // if (fDebug) printf("importAddress %s\n", address.ToString().c_str());
         pwalletMain->AddCScript(scriptPubKey);
         std::string strAccount;
         pwalletMain->SetAddressBookName(innerID, strAccount);
