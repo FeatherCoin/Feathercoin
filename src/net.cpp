@@ -56,7 +56,7 @@
 using namespace std;
 
 namespace {
-    const int MAX_OUTBOUND_CONNECTIONS = 8;
+    const int MAX_OUTBOUND_CONNECTIONS = 10;
 
     struct ListenSocket {
         SOCKET socket;
@@ -80,7 +80,7 @@ static CNode* pnodeLocalHost = NULL;
 uint64_t nLocalHostNonce = 0;
 static std::vector<ListenSocket> vhListenSocket;
 CAddrMan addrman;
-int nMaxConnections = 125;
+int nMaxConnections = 150;
 bool fAddressesInitialized = false;
 
 vector<CNode*> vNodes;
