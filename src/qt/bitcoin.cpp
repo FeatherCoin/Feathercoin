@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2014 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -84,7 +85,7 @@ Q_DECLARE_METATYPE(CAmount)
 
 static void InitMessage(const std::string &message)
 {
-    LogPrintf("init message: %s\n", message);
+    // if (fDebug) LogPrintf("init message: %s\n", message);
 }
 
 /*
@@ -264,7 +265,7 @@ void BitcoinCore::initialize()
 {
     try
     {
-        qDebug() << __func__ << ": Running AppInit2 in thread";
+        // if (fDebug) qDebug() << __func__ << ": Running AppInit2 in thread";
         int rv = AppInit2(threadGroup, scheduler);
         if(rv)
         {
@@ -285,11 +286,11 @@ void BitcoinCore::shutdown()
 {
     try
     {
-        qDebug() << __func__ << ": Running Shutdown in thread";
+        // if (fDebug) qDebug() << __func__ << ": Running Shutdown in thread";
         threadGroup.interrupt_all();
         threadGroup.join_all();
         Shutdown();
-        qDebug() << __func__ << ": Shutdown finished";
+        // if (fDebug) qDebug() << __func__ << ": Shutdown finished";
         Q_EMIT shutdownResult(1);
     } catch (const std::exception& e) {
         handleRunawayException(&e);
@@ -318,10 +319,10 @@ BitcoinApplication::~BitcoinApplication()
 {
     if(coreThread)
     {
-        qDebug() << __func__ << ": Stopping thread";
+        // if (fDebug) qDebug() << __func__ << ": Stopping thread";
         Q_EMIT stopThread();
         coreThread->wait();
-        qDebug() << __func__ << ": Stopped thread";
+        // if (fDebug) qDebug() << __func__ << ": Stopped thread";
     }
 
     delete window;
@@ -388,14 +389,14 @@ void BitcoinApplication::startThread()
 
 void BitcoinApplication::requestInitialize()
 {
-    qDebug() << __func__ << ": Requesting initialize";
+    // if (fDebug) qDebug() << __func__ << ": Requesting initialize";
     startThread();
     Q_EMIT requestedInitialize();
 }
 
 void BitcoinApplication::requestShutdown()
 {
-    qDebug() << __func__ << ": Requesting shutdown";
+    // if (fDebug) qDebug() << __func__ << ": Requesting shutdown";
     startThread();
     window->hide();
     window->setClientModel(0);
@@ -418,7 +419,7 @@ void BitcoinApplication::requestShutdown()
 
 void BitcoinApplication::initializeResult(int retval)
 {
-    qDebug() << __func__ << ": Initialization result: " << retval;
+    // if (fDebug) qDebug() << __func__ << ": Initialization result: " << retval;
     // Set exit result: 0 if successful, 1 if failure
     returnValue = retval ? 0 : 1;
     if(retval)
@@ -473,7 +474,7 @@ void BitcoinApplication::initializeResult(int retval)
 
 void BitcoinApplication::shutdownResult(int retval)
 {
-    qDebug() << __func__ << ": Shutdown result: " << retval;
+    // if (fDebug) qDebug() << __func__ << ": Shutdown result: " << retval;
     quit(); // Exit main loop after shutdown finished
 }
 
