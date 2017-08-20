@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
+// Copyright (c) 2013-2017 The Feathercoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -41,7 +42,9 @@ void CDBEnv::EnvShutdown()
     fDbEnvInit = false;
     int ret = dbenv->close(0);
     if (ret != 0)
-        LogPrintf("CDBEnv::EnvShutdown: Error %d shutting down database environment: %s\n", ret, DbEnv::strerror(ret));
+    {
+        // if (fDebug) LogPrintf("CDBEnv::EnvShutdown: Error %d shutting down database environment: %s\n", ret, DbEnv::strerror(ret));
+    }
     if (!fMockDb)
         DbEnv(0).remove(strPath.c_str(), 0);
 }
@@ -82,7 +85,7 @@ bool CDBEnv::Open(const boost::filesystem::path& pathIn)
     boost::filesystem::path pathLogDir = pathIn / "database";
     TryCreateDirectory(pathLogDir);
     boost::filesystem::path pathErrorFile = pathIn / "db.log";
-    LogPrintf("CDBEnv::Open: LogDir=%s ErrorFile=%s\n", pathLogDir.string(), pathErrorFile.string());
+    // if (fDebug) LogPrintf("CDBEnv::Open: LogDir=%s ErrorFile=%s\n", pathLogDir.string(), pathErrorFile.string());
 
     unsigned int nEnvFlags = 0;
     if (GetBoolArg("-privdb", true))
@@ -179,14 +182,14 @@ bool CDBEnv::Salvage(const std::string& strFile, bool fAggressive, std::vector<C
     Db db(dbenv, 0);
     int result = db.verify(strFile.c_str(), NULL, &strDump, flags);
     if (result == DB_VERIFY_BAD) {
-        LogPrintf("CDBEnv::Salvage: Database salvage found errors, all data may not be recoverable.\n");
+        // if (fDebug) LogPrintf("CDBEnv::Salvage: Database salvage found errors, all data may not be recoverable.\n");
         if (!fAggressive) {
-            LogPrintf("CDBEnv::Salvage: Rerun with aggressive mode to ignore errors and continue.\n");
+            // if (fDebug) LogPrintf("CDBEnv::Salvage: Rerun with aggressive mode to ignore errors and continue.\n");
             return false;
         }
     }
     if (result != 0 && result != DB_VERIFY_BAD) {
-        LogPrintf("CDBEnv::Salvage: Database salvage failed with result %d.\n", result);
+        // if (fDebug) LogPrintf("CDBEnv::Salvage: Database salvage failed with result %d.\n", result);
         return false;
     }
 
@@ -349,7 +352,7 @@ bool CDB::Rewrite(const string& strFile, const char* pszSkip)
                 bitdb.mapFileUseCount.erase(strFile);
 
                 bool fSuccess = true;
-                LogPrintf("CDB::Rewrite: Rewriting %s...\n", strFile);
+                // if (fDebug) LogPrintf("CDB::Rewrite: Rewriting %s...\n", strFile);
                 string strFileRes = strFile + ".rewrite";
                 { // surround usage of db with extra {}
                     CDB db(strFile.c_str(), "r");
@@ -362,7 +365,7 @@ bool CDB::Rewrite(const string& strFile, const char* pszSkip)
                                             DB_CREATE,          // Flags
                                             0);
                     if (ret > 0) {
-                        LogPrintf("CDB::Rewrite: Can't create database file %s\n", strFileRes);
+                        // if (fDebug) LogPrintf("CDB::Rewrite: Can't create database file %s\n", strFileRes);
                         fSuccess = false;
                     }
 
@@ -411,7 +414,7 @@ bool CDB::Rewrite(const string& strFile, const char* pszSkip)
                         fSuccess = false;
                 }
                 if (!fSuccess)
-                    LogPrintf("CDB::Rewrite: Failed to rewrite database file %s\n", strFileRes);
+                    // if (fDebug) LogPrintf("CDB::Rewrite: Failed to rewrite database file %s\n", strFileRes);
                 return fSuccess;
             }
         }
