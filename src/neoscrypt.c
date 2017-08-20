@@ -3,6 +3,7 @@
  * Copyright (c) 2012 Andrew Moon (floodyberry)
  * Copyright (c) 2012 Samuel Neves <sneves@dei.uc.pt>
  * Copyright (c) 2014 John Doering <ghostlander@phoenixcoin.org>
+ * Copyright (c) 2013-2017 The Feathercoin developers
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -1298,10 +1299,10 @@ int main() {
     }
 
     if(fail) {
-        printf("BLAKE2s integrity test failed!\n");
+       //  printf("BLAKE2s integrity test failed!\n");
         return(1);
     } else {
-        printf("BLAKE2s integrity test passed.\n");
+        // printf("BLAKE2s integrity test passed.\n");
     }
 
     neoscrypt_fastkdf(input, kdf_input_len, input, kdf_input_len, N, output, kdf_output_len);
@@ -1348,10 +1349,10 @@ int main() {
     }
 
     if(fail) {
-        printf("FastKDF integrity test failed!\n");
+        // printf("FastKDF integrity test failed!\n");
         return(1);
     } else {
-        printf("FastKDF integrity test passed.\n");
+        // printf("FastKDF integrity test passed.\n");
     }
 
     neoscrypt(input, output, 0x80000620);
@@ -1370,10 +1371,10 @@ int main() {
     }
 
     if(fail) {
-        printf("NeoScrypt integrity test failed!\n");
+        // printf("NeoScrypt integrity test failed!\n");
         return(1);
     } else {
-        printf("NeoScrypt integrity test passed.\n");
+        // printf("NeoScrypt integrity test passed.\n");
     }
 
     return(0);
