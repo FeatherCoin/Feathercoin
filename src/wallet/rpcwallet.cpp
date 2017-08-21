@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
-// Copyright (c) 2013-2016 The Feathercoin Core developers
+// Copyright (c) 2013-2017 The Feathercoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -2659,7 +2659,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
             
             std::string strType(vchType.begin(), vchType.end());
             
-            //printf("strType %s\n", strType.c_str());
+            // if (fDebug) printf("strType %s\n", strType.c_str());
             
             if (strType == "tx")
             {
@@ -2668,7 +2668,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
                 
                 if ((ret = pcursor->del(0)) != 0)
                 {
-                    printf("Delete transaction failed %d, %s\n", ret, db_strerror(ret));
+                    // if (fDebug) printf("Delete transaction failed %d, %s\n", ret, db_strerror(ret));
                     continue;
                 };
                 
@@ -2772,13 +2772,13 @@ Value scanforstealthtxns(const Array& params, bool fHelp)
     pwalletMain->nStealth = 0;
     pwalletMain->nFoundStealth = 0;
     
-    printf("Scan open from %d ................\n",nFromHeight); 
+    // if (fDebug) printf("Scan open from %d ................\n",nFromHeight); 
     while (pindex)
     {
         nBlocks++;
         CBlock block;
         ReadBlockFromDisk(block, pindex);  //block.ReadFromDisk(pindex);
-        printf("pindex->nHeight=%d \n",pindex->nHeight); 
+        // if (fDebug) printf("pindex->nHeight=%d \n",pindex->nHeight); 
         
         BOOST_FOREACH(CTransaction& tx, block.vtx)
         {
@@ -2795,9 +2795,9 @@ Value scanforstealthtxns(const Array& params, bool fHelp)
         pindex = pindex->pnext;
     };
     
-    printf("Scanned %u blocks, %u transactions\n", nBlocks, nTransactions);
-    printf("Found %u stealth transactions in blockchain.\n", pwalletMain->nStealth);
-    printf("Found %u new owned stealth transactions.\n", pwalletMain->nFoundStealth);
+    // if (fDebug) printf("Scanned %u blocks, %u transactions\n", nBlocks, nTransactions);
+    // if (fDebug) printf("Found %u stealth transactions in blockchain.\n", pwalletMain->nStealth);
+    // if (fDebug) printf("Found %u new owned stealth transactions.\n", pwalletMain->nFoundStealth);
     
     char cbuf[256];
     snprintf(cbuf, sizeof(cbuf), "%u new stealth transactions.", pwalletMain->nFoundStealth);
