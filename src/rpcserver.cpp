@@ -1,5 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -554,7 +555,7 @@ static void RPCAcceptHandler(boost::shared_ptr< basic_socket_acceptor<Protocol, 
     if (error)
     {
         // TODO: Actually handle errors
-        LogPrintf("%s: Error: %s\n", __func__, error.message());
+        // if (fDebug) LogPrintf("%s: Error: %s\n", __func__, error.message());
     }
     // Restrict callers by IP.  It is important to
     // do this before starting client thread, to filter out
@@ -644,13 +645,16 @@ void StartRPCThreads()
         boost::filesystem::path pathCertFile(GetArg("-rpcsslcertificatechainfile", "server.cert"));
         if (!pathCertFile.is_complete()) pathCertFile = boost::filesystem::path(GetDataDir()) / pathCertFile;
         if (boost::filesystem::exists(pathCertFile)) rpc_ssl_context->use_certificate_chain_file(pathCertFile.string());
-        else LogPrintf("ThreadRPCServer ERROR: missing server certificate file %s\n", pathCertFile.string());
-
+        else {
+             // if (fDebug) LogPrintf("ThreadRPCServer ERROR: missing server certificate file %s\n", pathCertFile.string());
+        }
         boost::filesystem::path pathPKFile(GetArg("-rpcsslprivatekeyfile", "server.pem"));
         if (!pathPKFile.is_complete()) pathPKFile = boost::filesystem::path(GetDataDir()) / pathPKFile;
         if (boost::filesystem::exists(pathPKFile)) rpc_ssl_context->use_private_key_file(pathPKFile.string(), ssl::context::pem);
-        else LogPrintf("ThreadRPCServer ERROR: missing server private key file %s\n", pathPKFile.string());
-
+        else 
+        {
+            // if (fDebug) LogPrintf("ThreadRPCServer ERROR: missing server private key file %s\n", pathPKFile.string());
+        }
         string strCiphers = GetArg("-rpcsslciphers", "TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH");
         SSL_CTX_set_cipher_list(rpc_ssl_context->impl(), strCiphers.c_str());
     }
@@ -664,7 +668,8 @@ void StartRPCThreads()
         vEndpoints.push_back(ip::tcp::endpoint(boost::asio::ip::address_v4::loopback(), defaultPort));
         if (mapArgs.count("-rpcbind"))
         {
-            LogPrintf("WARNING: option -rpcbind was ignored because -rpcallowip was not specified, refusing to allow everyone to connect\n");
+            
+         // if (fDebug) LogPrintf("WARNING: option -rpcbind was ignored because -rpcallowip was not specified, refusing to allow everyone to connect\n");
         }
     } else if (mapArgs.count("-rpcbind")) // Specific bind address
     {
@@ -698,7 +703,7 @@ void StartRPCThreads()
         try {
             boost::asio::ip::address bindAddress = endpoint.address();
             straddress = bindAddress.to_string();
-            LogPrintf("Binding RPC on address %s port %i (IPv4+IPv6 bind any: %i)\n", straddress, endpoint.port(), bBindAny);
+            // if (fDebug) LogPrintf("Binding RPC on address %s port %i (IPv4+IPv6 bind any: %i)\n", straddress, endpoint.port(), bBindAny);
             boost::system::error_code v6_only_error;
             boost::shared_ptr<ip::tcp::acceptor> acceptor(new ip::tcp::acceptor(*rpc_io_service));
 
@@ -722,7 +727,7 @@ void StartRPCThreads()
         }
         catch (const boost::system::system_error& e)
         {
-            LogPrintf("ERROR: Binding RPC on address %s port %i failed: %s\n", straddress, endpoint.port(), e.what());
+            // if (fDebug) LogPrintf("ERROR: Binding RPC on address %s port %i failed: %s\n", straddress, endpoint.port(), e.what());
             strerr = strprintf(_("An error occurred while setting up the RPC address %s port %u for listening: %s"), straddress, endpoint.port(), e.what());
         }
     }
@@ -768,14 +773,18 @@ void StopRPCThreads()
     {
         acceptor->cancel(ec);
         if (ec)
-            LogPrintf("%s: Warning: %s when cancelling acceptor\n", __func__, ec.message());
+        {
+           // if (fDebug) LogPrintf("%s: Warning: %s when cancelling acceptor\n", __func__, ec.message());
+        }
     }
     rpc_acceptors.clear();
     BOOST_FOREACH(const PAIRTYPE(std::string, boost::shared_ptr<deadline_timer>) &timer, deadlineTimers)
     {
         timer.second->cancel(ec);
         if (ec)
-            LogPrintf("%s: Warning: %s when cancelling timer\n", __func__, ec.message());
+        {
+            // if (fDebug) LogPrintf("%s: Warning: %s when cancelling timer\n", __func__, ec.message());
+        }
     }
     deadlineTimers.clear();
 
@@ -923,7 +932,7 @@ static bool HTTPReq_JSONRPC(AcceptedConnection *conn,
 
     if (!HTTPAuthorized(mapHeaders))
     {
-        LogPrintf("ThreadRPCServer incorrect password attempt from %s\n", conn->peer_address_to_string());
+        // if (fDebug) LogPrintf("ThreadRPCServer incorrect password attempt from %s\n", conn->peer_address_to_string());
         /* Deter brute-forcing
            We don't support exposing the RPC port, so this shouldn't result
            in a DoS. */
