@@ -30,7 +30,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     // The next block
     int nHeight = pindexLast->nHeight + 1;
-    // LogPrintf("GetNextWorkRequired.1 pindexLast block Height=%d,nBits=%d \n",pindexLast->nHeight,pindexLast->nBits);
+    // if (Debug) LogPrintf("GetNextWorkRequired.1 pindexLast block Height=%d,nBits=%d \n",pindexLast->nHeight,pindexLast->nBits);
 
     /* The 4th hard fork and testnet hard fork */
     if ((nHeight >= nForkFour)|| ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetFork))) {

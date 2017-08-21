@@ -2421,7 +2421,7 @@ bool CWallet::UnlockStealthAddresses(const CKeyingMaterial& vMasterKeyIn)
         
         if (!ckey.IsValid())
         {
-            // printf("Reconstructed key is invalid.\n");
+            // if (fDebug) printf("Reconstructed key is invalid.\n");
             continue;
         };
         
