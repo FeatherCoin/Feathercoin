@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -178,7 +179,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
                     // or other transactions in the memory pool.
                     if (!mempool.mapTx.count(txin.prevout.hash))
                     {
-                        LogPrintf("ERROR: mempool transaction missing input\n");
+                        // if (fDebug) LogPrintf("ERROR: mempool transaction missing input\n");
                         if (fDebug) assert("mempool transaction missing input" == 0);
                         fMissingInputs = true;
                         if (porphan)
@@ -304,8 +305,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
 
             if (fPrintPriority)
             {
-                LogPrintf("priority %.1f fee %s txid %s\n",
-                    dPriority, feeRate.ToString(), tx.GetHash().ToString());
+                // if (fDebug) LogPrintf("priority %.1f fee %s txid %s\n", dPriority, feeRate.ToString(), tx.GetHash().ToString());
             }
 
             // Add transactions that depend on this one to the priority queue
@@ -328,7 +328,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
 
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
-        LogPrintf("CreateNewBlock(): total size %u\n", nBlockSize);
+        // if (fDebug) LogPrintf("CreateNewBlock(): total size %u\n", nBlockSize);
 
         // Compute final coinbase transaction.
         txNew.vout[0].nValue = nFees + GetBlockSubsidy(nHeight, chainparams.GetConsensus());
@@ -421,8 +421,10 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey)
 
 static bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 {
-    LogPrintf("%s\n", pblock->ToString());
-    LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
+    
+    // if (fDebug) LogPrintf("%s\n", pblock->ToString());
+    // if (fDebug) LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
+    
 
     // Found a solution
     {
@@ -450,12 +452,13 @@ static bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, CReserveKey& rese
         // if (fDebug) LogPrintf("FeathercoinMiner: ProcessNewBlock, block not accepted");
         return true;
     }
+
     return true;
 }
 
 void static BitcoinMiner(CWallet *pwallet)
 {
-    LogPrintf("FeathercoinMiner started\n");
+    // if (fDebug) LogPrintf("FeathercoinMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
     RenameThread("feathercoin-miner");
     const CChainParams& chainparams = Params();
@@ -490,15 +493,14 @@ void static BitcoinMiner(CWallet *pwallet)
             auto_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey));
             if (!pblocktemplate.get())
             {
-                LogPrintf("Error in FeathercoinMiner: Keypool ran out, please call keypoolrefill before restarting the mining thread\n");
+                // if (fDebug) LogPrintf("Error in FeathercoinMiner: Keypool ran out, please call keypoolrefill before restarting the mining thread\n");
                 return;
             }
             CBlock *pblock = &pblocktemplate->block;
             IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
-
-            LogPrintf("Running FeathercoinMiner with %u transactions in block (%u bytes)\n", pblock->vtx.size(),
-                ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
-
+            
+            // if (fDebug) LogPrintf("Running FeathercoinMiner with %u transactions in block (%u bytes)\n", pblock->vtx.size(),                 ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
+            
             //
             // Search
             //
@@ -522,8 +524,10 @@ void static BitcoinMiner(CWallet *pwallet)
                         assert(hash == pblock->GetHash());
 
                         SetThreadPriority(THREAD_PRIORITY_NORMAL);
-                        LogPrintf("FeathercoinMiner:\n");
-                        LogPrintf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex(), hashTarget.GetHex());
+                        
+                        // if (fDebug) LogPrintf("FeathercoinMiner:\n");
+                        // if (fDebug) LogPrintf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex(), hashTarget.GetHex());
+                        
                         ProcessBlockFound(pblock, *pwallet, reservekey);
                         SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
@@ -559,12 +563,12 @@ void static BitcoinMiner(CWallet *pwallet)
     }
     catch (const boost::thread_interrupted&)
     {
-        LogPrintf("FeathercoinMiner terminated\n");
+        // if (fDebug) LogPrintf("FeathercoinMiner terminated\n");
         throw;
     }
     catch (const std::runtime_error &e)
     {
-        LogPrintf("FeathercoinMiner runtime error: %s\n", e.what());
+        // if (fDebug) LogPrintf("FeathercoinMiner runtime error: %s\n", e.what());
         return;
     }
 }
