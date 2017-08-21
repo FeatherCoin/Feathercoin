@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2016 The Feathercoin Core developers
+// Copyright (c) 2013-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -434,43 +434,43 @@ void MultiSigDialog::sendRawTransaction()
     CCoins existingCoins;
     bool fHaveMempool = mempool.exists(hashTx);
     bool fHaveChain = view.GetCoins(hashTx, existingCoins) && existingCoins.nHeight < 1000000000;
-    LogPrintf("sendRawTransaction: 100 hashTx=%s,fHaveMempoo=%d,fHaveChain=%d\n", hashTx.ToString(),fHaveMempool,fHaveChain); //OK
+    // if (fDebug) LogPrintf("sendRawTransaction: 100 hashTx=%s,fHaveMempoo=%d,fHaveChain=%d\n", hashTx.ToString(),fHaveMempool,fHaveChain); //OK
     
     if (!fHaveMempool && !fHaveChain) {
         // push to local node and sync with wallets
         CValidationState state;
         bool IsPool=AcceptToMemoryPool(mempool, state, *rawTx, false, NULL, false);
-        LogPrintf("sendRawTransaction: 200,AcceptToMemoryPool=%d\n",IsPool);
+        // if (fDebug) LogPrintf("sendRawTransaction: 200,AcceptToMemoryPool=%d\n",IsPool);
         
         if (IsPool) {
-        		LogPrintf("sendRawTransaction: 210 \n");
-            //SyncWithWallets(hashTx, *rawTx, NULL);
+        	// if (fDebug) LogPrintf("sendRawTransaction: 210 \n");
+            SyncWithWallets(hashTx, *rawTx, NULL);
             SyncWithWallets(*rawTx, NULL);
           	}
         else {
-        		LogPrintf("sendRawTransaction: 220 \n");
+        	// if (fDebug) LogPrintf("sendRawTransaction: 220 \n");
             if(state.IsInvalid()) {
-            		LogPrintf("sendRawTransaction Error: 222 ,GetRejectCode=%i,GetRejectReason=%s\n",state.GetRejectCode(), state.GetRejectReason());
+            		// if (fDebug) LogPrintf("sendRawTransaction Error: 222 ,GetRejectCode=%i,GetRejectReason=%s\n",state.GetRejectCode(), state.GetRejectReason());
             		//insufficient priority
             		return;
                 //throw JSONRPCError(RPC_TRANSACTION_REJECTED, strprintf("%i: %s", state.GetRejectCode(), state.GetRejectReason()));
             }
             else {
-            		LogPrintf("sendRawTransaction Error: 224 ,GetRejectReason=%s\n",state.GetRejectReason());
+            	// if (fDebug) LogPrintf("sendRawTransaction Error: 224 ,GetRejectReason=%s\n",state.GetRejectReason());
             		return;
                 //throw JSONRPCError(RPC_TRANSACTION_ERROR, state.GetRejectReason());
             }
         }
     } else if (fHaveChain) {
-    		LogPrintf("sendRawTransaction Error: 250,transaction already in block chain\n");
+    		// if (fDebug) LogPrintf("sendRawTransaction Error: 250,transaction already in block chain\n");
     		return;
         //throw JSONRPCError(RPC_TRANSACTION_ALREADY_IN_CHAIN, "transaction already in block chain");
     }
-    LogPrintf("sendRawTransaction: 300 \n");
+    // if (fDebug) LogPrintf("sendRawTransaction: 300 \n");
     
     //RelayTransaction(*rawTx, hashTx);
     RelayTransaction(*rawTx);
-    LogPrintf("sendRawTransaction: 400 \n");
+    // if (fDebug) LogPrintf("sendRawTransaction: 400 \n");
     
     QMessageBox::warning(this, tr("Send Coins"),tr("Transaction has been sent."),QMessageBox::Ok, QMessageBox::Ok);
     clear();
@@ -505,7 +505,7 @@ void MultiSigDialog::signTransaction(QString *addrStr)
         fNewRecipientAllowed = true;
     }
 //----------------------
-		LogPrintf("signTransaction: isTxCreate=%d\n", isTxCreate);
+	// if (fDebug) LogPrintf("signTransaction: isTxCreate=%d\n", isTxCreate);
     if ( !isTxCreate )
         createRawTransaction();
 
@@ -572,7 +572,7 @@ void MultiSigDialog::signTransaction(QString *addrStr)
             if (!view.GetCoins(txin.prevout.hash, coins) || !coins.IsAvailable(txin.prevout.n))
             {
                 isComplete = false;
-                LogPrintf("signTransaction: isComplete.100=%d\n", isComplete);
+                // if (fDebug) LogPrintf("signTransaction: isComplete.100=%d\n", isComplete);
                 continue;
             }
             const CScript& prevPubKey = coins.vout[txin.prevout.n].scriptPubKey;
@@ -590,7 +590,7 @@ void MultiSigDialog::signTransaction(QString *addrStr)
             if (!VerifyScript(txin.scriptSig, prevPubKey, SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_STRICTENC, MutableTransactionSignatureChecker(&mergedTx, i)))
             {
                 isComplete = false;
-                LogPrintf("signTransaction: isComplete.200=%d\n", isComplete);
+                // if (fDebug) LogPrintf("signTransaction: isComplete.200=%d\n", isComplete);
              }
         }
        // mergedTx failed to return to rawTx, to assign value  
@@ -599,10 +599,10 @@ void MultiSigDialog::signTransaction(QString *addrStr)
     
         editEnable(false);
         ui->sendButton->setEnabled(false);
-        LogPrintf("signTransaction: isComplete.300=%d\n", isComplete);
+        // if (fDebug) LogPrintf("signTransaction: isComplete.300=%d\n", isComplete);
     }
 
-		LogPrintf("signTransaction: isComplete.400=%d\n", isComplete);
+		// if (fDebug) LogPrintf("signTransaction: isComplete.400=%d\n", isComplete);
     if ( isComplete )
         ui->sendButton->setEnabled(true);
 
@@ -779,7 +779,7 @@ bool MultiSigDialog::handleURI(const QString &uri)
 
 void MultiSigDialog::setSharedBalance(qint64 balance, qint64 unconfirmedBalance, qint64 immatureBalance)
 {
-    //printf("setSharedBalance %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance).toStdString().c_str());
+    // if (fDebug) printf("setSharedBalance %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance).toStdString().c_str());
     Q_UNUSED(unconfirmedBalance);
     Q_UNUSED(immatureBalance);
     if(!model || !model->getOptionsModel())
@@ -849,16 +849,16 @@ void MultiSigDialog::updateAddressBalance()
             //if (wtx.IsCoinBase() || !wtx.IsFinal())
                 //continue;
 
-            //printf("updateAddressBalance wtx %s \n", wtx.GetHash().ToString().c_str());
+            // if (fDebug) printf("updateAddressBalance wtx %s \n", wtx.GetHash().ToString().c_str());
             for (unsigned int i = 0; i < wtx.vout.size(); i++)
             {
                 const CTxOut* txout = &wtx.vout[i];
                 if ( scriptPubKey == txout->scriptPubKey && !wtx.IsSpent(i)
                     ){
-                    //printf("updateAddressBalance GetDepthInMainChain %d\n", wtx.GetDepthInMainChain());
-                    //printf("updateAddressBalance nValue %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), txout.nValue).toStdString().c_str());
-                    //if (wtx.GetDepthInMainChain() > 0)
-                    //if (wtx.IsConfirmed())
+                    // if (fDebug) printf("updateAddressBalance GetDepthInMainChain %d\n", wtx.GetDepthInMainChain());
+                    // if (fDebug) printf("updateAddressBalance nValue %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), txout.nValue).toStdString().c_str());
+                    // if (wtx.GetDepthInMainChain() > 0)
+                    // if (wtx.IsConfirmed())
                     nAmount += txout->nValue;
                     COutPoint outpt(wtx.GetHash(), i);
                     coinControl->Select(outpt);
@@ -867,7 +867,7 @@ void MultiSigDialog::updateAddressBalance()
         }
     }
 
-    //printf("updateAddressBalance nAmount %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), nAmount).toStdString().c_str());
+    // if (fDebug) printf("updateAddressBalance nAmount %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), nAmount).toStdString().c_str());
     if(model && model->getOptionsModel())
     {
         ui->labelAvailableCoins->setText(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), nAmount));
@@ -951,7 +951,7 @@ void MultiSigDialog::checkRawTransaction()
         if ( isComplete )
             ui->sendButton->setEnabled(true);
     }
-    LogPrintf("checkRawTransaction: isTxCreate=%d,isComplete.a100=%d\n",isTxCreate,isComplete);
+    // if (fDebug) LogPrintf("checkRawTransaction: isTxCreate=%d,isComplete.a100=%d\n",isTxCreate,isComplete);
 
     QLineEdit *labelRequireAddr[3];
     QToolButton *btnSign[3];
@@ -973,13 +973,13 @@ void MultiSigDialog::checkRawTransaction()
         
         if ( IsMine(*pwalletMain, addr.Get()) )
         {
-        		LogPrintf("checkRawTransaction: IsMine=1,i=%d\n",i);
+        	// if (fDebug) LogPrintf("checkRawTransaction: IsMine=1,i=%d\n",i);
         		
             if ( !IsSign[i] )
             {
                 btnSign[i]->setVisible(true);
                 labelIsSign[i]->setVisible(false);
-                LogPrintf("checkRawTransaction: No Sign,IsSign[i]=%d\n",IsSign[i]); //IsMine=1,IsSign[2]=0
+                // if (fDebug) LogPrintf("checkRawTransaction: No Sign,IsSign[i]=%d\n",IsSign[i]); //IsMine=1,IsSign[2]=0
             }
             else
             {
@@ -987,14 +987,14 @@ void MultiSigDialog::checkRawTransaction()
                 labelIsSign[i]->setVisible(true);
                 labelIsSign[i]->setStyleSheet("color:green");
                 labelIsSign[i]->setText(tr("Signed"));
-                LogPrintf("checkRawTransaction: Yes Sign,IsSign[i]=%d\n",IsSign[i]);//Yes Sign,IsSign[i]=1
+                // if (fDebug) LogPrintf("checkRawTransaction: Yes Sign,IsSign[i]=%d\n",IsSign[i]);//Yes Sign,IsSign[i]=1
             }
         }
         else
         {
             btnSign[i]->setVisible(false);
             labelIsSign[i]->setVisible(true);
-            LogPrintf("checkRawTransaction: IsMine=0,i=%d,isTxCreate=%d,isComplete=%d,IsSign[i]=%d\n",i,isTxCreate,isComplete,IsSign[i]);
+            // if (fDebug) LogPrintf("checkRawTransaction: IsMine=0,i=%d,isTxCreate=%d,isComplete=%d,IsSign[i]=%d\n",i,isTxCreate,isComplete,IsSign[i]);
             
             if ( isTxCreate && IsSign[i])
             {
