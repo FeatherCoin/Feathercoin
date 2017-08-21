@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2012 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,8 +16,8 @@
 #ifdef DEBUG_LOCKCONTENTION
 void PrintLockContention(const char* pszName, const char* pszFile, int nLine)
 {
-    LogPrintf("LOCKCONTENTION: %s\n", pszName);
-    LogPrintf("Locker: %s:%d\n", pszFile, nLine);
+  // if (fDebug)  LogPrintf("LOCKCONTENTION: %s\n", pszName);
+  // if (fDebug)  LogPrintf("Locker: %s:%d\n", pszFile, nLine);
 }
 #endif /* DEBUG_LOCKCONTENTION */
 
@@ -62,22 +63,22 @@ static boost::thread_specific_ptr<LockStack> lockstack;
 
 static void potential_deadlock_detected(const std::pair<void*, void*>& mismatch, const LockStack& s1, const LockStack& s2)
 {
-    LogPrintf("POTENTIAL DEADLOCK DETECTED\n");
-    LogPrintf("Previous lock order was:\n");
+    // if (fDebug) LogPrintf("POTENTIAL DEADLOCK DETECTED\n");
+    // if (fDebug) LogPrintf("Previous lock order was:\n");
     BOOST_FOREACH (const PAIRTYPE(void*, CLockLocation) & i, s2) {
         if (i.first == mismatch.first)
-            LogPrintf(" (1)");
+          // if (fDebug)   LogPrintf(" (1)");
         if (i.first == mismatch.second)
-            LogPrintf(" (2)");
-        LogPrintf(" %s\n", i.second.ToString());
+          // if (fDebug)   LogPrintf(" (2)");
+     // if (fDebug)  LogPrintf(" %s\n", i.second.ToString());
     }
-    LogPrintf("Current lock order is:\n");
+    // if (fDebug) LogPrintf("Current lock order is:\n");
     BOOST_FOREACH (const PAIRTYPE(void*, CLockLocation) & i, s1) {
         if (i.first == mismatch.first)
-            LogPrintf(" (1)");
+           // if (fDebug)  LogPrintf(" (1)");
         if (i.first == mismatch.second)
-            LogPrintf(" (2)");
-        LogPrintf(" %s\n", i.second.ToString());
+           // if (fDebug)  LogPrintf(" (2)");
+        // if (fDebug) LogPrintf(" %s\n", i.second.ToString());
     }
 }
 
