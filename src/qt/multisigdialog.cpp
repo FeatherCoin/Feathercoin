@@ -444,7 +444,7 @@ void MultiSigDialog::sendRawTransaction()
         
         if (IsPool) {
         	// if (fDebug) LogPrintf("sendRawTransaction: 210 \n");
-            SyncWithWallets(hashTx, *rawTx, NULL);
+            // SyncWithWallets(hashTx, *rawTx, NULL);
             SyncWithWallets(*rawTx, NULL);
           	}
         else {
