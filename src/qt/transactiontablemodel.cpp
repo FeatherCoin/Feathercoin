@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2014 The Bitcoin Core developers
+// Copyright (c) 2013-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -75,7 +76,7 @@ public:
      */
     void refreshWallet()
     {
-        qDebug() << "TransactionTablePriv::refreshWallet";
+        // if (fDebug) qDebug() << "TransactionTablePriv::refreshWallet";
         cachedWallet.clear();
         {
             LOCK2(cs_main, wallet->cs_wallet);
@@ -94,7 +95,7 @@ public:
      */
     void updateWallet(const uint256 &hash, int status, bool showTransaction)
     {
-        qDebug() << "TransactionTablePriv::updateWallet: " + QString::fromStdString(hash.ToString()) + " " + QString::number(status);
+        // if (fDebug) qDebug() << "TransactionTablePriv::updateWallet: " + QString::fromStdString(hash.ToString()) + " " + QString::number(status);
 
         // Find bounds of this transaction in model
         QList<TransactionRecord>::iterator lower = qLowerBound(
@@ -113,16 +114,14 @@ public:
                 status = CT_DELETED; /* In model, but want to hide, treat as deleted */
         }
 
-        qDebug() << "    inModel=" + QString::number(inModel) +
-                    " Index=" + QString::number(lowerIndex) + "-" + QString::number(upperIndex) +
-                    " showTransaction=" + QString::number(showTransaction) + " derivedStatus=" + QString::number(status);
+        // if (fDebug) qDebug() << "    inModel=" + QString::number(inModel) + " Index=" + QString::number(lowerIndex) + "-" + QString::number(upperIndex) + " showTransaction=" + QString::number(showTransaction) + " derivedStatus=" + QString::number(status);
 
         switch(status)
         {
         case CT_NEW:
             if(inModel)
             {
-                qWarning() << "TransactionTablePriv::updateWallet: Warning: Got CT_NEW, but transaction is already in model";
+                // if (fDebug) qWarning() << "TransactionTablePriv::updateWallet: Warning: Got CT_NEW, but transaction is already in model";
                 break;
             }
             if(showTransaction)
@@ -132,7 +131,7 @@ public:
                 std::map<uint256, CWalletTx>::iterator mi = wallet->mapWallet.find(hash);
                 if(mi == wallet->mapWallet.end())
                 {
-                    qWarning() << "TransactionTablePriv::updateWallet: Warning: Got CT_NEW, but transaction is not in wallet";
+                    // if (fDebug) qWarning() << "TransactionTablePriv::updateWallet: Warning: Got CT_NEW, but transaction is not in wallet";
                     break;
                 }
                 // Added -- insert at the right position
@@ -154,7 +153,7 @@ public:
         case CT_DELETED:
             if(!inModel)
             {
-                qWarning() << "TransactionTablePriv::updateWallet: Warning: Got CT_DELETED, but transaction is not in model";
+                // if (fDebug) qWarning() << "TransactionTablePriv::updateWallet: Warning: Got CT_DELETED, but transaction is not in model";
                 break;
             }
             // Removed -- remove entire transaction from table
@@ -664,7 +663,7 @@ public:
     void invoke(QObject *ttm)
     {
         QString strHash = QString::fromStdString(hash.GetHex());
-        qDebug() << "NotifyTransactionChanged: " + strHash + " status= " + QString::number(status);
+        // if (fDebug) qDebug() << "NotifyTransactionChanged: " + strHash + " status= " + QString::number(status);
         QMetaObject::invokeMethod(ttm, "updateTransaction", Qt::QueuedConnection,
                                   Q_ARG(QString, strHash),
                                   Q_ARG(int, status),
