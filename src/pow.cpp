@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -29,7 +30,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     // The next block
     int nHeight = pindexLast->nHeight + 1;
-    //LogPrintf("GetNextWorkRequired.1 pindexLast block Height=%d,nBits=%d \n",pindexLast->nHeight,pindexLast->nBits);
+    // LogPrintf("GetNextWorkRequired.1 pindexLast block Height=%d,nBits=%d \n",pindexLast->nHeight,pindexLast->nBits);
 
     /* The 4th hard fork and testnet hard fork */
     if ((nHeight >= nForkFour)|| ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetFork))) {
@@ -37,7 +38,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         /* Difficulty reset after the switch */
         if((nHeight == nForkFour)|| ((chainParams.NetworkIDString()=="test") && (nHeight == nTestnetFork)))
         {
-        	LogPrintf("GetNextWorkRequired.1.00 4th hard fork\n");
+          // if (fDebug) LogPrintf("GetNextWorkRequired.1.00 4th hard fork\n");
           return nProofOfWorkLimitNeo;
          }
     }
@@ -69,10 +70,10 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         }
     }
 
-		//LogPrintf("GetNextWorkRequired.1.1 nInterval=%d,nTargetTimespan=%d,nTargetSpacing=%d \n",nInterval,nTargetTimespan,nTargetSpacing);    
+	// if (Debug) LogPrintf("GetNextWorkRequired.1.1 nInterval=%d,nTargetTimespan=%d,nTargetSpacing=%d \n",nInterval,nTargetTimespan,nTargetSpacing);    
     // Only change once per difficulty adjustment interval
     // Difficulty rules regular blocks
-    //if ((pindexLast->nHeight+1) % params.DifficultyAdjustmentInterval() != 0)
+    // if ((pindexLast->nHeight+1) % params.DifficultyAdjustmentInterval() != 0)
     if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < nForkThree))
     {
         if (params.fPowAllowMinDifficultyBlocks && (chainParams.NetworkIDString()=="test"))
@@ -83,7 +84,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
             //if (pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.nPowTargetSpacing*2)
             if (pblock->GetBlockTime() > pindexLast->GetBlockTime() + nTargetSpacing*2)
             {
-            		LogPrintf("GetNextWorkRequired.1.2 nProofOfWorkLimit=%d\n",nProofOfWorkLimit);
+                // if (fDebug) LogPrintf("GetNextWorkRequired.1.2 nProofOfWorkLimit=%d\n",nProofOfWorkLimit);
                 return nProofOfWorkLimit;
              }
             else
@@ -92,14 +93,14 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
                 const CBlockIndex* pindex = pindexLast;
                 while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
                     pindex = pindex->pprev;
-                LogPrintf("main,GetNextWorkRequired.1.3 nBits=%d\n",pindex->nBits);
+                // if (fDebug) LogPrintf("main,GetNextWorkRequired.1.3 nBits=%d\n",pindex->nBits);
                 return pindex->nBits;
             }
         }
-        //LogPrintf("GetNextWorkRequired.1.4 nBits=%d\n",pindexLast->nBits);
+        // if (Debug) LogPrintf("GetNextWorkRequired.1.4 nBits=%d\n",pindexLast->nBits);
         return pindexLast->nBits;
     }
-    LogPrintf("GetNextWorkRequired.2 Difficulty rules regular blocks,nHeight=%d,nInterval=%d,nHeight nInterval=%d\n",nHeight,nInterval,nHeight % nInterval);
+    // if (fDebug) LogPrintf("GetNextWorkRequired.2 Difficulty rules regular blocks,nHeight=%d,nInterval=%d,nHeight nInterval=%d\n",nHeight,nInterval,nHeight % nInterval);
     
     
     // The 1st retarget after genesis
@@ -111,7 +112,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         pindexFirst = pindexFirst->pprev;
     assert(pindexFirst);
 
-		LogPrintf("GetNextWorkRequired.3 Difficulty pindexFirst->nHeight=%d,nInterval=%d,nHeight=%d\n",pindexFirst->nHeight,nInterval,nHeight);
+	// if (fDebug) LogPrintf("GetNextWorkRequired.3 Difficulty pindexFirst->nHeight=%d,nInterval=%d,nHeight=%d\n",pindexFirst->nHeight,nInterval,nHeight);
     return CalculateNextWorkRequired(pindexLast, pindexFirst->GetBlockTime(), params,nInterval,nHeight);
 }
 
@@ -121,7 +122,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
 		
     // Limit adjustment step
     int64_t nActualTimespan = pindexLast->GetBlockTime() - nFirstBlockTime;
-    //LogPrintf("CalculateNextWorkRequired.1 nActualTimespan = %d  before bounds\n", nActualTimespan);
+    //if (fDebug) LogPrintf("CalculateNextWorkRequired.1 nActualTimespan = %d  before bounds\n", nActualTimespan);
     
         
     // Additional averaging over 4x nInterval window
@@ -142,7 +143,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
         nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
         nActualTimespan /= 4;
 
-        //LogPrintf("CalculateNextWorkRequired.2 RETARGET: >nForkTwo and <nForkThree nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n", nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+        // if (fDebug)  LogPrintf("CalculateNextWorkRequired.2 RETARGET: >nForkTwo and <nForkThree nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n", nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
     }
     
   	//eHRC  
@@ -181,7 +182,7 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
 				nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
 				nActualTimespan /= 4;
 				
-				LogPrintf("CalculateNextWorkRequired.3 RETARGET: >nForkThree nActualTimespanShort = %d, nActualTimespanMedium = %d, nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",nActualTimespanShort, nActualTimespanMedium, nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+			// if (fDebug) LogPrintf("CalculateNextWorkRequired.3 RETARGET: >nForkThree nActualTimespanShort = %d, nActualTimespanMedium = %d, nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",nActualTimespanShort, nActualTimespanMedium, nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
     }
 
     // The initial settings (4.0 difficulty limiter)
@@ -203,9 +204,8 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     if(nActualTimespan < nActualTimespanMin) nActualTimespan = nActualTimespanMin;
     if(nActualTimespan > nActualTimespanMax) nActualTimespan = nActualTimespanMax;
 
-    //LogPrintf("CalculateNextWorkRequired.4 RETARGET: nActualTimespan = %d after bounds\n", nActualTimespan);
-    //LogPrintf("CalculateNextWorkRequired.4 RETARGET: nTargetTimespan = %d, nTargetTimespan/nActualTimespan = %.4f\n", nTargetTimespan, (float) nTargetTimespan/nActualTimespan);
-
+    //if (fDebug) LogPrintf("CalculateNextWorkRequired.4 RETARGET: nActualTimespan = %d after bounds\n", nActualTimespan);
+    //if (fDebug) LogPrintf("CalculateNextWorkRequired.4 RETARGET: nTargetTimespan = %d, nTargetTimespan/nActualTimespan = %.4f\n", nTargetTimespan, (float) nTargetTimespan/nActualTimespan);
 
     arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     arith_uint256 bnPowScyptLimit = UintToArith256(uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
@@ -215,15 +215,15 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     bnNew.SetCompact(pindexLast->nBits);
     arith_uint256 bnOld;    
     bnOld = bnNew;
-    //watch
+    // watch
     bnNew *= nActualTimespan;
     bnNew /= nTargetTimespan;
 
-		//LogPrintf("CalculateNextWorkRequired.Retarget: pindexLast=%s\n",pindexLast->ToString());
-    //LogPrintf("CalculateNextWorkRequired.Retarget: bnNew       = %s ,%08x ,%d\n", bnNew.ToString(),bnNew.GetCompact(),bnNew.GetCompact());
-    //LogPrintf("CalculateNextWorkRequired.Retarget: bnPowLimit  = %s ,%08x ,%d\n", bnPowLimit.ToString(),bnPowLimit.GetCompact(),bnPowLimit.GetCompact());
-    //LogPrintf("CalculateNextWorkRequired.Retarget: powNeoLimit = %s ,%08x ,%d\n", UintToArith256(params.powNeoLimit).ToString(),UintToArith256(params.powNeoLimit).GetCompact(),UintToArith256(params.powNeoLimit).GetCompact());
-		//LogPrintf("CalculateNextWorkRequired.Retarget: bnPowScyptLimit  = %s ,%08x ,%d\n", bnPowScyptLimit.ToString(),bnPowScyptLimit.GetCompact(),bnPowScyptLimit.GetCompact());
+	// if (fDebug) LogPrintf("CalculateNextWorkRequired.Retarget: pindexLast=%s\n",pindexLast->ToString());
+    // if (fDebug) LogPrintf("CalculateNextWorkRequired.Retarget: bnNew       = %s ,%08x ,%d\n", bnNew.ToString(),bnNew.GetCompact(),bnNew.GetCompact());
+    // if (fDebug) LogPrintf("CalculateNextWorkRequired.Retarget: bnPowLimit  = %s ,%08x ,%d\n", bnPowLimit.ToString(),bnPowLimit.GetCompact(),bnPowLimit.GetCompact());
+    // if (fDebug) LogPrintf("CalculateNextWorkRequired.Retarget: powNeoLimit = %s ,%08x ,%d\n", UintToArith256(params.powNeoLimit).ToString(),UintToArith256(params.powNeoLimit).GetCompact(),UintToArith256(params.powNeoLimit).GetCompact());
+	// if (fDebug) LogPrintf("CalculateNextWorkRequired.Retarget: bnPowScyptLimit  = %s ,%08x ,%d\n", bnPowScyptLimit.ToString(),bnPowScyptLimit.GetCompact(),bnPowScyptLimit.GetCompact());
 		
 		if (chainParams.NetworkIDString()=="main")
 				bnPowLimit = bnPowScyptLimit;
@@ -231,11 +231,11 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     if (bnNew > bnPowLimit)
         bnNew = bnPowLimit;
 
-    /// debug print
-    LogPrintf("CalculateNextWorkRequired.5 RETARGET\n");
-    LogPrintf("nTargetTimespan = %d    nActualTimespan = %d\n", nTargetTimespan, nActualTimespan);
-    LogPrintf("Before: %08x  %s\n", pindexLast->nBits, bnOld.ToString());
-    LogPrintf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.ToString());
+    // debug print
+    // if (fDebug) LogPrintf("CalculateNextWorkRequired.5 RETARGET\n");
+    // if (fDebug) LogPrintf("nTargetTimespan = %d    nActualTimespan = %d\n", nTargetTimespan, nActualTimespan);
+    // if (fDebug) LogPrintf("Before: %08x  %s\n", pindexLast->nBits, bnOld.ToString());
+    // if (fDebug) LogPrintf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.ToString());
 
     return bnNew.GetCompact();
 }
@@ -263,7 +263,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     // if (hash > bnTarget.getuint256())
     if (UintToArith256(hash) > bnTarget)
     {
-    		LogPrintf("CheckProofOfWork 100,nBits=%d,hash=%s,bnTarget=%s,UintToArith256(hash)=%s\n",nBits,hash.ToString(),bnTarget.GetHex(),UintToArith256(hash).GetHex());
+    	// if (fDebug) LogPrintf("CheckProofOfWork 100,nBits=%d,hash=%s,bnTarget=%s,UintToArith256(hash)=%s\n",nBits,hash.ToString(),bnTarget.GetHex(),UintToArith256(hash).GetHex());
         return error("CheckProofOfWork(): hash doesn't match nBits");
     }
 
@@ -279,7 +279,7 @@ bool CheckHeaderProofOfWork(int nHeight,uint256 hash_n,uint256 hash_s, unsigned 
 			{
 				if (!CheckProofOfWork(hash_n, nBits,params))
 				{
-						LogPrintf("CheckHeaderProofOfWork(),neoscrypt in mainnet, nHeight=%i \n",nHeight);
+					// if (fDebug) LogPrintf("CheckHeaderProofOfWork(),neoscrypt in mainnet, nHeight=%i \n",nHeight);
 				    return error("CheckHeaderProofOfWork() neoscrypt in mainnet: proof of work failed.");	
 				}
 			}
@@ -287,7 +287,7 @@ bool CheckHeaderProofOfWork(int nHeight,uint256 hash_n,uint256 hash_s, unsigned 
 			{
 				if (!CheckProofOfWork(hash_s, nBits,params))
 				{
-						LogPrintf("CheckHeaderProofOfWork(),scrypt in mainnet, nHeight=%i \n",nHeight);
+					// if (fDebug) LogPrintf("CheckHeaderProofOfWork(),scrypt in mainnet, nHeight=%i \n",nHeight);
 				    return error("CheckHeaderProofOfWork() scrypt in mainnet: proof of work failed.");	
 				}
 			}
@@ -297,10 +297,10 @@ bool CheckHeaderProofOfWork(int nHeight,uint256 hash_n,uint256 hash_s, unsigned 
 				//Check for -testnet or -regtest 
 				if (!CheckProofOfWork(hash_n, nBits,params))
 				{
-						LogPrintf("CheckHeaderProofOfWork(),neoscrypt in testnet,proof of work failed. nHeight=%i \n",nHeight);
+						// if (fDebug) LogPrintf("CheckHeaderProofOfWork(),neoscrypt in testnet,proof of work failed. nHeight=%i \n",nHeight);
 						if (!CheckProofOfWork(hash_s, nBits,params))
 						{
-								LogPrintf("CheckHeaderProofOfWork(),scrypt in testnet,proof of work failed. nHeight=%i \n",nHeight);
+							// if (fDebug) LogPrintf("CheckHeaderProofOfWork(),scrypt in testnet,proof of work failed. nHeight=%i \n",nHeight);
 						    return error("CheckHeaderProofOfWork() scrypt in mainnet: proof of work failed.");	
 						}
 				}
