@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2014 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -746,10 +747,10 @@ void SendCoinsDialog::sendCoins(bool fSend)
 		int nHashType = SIGHASH_ALL;
 		if (!fSend)
 		{
-			LogPrintf("sendCoins,SIGHASH_ALL=%i, SIGHASH_ANYONECANPAY=%i, SIGHASH_ALL|SIGHASH_ANYONECANPAY=%i\n",int(SIGHASH_ALL), int(SIGHASH_ANYONECANPAY), int(SIGHASH_ALL|SIGHASH_ANYONECANPAY));
+			// if (fDebug) LogPrintf("sendCoins,SIGHASH_ALL=%i, SIGHASH_ANYONECANPAY=%i, SIGHASH_ALL|SIGHASH_ANYONECANPAY=%i\n",int(SIGHASH_ALL), int(SIGHASH_ANYONECANPAY), int(SIGHASH_ALL|SIGHASH_ANYONECANPAY));
 			nHashType = SIGHASH_ALL|SIGHASH_ANYONECANPAY; // contract signature, bitwise or operator (|) 
 		}
-		LogPrintf("sendCoins,nHashType=%i\n",nHashType);
+		// if (fDebug) LogPrintf("sendCoins,nHashType=%i\n",nHashType);
 		
     // prepare transaction for getting txFee earlier
     WalletModelTransaction currentTransaction(recipients);
@@ -760,13 +761,13 @@ void SendCoinsDialog::sendCoins(bool fSend)
     else
         prepareStatus = model->prepareTransaction(currentTransaction);
 
-		LogPrintf("sendCoins,200\n");		
+		// if (fDebug) LogPrintf("sendCoins,200\n");		
     // process prepareStatus and on error generate message shown to user
     if(nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY))
     {
     	processSendCoinsReturn(prepareStatus, BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), currentTransaction.getTransactionFee()));
     }
-		LogPrintf("sendCoins,210\n");
+		// if (fDebug) LogPrintf("sendCoins,210\n");
     if(prepareStatus.status != WalletModel::OK) {
     		if(nHashType != int(SIGHASH_ALL|SIGHASH_ANYONECANPAY))
     		{	
@@ -775,7 +776,7 @@ void SendCoinsDialog::sendCoins(bool fSend)
       	}
     }
     // At this time the transaction has been complete, has been signed 
-    LogPrintf("sendCoins,300\n");
+    // if (fDebug) LogPrintf("sendCoins,300\n");
 
     CAmount txFee = currentTransaction.getTransactionFee();
 
@@ -859,12 +860,12 @@ void SendCoinsDialog::sendCoins(bool fSend)
     {
     	QString txHash = model->hashCoins(currentTransaction,fSend);
     	//GUIUtil::setClipboard(txHash);
-    	LogPrintf("sendCoins,fSend=%d,txHash=%s\n",fSend,txHash.toStdString());
+    	// if (fDebug) LogPrintf("sendCoins,fSend=%d,txHash=%s\n",fSend,txHash.toStdString());
     	//sendCoins,fSend=0,txHash=95ec8dac2c67a8426569f9c710352306006051eef5ce9976039553ffa17e19f0
     	
     	QString txCode = model->codeCoins(currentTransaction,fSend);
     	GUIUtil::setClipboard(txCode);
-    	LogPrintf("sendCoins,fSend=%d,txCode=%s\n",fSend,txCode.toStdString());
+    	// if (fDebug) LogPrintf("sendCoins,fSend=%d,txCode=%s\n",fSend,txCode.toStdString());
     	//sendCoins,fSend=0,txCode=010000000161f6c79f3f083dded042da2579f6e41f7e19785ae93dc7cb3101972f11f5299e010000006b483045022100bf8deaf58b2764008044e1bbdc035738cf4056d1918d793378b608d2594f6a9102200a34c988574bee126b1f4aa3cf04b0901ba59982c8e1cea77e04b3747e78396501210323ee8b26367b524707483998d80eeaf1ce500fde18947bdf3c43a2f02d1fe92cfeffffff024fb34c03000000001976a914e22a568f899aaf00e4cc3a10cba6eef79510685488ac80969800000000001976a914e027cf7815b3e47e965aabfa8d1f208592f784c788acb0571500
 
 			QString questionString2 = tr("Your transaction codes has been copied to the clipboard!");
