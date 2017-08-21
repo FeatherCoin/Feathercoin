@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2014 The Bitcoin Core developers
+// Copyright (c) 2013-2017 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -469,11 +470,11 @@ void PaperWalletDialog::on_getNewAddress_clicked()
     CKey privKey;
     privKey.MakeNewKey(true);
     // CSecret is a serialization of just the secret parameter (32 bytes)
-    //CSecret vchSecret = privKey.GetSecret(fCompressed);
+    // CSecret vchSecret = privKey.GetSecret(fCompressed);
     // CPrivKey is a serialized private key, with all parameters included (279 bytes),use secp256k1 in key.cpp NID_secp256k1
     // CPrivKey vchPrivKey=privKey.GetPrivKey();
-    //LogPrintf("PaperWalletDialog CPrivKey=%s\n", HexStr(vchPrivKey).c_str());
-    //LogPrintf("PaperWalletDialog CSecret=%s\n", HexStr(vchSecret).c_str());
+    // if (fDebug) LogPrintf("PaperWalletDialog CPrivKey=%s\n", HexStr(vchPrivKey).c_str());
+    // if (fDebug) LogPrintf("PaperWalletDialog CSecret=%s\n", HexStr(vchSecret).c_str());
 
     // Derive the public key
     CPubKey pubkey = privKey.GetPubKey();
@@ -813,18 +814,18 @@ But if the output or other part of the transaction has been changed, the signatu
 				    QMessageBox::information(NULL, tr("TX Message"), tr("TX%1 decode failed!").arg(i), QMessageBox::Yes , QMessageBox::Yes);
 				    return;
 				}
-				LogPrintf("on_BroadcastBtn_clicked,i=%i,txCode=%s\n", i, txCode.toStdString());
-				LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vin.size=%i\n", i, tx.vin.size());
+				// if (fDebug) LogPrintf("on_BroadcastBtn_clicked,i=%i,txCode=%s\n", i, txCode.toStdString());
+				// if (fDebug) LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vin.size=%i\n", i, tx.vin.size());
 				
 				//Increase the input of other people
 				for (unsigned int t = 0; t < tx.vin.size(); t++)
 				{
 						const CTxIn& txin = tx.vin[t];
 						rawTx.vin.push_back(txin);
-						LogPrintf("on_BroadcastBtn_clicked,i=%i, tx.vin[t].prevout=%s\n",i ,tx.vin[t].prevout.ToString());
+						// if (fDebug) LogPrintf("on_BroadcastBtn_clicked,i=%i, tx.vin[t].prevout=%s\n",i ,tx.vin[t].prevout.ToString());
 				}
 				
-				LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vout.size=%i\n", i, tx.vout.size());
+				// if (fDebug) LogPrintf("on_BroadcastBtn_clicked,i=%i,tx.vout.size=%i\n", i, tx.vout.size());
 				if (i==0) 
 				{
 						//Only one output
@@ -837,15 +838,15 @@ But if the output or other part of the transaction has been changed, the signatu
 						
 						rawTx.nVersion = tx.nVersion;
 		    		rawTx.nLockTime = tx.nLockTime;  // Does it cause signature verification errors? the answer is
-		    		LogPrintf("on_BroadcastBtn_clicked,add txvout\n");
+		    		// if (fDebug) LogPrintf("on_BroadcastBtn_clicked,add txvout\n");
     		}
 		}
-		LogPrintf("on_BroadcastBtn_clicked,rawTx.vin.size=%i\n",  rawTx.vin.size());
-		LogPrintf("on_BroadcastBtn_clicked,rawTx.vout.size=%i\n", rawTx.vout.size());
+		// if (fDebug) LogPrintf("on_BroadcastBtn_clicked,rawTx.vin.size=%i\n",  rawTx.vin.size());
+		// if (fDebug) LogPrintf("on_BroadcastBtn_clicked,rawTx.vout.size=%i\n", rawTx.vout.size());
 		
 		//Get the binary code
     std::string strHex = EncodeHexTx(rawTx);
-    LogPrintf("on_BroadcastBtn_clicked,rawTx.strHex=%s\n", strHex);
+    // if (fDebug) LogPrintf("on_BroadcastBtn_clicked,rawTx.strHex=%s\n", strHex);
     		
     //Prepare the deal
     CTransaction tx(rawTx);
@@ -856,16 +857,16 @@ But if the output or other part of the transaction has been changed, the signatu
     bool fMissingInputs;
     if (!AcceptToMemoryPool(mempool, state, tx, false, &fMissingInputs, !fOverrideFees)) {
         if (state.IsInvalid()) {
-        		LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,1,RejectCode=%i,Reason=%s\n", state.GetRejectCode(), state.GetRejectReason());
+        		// if (fDebug) LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,1,RejectCode=%i,Reason=%s\n", state.GetRejectCode(), state.GetRejectReason());
         		QMessageBox::information(NULL, tr("Broadcast Message"), tr("AcceptToMemoryPool Fail!GetRejectCode=%1").arg(state.GetRejectCode()), QMessageBox::Yes , QMessageBox::Yes);
         		return;
         } else {
             if (fMissingInputs) {
-            		LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,2,Missing inputs\n");
+            		// if (fDebug) LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,2,Missing inputs\n");
             		QMessageBox::information(NULL, tr("Broadcast Message"), tr("AcceptToMemoryPool Missing inputs"), QMessageBox::Yes , QMessageBox::Yes);
             		return;
             }
-            LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,3,RejectCode=%i,Reason=%s\n", state.GetRejectCode(), state.GetRejectReason());
+            // if (fDebug) LogPrintf("on_BroadcastBtn_AcceptToMemoryPool,3,RejectCode=%i,Reason=%s\n", state.GetRejectCode(), state.GetRejectReason());
             QMessageBox::information(NULL, tr("Broadcast Message"), tr("AcceptToMemoryPool Fail!GetRejectCode=%1").arg(state.GetRejectCode()), QMessageBox::Yes , QMessageBox::Yes);
             return;
         }
@@ -874,7 +875,7 @@ But if the output or other part of the transaction has been changed, the signatu
     //Broadcast this deal
     RelayTransaction(tx);
     uint256 hashTx = tx.GetHash();
-    LogPrintf("on_BroadcastBtn_clicked,rawTx.TxID=%s\n", hashTx.ToString());
+    // if (fDebug) LogPrintf("on_BroadcastBtn_clicked,rawTx.TxID=%s\n", hashTx.ToString());
     GUIUtil::setClipboard(QString::fromStdString(hashTx.ToString()));
     
     
@@ -908,24 +909,24 @@ void DebugDialog::on_AddTransBtn_clicked()
 				// (TxToJSON/ScriptPubKeyToJSON) Find my addresses, n = 0
                 Object obj;
         ScriptPubKeyToJSON(txout.scriptPubKey, obj, true);
-        LogPrintf("on_AddTransBtn_clicked,scriptTxOut,obj.size=%d\n", obj.size());
+        // if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxOut,obj.size=%d\n", obj.size());
 				const json_spirit::Pair& pair = obj[4];
 				const string& name  = pair.name_;
 				const json_spirit::Value&  vvalue = pair.value_;
-				LogPrintf("on_AddTransBtn_clicked,scriptTxOut,obj[4].name=%s\n", name); //addresses
+				// if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxOut,obj[4].name=%s\n", name); //addresses
 				const Array& a = vvalue.get_array();
 				string addresses = a[0].get_str();
-				LogPrintf("on_AddTransBtn_clicked,scriptTxOut,addresses=%s\n", addresses);
+				// if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxOut,addresses=%s\n", addresses);
 				
 				// Which one is my output? Eliminate change trading 
 				if (addresses == strDoAddress.toStdString())
 				{
 		    	dCoin += (double)txout.nValue / (double)COIN;
-		    	LogPrintf("on_AddTransBtn_clicked,scriptTxOut,pay to addresses=%s,value=%d\n", addresses, dCoin);
+		    	// if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxOut,pay to addresses=%s,value=%d\n", addresses, dCoin);
 		  	}
 		}
 		nowCoins += dCoin;
-		LogPrintf("on_AddTransBtn_clicked,scriptTxOut,nowCoins=%d,dCoin=%d,vout.size=%d\n",nowCoins, dCoin, tx.vout.size());
+		// if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxOut,nowCoins=%d,dCoin=%d,vout.size=%d\n",nowCoins, dCoin, tx.vout.size());
 		
 		//2. You also need to display the input
 		double dTxInCoin = 0;
@@ -937,8 +938,8 @@ void DebugDialog::on_AddTransBtn_clicked()
         {
         		std::string txID = txin.prevout.hash.GetHex();
         		int64_t vout = (int64_t)txin.prevout.n;
-        		LogPrintf("on_AddTransBtn_clicked,scriptTxIn,txID=%s\n", txID);
-        		LogPrintf("on_AddTransBtn_clicked,scriptTxIn,vout=%d\n", vout);
+        		// if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxIn,txID=%s\n", txID);
+        		// if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxIn,vout=%d\n", vout);
         		
         		//Get the input of the transaction and find out his output value
         		CTransaction tx2;
@@ -946,7 +947,7 @@ void DebugDialog::on_AddTransBtn_clicked()
         		uint256 hash = txin.prevout.hash;
         		if (!GetTransaction(hash, tx2, hashBlock, true))
         		{
-        				LogPrintf("on_AddTransBtn_clicked,scriptTxIn,Error=No information available about transaction\n", vout);
+        				// if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxIn,Error=No information available about transaction\n", vout);
         				QMessageBox::information(NULL, tr("TX Message"), tr("No information available about transaction"), QMessageBox::Yes , QMessageBox::Yes);
 		    				return;		    				
 						}//txID=c42956cfed4a0e70baab7321c888c4bafb2f442e2b4f1aac8ae4ab952b3e2f09
@@ -956,7 +957,7 @@ void DebugDialog::on_AddTransBtn_clicked()
 								const CTxOut& txout = tx2.vout[i];
 								double value = (double)txout.nValue / (double)COIN;
 								int64_t n = (int64_t)i;
-							  LogPrintf("on_AddTransBtn_clicked,scriptTxIn,scriptTxOut,value=%d,n=%i\n", value, n);
+							  // if (fDebug) LogPrintf("on_AddTransBtn_clicked,scriptTxIn,scriptTxOut,value=%d,n=%i\n", value, n);
 							  
 							  //Not spent txid which output is what i can spend, see tx txin.prevout.n = vin.vout
 							  if (i == vout)
@@ -969,7 +970,7 @@ void DebugDialog::on_AddTransBtn_clicked()
 		}
 		
 		double maxCharge = ui->lineFTC->text().toDouble();
-		LogPrintf("on_AddTransBtn_clicked,inputRow=%i\n", inputRow);
+		// if (fDebug) LogPrintf("on_AddTransBtn_clicked,inputRow=%i\n", inputRow);
 		if (inputRow==0) {
 
 			  ui->progressBar->setMinimum(0);
@@ -983,13 +984,13 @@ void DebugDialog::on_AddTransBtn_clicked()
 		}
 		double dProgress = (ui->progressBar->value() - ui->progressBar->minimum()) * 100.0 / (ui->progressBar->maximum() - ui->progressBar->minimum());
 		ui->progressBar->setFormat(QString::fromLocal8Bit("processing...%1%").arg(QString::number(dProgress, 'f', 1)));
-		LogPrintf("on_AddTransBtn_clicked,maxCharge=%d,getCoins=%d,inputRow=%i\n",maxCharge, getCoins, inputRow);
+		// if (fDebug) LogPrintf("on_AddTransBtn_clicked,maxCharge=%d,getCoins=%d,inputRow=%i\n",maxCharge, getCoins, inputRow);
 		inputRow++;
 		
 		//Total Coins
 		QString nowAmount = tr("%1 FTC").arg(getCoins);
 		ui->totalLabel->setText(nowAmount);
-		LogPrintf("on_AddTransBtn_clicked,totalLabel=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
+		// if (fDebug) LogPrintf("on_AddTransBtn_clicked,totalLabel=%s,nowCoins=%d\n",nowAmount.toStdString(), nowCoins);
 		
 		//This Coins This should be able to display multiple columns?
 		QString amount = tr("In %1 FTC,Out %2 FTC,%3").arg(dTxInCoin).arg(dCoin).arg(txCode);
