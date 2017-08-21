@@ -1,4 +1,5 @@
 // Copyright (c) 2012-2014 The Bitcoin Core developers
+// Copyright (c) 2013-2017 The Feathercoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -105,7 +106,7 @@ public:
         if (!status.ok()) {
             if (status.IsNotFound())
                 return false;
-            LogPrintf("LevelDB read failure: %s\n", status.ToString());
+            // if (fDebug) LogPrintf("LevelDB read failure: %s\n", status.ToString());
             HandleError(status);
         }
         try {
@@ -138,7 +139,7 @@ public:
         if (!status.ok()) {
             if (status.IsNotFound())
                 return false;
-            LogPrintf("LevelDB read failure: %s\n", status.ToString());
+            // if (fDebug) LogPrintf("LevelDB read failure: %s\n", status.ToString());
             HandleError(status);
         }
         return true;
