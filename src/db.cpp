@@ -44,8 +44,7 @@ void CDBEnv::EnvShutdown()
     int ret = dbenv.close(0);
     if (ret != 0)
     {
-        if (fDebug)
-           LogPrintf("CDBEnv::EnvShutdown : Error %d shutting down database environment: %s\n", ret, DbEnv::strerror(ret));
+        // if (fDebug) LogPrintf("CDBEnv::EnvShutdown : Error %d shutting down database environment: %s\n", ret, DbEnv::strerror(ret));
     }
     if (!fMockDb)
         DbEnv(0).remove(path.string().c_str(), 0);
@@ -78,8 +77,7 @@ bool CDBEnv::Open(const boost::filesystem::path& pathIn)
     filesystem::path pathLogDir = path / "database";
     TryCreateDirectory(pathLogDir);
     filesystem::path pathErrorFile = path / "db.log";
-    if (fDebug)
-       LogPrintf("CDBEnv::Open : LogDir=%s ErrorFile=%s\n", pathLogDir.string(), pathErrorFile.string());
+    // if (fDebug) LogPrintf("CDBEnv::Open : LogDir=%s ErrorFile=%s\n", pathLogDir.string(), pathErrorFile.string());
 
     unsigned int nEnvFlags = 0;
     if (GetBoolArg("-privdb", true))
@@ -105,8 +103,10 @@ bool CDBEnv::Open(const boost::filesystem::path& pathIn)
                      DB_RECOVER    |
                      nEnvFlags,
                      S_IRUSR | S_IWUSR);
-    if (ret != 0)
-        return error("CDBEnv::Open : Error %d opening database environment: %s\n", ret, DbEnv::strerror(ret));
+    if (ret != 0) {
+        // if (fDebug) LogPrintf("CDBEnv::Open : Error %d opening database environment: %s\n", ret, DbEnv::strerror(ret));
+        return true;
+    }
 
     fDbEnvInit = true;
     fMockDb = false;
@@ -177,16 +177,16 @@ bool CDBEnv::Salvage(std::string strFile, bool fAggressive,
     int result = db.verify(strFile.c_str(), NULL, &strDump, flags);
     if (result == DB_VERIFY_BAD)
     {
-        LogPrintf("CDBEnv::Salvage : Database salvage found errors, all data may not be recoverable.\n");
+        // if (fDebug) LogPrintf("CDBEnv::Salvage : Database salvage found errors, all data may not be recoverable.\n");
         if (!fAggressive)
         {
-            LogPrintf("CDBEnv::Salvage : Rerun with aggressive mode to ignore errors and continue.\n");
+            // if (fDebug) LogPrintf("CDBEnv::Salvage : Rerun with aggressive mode to ignore errors and continue.\n");
             return false;
         }
     }
     if (result != 0 && result != DB_VERIFY_BAD)
     {
-        LogPrintf("CDBEnv::Salvage : Database salvage failed with result %d.\n", result);
+        // if (fDebug) LogPrintf("CDBEnv::Salvage : Database salvage failed with result %d.\n", result);
         return false;
     }
 
@@ -357,7 +357,7 @@ bool CDB::Rewrite(const string& strFile, const char* pszSkip)
                 bitdb.mapFileUseCount.erase(strFile);
 
                 bool fSuccess = true;
-                LogPrintf("CDB::Rewrite : Rewriting %s...\n", strFile);
+                // if (fDebug) LogPrintf("CDB::Rewrite : Rewriting %s...\n", strFile);
                 string strFileRes = strFile + ".rewrite";
                 { // surround usage of db with extra {}
                     CDB db(strFile.c_str(), "r");
@@ -371,7 +371,7 @@ bool CDB::Rewrite(const string& strFile, const char* pszSkip)
                                             0);
                     if (ret > 0)
                     {
-                        LogPrintf("CDB::Rewrite : Can't create database file %s\n", strFileRes);
+                        // if (fDebug) LogPrintf("CDB::Rewrite : Can't create database file %s\n", strFileRes);
                         fSuccess = false;
                     }
 
@@ -426,8 +426,9 @@ bool CDB::Rewrite(const string& strFile, const char* pszSkip)
                     if (dbB.rename(strFileRes.c_str(), NULL, strFile.c_str(), 0))
                         fSuccess = false;
                 }
-                if (!fSuccess)
-                    LogPrintf("CDB::Rewrite : Failed to rewrite database file %s\n", strFileRes);
+                // if (!fSuccess) {
+                //      if (fDebug) LogPrintf("CDB::Rewrite : Failed to rewrite database file %s\n", strFileRes);
+                // }
                 return fSuccess;
             }
         }
