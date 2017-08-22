@@ -1,3 +1,4 @@
+// Copyright (c) 2015-2017 The Feathercoin developers
 #include "createmultisigaddrdialog.h"
 #include "ui_createmultisigaddrdialog.h"
 
@@ -227,7 +228,7 @@ void CreateMultiSigAddrDialog::importAddress()
     const json_spirit::Value& addressV = json_spirit::find_value(addrJson, "address");
     const json_spirit::Value& scriptV  = json_spirit::find_value(addrJson, "redeemScript");
 
-    printf("importAddress redeemScript=%s\n", scriptV.get_str().c_str());
+    // if (fDebug) printf("importAddress redeemScript=%s\n", scriptV.get_str().c_str());
     std::vector<unsigned char> scriptData(ParseHex(scriptV.get_str()));
     CScript scriptPubKey(scriptData.begin(), scriptData.end());
 
