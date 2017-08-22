@@ -482,10 +482,8 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     {
         LOCK(cs_main);
         if (pblock->hashPrevBlock != chainActive.Tip()->GetBlockHash()) {
-               // if (fDebug) {
-               //     LogPrintf("FeathercoinMiner : generated block is stale");
-               // }
-            return true;
+             // if (fDebug) LogPrintf("FeathercoinMiner : generated block is stale");
+             return true;
         }
 
         // Remove key from key pool
@@ -499,8 +497,10 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 
         // Process this block the same as if we had received it from another node
         CValidationState state;
-        if (!ProcessBlock(state, NULL, pblock))
-            return error("FeathercoinMiner : ProcessBlock, block not accepted");
+        if (!ProcessBlock(state, NULL, pblock)) {
+            // if (fDebug) LogPrintf("FeathercoinMiner : ProcessBlock, block not accepted");
+            return true;
+        }
     }
 
     return true;
