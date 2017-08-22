@@ -29,16 +29,14 @@ static bool noui_ThreadSafeMessageBox(const std::string& message, const std::str
     default:
         strCaption += caption; // Use supplied caption (can be empty)
     }
-    if (fDebug)
-        LogPrintf("%s: %s\n", strCaption, message);
+    // if (fDebug) LogPrintf("%s: %s\n", strCaption, message);
     fprintf(stderr, "%s: %s\n", strCaption.c_str(), message.c_str());
     return false;
 }
 
 static void noui_InitMessage(const std::string &message)
 {
-    if (fDebug)
-        LogPrintf("init message: %s\n", message);
+    // if (fDebug) LogPrintf("init message: %s\n", message);
 }
 
 void noui_connect()
