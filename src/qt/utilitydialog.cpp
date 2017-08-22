@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -156,23 +157,23 @@ void DebugDialog::on_sxButton_clicked()
     int numberSxTransaction = 0;
     while (pindex->nHeight >= nFromHeight)
     {
-		    LogPrintf("Scan sx transaction at %d ................\n",pindex->nHeight); 
+		    // if (fDebug) LogPrintf("Scan sx transaction at %d ................\n",pindex->nHeight); 
 		    CBlock block;
 		    if (!ReadBlockFromDisk(block, pindex))
 		    {
-		    	LogPrintf("ReadBlockFromDisk failure.\n"); 
+		    	// if (fDebug) LogPrintf("ReadBlockFromDisk failure.\n"); 
 		    	return;
 		    } 
-		    LogPrintf("block.vtx.size= %d ................\n",block.vtx.size()); 
+		    // if (fDebug) LogPrintf("block.vtx.size= %d ................\n",block.vtx.size()); 
 		    BOOST_FOREACH(CTransaction& tx, block.vtx)
 		    { 
 		        string reason;
 		        if (!IsStandardTx(tx, reason))
 		        {
-		        		LogPrintf("Standard transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason);
+		        		// if (fDebug) LogPrintf("Standard transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason);
 		            continue; // leave out coinbase and others       
 		        }
-		        LogPrintf("Found stealth transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason); 
+		        // if (fDebug) LogPrintf("Found stealth transaction %s :reason %s  .\n",tx.GetHash().ToString(),reason); 
 		        pwalletMain->AddToWalletIfInvolvingMe(tx.GetHash(), tx, &block, fUpdate);
 			numberSxTransaction++;
 		    };
@@ -221,13 +222,13 @@ void OpennameDialog::on_insertButton_clicked()
     if(!model || !model->getOptionsModel())
         return;
     
-    LogPrintf("OpennameDialog........\n");
+    // if (fDebug) LogPrintf("OpennameDialog........\n");
     QString payadress=ui->txtPayAdress->text();
     QString nameOP=ui->txtName->text();
     QString locaOP=ui->txtLocation->text();
     QString contOP=ui->txtContact->text();
     QString strOption=QString(ui->cmbOpt->currentData().toString());  //select operation  currentText(),currentIndex()
-    LogPrintf("OpennameDialog strOption=%s\n", strOption.toStdString());    
+    // if (fDebug) LogPrintf("OpennameDialog strOption=%s\n", strOption.toStdString());    
     QString privkeyOP=ui->txtNameAddress->text(); //paste hash160 from addressbookpage
     
     //name_hash:e00414720684e88cb7943fc6751527a94b2e0cdd
@@ -239,41 +240,41 @@ void OpennameDialog::on_insertButton_clicked()
           name_and_pubkey = bin_name + unhexlify(script_pubkey)
           return hex_hash160(name_and_pubkey)*/
     
-    //1)script_pubkey 
+    // 1) script_pubkey 
     const char* pszMess = privkeyOP.toStdString().c_str();//hash160=6f01b45dd6685d5ac1717baa46e4cda8287c160b
     //CScript scriptP = CScript() << OP_DUP << OP_HASH160 << vector<unsigned char>((const unsigned char*)pszMess, (const unsigned char*)pszMess + strlen(pszMess)) << OP_EQUALVERIFY << OP_CHECKSIG;
     CScript scriptP = CScript() << OP_DUP << OP_HASH160 << ParseHex(pszMess) << OP_EQUALVERIFY << OP_CHECKSIG;
     //const char* script_pubkey=HexStr(scriptP.begin(), scriptP.end(), true).c_str();
     const char* script_pubkey=HexStr(scriptP).c_str();
-    LogPrintf("OpennameDialog script_pubkey=%s\n", script_pubkey);//ok=76a9146f01b45dd6685d5ac1717baa46e4cda8287c160b88ac
+    // if (fDebug) LogPrintf("OpennameDialog script_pubkey=%s\n", script_pubkey); //ok=76a9146f01b45dd6685d5ac1717baa46e4cda8287c160b88ac
         
-    //2)bin_name = b40_to_bin('lizhi')
-    std::string strName = nameOP.toStdString();//"lizhi";必须小写，属于base40字符集
+    // 2)bin_name = b40_to_bin ('lizhi')
+    std::string strName = nameOP.toStdString(); //"Lizhi"; must be lowercase, belonging to base40 character set
     const std::vector<unsigned char> vch(strName.begin(), strName.end());
     uint64_t intermediate_integer=charset_to_int(&vch[0],&vch[0] + vch.size());
-    LogPrintf("OpennameDialog bin_name,intermediate_integer=%d\n", intermediate_integer);//intermediate_integer=54968698
+    // if (fDebug) LogPrintf("OpennameDialog bin_name,intermediate_integer=%d\n", intermediate_integer); //intermediate_integer=54968698
     
     std::string output_string= int_to_charset(intermediate_integer); //B16_CHARS
-    LogPrintf("OpennameDialog bin_name,int_to_charset=%s\n", output_string.c_str());//int_to_charset=346c17a
+    // if (fDebug) LogPrintf("OpennameDialog bin_name,int_to_charset=%s\n", output_string.c_str());//int_to_charset=346c17a
     
     std::string bin_name=charset_to_hex(vch);
-    LogPrintf("OpennameDialog bin_name=%s\n", bin_name.c_str());//bin_name=0346c17a
-    //返回由十六进制字符串hexstr表示的二进制数据
+    // if (fDebug) LogPrintf("OpennameDialog bin_name=%s\n", bin_name.c_str());//bin_name=0346c17a
+    //Returns the binary data represented by the hexadecimal string hexstr
     bin_name=unhexlify(bin_name);
-    LogPrintf("OpennameDialog bin_name,unhexlify=%s\n", bin_name.c_str());//ok unhexlify(bin_name)=F羫    
-    LogPrintf("OpennameDialog bin_name,unhexlify=%s\n", unhexlify("7B5a7D").c_str());//unhexlify={Z}
+    // if (fDebug) LogPrintf("OpennameDialog bin_name,unhexlify=%s\n", bin_name.c_str());  //ok unhexlify(bin_name)= Fdecoded   
+    // if (fDebug) LogPrintf("OpennameDialog bin_name,unhexlify=%s\n", unhexlify("7B5a7D").c_str());//unhexlify={Z}
     
     //3)name_hash
     std::string str_script_pubkey;
     str_script_pubkey.assign(script_pubkey);
-    LogPrintf("OpennameDialog str_script_pubkey=%s\n", str_script_pubkey.c_str());//str_script_pubkey=76a9146f01b45dd6685d5ac1717baa46e4cda8287c160b88ac
+    // if (fDebug) LogPrintf("OpennameDialog str_script_pubkey=%s\n", str_script_pubkey.c_str()); //str_script_pubkey=76a9146f01b45dd6685d5ac1717baa46e4cda8287c160b88ac
     std::string name_and_pubkey=bin_name+unhexlify(str_script_pubkey);
-    LogPrintf("OpennameDialog name_and_pubkey=%s\n", name_and_pubkey.c_str());//name_and_pubkey=F羫v?o碷謍]Z羜{狥渫?|埇
+    // if (fDebug) LogPrintf("OpennameDialog name_and_pubkey=%s\n", name_and_pubkey.c_str()); //name_and_pubkey= 
     std::vector<unsigned char> hash_name(name_and_pubkey.begin(), name_and_pubkey.end());
     uint160 hash_name_hash160=Hash160(hash_name);
-    LogPrintf("OpennameDialog hash_name_hash160 =%s\n", HexStr(hash_name_hash160).c_str());//hash_name_hash160=e00414720684e88cb7943fc6751527a94b2e0cdd
+    // if (fDebug) LogPrintf("OpennameDialog hash_name_hash160 =%s\n", HexStr(hash_name_hash160).c_str()); //hash_name_hash160=e00414720684e88cb7943fc6751527a94b2e0cdd
     std::string name_hash=HexStr(hash_name_hash160);
-    LogPrintf("OpennameDialog name_hash=%s\n", name_hash.c_str());//name_hash=e00414720684e88cb7943fc6751527a94b2e0cdd
+    // if (fDebug) LogPrintf("OpennameDialog name_hash=%s\n", name_hash.c_str()); //name_hash=e00414720684e88cb7943fc6751527a94b2e0cdd
     
     //def build(name, script_pubkey, consensus_hash, testset=False):
     //script = 'NAME_PREORDER %s %s' % (name_hash, consensus_hash)
@@ -284,7 +285,7 @@ void OpennameDialog::on_insertButton_clicked()
     //consensus_hash
     
     QString textOP=QString(OPENNAME_MAGIC_BYTES_MAINSET)+strOption+QString(script_pubkey);
-    LogPrintf("OpennameDialog textOP=%s\n", textOP.toStdString());//08a76a9146f01b45dd6685d5ac1717baa46e4cda8287c160b88ac
+    // if (fDebug) LogPrintf("OpennameDialog textOP=%s\n", textOP.toStdString());//08a76a9146f01b45dd6685d5ac1717baa46e4cda8287c160b88ac
     
     return;
     
@@ -444,7 +445,7 @@ void OpennameDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn &
         return;
     }
 		
-		QMessageBox::information(NULL, tr("Wallet WARNING"), tr("Send Coins Failed:") + msgParams.first, QMessageBox::Yes , QMessageBox::Yes);
+	QMessageBox::information(NULL, tr("Wallet WARNING"), tr("Send Coins Failed:") + msgParams.first, QMessageBox::Yes , QMessageBox::Yes);
     emit message(tr("Send Coins"), msgParams.first, msgParams.second);
 }
 
@@ -458,7 +459,7 @@ CommentDialog::CommentDialog(QWidget *parent) :
     ui(new Ui::CommentDialog)
 {
     ui->setupUi(this);
-    //ui->buttonBox->addButton(tr("Close"), QDialogButtonBox::RejectRole);
+    // ui->buttonBox->addButton(tr("Close"), QDialogButtonBox::RejectRole);
 
 }
 
@@ -466,7 +467,7 @@ void CommentDialog::setModel(WalletModel *model)
 {
 
     this->model = model;
-    //this->on_insertButton_clicked();
+    // this->on_insertButton_clicked();
     
 }
 
@@ -695,8 +696,8 @@ void PaperWalletDialog::on_getNewAddress_clicked()
     CSecret vchSecret = privKey.GetSecret(fCompressed);
     // CPrivKey is a serialized private key, with all parameters included (279 bytes),use secp256k1 in key.cpp NID_secp256k1
     CPrivKey vchPrivKey=privKey.GetPrivKey();
-    //LogPrintf("PaperWalletDialog CPrivKey=%s\n", HexStr(vchPrivKey).c_str());
-    //LogPrintf("PaperWalletDialog CSecret=%s\n", HexStr(vchSecret).c_str());
+    // if (fDebug) LogPrintf("PaperWalletDialog CPrivKey=%s\n", HexStr(vchPrivKey).c_str());
+    // if (fDebug) LogPrintf("PaperWalletDialog CSecret=%s\n", HexStr(vchSecret).c_str());
 
     // Derive the public key
     //CPubKey pubkey = privKey.GetPubKey();
