@@ -1,4 +1,5 @@
 // Copyright (c) 2012 Pieter Wuille
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -403,8 +404,9 @@ public:
         {
             LOCK(cs);
             int err;
-            if ((err=Check_()))
-                LogPrintf("ADDRMAN CONSISTENCY CHECK FAILED!!! err=%i\n", err);
+            // if ((err=Check_())) {
+            // if (fDebug) LogPrintf("ADDRMAN CONSISTENCY CHECK FAILED!!! err=%i\n", err);
+            // }
         }
 #endif
     }
@@ -419,8 +421,9 @@ public:
             fRet |= Add_(addr, source, nTimePenalty);
             Check();
         }
-        if (fRet)
-            LogPrint("addrman", "Added %s from %s: %i tried, %i new\n", addr.ToStringIPPort().c_str(), source.ToString().c_str(), nTried, nNew);
+        // if (fRet) {
+        //     if (fDebug) LogPrint("addrman", "Added %s from %s: %i tried, %i new\n", addr.ToStringIPPort().c_str(), source.ToString().c_str(), nTried, nNew);
+        // }
         return fRet;
     }
 
@@ -435,8 +438,9 @@ public:
                 nAdd += Add_(*it, source, nTimePenalty) ? 1 : 0;
             Check();
         }
-        if (nAdd)
-            LogPrint("addrman", "Added %i addresses from %s: %i tried, %i new\n", nAdd, source.ToString().c_str(), nTried, nNew);
+        // if (nAdd) {
+        //     if (fDebug) LogPrint("addrman", "Added %i addresses from %s: %i tried, %i new\n", nAdd, source.ToString().c_str(), nTried, nNew);
+        // }
         return nAdd > 0;
     }
 

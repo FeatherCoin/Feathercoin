@@ -1,3 +1,4 @@
+// Copyright (c) 2015-2017 The Feathercoin developers
 #include "multisigdialog.h"
 #include "ui_multisigdialog.h"
 
@@ -719,7 +720,7 @@ bool MultiSigDialog::handleURI(const QString &uri)
 
 void MultiSigDialog::setSharedBalance(qint64 balance, qint64 unconfirmedBalance, qint64 immatureBalance)
 {
-    //printf("setSharedBalance %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance).toStdString().c_str());
+    // if (fDebug) printf("setSharedBalance %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance).toStdString().c_str());
     Q_UNUSED(unconfirmedBalance);
     Q_UNUSED(immatureBalance);
     if(!model || !model->getOptionsModel())
@@ -788,16 +789,16 @@ void MultiSigDialog::updateAddressBalance()
             //if (wtx.IsCoinBase() || !wtx.IsFinal())
                 //continue;
 
-            //printf("updateAddressBalance wtx %s \n", wtx.GetHash().ToString().c_str());
+            // if (fDebug) printf("updateAddressBalance wtx %s \n", wtx.GetHash().ToString().c_str());
             for (unsigned int i = 0; i < wtx.vout.size(); i++)
             {
                 const CTxOut* txout = &wtx.vout[i];
                 if ( scriptPubKey == txout->scriptPubKey && !wtx.IsSpent(i)
                     ){
-                    //printf("updateAddressBalance GetDepthInMainChain %d\n", wtx.GetDepthInMainChain());
-                    //printf("updateAddressBalance nValue %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), txout.nValue).toStdString().c_str());
-                    //if (wtx.GetDepthInMainChain() > 0)
-                    //if (wtx.IsConfirmed())
+                    // if (fDebug)printf("updateAddressBalance GetDepthInMainChain %d\n", wtx.GetDepthInMainChain());
+                    // if (fDebug)printf("updateAddressBalance nValue %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), txout.nValue).toStdString().c_str());
+                    // if (wtx.GetDepthInMainChain() > 0)
+                    // if (wtx.IsConfirmed())
                     nAmount += txout->nValue;
                     COutPoint outpt(wtx.GetHash(), i);
                     coinControl->Select(outpt);
@@ -806,7 +807,7 @@ void MultiSigDialog::updateAddressBalance()
         }
     }
 
-    //printf("updateAddressBalance nAmount %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), nAmount).toStdString().c_str());
+    // if (fDebug)printf("updateAddressBalance nAmount %s\n", BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), nAmount).toStdString().c_str());
     if(model && model->getOptionsModel())
     {
         ui->labelAvailableCoins->setText(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), nAmount));

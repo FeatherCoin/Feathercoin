@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -313,7 +314,7 @@ bool AddressTableModel::setData(const QModelIndex &index, const QVariant &value,
             std::string sTemp = value.toString().toStdString();
             if (IsStealthAddress(sTemp))
             {
-                printf("IsStealthAddress = INVALID_ADDRESS\n");
+                // if (fDebug) printf("IsStealthAddress = INVALID_ADDRESS\n");
                 editStatus = INVALID_ADDRESS;
                 return false;
             }
