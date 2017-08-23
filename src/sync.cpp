@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2012 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,8 +12,8 @@
 #ifdef DEBUG_LOCKCONTENTION
 void PrintLockContention(const char* pszName, const char* pszFile, int nLine)
 {
-    LogPrintf("LOCKCONTENTION: %s\n", pszName);
-    LogPrintf("Locker: %s:%d\n", pszFile, nLine);
+    // if (fDebug) LogPrintf("LOCKCONTENTION: %s\n", pszName);
+    // if (fDebug) LogPrintf("Locker: %s:%d\n", pszFile, nLine);
 }
 #endif /* DEBUG_LOCKCONTENTION */
 
@@ -59,20 +60,24 @@ static boost::thread_specific_ptr<LockStack> lockstack;
 
 static void potential_deadlock_detected(const std::pair<void*, void*>& mismatch, const LockStack& s1, const LockStack& s2)
 {
-    LogPrintf("POTENTIAL DEADLOCK DETECTED\n");
-    LogPrintf("Previous lock order was:\n");
+    // if (fDebug) LogPrintf("POTENTIAL DEADLOCK DETECTED\n");
+    // if (fDebug) LogPrintf("Previous lock order was:\n");
     BOOST_FOREACH(const PAIRTYPE(void*, CLockLocation)& i, s2)
     {
-        if (i.first == mismatch.first) LogPrintf(" (1)");
-        if (i.first == mismatch.second) LogPrintf(" (2)");
-        LogPrintf(" %s\n", i.second.ToString());
+        // if (fDebug) {
+        //    if (i.first == mismatch.first) LogPrintf(" (1)");
+        //    if (i.first == mismatch.second) LogPrintf(" (2)");
+        //    LogPrintf(" %s\n", i.second.ToString());
+        // }
     }
-    LogPrintf("Current lock order is:\n");
+    // if (fDebug) LogPrintf("Current lock order is:\n");
     BOOST_FOREACH(const PAIRTYPE(void*, CLockLocation)& i, s1)
     {
-        if (i.first == mismatch.first) LogPrintf(" (1)");
-        if (i.first == mismatch.second) LogPrintf(" (2)");
-        LogPrintf(" %s\n", i.second.ToString());
+        // if (fDebug) {
+        //    if (i.first == mismatch.first) LogPrintf(" (1)");
+        //    if (i.first == mismatch.second) LogPrintf(" (2)");
+        //    LogPrintf(" %s\n", i.second.ToString());
+        // }
     }
 }
 
@@ -81,7 +86,7 @@ static void push_lock(void* c, const CLockLocation& locklocation, bool fTry)
     if (lockstack.get() == NULL)
         lockstack.reset(new LockStack);
 
-    LogPrint("lock", "Locking: %s\n", locklocation.ToString());
+    // if (fDebug) LogPrint("lock", "Locking: %s\n", locklocation.ToString());
     dd_mutex.lock();
 
     (*lockstack).push_back(std::make_pair(c, locklocation));
@@ -108,11 +113,10 @@ static void push_lock(void* c, const CLockLocation& locklocation, bool fTry)
 
 static void pop_lock()
 {
-    if (fDebug)
-    {
-        const CLockLocation& locklocation = (*lockstack).rbegin()->second;
-        LogPrint("lock", "Unlocked: %s\n", locklocation.ToString());
-    }
+    // if (fDebug) {
+          const CLockLocation& locklocation = (*lockstack).rbegin()->second;
+          LogPrint("lock", "Unlocked: %s\n", locklocation.ToString());
+    // }
     dd_mutex.lock();
     (*lockstack).pop_back();
     dd_mutex.unlock();
@@ -140,7 +144,7 @@ void AssertLockHeldInternal(const char *pszName, const char* pszFile, int nLine,
 {
     BOOST_FOREACH(const PAIRTYPE(void*, CLockLocation)&i, *lockstack)
         if (i.first == cs) return;
-    fprintf(stderr, "Assertion failed: lock %s not held in %s:%i; locks held:\n%s",
+    // if (fDebug) fprintf(stderr, "Assertion failed: lock %s not held in %s:%i; locks held:\n%s",
             pszName, pszFile, nLine, LocksHeld().c_str());
     abort();
 }

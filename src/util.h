@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -524,8 +525,7 @@ template <typename Callable> void LoopForever(const char* name,  Callable func, 
 {
     std::string s = strprintf("feathercoin-%s", name);
     RenameThread(s.c_str());
-    if (fDebug) 
-        LogPrintf("%s thread start\n", name);
+    // if (fDebug) LogPrintf("%s thread start\n", name);
     try
     {
         while (1)
@@ -536,8 +536,7 @@ template <typename Callable> void LoopForever(const char* name,  Callable func, 
     }
     catch (boost::thread_interrupted)
     {
-        if (fDebug)
-            LogPrintf("%s thread stop\n", name);
+        // if (fDebug) LogPrintf("%s thread stop\n", name);
         throw;
     }
     catch (std::exception& e) {
@@ -556,16 +555,13 @@ template <typename Callable> void TraceThread(const char* name,  Callable func)
     RenameThread(s.c_str());
     try
     { 
-        if (fDebug)
-           LogPrintf("%s thread start\n", name);
+        // if (fDebug) LogPrintf("%s thread start\n", name);
         func();
-        if (fDebug)
-            LogPrintf("%s thread exit\n", name);
+        // if (fDebug) LogPrintf("%s thread exit\n", name);
     }
     catch (boost::thread_interrupted)
     {
-        if (fDebug)
-           LogPrintf("%s thread interrupt\n", name);
+        // if (fDebug) LogPrintf("%s thread interrupt\n", name);
         throw;
     }
     catch (std::exception& e) {

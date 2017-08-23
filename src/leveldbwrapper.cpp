@@ -1,4 +1,5 @@
 // Copyright (c) 2012-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,7 +16,7 @@
 void HandleError(const leveldb::Status &status) throw(leveldb_error) {
     if (status.ok())
         return;
-    LogPrintf("%s\n", status.ToString());
+    // if (fDebug) LogPrintf("%s\n", status.ToString());
     if (status.IsCorruption())
         throw leveldb_error("Database corrupted");
     if (status.IsIOError())
@@ -48,15 +49,15 @@ CLevelDBWrapper::CLevelDBWrapper(const boost::filesystem::path &path, size_t nCa
         options.env = penv;
     } else {
         if (fWipe) {
-            LogPrintf("Wiping LevelDB in %s\n", path.string());
+            // if (fDebug) LogPrintf("Wiping LevelDB in %s\n", path.string());
             leveldb::DestroyDB(path.string(), options);
         }
         TryCreateDirectory(path);
-  //      LogPrintf("Opening LevelDB in %s\n", path.string());
+        // if (fDebug) LogPrintf("Opening LevelDB in %s\n", path.string());
     }
     leveldb::Status status = leveldb::DB::Open(options, path.string(), &pdb);
     HandleError(status);
-  //  LogPrintf("Opened LevelDB successfully\n");
+    // if (fDebug) LogPrintf("Opened LevelDB successfully\n");
 }
 
 CLevelDBWrapper::~CLevelDBWrapper() {

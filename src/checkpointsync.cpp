@@ -195,8 +195,7 @@ bool AcceptPendingSyncCheckpoint()
         hashPendingCheckpoint = 0;
         checkpointMessage = checkpointMessagePending;
         checkpointMessagePending.SetNull();
-        if (fDebug)
-             LogPrintf("AcceptPendingSyncCheckpoint : sync-checkpoint at %s\n", hashSyncCheckpoint.ToString().c_str());
+        // if (fDebug) LogPrintf("AcceptPendingSyncCheckpoint : sync-checkpoint at %s\n", hashSyncCheckpoint.ToString().c_str());
         // relay the checkpoint
         if (!checkpointMessage.IsNull())
         {
@@ -266,14 +265,12 @@ bool ResetSyncCheckpoint()
     if (mapBlockIndex.count(hash) && !mapBlockIndex[hash]->IsInMainChain())
     {
         // checkpoint block accepted but not yet in main chain
-        if (fDebug)
-             LogPrintf("ResetSyncCheckpoint: SetBestChain to hardened checkpoint %s\n", hash.ToString().c_str());
+        // if (fDebug) LogPrintf("ResetSyncCheckpoint: SetBestChain to hardened checkpoint %s\n", hash.ToString().c_str());
         
         CValidationState state;
         if (!SetBestChain(state, mapBlockIndex[hash]))
         {
-           if (fDebug)
-               LogPrintf("ResetSyncCheckpoint: SetBestChain failed for hardened checkpoint %s", hash.ToString().c_str()); 
+           //if (fDebug) LogPrintf("ResetSyncCheckpoint: SetBestChain failed for hardened checkpoint %s", hash.ToString().c_str()); 
            return true;
         }
     }
@@ -282,18 +279,15 @@ bool ResetSyncCheckpoint()
         // checkpoint block not yet accepted
         hashPendingCheckpoint = hash;
         checkpointMessagePending.SetNull();
-        if (fDebug)
-          LogPrintf("ResetSyncCheckpoint: pending for sync-checkpoint %s\n", hashPendingCheckpoint.ToString().c_str());
+        // if (fDebug) LogPrintf("ResetSyncCheckpoint: pending for sync-checkpoint %s\n", hashPendingCheckpoint.ToString().c_str());
     }
 
     if (!WriteSyncCheckpoint((mapBlockIndex.count(hash) && mapBlockIndex[hash]->IsInMainChain())? hash : Params().HashGenesisBlock()))
          {
-        if (fDebug)
-	        LogPrintf("ResetSyncCheckpoint: failed to write sync checkpoint %s", hash.ToString().c_str());
+        // if (fDebug) LogPrintf("ResetSyncCheckpoint: failed to write sync checkpoint %s", hash.ToString().c_str());
         return true;
          }
-    if (fDebug)
-	    LogPrintf("ResetSyncCheckpoint: sync-checkpoint reset to %s\n", hashSyncCheckpoint.ToString().c_str());
+    // if (fDebug) LogPrintf("ResetSyncCheckpoint: sync-checkpoint reset to %s\n", hashSyncCheckpoint.ToString().c_str());
     return true;
 }
 
@@ -334,8 +328,7 @@ bool SetCheckpointPrivKey(std::string strPrivKey)
     CBitcoinSecret vchSecret;
     if (!vchSecret.SetString(strPrivKey))
        {
-           if (fDebug)
-               	LogPrintf("SendSyncCheckpoint: Checkpoint master key invalid");
+           // if (fDebug) LogPrintf("SendSyncCheckpoint: Checkpoint master key invalid");
         return true;
        }
         //CKey key = vchSecret.GetKey(); // if key is not correct openssl may crash
@@ -361,15 +354,13 @@ bool SendSyncCheckpoint(uint256 hashCheckpoint)
 
     if (CSyncCheckpoint::strMasterPrivKey.empty())
          {
-           if (fDebug)
-               	LogPrintf("SendSyncCheckpoint: Checkpoint master key unavailable.");
+           // if (fDebug) LogPrintf("SendSyncCheckpoint: Checkpoint master key unavailable.");
            return true;
        }        
     CBitcoinSecret vchSecret;
     if (!vchSecret.SetString(CSyncCheckpoint::strMasterPrivKey))
          {
-           if (fDebug)
-               	LogPrintf("SendSyncCheckpoint: Checkpoint master key invalid");
+           // if (fDebug) LogPrintf("SendSyncCheckpoint: Checkpoint master key invalid");
            return true;
        }
     //CKey key = vchSecret.GetKey(); // if key is not correct openssl may crash
@@ -379,14 +370,12 @@ bool SendSyncCheckpoint(uint256 hashCheckpoint)
     key.SetSecret(secret, fCompressed); // if key is not correct openssl may crash
     if (!key.Sign(Hash(checkpoint.vchMsg.begin(), checkpoint.vchMsg.end()), checkpoint.vchSig))
       {
-           if (fDebug)
-               	LogPrintf("SendSyncCheckpoint: Unable to sign checkpoint, check private key?");
+           // if (fDebug) LogPrintf("SendSyncCheckpoint: Unable to sign checkpoint, check private key?");
            return true;
        }
     if(!checkpoint.ProcessSyncCheckpoint(NULL))
     {
-        if (fDebug)
-	          LogPrintf("WARNING: SendSyncCheckpoint: Failed to process checkpoint.\n");
+        // if (fDebug) LogPrintf("WARNING: SendSyncCheckpoint: Failed to process checkpoint.\n");
         return false;
     }
 
@@ -436,14 +425,12 @@ bool CSyncCheckpoint::CheckSignature()
     //CPubKey key(ParseHex(strMasterPubKey));
     if (!key.SetPubKey(ParseHex(strMasterPubKey)))
         {
-        if (fDebug)
-            LogPrintf("CSyncCheckpoint::CheckSignature() : SetPubKey failed");
+        // if (fDebug) LogPrintf("CSyncCheckpoint::CheckSignature() : SetPubKey failed");
         return true;
         }
     if (!key.Verify(Hash(vchMsg.begin(), vchMsg.end()), vchSig))
         {
-        if (fDebug)
-            LogPrintf("CSyncCheckpoint::CheckSignature() : verify signature failed");
+        // if (fDebug) LogPrintf("CSyncCheckpoint::CheckSignature() : verify signature failed");
         return true;
         }
     // Now unserialize the data
@@ -457,20 +444,17 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
 {
     if (!CheckSignature())
         return false;
-        if (fDebug)
-  	    	LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 100,hashCheckpoint=%s\n",hashCheckpoint.ToString().c_str());
+        // if (fDebug) LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 100,hashCheckpoint=%s\n",hashCheckpoint.ToString().c_str());
 		
     LOCK(cs_hashSyncCheckpoint);
     if (!mapBlockIndex.count(hashCheckpoint))   //count=0 
     {   
-         if (fDebug)
-             LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 110,mapBlockIndex.count=%d \n",mapBlockIndex.count(hashCheckpoint));
+         // if (fDebug) LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 110,mapBlockIndex.count=%d \n",mapBlockIndex.count(hashCheckpoint));
     		
         // We haven't received the checkpoint chain, keep the checkpoint as pending
         hashPendingCheckpoint = hashCheckpoint;
         checkpointMessagePending = *this;
-        if (fDebug)
-             LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 130: pending for sync-checkpoint %s\n", hashCheckpoint.ToString().c_str());
+        // if (fDebug) LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 130: pending for sync-checkpoint %s\n", hashCheckpoint.ToString().c_str());
 
         // Ask this guy to fill in what we're missing
         if (pfrom)
@@ -480,26 +464,22 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
             // ask directly as well in case rejected earlier by duplicate
             // proof-of-stake because getblocks may not get it this time 	            
             pfrom->AskFor(CInv(MSG_BLOCK, mapOrphanBlocks.count(hashCheckpoint)? WantedByOrphan(mapOrphanBlocks[hashCheckpoint]) : hashCheckpoint));
-            if (fDebug)
-                LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 140 ,AskFor.\n");
+            // if (fDebug) LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 140 ,AskFor.\n");
         }
         return false;
     }
 
-        if (fDebug)
-     		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 201 hashCheckpoint=%s ,nHeight=%d\n",hashCheckpoint.ToString().c_str(),mapBlockIndex[hashCheckpoint]->nHeight);
+        // if (fDebug) LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 201 hashCheckpoint=%s ,nHeight=%d\n",hashCheckpoint.ToString().c_str(),mapBlockIndex[hashCheckpoint]->nHeight);
 		
     if (!ValidateSyncCheckpoint(hashCheckpoint))
         return false;
 
     CBlockIndex* pindexCheckpoint = mapBlockIndex[hashCheckpoint];
-    if (fDebug)
-         LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 210,pindexCheckpoint=%s\n",pindexCheckpoint->ToString());
+    // if (fDebug) LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 210,pindexCheckpoint=%s\n",pindexCheckpoint->ToString());
     
     if (IsSyncCheckpointEnforced() && !pindexCheckpoint->IsInMainChain())
     {
-        if (fDebug)
-    		LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 220,IsInMainChain=%d\n",pindexCheckpoint->IsInMainChain());
+        // if (fDebug) LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 220,IsInMainChain=%d\n",pindexCheckpoint->IsInMainChain());
     		
         // checkpoint chain received but not yet main chain
         CValidationState state;
@@ -513,14 +493,12 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
     }
 
     if (!WriteSyncCheckpoint(hashCheckpoint))
-         if (fDebug)
-             LogPrintf("ProcessSyncCheckpoint(): failed to write sync checkpoint %s", hashCheckpoint.ToString().c_str());
+         // if (fDebug) LogPrintf("ProcessSyncCheckpoint(): failed to write sync checkpoint %s", hashCheckpoint.ToString().c_str());
         return true ;
     checkpointMessage = *this;
     hashPendingCheckpoint = 0;
     checkpointMessagePending.SetNull();
-    if (fDebug)
-          LogPrintf("ProcessSyncCheckpoint: sync-checkpoint at %s\n", hashCheckpoint.ToString().c_str());
+    // if (fDebug) LogPrintf("ProcessSyncCheckpoint: sync-checkpoint at %s\n", hashCheckpoint.ToString().c_str());
     
     return true;
 }

@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -74,7 +75,7 @@ public:
      */
     void refreshWallet()
     {
-        qDebug() << "TransactionTablePriv::refreshWallet";
+        // if (fDebug) qDebug() << "TransactionTablePriv::refreshWallet";
         cachedWallet.clear();
         {
             LOCK2(cs_main, wallet->cs_wallet);
@@ -93,7 +94,7 @@ public:
      */
     void updateWallet(const uint256 &hash, int status)
     {
-        qDebug() << "TransactionTablePriv::updateWallet : " + QString::fromStdString(hash.ToString()) + " " + QString::number(status);
+        // if (fDebug) qDebug() << "TransactionTablePriv::updateWallet : " + QString::fromStdString(hash.ToString()) + " " + QString::number(status);
         {
             LOCK2(cs_main, wallet->cs_wallet);
 
@@ -121,21 +122,19 @@ public:
                     status = CT_DELETED; /* In model, but want to hide, treat as deleted */
             }
 
-            qDebug() << "   inWallet=" + QString::number(inWallet) + " inModel=" + QString::number(inModel) +
-                        " Index=" + QString::number(lowerIndex) + "-" + QString::number(upperIndex) +
-                        " showTransaction=" + QString::number(showTransaction) + " derivedStatus=" + QString::number(status);
+            // if (fDebug) qDebug() << "   inWallet=" + QString::number(inWallet) + " inModel=" + QString::number(inModel) + " Index=" + QString::number(lowerIndex) + "-" + QString::number(upperIndex) + " showTransaction=" + QString::number(showTransaction) + " derivedStatus=" + QString::number(status);
 
             switch(status)
             {
             case CT_NEW:
                 if(inModel)
                 {
-                    qDebug() << "TransactionTablePriv::updateWallet : Warning: Got CT_NEW, but transaction is already in model";
+                    // if (fDebug) qDebug() << "TransactionTablePriv::updateWallet : Warning: Got CT_NEW, but transaction is already in model";
                     break;
                 }
                 if(!inWallet)
                 {
-                    qDebug() << "TransactionTablePriv::updateWallet : Warning: Got CT_NEW, but transaction is not in wallet";
+                    // if (fDebug) qDebug() << "TransactionTablePriv::updateWallet : Warning: Got CT_NEW, but transaction is not in wallet";
                     break;
                 }
                 if(showTransaction)
@@ -159,7 +158,7 @@ public:
             case CT_DELETED:
                 if(!inModel)
                 {
-                    qDebug() << "TransactionTablePriv::updateWallet : Warning: Got CT_DELETED, but transaction is not in model";
+                    // if (fDebug) qDebug() << "TransactionTablePriv::updateWallet : Warning: Got CT_DELETED, but transaction is not in model";
                     break;
                 }
                 // Removed -- remove entire transaction from table

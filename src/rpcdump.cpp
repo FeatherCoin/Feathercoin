@@ -1,4 +1,5 @@
 // Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -188,7 +189,7 @@ Value importwallet(const Array& params, bool fHelp)
         key.SetSecret(secret, fCompressed);
         CKeyID keyid = key.GetPubKey().GetID();
         if (pwalletMain->HaveKey(keyid)) {
-            LogPrintf("Skipping import of %s (key already present)\n", CBitcoinAddress(keyid).ToString());
+            // if (fDebug) LogPrintf("Skipping import of %s (key already present)\n", CBitcoinAddress(keyid).ToString());
             continue;
         }
         int64_t nTime = DecodeDumpTime(vstr[1]);
@@ -206,8 +207,7 @@ Value importwallet(const Array& params, bool fHelp)
                 fLabel = true;
             }
         }
-        LogPrintf("Importing %s...\n", CBitcoinAddress(keyid).ToString());
-        //if (!pwalletMain->AddKeyPubKey(key, pubkey)) {
+        // if (fDebug) LogPrintf("Importing %s...\n", CBitcoinAddress(keyid).ToString());
         if (!pwalletMain->AddKey(key)) {
             fGood = false;
             continue;
@@ -226,7 +226,7 @@ Value importwallet(const Array& params, bool fHelp)
     if (!pwalletMain->nTimeFirstKey || nTimeBegin < pwalletMain->nTimeFirstKey)
         pwalletMain->nTimeFirstKey = nTimeBegin;
 
-    LogPrintf("Rescanning last %i blocks\n", chainActive.Height() - pindex->nHeight + 1);
+    // if (fDebug) LogPrintf("Rescanning last %i blocks\n", chainActive.Height() - pindex->nHeight + 1);
     pwalletMain->ScanForWalletTransactions(pindex);
     pwalletMain->MarkDirty();
 
