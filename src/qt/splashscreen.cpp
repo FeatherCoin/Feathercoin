@@ -26,8 +26,8 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QWidget(0, f), curAlignment(0)
 {
     // set reference point, paddings
-    int paddingRight            = 296;
-    int paddingTop              = 230;
+    int paddingRight            = 230;
+    int paddingTop              = 260;
     int titleVersionVSpace      = 13;
     int titleCopyrightVSpace    = 26;
 
@@ -46,13 +46,36 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QString font            = QApplication::font().toString();
 
     // create a bitmap according to device pixelratio
-    QSize splashSize(480*devicePixelRatio,320*devicePixelRatio);
+    QSize splashSize(585*devicePixelRatio,350*devicePixelRatio);
     pixmap = QPixmap(splashSize);
+
+#if QT_VERSION > 0x050100
+    // change to HiDPI if it makes sense
+    pixmap.setDevicePixelRatio(devicePixelRatio);
+#endif
 
     QPainter pixPaint(&pixmap);
     pixPaint.setPen(QColor(100,100,100));
 
-    pixPaint.setFont(QFont(font, 11*fontFactor));
+    // draw a slightly radial gradient
+    QRadialGradient gradient(QPoint(0,0), splashSize.width()/devicePixelRatio);
+    gradient.setColorAt(0, Qt::white);
+    gradient.setColorAt(1, QColor(247,247,247));
+    QRect rGradient(QPoint(0,0), splashSize);
+    pixPaint.fillRect(rGradient, gradient);
+
+//    draw the bitcoin icon, expected size of PNG: 1024x1024
+    QRect rectIcon(QPoint(0,0), QSize(585,350));
+
+    const QSize requiredSize(584,350);
+//  QPixmap icon(networkStyle->getAppIcon().pixmap(requiredSize));
+//  Feathercoin Fix for networkStyle calling bitcoin.png image / icon for Splashscreen
+    QPixmap icon(":/images/splash", "QSize");
+
+    pixPaint.drawPixmap(rectIcon, icon);
+
+    // check font size and drawing with
+    pixPaint.setFont(QFont(font, 24*fontFactor));
     QFontMetrics fm = pixPaint.fontMetrics();
     int titleTextWidth  = fm.width(titleText);
     if(titleTextWidth > 160) {
@@ -121,7 +144,7 @@ static void InitMessage(SplashScreen *splash, const std::string &message)
         Qt::QueuedConnection,
         Q_ARG(QString, QString::fromStdString(message)),
         Q_ARG(int, Qt::AlignBottom|Qt::AlignHCenter),
-        Q_ARG(QColor, QColor(200,200,200)));
+        Q_ARG(QColor, QColor(55,55,55)));
 }
 
 static void ShowProgress(SplashScreen *splash, const std::string &title, int nProgress)

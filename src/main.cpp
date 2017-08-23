@@ -1088,7 +1088,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
 
         // Check against previous transactions
         // This is done last to help prevent CPU exhaustion denial-of-service attacks.
-        if (!CheckInputs(tx, state, view, true, STANDARD_SCRIPT_VERIFY_FLAGS, true))
+        if (!CheckInputs(tx, state, view, true, SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_STRICTENC | SCRIPT_VERIFY_DERSIG, true))
         {
         		LogPrintf("AcceptToMemoryPool,STANDARD_SCRIPT_VERIFY_FLAGS=%i\n", STANDARD_SCRIPT_VERIFY_FLAGS);
             return error("AcceptToMemoryPool: ConnectInputs failed %s", hash.ToString());
@@ -1959,22 +1959,17 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
    	bool fStrictPayToScriptHash =true;
     unsigned int flags = SCRIPT_VERIFY_P2SH;
 
-    // Start enforcing the DERSIG (BIP66) rules, for block.nVersion=3 blocks,
-    // when 75% of the network has upgraded:
-    /*if (block.nVersion >= 3 && IsSuperMajority(3, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
-        flags |= SCRIPT_VERIFY_DERSIG;
-    }*/
-    
-    // Start enforcing the DERSIG (BIP66) rules and CHECKLOCKTIMEVERIFY, (BIP65) for block.nVersion=4
-    // blocks, when 75% of the network has upgraded:
+    // Start enforcing the DERSIG (BIP66) rules after block 1278297
     if (pindex->nHeight >=MIN_BLOCKHEADER_VERSION4_HEIGHT)
     {
-		    //if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
-		    if (block.cVersion >= 4) {
-		        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
-		        flags |= SCRIPT_VERIFY_DERSIG;
-		    }
-		}
+		flags |= SCRIPT_VERIFY_DERSIG;
+	}
+    
+    // Start enforcing the CHECKLOCKTIMEVERIFY (BIP65) for block.nVersion=4
+    // blocks, when 75% of the network has upgraded:
+    if (block.nVersion >= 4 && IsSuperMajority(4, pindex->pprev, chainparams.GetConsensus().nMajorityEnforceBlockUpgrade, chainparams.GetConsensus())) {
+	    flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+	}
 
     CBlockUndo blockundo;
 
@@ -3143,7 +3138,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     // Reject block.nVersion=2 blocks when 95% (75% on testnet) of the network has upgraded:
     //testnet
-    if (block.nVersion < 3 && IsSuperMajority(3, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
+    if (block.nVersion < 3 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
     {
     		if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetV4))
     		{
@@ -3162,22 +3157,6 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if (block.nVersion == 3)
         return state.Invalid(error("%s : rejected nVersion=3 block,block v3 was never enforced.", __func__),
                              REJECT_OBSOLETE, "bad-version");
-                             
-    // Reject block.nVersion=3 blocks when 95% (75% on testnet) of the network has upgraded:
-    if (block.nVersion < 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
-    {
-    		if ((chainParams.NetworkIDString()=="test") && (nHeight >= nTestnetV4))
-    		{
-    				LogPrintf("rejected nVersion=3: nHeight=%d,MajorityRejectBlock=%d \n",nHeight,consensusParams.nMajorityRejectBlockOutdated);
-		        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
-		                             REJECT_OBSOLETE, "bad-version");
-        }
-        if (chainParams.NetworkIDString()=="main")
-        {
-		        return state.Invalid(error("%s : rejected nVersion=3 block", __func__),
-		                             REJECT_OBSOLETE, "bad-version");
-        }
-    }
     
     // Check whether the legal upgrade to 5, whether to reject less than 5 versions, to achieve the purpose of version upgrade. Version 4 is the starting point
     if (block.cVersion < 5 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityRejectBlockOutdated, consensusParams))
@@ -3223,8 +3202,7 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
     {
     		return state.DoS(100, error("%s: block nVersion 3 height mismatch in coinbase,block v3 was never enforced.", __func__), REJECT_INVALID, "bad-cb-height");     
     }
-    if (block.nVersion == 4 && block.nTime > MIN_BLOCKHEADER_VERSION4_SwitchTime
-    	                     && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
+    if (block.nVersion == 4 && IsSuperMajority(4, pindexPrev, consensusParams.nMajorityEnforceBlockUpgrade, consensusParams))
     {
         CScript expect = CScript() << nHeight;
         if (block.vtx[0].vin[0].scriptSig.size() < expect.size() || !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) 

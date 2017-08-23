@@ -38,12 +38,12 @@
       <number>0</number>
      </property>
      <property name="pixmap" stdset="0">
-      <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
+      <pixmap resource="../feathercoin.qrc">:/images/about</pixmap>
      </property>
      <item>
       <widget class="QLabel" name="aboutLogo">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="maximumSize">
         <size>
@@ -55,7 +55,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../bitcoin.qrc">:/images/logo</pixmap>
+        <pixmap resource="../feathercoin.qrc">:/images/logo</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -90,7 +90,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
+        <pixmap resource="../feathercoin.qrc">:/images/about</pixmap>
        </property>
       </widget>
      </item>
@@ -193,7 +193,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../bitcoin.qrc"/>
+  <include location="../feathercoin.qrc"/>
  </resources>
  <connections>
   <connection>
