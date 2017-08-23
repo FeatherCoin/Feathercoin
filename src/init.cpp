@@ -50,6 +50,7 @@
 #include <boost/thread.hpp>
 #include <openssl/crypto.h>
 
+
 using namespace std;
 
 #ifdef ENABLE_WALLET
@@ -1473,6 +1474,8 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
 #endif
 
     // ********************************************************* Step 11: finished
+    
+   
 
     SetRPCWarmupFinished();
     uiInterface.InitMessage(_("Done loading"));

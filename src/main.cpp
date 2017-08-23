@@ -3344,9 +3344,9 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
 		LogPrintf("AcceptBlock sync-checkpoint,nHeight=%d.\n",nHeight);
     // ppcoin: check pending sync-checkpoint
-    AcceptPendingSyncCheckpoint();
+    if ( AcceptPendingSyncCheckpoint() ) {
 		LogPrintf("AcceptBlock OK,nHeight=%d.\n",nHeight);
-		
+		}
     return true;
 }
 
@@ -5206,7 +5206,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         uint256 alertHash = alert.GetHash();
         if (pfrom->setKnown.count(alertHash) == 0)
         {
-            if (alert.ProcessAlert(Params().AlertKey()))
+            if (alert.ProcessAlert(Params().AlertKey(),false))
             {
                 // Relay
                 pfrom->setKnown.insert(alertHash);
