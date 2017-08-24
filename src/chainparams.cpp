@@ -89,12 +89,12 @@ public:
         //how to do feathercoin ?
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,14); // FeatherCoin addresses start with F
         base58Prefixes[SCRIPT_ADDRESS_OLD] = std::vector<unsigned char>(1,5);
-      //  base58Prefixes[SCRIPT_ADDRESS] = list_of(96);
+        // base58Prefixes[SCRIPT_ADDRESS] = list_of(96);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,142);// 14+128
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x88)(0xBC)(0x26).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x88)(0xDA)(0xEE).convert_to_container<std::vector<unsigned char> >();
-        //base58Prefixes[EXT_SCRIPT_ADDRESS] = list_of(96);
+        // th base58Prefixes[EXT_SCRIPT_ADDRESS] = list_of(96);
         
         // Convert the pnSeeds array into usable address objects.
         for (unsigned int i = 0; i < ARRAYLEN(pnSeed); i++)
@@ -139,7 +139,7 @@ public:
         pchMessageStart[2] = 0xa5;
         pchMessageStart[3] = 0xba;
 	
-	pchMessageStartNew[0] = 0xaa;
+        pchMessageStartNew[0] = 0xaa;
         pchMessageStartNew[1] = 0xbb;
         pchMessageStartNew[2] = 0xcc;
         pchMessageStartNew[3] = 0xdd;
@@ -198,19 +198,59 @@ public:
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
         genesis.nTime = 1296688602;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 2;
+        genesis.nNonce = 0;
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 18446;
         strDataDir = "regtest";
-        assert(hashGenesisBlock == uint256("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
+        //uncomment to log regtest genesis block info
+                
+//        if (fDebug)
+//                         {
+//                             printf("Searching for genesis block...\n");
+//                             uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+//                             uint256 thash;
+//
+//                             while (true)
+//                             {
+//                                 thash = genesis.GetHash();
+//                                 if (thash <= hashTarget)
+//                                     break;
+//                                 if ((genesis.nNonce & 0xFFF) == 0)
+//                                 {
+//                                     printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+//                                 }
+//                                 ++genesis.nNonce;
+//                                 if (genesis.nNonce == 0)
+//                                 {
+//                                     printf("NONCE WRAPPED, incrementing time\n");
+//                                     ++genesis.nTime;
+//                                 }
+//                             }
+//                             printf("genesis.nTime = %u \n", genesis.nTime);
+//                             printf("genesis.nNonce = %u \n", genesis.nNonce);
+//                             printf("genesis.nVersion = %u \n", genesis.nVersion);
+//                             printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str()); //idk
+//                             printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
+//
+//                         }
+//
+// 
+        // assert(hashGenesisBlock == uint256("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
 
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
+        // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
+        
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,65);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
+        base58Prefixes[SECRET_KEY]     = std::vector<unsigned char>(1,193);//65+128
+        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x35)(0x87)(0xCF).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x35)(0x83)(0x94).convert_to_container<std::vector<unsigned char> >();
     }
 
     virtual bool RequireRPCPassword() const { return false; }
     virtual Network NetworkID() const { return CChainParams::REGTEST; }
 };
-//static CRegTestParams regTestParams;
+static CRegTestParams regTestParams;
 
 static CChainParams *pCurrentParams = &mainParams;
 
@@ -227,8 +267,8 @@ void SelectParams(CChainParams::Network network) {
             pCurrentParams = &testNetParams;
             break;
         case CChainParams::REGTEST:
-            //pCurrentParams = &regTestParams;
-            pCurrentParams = &testNetParams;
+            pCurrentParams = &regTestParams;
+            // pCurrentParams = &testNetParams;
             break;
         default:
             assert(false && "Unimplemented network");
