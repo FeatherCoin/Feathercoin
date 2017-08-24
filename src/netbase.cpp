@@ -292,13 +292,14 @@ bool static Socks5(string strDest, int port, SOCKET& hSocket)
             if (ret) {
                 closesocket(hSocket);
                 // if (fDebug) LogPrintf("Error reading from proxy");
-                return true;
+                return false;
             }
             int nRecv = pchRet3[0];
             ret = recv(hSocket, pchRet3, nRecv, 0) != nRecv;
             break;
         }
-        default: closesocket(hSocket); return error("Error: malformed proxy response");
+        default: closesocket(hSocket); 
+        return error("Error: malformed proxy response");
     }
     if (ret)
     {
