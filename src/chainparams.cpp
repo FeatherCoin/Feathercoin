@@ -182,17 +182,25 @@ static CTestNetParams testNetParams;
 class CRegTestParams : public CTestNetParams {
 public:
     CRegTestParams() {
-        pchMessageStart[0] = 0xfa;
-        pchMessageStart[1] = 0xbf;
-        pchMessageStart[2] = 0xb5;
-        pchMessageStart[3] = 0xda;
+        
+        pchMessageStart[0] = 0xda;
+        pchMessageStart[1] = 0xaf;
+        pchMessageStart[2] = 0xa5;
+        pchMessageStart[3] = 0xba;
+        
+        
+	    pchMessageStartNew[0] = 0xaa;
+        pchMessageStartNew[1] = 0xbb;
+        pchMessageStartNew[2] = 0xcc;
+        pchMessageStartNew[3] = 0xdd;
+
         nSubsidyHalvingInterval = 150;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
         genesis.nTime = 1296688602;
         genesis.nBits = 0x207fffff;
         genesis.nNonce = 2;
         hashGenesisBlock = genesis.GetHash();
-        nDefaultPort = 18444;
+        nDefaultPort = 18446;
         strDataDir = "regtest";
         assert(hashGenesisBlock == uint256("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
 
