@@ -196,48 +196,53 @@ public:
 
         nSubsidyHalvingInterval = 150;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
-        genesis.nTime = 1296688602;
+        genesis.nTime = 1396255061;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 0;
+        genesis.nNonce = 3252028180;
+        genesis.nVersion = 1; 
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 18446;
         strDataDir = "regtest";
-        //uncomment to log regtest genesis block info
-                
-//        if (fDebug)
-//                         {
-//                             printf("Searching for genesis block...\n");
-//                             uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
-//                             uint256 thash;
-//
-//                             while (true)
-//                             {
-//                                 thash = genesis.GetHash();
-//                                 if (thash <= hashTarget)
-//                                     break;
-//                                 if ((genesis.nNonce & 0xFFF) == 0)
-//                                 {
-//                                     printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
-//                                 }
-//                                 ++genesis.nNonce;
-//                                 if (genesis.nNonce == 0)
-//                                 {
-//                                     printf("NONCE WRAPPED, incrementing time\n");
-//                                     ++genesis.nTime;
-//                                 }
-//                             }
-//                             printf("genesis.nTime = %u \n", genesis.nTime);
-//                             printf("genesis.nNonce = %u \n", genesis.nNonce);
-//                             printf("genesis.nVersion = %u \n", genesis.nVersion);
-//                             printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str()); //idk
-//                             printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-//
-//                         }
-//
-// 
-        // assert(hashGenesisBlock == uint256("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
+        
+        // ./feathercoin-cli -regtest setgenerate false generate 202 -listen=0
+        
+        //uncomment to log regtest genesis block info              
+        if (true)
+                         {
+                             printf("Searching for genesis block...\n");
+                             uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+                             uint256 thash;
 
+                             while (true)
+                             {
+                                 thash = genesis.GetHash();
+                                 if (thash <= hashTarget)
+                                     break;
+                                 if ((genesis.nNonce & 0xFFF) == 0)
+                                 {
+                                     printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                                 }
+                                 ++genesis.nNonce;
+                                 if (genesis.nNonce == 0)
+                                 {
+                                     printf("NONCE WRAPPED, incrementing time\n");
+                                     ++genesis.nTime;
+                                 }
+                             }
+                             printf("genesis.nTime = %u \n", genesis.nTime);
+                             printf("genesis.nNonce = %u \n", genesis.nNonce);
+                             printf("genesis.nVersion = %u \n", genesis.nVersion);
+                             printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str());
+                             printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
+
+                         }
+                
+        // assert(genesis.hashMerkleRoot == uint256("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
+        assert(hashGenesisBlock == uint256("0x1d3f0daf0c110faaf84f47582822b6a87528936b402c768a6b51bd40aa0a362a"));
+
+        vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
+        // LogPrintf("1 =\n ");
         // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
         
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,65);
@@ -245,6 +250,7 @@ public:
         base58Prefixes[SECRET_KEY]     = std::vector<unsigned char>(1,193);//65+128
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x35)(0x87)(0xCF).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x35)(0x83)(0x94).convert_to_container<std::vector<unsigned char> >();
+        
     }
 
     virtual bool RequireRPCPassword() const { return false; }
