@@ -1330,6 +1330,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
     }
+    
+    if (RegTest()) {
+        nTargetTimespan = 5; // 1 minute timespan
+        nTargetSpacing = 5; // 1 minute block
+    }
 
     // 2016 blocks initial, 504 after the 1st, 126 after the 2nd hard fork, 15 after the 3rd hard fork
     int nInterval = nTargetTimespan / nTargetSpacing;
@@ -3098,7 +3103,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired, unsigned int nToCheck)
 {
     // Feathercoin: temporarily disable v2 block lockin until we are ready for v2 transition
-    // 1000个中有750个新版本
+    // 1000   --   750
     // return false;
     
     unsigned int nFound = 0;
