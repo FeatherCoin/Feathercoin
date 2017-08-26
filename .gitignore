@@ -13,6 +13,9 @@ src/test/test_feathercoin
 
 
 # ignore files created by autoconf and conf
+m4/*
+secp256k1/m4/*
+*.lo
 src/bitcoin-config.h
 src/bitcoin-config.h
 src/Makefile.in
