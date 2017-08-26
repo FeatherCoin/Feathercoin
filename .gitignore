@@ -15,7 +15,6 @@ src/test/test_feathercoin
 # ignore files created by autoconf and conf
 m4/*
 secp256k1/m4/*
-*.lo
 src/bitcoin-config.h
 src/bitcoin-config.h
 src/Makefile.in
@@ -34,6 +33,7 @@ src/stamp-h1
 
 #ignore files created during make
 src/qt/*.moc
+*.lo
 src/qt/moc_*.cpp
 src/qt/forms/ui_*.h
 src/qt/Makefile.in
