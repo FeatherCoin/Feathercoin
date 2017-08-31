@@ -5,7 +5,7 @@ AC_DEFUN([BITCOIN_FIND_BDB51],[
   bdbpath=X
   bdb51path=X
   bdbdirlist=
-  for _vn in 5.1 51 5 ''; do
+  for _vn in 5.1 51 5 4.8 48 4 ''; do
     for _pfx in b lib ''; do
       bdbdirlist="$bdbdirlist ${_pfx}db${_vn}"
     done
