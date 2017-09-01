@@ -63,6 +63,8 @@ enum BindFlags {
     BF_REPORT_ERROR = (1U << 1)
 };
 
+/* Assembly level processor optimisation features */
+unsigned int opt_flags = 0;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -472,6 +474,19 @@ bool AppInit2(boost::thread_group& threadGroup)
 #endif
 
     // ********************************************************* Step 2: parameter interactions
+
+    opt_flags = cpu_vec_exts();
+    if(GetBoolArg("-sse2", true)) {
+        /* Verify hardware SSE2 support */
+        if(opt_flags & 0x00000020) {
+            printf("SSE2 optimisations enabled\n");
+            nNeoScryptOptions |= 0x1000;
+        } else {
+            printf("SSE2 unsupported, optimisations disabled\n");
+        }
+    } else {
+        printf("SSE2 optimisations disabled\n");
+    }
 
     if (mapArgs.count("-bind")) {
         // when specifying an explicit binding address, you want to listen on it
