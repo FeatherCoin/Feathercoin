@@ -33,7 +33,7 @@
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 23
+#serial 22
 
 AC_DEFUN([AX_BOOST_BASE],
 [
@@ -72,7 +72,7 @@ AC_ARG_WITH([boost-libdir],
 )
 
 if test "x$want_boost" = "xyes"; then
-    boost_lib_version_req=ifelse([$1], ,1.20.0,$1)
+    boost_lib_version_req=ifelse([$1], ,1.54.0,$1)
     boost_lib_version_req_shorten=`expr $boost_lib_version_req : '\([[0-9]]*\.[[0-9]]*\)'`
     boost_lib_version_req_major=`expr $boost_lib_version_req : '\([[0-9]]*\)'`
     boost_lib_version_req_minor=`expr $boost_lib_version_req : '[[0-9]]*\.\([[0-9]]*\)'`
@@ -92,10 +92,7 @@ if test "x$want_boost" = "xyes"; then
     libsubdirs="lib"
     ax_arch=`uname -m`
     case $ax_arch in
-      x86_64)
-        libsubdirs="lib64 libx32 lib lib64"
-        ;;
-      ppc64|s390x|sparc64|aarch64)
+      x86_64|ppc64|s390x|sparc64|aarch64)
         libsubdirs="lib64 lib lib64"
         ;;
     esac
@@ -105,18 +102,6 @@ if test "x$want_boost" = "xyes"; then
     dnl are almost assuredly the ones desired.
     AC_REQUIRE([AC_CANONICAL_HOST])
     libsubdirs="lib/${host_cpu}-${host_os} $libsubdirs"
-
-    case ${host_cpu} in
-      i?86)
-        libsubdirs="lib/i386-${host_os} $libsubdirs"
-        ;;
-    esac
-
-    dnl some arches may advertise a cpu type that doesn't line up with their
-    dnl prefix's cpu type. For example, uname may report armv7l while libs are
-    dnl installed to /usr/lib/arm-linux-gnueabihf. Try getting the compiler's
-    dnl value for an extra chance of finding the correct path.
-    libsubdirs="lib/`$CXX -dumpmachine 2>/dev/null` $libsubdirs"
 
     dnl first we check the system location for boost libraries
     dnl this location ist chosen if boost libraries are installed with the --layout=system option
