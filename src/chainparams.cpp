@@ -194,7 +194,7 @@ public:
         pchMessageStartNew[2] = 0xcc;
         pchMessageStartNew[3] = 0xdd;
 
-        nSubsidyHalvingInterval = 150;
+        nSubsidyHalvingInterval = 256;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
         
         genesis.nTime = 1396255061;
@@ -206,7 +206,8 @@ public:
         nDefaultPort = 18446;
         strDataDir = "regtest";
         
-        // ./feathercoin-cli -regtest setgenerate false generate 202 -listen=0
+        // ./feathercoind -regtest -listen=0 -debug -daemon
+        // ./feathercoin-cli -regtest setgenerate true 202 
         
         //uncomment to log regtest genesis block info  
         /*

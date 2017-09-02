@@ -1257,12 +1257,22 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 {    
     int64_t nSubsidy = 200 * COIN;
 	
-		if(nHeight >= nForkThree || (TestNet()))
+		if(nHeight >= nForkThree || (TestNet() || RegTest()) )
 			nSubsidy = 80 * COIN;
 
     // Halving subsidy happens every 2,100,000 blocks. The code below takes account for the
     // fact that the first 204,639 blocks took 2.5 minutes and after changed to 1 minute.
-    nSubsidy >>= (nHeight + 306960) / 2100000;
+    if (!RegTest()) {
+        nSubsidy >>= (nHeight + 306960) / 2100000;
+    }
+        else {
+            int halvings = nHeight / Params().SubsidyHalvingInterval();
+            if (halvings >= 64)
+                   return nFees;
+            nSubsidy >>= halvings;
+        }
+    
+    
 
     return nSubsidy + nFees;
 }
@@ -1348,13 +1358,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         }
     }
       if (RegTest()) {
-        // printf("GetWorkRequired RegTestSetup   1.1   main.cpp\n");  // RegTest Debug
-        // cin.get(); // RegTest Debug
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
-        // fHardFork = false;
-        fNeoScrypt = false;
-        // printf("GetWorkRequired  RegTestSetup  - Neoscrypt False     1.2   main.cpp\n");  // RegTest Debug
+        fHardFork = true;
+        fNeoScrypt = true;
+        // printf("GetWorkRequired  RegTestSetup  - Neoscrypt & HF True     1.1   main.cpp\n");  // RegTest Debug
         // return(bnNeoScryptSwitch.GetCompact());
     }
     	
