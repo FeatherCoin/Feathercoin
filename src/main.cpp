@@ -1332,13 +1332,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
     
     if (RegTest()) {
-// <<<<<<< 0.9.6.2-bushstar
- //       nTargetTimespan = 5; // 1 minute timespan
- //       nTargetSpacing = 5; // 1 minute block
-// =======
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
-// >>>>>>> 0.9.6.2-0.10-BackportsTest
     }
 
     // 2016 blocks initial, 504 after the 1st, 126 after the 2nd hard fork, 15 after the 3rd hard fork
@@ -1352,7 +1347,16 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
             fHardFork = false;
         }
     }
-    	
+      if (RegTest()) {
+        // printf("GetWorkRequired RegTestSetup   1.1   main.cpp\n");  // RegTest Debug
+        // cin.get(); // RegTest Debug
+        nTargetTimespan = 60; // 1 minute timespan
+        nTargetSpacing = 60; // 1 minute block
+        // fHardFork = false;
+        fNeoScrypt = false;
+        // printf("GetWorkRequired  RegTestSetup  - Neoscrypt False     1.2   main.cpp\n");  // RegTest Debug
+        // return(bnNeoScryptSwitch.GetCompact());
+    }
     	
     // Difficulty rules regular blocks
     if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < nForkThree))
@@ -1413,10 +1417,10 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     
   //eHRC  
 	// Additional averaging over 15, 120 and 480 block window
-    if((nHeight >= nForkThree) || TestNet()) {
+    if((nHeight >= nForkThree) || TestNet() || RegTest()) {
 	
         nInterval *= 480;
-
+        // printf("GetWorkRequired  Setting eHRC  1.2   main.cpp\n");  // RegTest Debug
         int pindexFirstShortTime = 0;
         int pindexFirstMediumTime = 0;
         const CBlockIndex* pindexFirstLong = pindexLast;
