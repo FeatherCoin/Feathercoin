@@ -209,7 +209,7 @@ public:
         // ./feathercoind -regtest -listen=0 -debug -daemon
         // ./feathercoin-cli -regtest setgenerate true 202 
         
-        //uncomment to log regtest genesis block info  
+        //uncomment to log or regenerate the regtest genesis block info  
         /*
         if (true)
                          {
