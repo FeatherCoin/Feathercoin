@@ -187,8 +187,7 @@ public:
         pchMessageStart[1] = 0xaf;
         pchMessageStart[2] = 0xa5;
         pchMessageStart[3] = 0xba;
-        
-        
+
 	    pchMessageStartNew[0] = 0xaa;
         pchMessageStartNew[1] = 0xbb;
         pchMessageStartNew[2] = 0xcc;
@@ -196,17 +195,13 @@ public:
 
         nSubsidyHalvingInterval = 150;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
-        nMinerThreads = 1;
-        nTargetTimespan = 60; // 1 minute
-        nTargetSpacing = 60; // 2.5 minutes
-        
-        
+
         genesis.nTime = 1396255061;
         genesis.nBits = 0x207fffff;
         genesis.nNonce = 3251853103;
 
         genesis.nVersion = 2;
-        //nMinerThreads = 2;
+
         vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 18446;
