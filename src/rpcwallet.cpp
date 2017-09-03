@@ -2233,7 +2233,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
             
             std::string strType(vchType.begin(), vchType.end());
             
-            // if (fDebug) printf("strType %s\n", strType.c_str());
+            printf("strType %s\n", strType.c_str());
             
             if (strType == "tx")
             {
@@ -2242,7 +2242,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
                 
                 if ((ret = pcursor->del(0)) != 0)
                 {
-                    // if (fDebug) printf("Delete transaction failed %d, %s\n", ret, db_strerror(ret));
+                    printf("Delete transaction failed %d, %s\n", ret, db_strerror(ret));
                     continue;
                 };
                 

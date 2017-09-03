@@ -637,7 +637,7 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
         Dbc* pcursor = GetCursor();
         if (!pcursor)
         {
-            // if (fDebug) LogPrintf("Error getting wallet database cursor\n");
+            LogPrintf("Error getting wallet database cursor\n");
             return DB_CORRUPT;
         }
 
@@ -651,7 +651,7 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
                 break;
             else if (ret != 0)
             {
-                // if (fDebug) LogPrintf("Error reading next record from wallet database\n");
+                LogPrintf("Error reading next record from wallet database\n");
                 return DB_CORRUPT;
             }
 
@@ -672,9 +672,8 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
                         SoftSetBoolArg("-rescan", true);
                 }
             }
-            if (!strErr.empty()) {
-                // if (fDebug) LogPrintf("%s\n", strErr);
-            }
+            if (!strErr.empty())
+                LogPrintf("%s\n", strErr);
         }
         pcursor->close();
     }
@@ -692,11 +691,12 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
     // upgrading, we don't want to make it worse.
     if (result != DB_LOAD_OK)
         return result;
-    /* if (fDebug) {
-         LogPrintf("nFileVersion = %d\n", wss.nFileVersion);
-         LogPrintf("Keys: %u plaintext, %u encrypted, %u w/ metadata, %u total\n",
+
+    LogPrintf("nFileVersion = %d\n", wss.nFileVersion);
+ 
+    LogPrintf("Keys: %u plaintext, %u encrypted, %u w/ metadata, %u total\n",
                wss.nKeys, wss.nCKeys, wss.nKeyMeta, wss.nKeys + wss.nCKeys);
-    } */
+
     // nTimeFirstKey is only reliable if all keys have metadata
     if ((wss.nKeys + wss.nCKeys) != wss.nKeyMeta)
         pwallet->nTimeFirstKey = 1; // 0 would be considered 'no value'
@@ -734,7 +734,7 @@ DBErrors CWalletDB::FindWalletTx(CWallet* pwallet, vector<uint256>& vTxHash)
         Dbc* pcursor = GetCursor();
         if (!pcursor)
         {
-            // if (fDebug) LogPrintf("Error getting wallet database cursor\n");
+            LogPrintf("Error getting wallet database cursor\n");
             return DB_CORRUPT;
         }
 
@@ -748,7 +748,7 @@ DBErrors CWalletDB::FindWalletTx(CWallet* pwallet, vector<uint256>& vTxHash)
                 break;
             else if (ret != 0)
             {
-                // if (fDebug) LogPrintf("Error reading next record from wallet database\n");
+                LogPrintf("Error reading next record from wallet database\n");
                 return DB_CORRUPT;
             }
 
@@ -838,7 +838,7 @@ void ThreadFlushWalletDB(const string& strFile)
                     map<string, int>::iterator mi = bitdb.mapFileUseCount.find(strFile);
                     if (mi != bitdb.mapFileUseCount.end())
                     {
-                        // if (fDebug) LogPrint("db", "Flushing wallet.dat\n");
+                        LogPrint("db", "Flushing wallet.dat\n");
                         nLastFlushed = nWalletDBUpdated;
                         int64_t nStart = GetTimeMillis();
 
@@ -847,7 +847,7 @@ void ThreadFlushWalletDB(const string& strFile)
                         bitdb.CheckpointLSN(strFile);
 
                         bitdb.mapFileUseCount.erase(mi++);
-                        // if (fDebug) LogPrint("db", "Flushed wallet.dat %dms\n", GetTimeMillis() - nStart);
+                        LogPrint("db", "Flushed wallet.dat %dms\n", GetTimeMillis() - nStart);
                     }
                 }
             }
@@ -882,10 +882,10 @@ bool BackupWallet(const CWallet& wallet, const string& strDest)
 #else
                     filesystem::copy_file(pathSrc, pathDest);
 #endif
-                    // if (fDebug) LogPrintf("copied wallet.dat to %s\n", pathDest.string());
+                    LogPrintf("copied wallet.dat to %s\n", pathDest.string());
                     return true;
                 } catch(const filesystem::filesystem_error &e) {
-                    // if (fDebug) LogPrintf("error copying wallet.dat to %s - %s\n", pathDest.string(), e.what());
+                    LogPrintf("error copying wallet.dat to %s - %s\n", pathDest.string(), e.what());
                     return false;
                 }
             }
@@ -913,11 +913,11 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
     int result = dbenv.dbenv.dbrename(NULL, filename.c_str(), NULL,
                                       newFilename.c_str(), DB_AUTO_COMMIT);
     if (result == 0) {
-        // if (fDebug) LogPrintf("Renamed %s to %s\n", filename, newFilename);
+        LogPrintf("Renamed %s to %s\n", filename, newFilename);
     }
     else
     {
-        // if (fDebug) LogPrintf("Failed to rename %s to %s\n", filename, newFilename);
+        LogPrintf("Failed to rename %s to %s\n", filename, newFilename);
         return false;
     }
 
@@ -925,10 +925,10 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
     bool allOK = dbenv.Salvage(newFilename, true, salvagedData);
     if (salvagedData.empty())
     {
-        // if (fDebug) LogPrintf("Salvage(aggressive) found no records in %s.\n", newFilename);
+        LogPrintf("Salvage(aggressive) found no records in %s.\n", newFilename);
         return false;
     }
-    // if (fDebug) LogPrintf("Salvage(aggressive) found %u records\n", salvagedData.size());
+    LogPrintf("Salvage(aggressive) found %u records\n", salvagedData.size());
 
     bool fSuccess = allOK;
     Db* pdbCopy = new Db(&dbenv.dbenv, 0);
@@ -940,7 +940,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
                             0);
     if (ret > 0)
     {
-        // if (fDebug) LogPrintf("Cannot create database file %s\n", filename);
+        LogPrintf("Cannot create database file %s\n", filename);
         return false;
     }
     CWallet dummyWallet;
@@ -960,7 +960,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
                 continue;
             if (!fReadOK)
             {
-                // if (fDebug) LogPrintf("WARNING: CWalletDB::Recover skipping %s: %s\n", strType, strErr);
+                LogPrintf("WARNING: CWalletDB::Recover skipping %s: %s\n", strType, strErr);
                 continue;
             }
         }

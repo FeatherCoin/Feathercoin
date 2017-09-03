@@ -16,7 +16,7 @@
 void HandleError(const leveldb::Status &status) throw(leveldb_error) {
     if (status.ok())
         return;
-    // if (fDebug) LogPrintf("%s\n", status.ToString());
+    LogPrintf("%s\n", status.ToString());
     if (status.IsCorruption())
         throw leveldb_error("Database corrupted");
     if (status.IsIOError())
@@ -49,15 +49,15 @@ CLevelDBWrapper::CLevelDBWrapper(const boost::filesystem::path &path, size_t nCa
         options.env = penv;
     } else {
         if (fWipe) {
-            // if (fDebug) LogPrintf("Wiping LevelDB in %s\n", path.string());
+            LogPrintf("Wiping LevelDB in %s\n", path.string());
             leveldb::DestroyDB(path.string(), options);
         }
         TryCreateDirectory(path);
-        // if (fDebug) LogPrintf("Opening LevelDB in %s\n", path.string());
+        LogPrintf("Opening LevelDB in %s\n", path.string());
     }
     leveldb::Status status = leveldb::DB::Open(options, path.string(), &pdb);
     HandleError(status);
-    // if (fDebug) LogPrintf("Opened LevelDB successfully\n");
+    LogPrintf("Opened LevelDB successfully\n");
 }
 
 CLevelDBWrapper::~CLevelDBWrapper() {

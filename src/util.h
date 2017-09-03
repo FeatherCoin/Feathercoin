@@ -526,7 +526,7 @@ template <typename Callable> void LoopForever(const char* name,  Callable func, 
 {
     std::string s = strprintf("feathercoin-%s", name);
     RenameThread(s.c_str());
-    // if (fDebug) LogPrintf("%s thread start\n", name);
+    LogPrintf("%s thread start\n", name);
     try
     {
         while (1)
@@ -537,7 +537,7 @@ template <typename Callable> void LoopForever(const char* name,  Callable func, 
     }
     catch (boost::thread_interrupted)
     {
-        // if (fDebug) LogPrintf("%s thread stop\n", name);
+        LogPrintf("%s thread stop\n", name);
         throw;
     }
     catch (std::exception& e) {
@@ -556,13 +556,13 @@ template <typename Callable> void TraceThread(const char* name,  Callable func)
     RenameThread(s.c_str());
     try
     { 
-        // if (fDebug) LogPrintf("%s thread start\n", name);
+        LogPrintf("%s thread start\n", name);
         func();
-        // if (fDebug) LogPrintf("%s thread exit\n", name);
+        LogPrintf("%s thread exit\n", name);
     }
     catch (boost::thread_interrupted)
     {
-        // if (fDebug) LogPrintf("%s thread interrupt\n", name);
+        LogPrintf("%s thread interrupt\n", name);
         throw;
     }
     catch (std::exception& e) {
