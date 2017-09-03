@@ -269,10 +269,8 @@ bool ResetSyncCheckpoint()
         
         CValidationState state;
         if (!SetBestChain(state, mapBlockIndex[hash]))
-        {
-           //if (fDebug) LogPrintf("ResetSyncCheckpoint: SetBestChain failed for hardened checkpoint %s", hash.ToString().c_str()); 
-           return true;
-        }
+            return true;
+           // return error("ResetSyncCheckpoint: SetBestChain failed for hardened checkpoint %s", hash.ToString().c_str());
     }
     else if(!mapBlockIndex.count(hash))
     {
@@ -283,11 +281,8 @@ bool ResetSyncCheckpoint()
     }
 
     if (!WriteSyncCheckpoint((mapBlockIndex.count(hash) && mapBlockIndex[hash]->IsInMainChain())? hash : Params().HashGenesisBlock()))
-         {
-        // if (fDebug) LogPrintf("ResetSyncCheckpoint: failed to write sync checkpoint %s", hash.ToString().c_str());
         return true;
-         }
-    // if (fDebug) LogPrintf("ResetSyncCheckpoint: sync-checkpoint reset to %s\n", hashSyncCheckpoint.ToString().c_str());
+        // return error("ResetSyncCheckpoint: failed to write sync checkpoint %s", hash.ToString().c_str());
     return true;
 }
 
@@ -327,11 +322,10 @@ bool SetCheckpointPrivKey(std::string strPrivKey)
 
     CBitcoinSecret vchSecret;
     if (!vchSecret.SetString(strPrivKey))
-       {
-           // if (fDebug) LogPrintf("SendSyncCheckpoint: Checkpoint master key invalid");
         return true;
-       }
-        //CKey key = vchSecret.GetKey(); // if key is not correct openssl may crash
+        // return error("SendSyncCheckpoint: Checkpoint master key invalid");
+
+    // CKey key = vchSecret.GetKey(); // if key is not correct openssl may crash
     CKey key;
     bool fCompressed;
     CSecret secret = vchSecret.GetSecret(fCompressed);
@@ -353,26 +347,24 @@ bool SendSyncCheckpoint(uint256 hashCheckpoint)
     checkpoint.vchMsg = std::vector<unsigned char>(sMsg.begin(), sMsg.end());
 
     if (CSyncCheckpoint::strMasterPrivKey.empty())
-         {
-           // if (fDebug) LogPrintf("SendSyncCheckpoint: Checkpoint master key unavailable.");
-           return true;
-       }        
+        return true;
+        // return error("SendSyncCheckpoint: Checkpoint master key unavailable.");
+
     CBitcoinSecret vchSecret;
     if (!vchSecret.SetString(CSyncCheckpoint::strMasterPrivKey))
-         {
-           // if (fDebug) LogPrintf("SendSyncCheckpoint: Checkpoint master key invalid");
-           return true;
-       }
+        return true;
+        // return error("SendSyncCheckpoint: Checkpoint master key invalid");
+
     //CKey key = vchSecret.GetKey(); // if key is not correct openssl may crash
     CKey key;
     bool fCompressed;
     CSecret secret = vchSecret.GetSecret(fCompressed);
     key.SetSecret(secret, fCompressed); // if key is not correct openssl may crash
     if (!key.Sign(Hash(checkpoint.vchMsg.begin(), checkpoint.vchMsg.end()), checkpoint.vchSig))
-      {
-           // if (fDebug) LogPrintf("SendSyncCheckpoint: Unable to sign checkpoint, check private key?");
-           return true;
-       }
+        return true;
+        // return error("SendSyncCheckpoint: Unable to sign checkpoint, check private key?");
+           
+
     if(!checkpoint.ProcessSyncCheckpoint(NULL))
     {
         // if (fDebug) LogPrintf("WARNING: SendSyncCheckpoint: Failed to process checkpoint.\n");
@@ -424,15 +416,14 @@ bool CSyncCheckpoint::CheckSignature()
     std::string strMasterPubKey = TestNet()? CSyncCheckpoint::strTestPubKey : CSyncCheckpoint::strMainPubKey;
     //CPubKey key(ParseHex(strMasterPubKey));
     if (!key.SetPubKey(ParseHex(strMasterPubKey)))
-        {
-        // if (fDebug) LogPrintf("CSyncCheckpoint::CheckSignature() : SetPubKey failed");
         return true;
-        }
+        // return error("CSyncCheckpoint::CheckSignature() : verify signature failed");
+        
+
     if (!key.Verify(Hash(vchMsg.begin(), vchMsg.end()), vchSig))
-        {
-        // if (fDebug) LogPrintf("CSyncCheckpoint::CheckSignature() : verify signature failed");
         return true;
-        }
+        // return error("CSyncCheckpoint::CheckSignature() : verify signature failed");
+
     // Now unserialize the data
     CDataStream sMsg(vchMsg, SER_NETWORK, PROTOCOL_VERSION);
     sMsg >> *(CUnsignedSyncCheckpoint*)this;
@@ -486,15 +477,15 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
         if (!SetBestChain(state, pindexCheckpoint))
         {
             hashInvalidCheckpoint = hashCheckpoint;
-            if (fDebug)
-                  LogPrintf("ProcessSyncCheckpoint SetBestChain Invalid,hashInvalidCheckpoint=%s.\n",hashInvalidCheckpoint.ToString().c_str());
             return true;
+            // return error("ProcessSyncCheckpoint: SetBestChain failed for sync checkpoint %s", hashCheckpoint.ToString().c_str());
         }
     }
 
     if (!WriteSyncCheckpoint(hashCheckpoint))
-         // if (fDebug) LogPrintf("ProcessSyncCheckpoint(): failed to write sync checkpoint %s", hashCheckpoint.ToString().c_str());
         return true ;
+        // return error("ProcessSyncCheckpoint(): failed to write sync checkpoint %s", hashCheckpoint.ToString().c_str());
+
     checkpointMessage = *this;
     hashPendingCheckpoint = 0;
     checkpointMessagePending.SetNull();
