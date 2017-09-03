@@ -98,21 +98,6 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
-// The 1st hard fork
-const int nForkOne = 33000;
-// The 2nd hard fork
-const int nForkTwo = 87948;
-// The 3rd hard fork
-const int nForkThree = 204639;
-// The 4th hard fork
-const int nForkFour = 432000;
-
-static const int nTestnetFork   =  600;
-
-static const unsigned int nSwitchV2            = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
-static const unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
-
-
 /** "reject" message codes **/
 static const unsigned char REJECT_MALFORMED = 0x01;
 static const unsigned char REJECT_INVALID = 0x10;

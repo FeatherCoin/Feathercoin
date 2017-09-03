@@ -1259,8 +1259,8 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 {    
     int64_t nSubsidy = 200 * COIN;
 	
-		if(nHeight >= nForkThree || (TestNet()))
-			nSubsidy = 80 * COIN;
+    if (nHeight >= Params().ForkThree() || TestNet())
+        nSubsidy = 80 * COIN;
 
     // Halving subsidy happens every 2,100,000 blocks. The code below takes account for the
     // fact that the first 204,639 blocks took 2.5 minutes and after changed to 1 minute.
@@ -1312,20 +1312,20 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int nHeight = pindexLast->nHeight + 1;
       
     /* The 4th hard fork and testnet hard fork */
-    if((nHeight >= nForkFour) || (TestNet() && (nHeight >= nTestnetFork))) {
+    if(nHeight >= Params().ForkFour()) {
         if(!fNeoScrypt) fNeoScrypt = true;
         /* Difficulty reset after the switch */
-        if((nHeight == nForkFour) || (TestNet() && (nHeight == nTestnetFork)))
+        if(nHeight == Params().ForkFour())
           return(bnNeoScryptSwitch.GetCompact());
     }
 
-    if (nHeight >= nForkOne)
+    if (nHeight >= Params().ForkOne())
 			nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
 
-    if (nHeight >= nForkTwo)
+    if (nHeight >= Params().ForkTwo())
 			nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
 		
-    if (nHeight >= nForkThree || TestNet()) {
+    if (nHeight >= Params().ForkThree() || TestNet()) {
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
     }
@@ -1338,17 +1338,10 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     // 2016 blocks initial, 504 after the 1st, 126 after the 2nd hard fork, 15 after the 3rd hard fork
     int nInterval = nTargetTimespan / nTargetSpacing;
 
-    bool fHardFork = (nHeight == nForkOne) || (nHeight == nForkTwo) || (nHeight == nForkThree) || (nHeight == nForkFour);
-    if(TestNet()) {
-        if (nHeight == nTestnetFork) {
-            fHardFork = true;
-        } else {
-            fHardFork = false;
-        }
-    }
+    bool fHardFork = (nHeight == Params().ForkOne()) || (nHeight == Params().ForkTwo()) || (nHeight == Params().ForkThree()) || (nHeight == Params().ForkFour());
 
     // Difficulty rules regular blocks
-    if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < nForkThree))
+    if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < Params().ForkThree()))
     {
         if (TestNet())
         {
@@ -1383,7 +1376,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     LogPrintf("  nActualTimespan = %d  before bounds\n", nActualTimespan);
 
     // Additional averaging over 4x nInterval window
-    if((nHeight >= nForkTwo) && (nHeight < nForkThree)) {
+    if((nHeight >= Params().ForkTwo()) && (nHeight < Params().ForkThree())) {
         nInterval *= 4;
 
         const CBlockIndex* pindexFirst = pindexLast;
@@ -1405,7 +1398,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     
     //eHRC  
 	// Additional averaging over 15, 120 and 480 block window
-    if((nHeight >= nForkThree) || TestNet()) {
+    if(nHeight >= Params().ForkThree() || TestNet()) {
 	
         nInterval *= 480;
 
@@ -1446,13 +1439,13 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int nActualTimespanMin = nTargetTimespan/4;
 
     // The 1st hard fork (1.4142857 aka 41% difficulty limiter)
-    if(nHeight >= nForkOne) {
+    if(nHeight >= Params().ForkOne()) {
         nActualTimespanMax = nTargetTimespan*99/70;
         nActualTimespanMin = nTargetTimespan*70/99;
     }
 
     // The 2nd hard fork (1.0905077 aka 9% difficulty limiter)
-    if(nHeight >= nForkTwo || TestNet()) {
+    if(nHeight >= Params().ForkTwo()) {
         nActualTimespanMax = nTargetTimespan*494/453;
         nActualTimespanMin = nTargetTimespan*453/494;
     }
@@ -2647,7 +2640,7 @@ bool CBlockHeader::CheckProofOfWork(int nHeight) const
 
 			return true;
         }
-        if (nHeight >= nForkFour)
+        if (nHeight >= Params().ForkFour())
             if (!::CheckProofOfWork(GetPoWHash(), nBits))
                 return error("CBlockHeader::CheckProofOfWork() GetPoWHash in mainnet: proof of work failed.");	
         else
@@ -2872,7 +2865,7 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
         nHeight = pindexPrev->nHeight+1;
 
         /* Don't accept blocks with bogus nVersion numbers after this point */
-        if (nHeight >= nForkFour)
+        if (nHeight >= Params().ForkFour())
             if ((block.nVersion == 1) && (block.nVersion == 3)) 
                 return(state.DoS(100, error("AcceptBlock() : incorrect block version")));
 
@@ -2953,7 +2946,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         }
 
     // Enforce block.nVersion=2 rule that the coinbase starts with serialized block height
-    if (block.nVersion == 2 && block.nTime > nSwitchV2 ) 
+    if (block.nVersion == 2 && block.nTime > Params().NeoScryptSwitch() ) 
     {
         // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):
         if ((!TestNet() && CBlockIndex::IsSuperMajority(2, pindex->pprev, 750, 1000)) ||
