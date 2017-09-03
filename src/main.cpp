@@ -1199,10 +1199,6 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos)
         return error("%s : Deserialize or I/O error - %s", __func__, e.what());
     }
 
-    // Check the header
-    if (!block.CheckProofOfWork(mapBlockIndex[block.GetHash()]->nHeight))
-        return error("Check the header ReadBlockFromDisk : Errors in block header");
-
     return true;
 }
 
@@ -1479,10 +1475,14 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
 
     // Check range
     if (bnTarget <= 0 || bnTarget > Params().ProofOfWorkLimit())
-        return error("Check range CheckProofOfWork() : nBits below minimum work");
+        return error("CheckProofOfWork() : nBits below minimum work");
 
-     return true;
- }
+    // Check proof of work matches claimed amount
+    if (hash > bnTarget.getuint256())
+        return error("CheckProofOfWork() : hash doesn't match nBits");
+
+    return true;
+}
 
 bool IsInitialBlockDownload()
 {
@@ -2610,46 +2610,6 @@ int GetAuxPowStartBlock()
         return AUXPOW_START_MAINNET;
 }
 
-bool CBlockHeader::CheckProofOfWork(int nHeight) const
-{
-    if (TestNet())
-    {
-        if (nHeight == INT_MAX)
-        {
-            if (!::CheckProofOfWork(GetPoWHashS(), nBits))
-                if (!::CheckProofOfWork(GetPoWHash(), nBits))
-                    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: INT_MAX proof of work failed.");
-
-            return true;
-        }
-
-        if (nHeight >= 600)
-            if (!::CheckProofOfWork(GetPoWHash(), nBits))
-                return error("CBlockHeader::CheckProofOfWork() GetPoWHash in testnet: proof of work failed.");	
-		else
-            if (!::CheckProofOfWork(GetPoWHashS(), nBits))
-                return error("CBlockHeader::CheckProofOfWork() GetPoWHashS in testnet: proof of work failed.");	
-    }
-    else
-    {
-        if (nHeight == INT_MAX)
-        {
-            if (!::CheckProofOfWork(GetPoWHashS(), nBits))
-                if (!::CheckProofOfWork(GetPoWHash(), nBits))
-                    return error("CBlockHeader::CheckProofOfWork() GetPoWHash: INT_MAX proof of work failed.");
-
-			return true;
-        }
-        if (nHeight >= Params().ForkFour())
-            if (!::CheckProofOfWork(GetPoWHash(), nBits))
-                return error("CBlockHeader::CheckProofOfWork() GetPoWHash in mainnet: proof of work failed.");	
-        else
-            if (!::CheckProofOfWork(GetPoWHashS(), nBits))
-                return error("CBlockHeader::CheckProofOfWork() GetPoWHashS in mainnet: proof of work failed.");	
-    }
-	return true;
-}
-
 bool FindBlockPos(CValidationState &state, CDiskBlockPos &pos, unsigned int nAddSize, unsigned int nHeight, uint64_t nTime, bool fKnown = false)
 {
     bool fUpdatedLast = false;
@@ -2747,7 +2707,7 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nHeight, bool fCheckPOW)
 {
     // Check proof of work matches claimed amount
-    if (fCheckPOW && !block.CheckProofOfWork(nHeight))
+    if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(), block.nBits))
     	return state.DoS(50, error("CheckBlockHeader(),block.CheckProofOfWork : proof of work failed."),
                          REJECT_INVALID, "high-hash");
 

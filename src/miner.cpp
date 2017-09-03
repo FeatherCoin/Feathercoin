@@ -9,7 +9,6 @@
 #include "core.h"
 #include "main.h"
 #include "net.h"
-#include "scrypt.h"
 #include "neoscrypt.h"
 #include "auxpow.h"
 #ifdef ENABLE_WALLET
