@@ -1332,13 +1332,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
     
     if (RegTest()) {
-// <<<<<<< 0.9.6.2-bushstar
- //       nTargetTimespan = 5; // 1 minute timespan
- //       nTargetSpacing = 5; // 1 minute block
-// =======
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
-// >>>>>>> 0.9.6.2-0.10-BackportsTest
     }
 
     // 2016 blocks initial, 504 after the 1st, 126 after the 2nd hard fork, 15 after the 3rd hard fork

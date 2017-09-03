@@ -196,21 +196,15 @@ public:
 
         nSubsidyHalvingInterval = 150;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
-// <<<<<<< 0.9.6.2-bushstar
-        // nMinerThreads = 1;
-        // nTargetTimespan = 5; // 1 minute
-        // nTargetSpacing = 5; // 2.5 minutes
-// =======
         nMinerThreads = 1;
         nTargetTimespan = 60; // 1 minute
         nTargetSpacing = 60; // 2.5 minutes
-// >>>>>>> 0.9.6.2-0.10-BackportsTest
         
         
         genesis.nTime = 1396255061;
         genesis.nBits = 0x207fffff;
         genesis.nNonce = 3251853103;
-// <<<<<<< 0.9.6.2-bushstar
+
         genesis.nVersion = 2;
         //nMinerThreads = 2;
         vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
@@ -218,71 +212,12 @@ public:
         nDefaultPort = 18446;
         nRPCPort = 18447;
         strDataDir = "regtest";
-        
-        // ./feathercoind -regtest -listen=0 -debug -daemon
-        // ./feathercoin-cli -regtest setgenerate true 2
-        
-        //uncomment to log regtest genesis block info              
-        /* if (true)
-// =======
-  //      genesis.nVersion = 2; 
-  //      vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
-  //      hashGenesisBlock = genesis.GetHash();
-  //      nDefaultPort = 18446;
-  //      strDataDir = "regtest";
-        
-        // ./feathercoin-cli -regtest setgenerate false generate 202 -listen=0
-        
-        //uncomment to log regtest genesis block info              
-/*
-        if (true)
-// >>>>>>> 0.9.6.2-0.10-BackportsTest
-                         {
-                             printf("Searching for genesis block...\n");
-                             uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
-                             uint256 thash;
 
-                             while (true)
-                             {
-                                 thash = genesis.GetHash();
-                                 if (thash <= hashTarget)
-                                     break;
-                                 if ((genesis.nNonce & 0xFFF) == 0)
-                                 {
-                                     printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
-                                 }
-                                 ++genesis.nNonce;
-                                 if (genesis.nNonce == 0)
-                                 {
-                                     printf("NONCE WRAPPED, incrementing time\n");
-                                     ++genesis.nTime;
-                                 }
-                             }
-                             printf("genesis.nTime = %u \n", genesis.nTime);
-                             printf("genesis.nNonce = %u \n", genesis.nNonce);
-                             printf("genesis.nVersion = %u \n", genesis.nVersion);
-                             printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str());
-                             printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-
-                         }
- // <<<<<<< 0.9.6.2-bushstar
-           */
-  =======
-                
-// >>>>>>> 0.9.6.2-0.10-BackportsTest
-        // assert(genesis.hashMerkleRoot == uint256("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
         assert(hashGenesisBlock == uint256("0x3f8c076e2290f8d126be6afd574cb5070ac13bd5e117c564b6a1c51c1c4101f2"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
-// <<<<<<< 0.9.6.2-bushstar
-        
-        // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
-// =======
-        // LogPrintf("1 =\n ");
-        // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
-        
-// >>>>>>> 0.9.6.2-0.10-BackportsTest
+
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,65);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
         base58Prefixes[SECRET_KEY]     = std::vector<unsigned char>(1,193);//65+128
