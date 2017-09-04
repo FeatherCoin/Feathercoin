@@ -135,7 +135,6 @@ extern CBlockIndex* pindexBest;
 extern unsigned int nTransactionsUpdated;
 extern uint64_t nLastBlockTx;
 extern uint64_t nLastBlockSize;
-extern std::map<uint256, CBlock*> mapOrphanBlocksA;
 extern std::map<uint256, COrphanBlock*> mapOrphanBlocks; 
 extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;

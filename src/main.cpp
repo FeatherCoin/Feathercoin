@@ -89,7 +89,6 @@ int64_t CTransaction::nMinTxFee = 1000000;  // Override with -mintxfee
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying and mining) */
 int64_t CTransaction::nMinRelayTxFee = 1000000;
 
-map<uint256, CBlock*> mapOrphanBlocksA;
 map<uint256, COrphanBlock*> mapOrphanBlocks;
 multimap<uint256, COrphanBlock*> mapOrphanBlocksByPrev;
 
