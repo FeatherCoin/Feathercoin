@@ -623,12 +623,12 @@ Value getbalance(const Array& params, bool fHelp)
     if (params[0].get_str() == "*") {
         // Calculate total balance a different way from GetBalance()
         // (GetBalance() sums up all unspent TxOuts)
-        // getbalance and getbalance '*' 0 should return the same number
+        // getbalance and "getbalance * 1 true" should return the same number
         int64_t nBalance = 0;
         for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
         {
             const CWalletTx& wtx = (*it).second;
-            if (!wtx.IsTrusted() || wtx.GetBlocksToMaturity() > 0)
+            if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || wtx.GetDepthInMainChain() < 0)
                 continue;
 
             int64_t allFee;
@@ -2233,7 +2233,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
             
             std::string strType(vchType.begin(), vchType.end());
             
-            // if (fDebug) printf("strType %s\n", strType.c_str());
+            printf("strType %s\n", strType.c_str());
             
             if (strType == "tx")
             {
@@ -2242,7 +2242,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
                 
                 if ((ret = pcursor->del(0)) != 0)
                 {
-                    // if (fDebug) printf("Delete transaction failed %d, %s\n", ret, db_strerror(ret));
+                    printf("Delete transaction failed %d, %s\n", ret, db_strerror(ret));
                     continue;
                 };
                 

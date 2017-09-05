@@ -68,7 +68,7 @@ Q_DECLARE_METATYPE(bool*)
 
 static void InitMessage(const std::string &message)
 {
-    // if (fDebug) LogPrintf("init message: %s\n", message);
+    LogPrintf("init message: %s\n", message);
 }
 
 /*
@@ -130,14 +130,14 @@ static void initTranslations(QTranslator &qtTranslatorBase, QTranslator &qtTrans
 void DebugMessageHandler(QtMsgType type, const char *msg)
 {
     Q_UNUSED(type);
-    // if (fDebug) LogPrint("qt", "GUI: %s\n", msg);
+    LogPrint("qt", "GUI: %s\n", msg);
 }
 #else
 void DebugMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString &msg)
 {
     Q_UNUSED(type);
     Q_UNUSED(context);
-    // if (fDebug) LogPrint("qt", "GUI: %s\n", qPrintable(msg));
+    LogPrint("qt", "GUI: %s\n", qPrintable(msg));
 }
 #endif
 
@@ -240,7 +240,7 @@ void BitcoinCore::initialize()
 {
     try
     {   
-        // if (fDebug) LogPrintf("Running AppInit2 in thread\n");
+        LogPrintf("Running AppInit2 in thread\n");
         int rv = AppInit2(threadGroup);
         if(rv)
         {
@@ -261,11 +261,11 @@ void BitcoinCore::shutdown()
 {
     try
     {
-        // if (fDebug) LogPrintf("Running Shutdown in thread\n");
+        LogPrintf("Running Shutdown in thread\n");
         threadGroup.interrupt_all();
         threadGroup.join_all();
         Shutdown();
-        // if (fDebug) LogPrintf("Shutdown finished\n");
+        LogPrintf("Shutdown finished\n");
         emit shutdownResult(1);
     } catch (std::exception& e) {
         handleRunawayException(&e);
@@ -293,10 +293,10 @@ BitcoinApplication::BitcoinApplication(int &argc, char **argv):
 
 BitcoinApplication::~BitcoinApplication()
 {
-    // if (fDebug) LogPrintf("Stopping thread\n");
+    LogPrintf("Stopping thread\n");
     emit stopThread();
     coreThread->wait();
-    // if (fDebug) LogPrintf("Stopped thread\n");
+    LogPrintf("Stopped thread\n");
 
     delete window;
     window = 0;
@@ -358,13 +358,13 @@ void BitcoinApplication::startThread()
 
 void BitcoinApplication::requestInitialize()
 {
-    // if (fDebug) LogPrintf("Requesting initialize\n");
+    LogPrintf("Requesting initialize\n");
     emit requestedInitialize();
 }
 
 void BitcoinApplication::requestShutdown()
 {
-    // if (fDebug) LogPrintf("Requesting shutdown\n");
+    LogPrintf("Requesting shutdown\n");
     window->hide();
     window->setClientModel(0);
     pollShutdownTimer->stop();
@@ -386,7 +386,7 @@ void BitcoinApplication::requestShutdown()
 
 void BitcoinApplication::initializeResult(int retval)
 {
-    // if (fDebug) LogPrintf("Initialization result: %i\n", retval);
+    LogPrintf("Initialization result: %i\n", retval);
     // Set exit result: 0 if successful, 1 if failure
     returnValue = retval ? 0 : 1;
     if(retval)
@@ -441,7 +441,7 @@ void BitcoinApplication::initializeResult(int retval)
 
 void BitcoinApplication::shutdownResult(int retval)
 {
-    // if (fDebug) LogPrintf("Shutdown result: %i\n", retval);
+    LogPrintf("Shutdown result: %i\n", retval);
     quit(); // Exit main loop after shutdown finished
 }
 

@@ -93,7 +93,7 @@ public:
         if (!status.ok()) {
             if (status.IsNotFound())
                 return false;
-            // if (fDebug) LogPrintf("LevelDB read failure: %s\n", status.ToString().c_str());
+            LogPrintf("LevelDB read failure: %s\n", status.ToString().c_str());
             HandleError(status);
         }
         try {
@@ -122,7 +122,7 @@ public:
         if (!status.ok()) {
             if (status.IsNotFound())
                 return false;
-            // if (fDebug) LogPrintf("LevelDB read failure: %s\n", status.ToString().c_str());
+            LogPrintf("LevelDB read failure: %s\n", status.ToString().c_str());
             HandleError(status);
         }
         return true;

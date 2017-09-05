@@ -60,7 +60,6 @@ BITCOIN_CORE_H = \
   rpcprotocol.h \
   rpcserver.h \
   script.h \
-  scrypt.h \
   neoscrypt.h \
   serialize.h \
   sync.h \
@@ -140,7 +139,6 @@ libbitcoin_common_a_SOURCES = \
   protocol.cpp \
   rpcprotocol.cpp \
   script.cpp \
-  scrypt.cpp \
   neoscrypt.c \
   neoscrypt_asm.S \
   sync.cpp \

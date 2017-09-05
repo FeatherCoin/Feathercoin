@@ -76,8 +76,6 @@ public:
 class CSyncCheckpoint : public CUnsignedSyncCheckpoint
 {
 public:
-    static const std::string strMainPubKey;
-    static const std::string strTestPubKey;
     static std::string strMasterPrivKey;
 
     std::vector<unsigned char> vchMsg;
@@ -113,11 +111,11 @@ public:
 
     bool RelayTo(CNode* pnode) const
     {
-        // returns true if wasn't already sent 如果不是已经发送（未发送返回true）
+        // returns true if wasn't already sent
         if (pnode->hashCheckpointKnown != hashCheckpoint)
         {
             pnode->hashCheckpointKnown = hashCheckpoint;
-            pnode->PushMessage("checkpoint", *this);  //发送CSyncCheckpoint
+            pnode->PushMessage("checkpoint", *this);
             return true;
         }
         return false;

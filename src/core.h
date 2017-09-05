@@ -7,7 +7,6 @@
 #define BITCOIN_CORE_H
 
 #include "script.h"
-#include "scrypt.h"
 #include "neoscrypt.h"
 #include "serialize.h"
 #include "uint256.h"
@@ -439,27 +438,12 @@ public:
 
     uint256 GetHash() const;
     
-    uint256 GetPoWHash() const
-    {
-        uint256 thash;
-        unsigned int profile = 0x0;
-        neoscrypt((unsigned char *) &nVersion, (unsigned char *) &thash, profile);
-        return thash;
-    }
-    
-    uint256 GetPoWHashS() const
-    {
-        uint256 thash;
-        scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
-        return thash;
-    }
+    uint256 GetPoWHash() const;
 
     int64_t GetBlockTime() const
     {
         return (int64_t)nTime;
     }
-
-		bool CheckProofOfWork(int nHeight) const;
 };
 
 
