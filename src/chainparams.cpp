@@ -201,13 +201,12 @@ public:
         pchMessageStartNew[2] = 0xcc;
         pchMessageStartNew[3] = 0xdd;
 
-        nSubsidyHalvingInterval = 150;
+        nSubsidyHalvingInterval = 256;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
 
         genesis.nTime = 1396255061;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 3251853103;
-
+        genesis.nNonce = 3250989159;
         genesis.nVersion = 2;
 
         vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
@@ -216,7 +215,8 @@ public:
         nRPCPort = 18447;
         strDataDir = "regtest";
 
-        assert(hashGenesisBlock == uint256("0x3f8c076e2290f8d126be6afd574cb5070ac13bd5e117c564b6a1c51c1c4101f2"));
+        assert(genesis.hashMerkleRoot == uint256("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
+        assert(hashGenesisBlock == uint256("0x3cb269a7f1ac8338f0ac28bf2f2cf6b67d91bd5e09b82efa60fceae3d5924323"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
