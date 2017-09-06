@@ -1254,12 +1254,19 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 {    
     int64_t nSubsidy = 200 * COIN;
 	
-    if (nHeight >= Params().ForkThree() || TestNet())
+    if (nHeight >= Params().ForkThree() || TestNet() || RegTest())
         nSubsidy = 80 * COIN;
 
     // Halving subsidy happens every 2,100,000 blocks. The code below takes account for the
     // fact that the first 204,639 blocks took 2.5 minutes and after changed to 1 minute.
-    nSubsidy >>= (nHeight + 306960) / 2100000;
+    if (!RegTest()) {
+        nSubsidy >>= (nHeight + 306960) / 2100000;
+    } else {
+        int halvings = nHeight / Params().SubsidyHalvingInterval();
+        if (halvings >= 64)
+            return nFees;
+        nSubsidy >>= halvings;
+    }
 
     return nSubsidy + nFees;
 }
@@ -1307,7 +1314,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int nHeight = pindexLast->nHeight + 1;
       
     /* The 4th hard fork and testnet hard fork */
-    if(nHeight >= Params().ForkFour()) {
+    if(!RegTest() && nHeight >= Params().ForkFour()) {
         if(!fNeoScrypt) fNeoScrypt = true;
         /* Difficulty reset after the switch */
         if(nHeight == Params().ForkFour())
@@ -1324,16 +1331,18 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
     }
-    
-    if (RegTest()) {
-        nTargetTimespan = 60; // 1 minute timespan
-        nTargetSpacing = 60; // 1 minute block
-    }
 
     // 2016 blocks initial, 504 after the 1st, 126 after the 2nd hard fork, 15 after the 3rd hard fork
     int nInterval = nTargetTimespan / nTargetSpacing;
 
     bool fHardFork = (nHeight == Params().ForkOne()) || (nHeight == Params().ForkTwo()) || (nHeight == Params().ForkThree()) || (nHeight == Params().ForkFour());
+
+    if (RegTest()) {
+        nTargetTimespan = 60; // 1 minute timespan
+        nTargetSpacing = 60; // 1 minute block
+        fHardFork = true;
+        fNeoScrypt = true;
+    }
 
     // Difficulty rules regular blocks
     if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < Params().ForkThree()))
@@ -1393,7 +1402,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     
     //eHRC  
 	// Additional averaging over 15, 120 and 480 block window
-    if(nHeight >= Params().ForkThree() || TestNet()) {
+    if(nHeight >= Params().ForkThree() || TestNet() || RegTest()) {
 	
         nInterval *= 480;
 
