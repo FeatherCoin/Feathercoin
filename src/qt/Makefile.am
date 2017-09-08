@@ -104,14 +104,18 @@ QT_FORMS_UI = \
   forms/sendcoinsentry.ui \
   forms/signverifymessagedialog.ui \
   forms/transactiondescdialog.ui \
-  forms/qrcodedialog.ui \
   forms/paperwalletdialog.ui \
   forms/commentdialog.ui \
   forms/opennamedialog.ui \
   forms/debugdialog.ui \
-  forms/snapwidget.ui \
   forms/createmultisigaddrdialog.ui \
   forms/multisigdialog.ui
+
+if USE_QRCODE
+QT_FORMS_UI += \
+  forms/qrcodedialog.ui \
+  forms/snapwidget.ui
+endif
 
 QT_MOC_CPP = \
   moc_addressbookpage.cpp \
@@ -234,13 +238,17 @@ BITCOIN_QT_H = \
   walletmodeltransaction.h \
   walletview.h \
   winshutdownmonitor.h \
-  qrcodedialog.h \
-  snapwidget.h \
-  qimagesource.h \
   verticallabel.h \
   reportview.h \
   createmultisigaddrdialog.h \
   multisigdialog.h
+
+if USE_QRCODE
+BITCOIN_QT_H += \
+  snapwidget.h \
+  qimagesource.h \
+  qrcodedialog.h
+endif
 
 RES_ICONS = \
   res/icons/add.png \
@@ -314,7 +322,6 @@ BITCOIN_QT_CPP = \
   optionsdialog.cpp \
   shiftdialog.cpp \
   coinnectordialog.cpp \
-  qrcodedialog.cpp \
   optionsmodel.cpp \
   qvalidatedlineedit.cpp \
   qvaluecombobox.cpp \
@@ -324,6 +331,11 @@ BITCOIN_QT_CPP = \
   utilitydialog.cpp \
   verticallabel.cpp \
   winshutdownmonitor.cpp
+
+if USE_QRCODE
+BITCOIN_QT_CPP += \
+  qrcodedialog.cpp
+endif
 
 if ENABLE_WALLET
 BITCOIN_QT_CPP += \
@@ -354,12 +366,19 @@ BITCOIN_QT_CPP += \
   walletmodeltransaction.cpp \
   walletview.cpp \
   reportview.cpp \
-  snapwidget.cpp \
   verticallabel.cpp \
-  qimagesource.cpp \
   createmultisigaddrdialog.cpp \
   multisigdialog.cpp
+
+if USE_QRCODE
+BITCOIN_QT_CPP += \
+  snapwidget.cpp \
+  qimagesource.cpp \
+  qrcodedialog.h
 endif
+endif
+
+
 
 RES_IMAGES = \
   res/images/about.png \
