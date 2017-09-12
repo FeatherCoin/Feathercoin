@@ -386,7 +386,6 @@ RES_IMAGES = \
   res/images/splash_testnet.png \
   res/images/LOGO.png \
   res/images/mainbg.png \
-  res/images/about_bitcoin.png \
   res/images/paper_wallet.png \
   res/images/about.png
 
