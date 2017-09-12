@@ -253,7 +253,7 @@ endif
 RES_ICONS = \
   res/icons/add.png \
   res/icons/address-book.png \
-  res/icons/bitcoin.ico \
+  res/icons/feathercoin.ico \
   res/icons/bitcoin.png \
   res/icons/bitcoin_testnet.ico \
   res/icons/bitcoin_testnet.png \
