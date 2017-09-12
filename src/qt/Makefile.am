@@ -256,7 +256,7 @@ RES_ICONS = \
   res/icons/feathercoin.ico \
   res/icons/feathercoin.png \
   res/icons/feathercoin_testnet.ico \
-  res/icons/bitcoin_testnet.png \
+  res/icons/feathercoin_testnet.png \
   res/icons/clock1.png \
   res/icons/clock2.png \
   res/icons/clock3.png \
