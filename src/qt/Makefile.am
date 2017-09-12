@@ -254,7 +254,7 @@ RES_ICONS = \
   res/icons/add.png \
   res/icons/address-book.png \
   res/icons/feathercoin.ico \
-  res/icons/bitcoin.png \
+  res/icons/feathercoin.png \
   res/icons/feathercoin_testnet.ico \
   res/icons/bitcoin_testnet.png \
   res/icons/clock1.png \

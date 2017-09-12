@@ -1,6 +1,6 @@
 #!/bin/bash
 # create multiresolution windows icon
-ICON_SRC=../../src/qt/res/icons/bitcoin.png
+ICON_SRC=../../src/qt/res/icons/feathercoin.png
 ICON_DST=../../src/qt/res/icons/feathercoin.ico
 convert ${ICON_SRC} -resize 16x16 bitcoin-16.png
 convert ${ICON_SRC} -resize 32x32 bitcoin-32.png
