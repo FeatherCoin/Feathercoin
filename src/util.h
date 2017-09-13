@@ -145,7 +145,10 @@ extern bool fCommandLine;
 extern std::string strMiscWarning;
 extern bool fTestNet;
 extern bool fTestNetInit;
+
 extern bool fNeoScrypt;
+extern uint nNeoScryptOptions;
+
 extern bool fBloomFilters;
 extern bool fNoListen;
 extern bool fLogTimestamps;
