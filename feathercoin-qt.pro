@@ -1,13 +1,13 @@
 TEMPLATE = app
 TARGET = feathercoin-qt
 macx:TARGET = "Feathercoin-Qt"
-VERSION = 0.8.7.3
+VERSION = 0.8.7.4
 INCLUDEPATH += src src/json src/qt
 QT += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
-QMAKE_CFLAGS += -DSHA256
+QMAKE_CFLAGS += -DSHA256 -DASM -DOPT
 CONFIG += thread
 CONFIG += static
 
@@ -38,15 +38,6 @@ contains(RELEASE, 1) {
     }
 }
 
-!win32 {
-    # for extra security against potential buffer overflows: enable GCCs Stack Smashing Protection
-    QMAKE_CXXFLAGS *= -fstack-protector-all
-    QMAKE_LFLAGS *= -fstack-protector-all
-    # Exclude on Windows cross compile with MinGW 4.2.x, as it will result in a non-working executable!
-    # This can be enabled for Windows, when we switch to MinGW >= 4.4.x.
-}
-# for extra security (see: https://wiki.debian.org/Hardening): this flag is GCC compiler-specific
-QMAKE_CXXFLAGS *= -D_FORTIFY_SOURCE=2
 # for extra security on Windows: enable ASLR and DEP via GCC linker flags
 win32:QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--nxcompat
 # on Windows: enable GCC large address aware linker flag
@@ -301,8 +292,7 @@ SOURCES += src/qt/bitcoin.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
-    src/qt/splashscreen.cpp \
-    src/checkpointsync.cpp
+    src/qt/splashscreen.cpp
 
 RESOURCES += src/qt/bitcoin.qrc
 

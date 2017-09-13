@@ -80,7 +80,11 @@ bool fCommandLine = false;
 string strMiscWarning;
 bool fTestNet = false;
 bool fTestNetInit = false;
+
+/* NeoScrypt related */
 bool fNeoScrypt = false;
+uint nNeoScryptOptions = 0;
+
 bool fBloomFilters = true;
 bool fNoListen = false;
 bool fLogTimestamps = false;

@@ -101,8 +101,7 @@ OBJS= \
     obj/bloom.o \
     obj/noui.o \
     obj/leveldb.o \
-    obj/txdb.o \
-    obj/checkpointsync.o
+    obj/txdb.o
 
 all: feathercoind.exe
 
@@ -119,10 +118,10 @@ leveldb/libleveldb.a:
 	cd leveldb && $(MAKE) CC=$(CC) CXX=$(CXX) OPT="$(CFLAGS)" TARGET_OS=NATIVE_WINDOWS libleveldb.a libmemenv.a && cd ..
 
 obj/neoscrypt.o: neoscrypt.c
-	gcc -O2 -fomit-frame-pointer -DSHA256 -c -o $@ $^
+	gcc -O2 -fomit-frame-pointer -DSHA256 -DASM -DOPT -c -o $@ $^
 
 obj/neoscrypt_asm.o: neoscrypt_asm.S
-	gcc -c -o $@ $^
+	gcc -c -DSHA256 -DASM -DOPT -o $@ $^
 
 obj/%.o: %.cpp $(HEADERS)
 	$(CXX) -c $(CFLAGS) -o $@ $<
