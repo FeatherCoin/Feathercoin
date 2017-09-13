@@ -1080,12 +1080,17 @@ void ThreadMapPort()
     char lanaddr[64];
 
 #ifndef UPNPDISCOVER_SUCCESS
-    /* miniupnpc 1.5 */
+    /* miniUPnPc v1.5 */
     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0);
-#else
-    /* miniupnpc 1.6 */
+#elif (MINIUPNPC_API_VERSION < 14)
+    /* miniUPnPc v1.6 to v1.9 */
     int error = 0;
     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, &error);
+#else
+    /* miniUPnPc v1.9.20150730 and newer;
+     * CVE-2015-6031 may affect releases prior to v1.9.20150917 */
+    int error = 0;
+    devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, 2, &error);
 #endif
 
     struct UPNPUrls urls;

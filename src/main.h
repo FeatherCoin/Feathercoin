@@ -1402,6 +1402,9 @@ public:
             }
         }
 
+        /* Apply optimisation options if any */
+        profile |= nNeoScryptOptions;
+        /* Hash the block header */
         neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);
 
         return(hash);

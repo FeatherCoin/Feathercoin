@@ -8,10 +8,18 @@
 #include "leveldb/status.h"
 #include "port/port.h"
 #include "util/mutexlock.h"
+#include <stdint.h>
 #include <map>
 #include <string.h>
 #include <string>
 #include <vector>
+
+#if defined(__MINGW32__) && !defined(__MINGW64__)
+/* Should be declared in stdint.h */
+#ifndef SIZE_MAX
+#define SIZE_MAX 0xffffffffffffffffULL /* 18446744073709551615ULL */
+#endif
+#endif
 
 namespace leveldb {
 
@@ -55,14 +63,15 @@ class FileState {
     }
     const uint64_t available = size_ - offset;
     if (n > available) {
-      n = available;
+      n = static_cast<size_t>(available);
     }
     if (n == 0) {
       *result = Slice();
       return Status::OK();
     }
 
-    size_t block = offset / kBlockSize;
+    assert(offset / kBlockSize <= SIZE_MAX);
+    size_t block = static_cast<size_t>(offset / kBlockSize);
     size_t block_offset = offset % kBlockSize;
 
     if (n <= kBlockSize - block_offset) {
@@ -167,7 +176,7 @@ class SequentialFileImpl : public SequentialFile {
     if (pos_ > file_->Size()) {
       return Status::IOError("pos_ > file_->Size()");
     }
-    const size_t available = file_->Size() - pos_;
+    const uint64_t available = file_->Size() - pos_;
     if (n > available) {
       n = available;
     }
@@ -177,7 +186,7 @@ class SequentialFileImpl : public SequentialFile {
 
  private:
   FileState* file_;
-  size_t pos_;
+  uint64_t pos_;
 };
 
 class RandomAccessFileImpl : public RandomAccessFile {
