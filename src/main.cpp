@@ -2233,7 +2233,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
             if(!std::equal(expect.begin(), expect.end(), vtx[0].vin[0].scriptSig.begin()))
                 return(state.DoS(100, error("AcceptBlock() : incorrect block height in coin base")));
         }
- 
+
         // Check proof of work
         if (nBits != GetNextWorkRequired(pindexPrev, this))
             return state.DoS(100, error("AcceptBlock() : incorrect proof of work"));
