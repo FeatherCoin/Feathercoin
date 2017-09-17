@@ -640,8 +640,8 @@ if test x$bitcoin_enable_qt != xno; then
       AC_MSG_RESULT(yes)
       AC_DEFINE([USE_ZXING],[1],[Define if QR support should be compiled in])
       use_zxing=yes
-      AC_DEFINE([USE_QRCODE],[0],[Define if QR support should be compiled in])
-      use_qr=no
+      AC_DEFINE([USE_QRCODE],[1],[Define if QR support should be compiled in])
+      use_qr=yes
     else
       AC_MSG_RESULT(no)
     fi
