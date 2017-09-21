@@ -253,10 +253,10 @@ endif
 RES_ICONS = \
   res/icons/add.png \
   res/icons/address-book.png \
-  res/icons/bitcoin.ico \
-  res/icons/bitcoin.png \
-  res/icons/bitcoin_testnet.ico \
-  res/icons/bitcoin_testnet.png \
+  res/icons/feathercoin.ico \
+  res/icons/feathercoin.png \
+  res/icons/feathercoin_testnet.ico \
+  res/icons/feathercoin_testnet.png \
   res/icons/clock1.png \
   res/icons/clock2.png \
   res/icons/clock3.png \
@@ -386,7 +386,6 @@ RES_IMAGES = \
   res/images/splash_testnet.png \
   res/images/LOGO.png \
   res/images/mainbg.png \
-  res/images/about_bitcoin.png \
   res/images/paper_wallet.png \
   res/images/about.png
 
