@@ -24,6 +24,10 @@
  * SUCH DAMAGE.
  */
 
+#if defined(HAVE_CONFIG_H)
+#include "bitcoin-config.h"
+#endif
+
 #if defined(ASM) && defined(__x86_64__)
 
 /* MOVQ_FIX addresses incorrect behaviour of old GNU assembler when transferring
@@ -2519,11 +2523,9 @@ _neoscrypt:
 	movq	%rsi, %r15
 	movq	%rdx, %rbx
 
-#ifdef SHA256
 /* Scrypt mode */
 	testl	$0x01, %ebx
 	jnz	.scrypt
-#endif
 
 #ifdef WIN64
 /* attempt to allocate 33280 + 128 bytes of stack space fails miserably;
@@ -3602,8 +3604,6 @@ _neoscrypt:
 #endif
 	ret
 
-#ifdef SHA256
-
 .scrypt:
 #ifdef WIN64
 /* attempt to allocate 131200 + 128 bytes of stack space fails miserably;
@@ -3938,8 +3938,6 @@ _neoscrypt:
 	popq	%rdi
 #endif
 	ret
-
-#endif /* SHA256 */
 
 /* cpu_vec_exts()
  * AMD64 detector of any processor vector extensions present
@@ -7326,11 +7324,9 @@ _neoscrypt:
 	movl	24(%esp), %edi
 	movl	28(%esp), %ebx
 
-#ifdef SHA256
 /* Scrypt mode */
 	testl	$0x01, %ebx
 	jnz	.scrypt
-#endif
 
 #ifdef WIN32
 /* attempt to allocate 33280 + 128 bytes of stack space fails miserably;
@@ -8695,8 +8691,6 @@ _neoscrypt:
 	popl	%ebx
 	ret
 
-#ifdef SHA256
-
 .scrypt:
 #ifdef WIN32
 /* attempt to allocate 131200 + 128 bytes of stack space fails miserably;
@@ -9025,8 +9019,6 @@ _neoscrypt:
 	popl	%ebp
 	popl	%ebx
 	ret
-
-#endif /* SHA256 */
 
 /* cpu_vec_exts()
  * i386 detector of any vector extensions present
