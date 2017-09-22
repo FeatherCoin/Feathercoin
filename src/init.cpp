@@ -473,18 +473,18 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     // ********************************************************* Step 2: parameter interactions
 
+#if defined (USE_SSE2)
     opt_flags = cpu_vec_exts();
-    if(GetBoolArg("-sse2", true)) {
-        /* Verify hardware SSE2 support */
-        if(opt_flags & 0x00000020) {
-            printf("SSE2 optimisations enabled\n");
-            nNeoScryptOptions |= 0x1000;
-        } else {
-            printf("SSE2 unsupported, optimisations disabled\n");
-        }
+    /* Verify hardware SSE2 support */
+    if(opt_flags & 0x00000020) {
+        printf("SSE2 optimisations enabled\n");
+        nNeoScryptOptions |= 0x1000;
     } else {
-        printf("SSE2 optimisations disabled\n");
+        printf("SSE2 unsupported, optimisations disabled\n");
     }
+#else
+    printf("SSE2 optimisations disabled\n");
+#endif
 
     if (mapArgs.count("-bind")) {
         // when specifying an explicit binding address, you want to listen on it
