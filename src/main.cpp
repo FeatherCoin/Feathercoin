@@ -2731,10 +2731,9 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nH
     {
         // Extra checks to prevent "fill up memory by spamming with bogus blocks"
         int64_t deltaTime = block.GetBlockTime() - pcheckpoint->nTime;
-        if (deltaTime < 0)
+        if (deltaTime < 0) 
         {
-            LogPrintf("CheckBlockHeader() : block with timestamp before last checkpoint");
-            return state.DoS(100, NULL,
+            return state.DoS(100, error("CheckBlockHeader() : block with timestamp before last checkpoint"),
                              REJECT_CHECKPOINT, "time-too-old");
         }
         CBigNum bnNewBlock;
