@@ -1377,7 +1377,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     // Limit adjustment step
     int64_t nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-    LogPrintf("  nActualTimespan = %d  before bounds\n", nActualTimespan);
+    // LogPrintf("  nActualTimespan = %d  before bounds\n", nActualTimespan);
 
     // Additional averaging over 4x nInterval window
     if((nHeight >= Params().ForkTwo()) && (nHeight < Params().ForkThree())) {
@@ -1435,7 +1435,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 		nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
 		nActualTimespan /= 4;
 
-        LogPrintf("RETARGET: nActualTimespanShort = %d, nActualTimespanMedium = %d, nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n", nActualTimespanShort, nActualTimespanMedium, nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+        // LogPrintf("RETARGET: nActualTimespanShort = %d, nActualTimespanMedium = %d, nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n", nActualTimespanShort, nActualTimespanMedium, nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
     }
 
     // The initial settings (4.0 difficulty limiter)
@@ -1486,9 +1486,9 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
         return error("CheckProofOfWork() : nBits below minimum work");
 
     // Check proof of work matches claimed amount
-    LogPrintf("CheckProofOfWork() hash=%s \n",hash.ToString().c_str());
-    LogPrintf("CheckProofOfWork() nBits=%i \n",nBits);
-    LogPrintf("CheckProofOfWork() bnTarget.getuint256=%s \n",bnTarget.getuint256().ToString().c_str());
+    // LogPrintf("CheckProofOfWork() hash=%s \n",hash.ToString().c_str());
+    // LogPrintf("CheckProofOfWork() nBits=%i \n",nBits);
+    // LogPrintf("CheckProofOfWork() bnTarget.getuint256=%s \n",bnTarget.getuint256().ToString().c_str());
     if (hash > bnTarget.getuint256())
         return error("CheckProofOfWork() : hash doesn't match nBits");
 
@@ -2122,10 +2122,12 @@ void static UpdateTip(CBlockIndex *pindexNew) {
     // New best block
     nTimeBestReceived = GetTime();
     mempool.AddTransactionsUpdated(1);
-    LogPrintf("UpdateTip: new best=%s  height=%d  log2_work=%.8g  tx=%lu  date=%s progress=%f\n",
+    if (fDebug) {
+        LogPrintf("UpdateTip: new best=%s  height=%d  log2_work=%.8g  tx=%lu  date=%s progress=%f\n",
       chainActive.Tip()->GetBlockHash().ToString(), chainActive.Height(), log(chainActive.Tip()->nChainWork.getdouble())/log(2.0), (unsigned long)chainActive.Tip()->nChainTx,
       DateTimeStrFormat("%Y-%m-%d %H:%M:%S", chainActive.Tip()->GetBlockTime()),
       Checkpoints::GuessVerificationProgress(chainActive.Tip()));
+    }
 
     // Check the version of the last 100 blocks to see if we need to upgrade:
     if (!fIsInitialDownload)
@@ -2731,10 +2733,9 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nH
     {
         // Extra checks to prevent "fill up memory by spamming with bogus blocks"
         int64_t deltaTime = block.GetBlockTime() - pcheckpoint->nTime;
-        if (deltaTime < 0)
+        if (deltaTime < 0) 
         {
-            LogPrintf("CheckBlockHeader() : block with timestamp before last checkpoint");
-            return state.DoS(100, NULL,
+            return state.DoS(100, error("CheckBlockHeader() : block with timestamp before last checkpoint"),
                              REJECT_CHECKPOINT, "time-too-old");
         }
         CBigNum bnNewBlock;
