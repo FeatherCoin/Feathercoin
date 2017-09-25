@@ -1397,7 +1397,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
         nActualTimespan /= 4;
 
-        LogPrintf("RETARGET: nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n", nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+        // LogPrintf("RETARGET: nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n", nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
     }
     
     //eHRC  

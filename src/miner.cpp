@@ -318,7 +318,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn)
 
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
-        LogPrintf("CreateNewBlock(): total size %u\n", nBlockSize);
+        // LogPrintf("CreateNewBlock(): total size %u\n", nBlockSize);
 
         pblock->vtx[0].vout[0].nValue = GetBlockValue(pindexPrev->nHeight+1, nFees);
         pblocktemplate->vTxFees[0] = -nFees;
@@ -505,10 +505,10 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
         return false;
 
     //// debug print
-    LogPrintf("FeathercoinMiner:\n");
-    LogPrintf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex(), hashTarget.GetHex());
+    // LogPrintf("FeathercoinMiner:\n");
+    // LogPrintf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex(), hashTarget.GetHex());
     pblock->print();
-    LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
+    // LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
 
     // Found a solution
     {
