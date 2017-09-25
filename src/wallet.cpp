@@ -1948,7 +1948,7 @@ bool CWallet::SendStealthMoneyToDestination(CStealthAddress& sxAddress, int64_t 
 
 bool CWallet::FindStealthTransactions(const CTransaction& tx)
 {
-    // if (fDebug) LogPrintf("FindStealthTransactions() tx:%s,", tx.GetHash().GetHex().c_str());    
+    // if (fDebug) LogPrintf("FindStealthTransactions() tx:%s,\n", tx.GetHash().GetHex().c_str());    
     /*if (tx.GetHash().GetHex().compare("85568ae1dacfdc6730b0d2ddeb2c4d7d07b0ac702e6d9a7f408293e2cd628d57")==1)
    	{
    		LogPrintf("no debug.\n");
@@ -2035,7 +2035,7 @@ bool CWallet::FindStealthTransactions(const CTransaction& tx)
              // if (fDebug) LogPrintf("StealthAddress Spend Pubkey=%s\n",HexStr(it->spend_pubkey.begin(), it->spend_pubkey.end()));
                     //02ffae1e8fda48c5ff6824ac0d497ea3c3b1ef3a438832bd5e5edc0bf4f93172d6,  versus  OP_RETURN Mismatch
                 
-             // if (fDebug) LogPrintf("StealthSecret.....");
+             // if (fDebug) LogPrintf("StealthSecret.....\n");
              // if (fDebug) LogPrintf("sScan.e=%s\n",HexStr(&sScan.e[0],&sScan.e[32]).c_str());   //,Payee stealth public key address    Scan Secret:scan_secret
              // if (fDebug) LogPrintf("vchEphemPK=%s\n", HexStr(vchEphemPK).c_str()); //??? Is empty pubkey  Is a problem
              // if (fDebug) LogPrintf("it->spend_pubkey=%s\n", HexStr(it->spend_pubkey)); //
@@ -2207,7 +2207,7 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey)
         if (!wtxNew.AcceptToMemoryPool(false))
         {
             // This must not fail. The transaction has already been signed and recorded.
-            LogPrintf("CommitTransaction() : Error: Transaction not valid");
+            LogPrintf("CommitTransaction() : Error: Transaction not valid\n");
             return false;
         }
         wtxNew.RelayWalletTransaction();
@@ -2228,7 +2228,7 @@ string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNe
     if (IsLocked())
     {
         string strError = _("Error: Wallet locked, unable to create transaction!");
-        LogPrintf("SendMoney() : %s", strError);
+        LogPrintf("SendMoney() : %s\n", strError);
         return strError;
     }
     string strError;
