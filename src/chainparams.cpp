@@ -153,6 +153,10 @@ public:
         //how to do
         vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
         checkpointPubKey = "04db371d2b99df9e7962b2ce2369ada9821261e7f943a57a7ff3494d7d6c87939d3632fcaa2878bd5e45cfea0ea435fd6ee049a28ccbd0998ea3aadeb7abeed065";
+        nForkTwo = 0;
+        nForkThree = 0;
+        nForkFour = 600;
+        nNeoScryptFork = 1486758327;
         nDefaultPort = 19336;
         nRPCPort = 19337;
         strDataDir = "testnet3";

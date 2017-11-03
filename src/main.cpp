@@ -1327,7 +1327,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if (nHeight >= Params().ForkTwo())
 			nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
 		
-    if (nHeight >= Params().ForkThree() || TestNet()) {
+    if (nHeight >= Params().ForkThree()) {
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
     }
@@ -2721,7 +2721,7 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nH
 {
     // Check proof of work matches claimed amount
     if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(), block.nBits))
-    	return state.DoS(50, error("CheckBlockHeader(),block.CheckProofOfWork : proof of work failed."),
+        return state.DoS(50, error("CheckBlockHeader(): block.CheckProofOfWork : proof of work failed."),
                          REJECT_INVALID, "high-hash");
     // Check timestamp
     if (block.GetBlockTime() > GetAdjustedTime() + 2 * 60 * 60)
