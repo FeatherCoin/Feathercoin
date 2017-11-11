@@ -56,7 +56,7 @@ std::string DecodeDumpString(const std::string &str) {
     for (unsigned int pos = 0; pos < str.length(); pos++) {
         unsigned char c = str[pos];
         if (c == '%' && pos+2 < str.length()) {
-            c = (((str[pos+1]>>6)*9+((str[pos+1]-'0')&15)) << 4) | 
+            c = (((str[pos+1]>>6)*9+((str[pos+1]-'0')&15)) << 4) |
                 ((str[pos+2]>>6)*9+((str[pos+2]-'0')&15));
             pos += 2;
         }
@@ -320,7 +320,7 @@ Value dumpwallet(const Array& params, bool fHelp)
         CSecret key;
         bool fCompressed;
         //if (pwalletMain->GetKey(keyid, key)) {
-        if (!pwalletMain->GetSecret(keyid, key, fCompressed)) {
+        if (pwalletMain->GetSecret(keyid, key, fCompressed)) {
             if (pwalletMain->mapAddressBook.count(keyid)) {
                 //file << strprintf("%s %s label=%s # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, EncodeDumpString(pwalletMain->mapAddressBook[keyid].name), strAddr);
                 file << strprintf("%s %s label=%s # addr=%s\n", CBitcoinSecret(key, fCompressed).ToString(), strTime, EncodeDumpString(pwalletMain->mapAddressBook[keyid].name), strAddr);
