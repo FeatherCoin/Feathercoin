@@ -201,8 +201,8 @@ bool AcceptPendingSyncCheckpoint()
 uint256 AutoSelectSyncCheckpoint()
 {
     // Search backward for a block with specified depth policy
-    const CBlockIndex *pindex = pindexBest;
-    while (pindex->pprev && pindex->nHeight + (int)GetArg("-checkpointdepth", -1) > pindexBest->nHeight)
+    const CBlockIndex *pindex = chainActive.Tip();
+    while (pindex->pprev && pindex->nHeight + (int)GetArg("-checkpointdepth", -1) > chainActive.Tip()->nHeight)
         pindex = pindex->pprev;
     return pindex->GetBlockHash();
 }
@@ -434,13 +434,11 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
         // We haven't received the checkpoint chain, keep the checkpoint as pending
         hashPendingCheckpoint = hashCheckpoint;
         checkpointMessagePending = *this;
-        LogPrintf("CSyncCheckpoint::ProcessSyncCheckpoint 130: pending for sync-checkpoint %s\n", hashCheckpoint.ToString().c_str());
 
         // Ask this guy to fill in what we're missing
         if (pfrom)
         {
-            //pfrom->PushGetBlocks(pindexBest, hashCheckpoint);
-            PushGetBlocks(pfrom, pindexBest, hashCheckpoint);
+            PushGetBlocks(pfrom, chainActive.Tip(), hashCheckpoint);
             // ask directly as well in case rejected earlier by duplicate
             // proof-of-stake because getblocks may not get it this time 	            
             pfrom->AskFor(CInv(MSG_BLOCK, mapOrphanBlocks.count(hashCheckpoint)? WantedByOrphan(mapOrphanBlocks[hashCheckpoint]) : hashCheckpoint));
@@ -460,14 +458,12 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
         if (!SetBestChain(state, pindexCheckpoint))
         {
             hashInvalidCheckpoint = hashCheckpoint;
-            return true;
-            // return error("ProcessSyncCheckpoint: SetBestChain failed for sync checkpoint %s", hashCheckpoint.ToString().c_str());
+            return error("ProcessSyncCheckpoint: SetBestChain failed for sync checkpoint %s", hashCheckpoint.ToString().c_str());
         }
     }
 
     if (!WriteSyncCheckpoint(hashCheckpoint))
-        return true ;
-        // return error("ProcessSyncCheckpoint(): failed to write sync checkpoint %s", hashCheckpoint.ToString().c_str());
+        return error("ProcessSyncCheckpoint(): failed to write sync checkpoint %s", hashCheckpoint.ToString().c_str());
 
     checkpointMessage = *this;
     hashPendingCheckpoint = 0;

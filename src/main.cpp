@@ -1932,7 +1932,7 @@ bool ConnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex, C
 {
     AssertLockHeld(cs_main);
     // Check it again in case a previous version let a bad block in
-    if (!CheckBlock(block, state, pindex->nHeight, !fJustCheck, !fJustCheck))
+    if (!CheckBlock(block, state, !fJustCheck, !fJustCheck))
         return false;
 
     // verify that the view's current state corresponds to the previous block
@@ -2717,7 +2717,7 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
     return true;
 }
 
-bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nHeight, bool fCheckPOW)
+bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool fCheckPOW)
 {
     // Check proof of work matches claimed amount
     if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(), block.nBits))
@@ -2752,11 +2752,11 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nH
     return true;
 }
 
-bool CheckBlock(const CBlock& block, CValidationState& state, int nHeight, bool fCheckPOW, bool fCheckMerkleRoot)
+bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bool fCheckMerkleRoot)
 {
     // These are checks that are independent of context
     // that can be verified before saving an orphan block.
-    if (!CheckBlockHeader(block, state, nHeight, fCheckPOW))
+    if (!CheckBlockHeader(block, state, fCheckPOW))
         return false;
     
         
@@ -2856,11 +2856,6 @@ bool AcceptBlockHeader(CBlockHeader& block, CValidationState& state, CBlockIndex
             return state.DoS(100, error("AcceptBlock() : rejected by checkpoint lock-in at %d", nHeight),
                              REJECT_CHECKPOINT, "checkpoint mismatch");
 
-        // ppcoin: check that the block satisfies synchronized checkpoint
-        // if not in checkpoint advisory mode
-        if (IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
-        	return error("checkpoint AcceptBlock() : rejected by synchronized checkpoint");
-
         // Don't accept any forks from the main chain prior to last checkpoint
         CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(mapBlockIndex);
         if (pcheckpoint && nHeight < pcheckpoint->nHeight)
@@ -2899,7 +2894,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
     int nHeight = pindex->nHeight;
 
-    if (!CheckBlock(block, state, nHeight)) {
+    if (!CheckBlock(block, state)) {
         if (state.Invalid() && !state.CorruptionPossible()) {
             pindex->nStatus |= BLOCK_FAILED_VALID;
         }
@@ -2949,6 +2944,20 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
                                  REJECT_INVALID, "bad-cb-height");
             }
         }
+    }
+
+    // Get prev block index
+    CBlockIndex* pindexPrev = NULL;
+    if (hash != Params().HashGenesisBlock()) {
+        map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
+        if (mi == mapBlockIndex.end())
+            return state.DoS(10, error("AcceptBlock() : prev block not found"), 0, "bad-prevblk");
+        pindexPrev = (*mi).second;
+
+        // Check that the block satisfies synchronized checkpoint
+        // if not in checkpoint advisory mode
+        if (IsSyncCheckpointEnforced() && !CheckSyncCheckpoint(hash, pindexPrev))
+            return error("checkpoint AcceptBlock() : rejected by synchronized checkpoint");
     }
 
     // Write block to history file
@@ -3076,8 +3085,8 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
         return state.Invalid(error("ProcessBlock() : already have block (orphan) %s", hash.ToString()), 0, "duplicate");
 
     // Preliminary checks
-    if (!CheckBlock(*pblock, state, INT_MAX)) 
-    	  return true;
+    if (!CheckBlock(*pblock, state))
+        return error("ProcessBlock() : CheckBlock FAILED");
         	
     // ppcoin: ask for pending sync-checkpoint if any
     if (!IsInitialBlockDownload())
