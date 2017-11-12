@@ -35,6 +35,7 @@ config.status
 configure
 libtool
 src/bitcoin-config.h
+src/bitcoin-config.h.in
 src/qt/Makefile.in
 src/qt/test/Makefile.in
 src/test/Makefile.in
