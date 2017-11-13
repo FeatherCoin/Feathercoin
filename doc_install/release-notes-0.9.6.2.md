@@ -16,11 +16,13 @@ Fixes:
 - new protocol version number (issue #158)
 - changes to unit tests (issue #159)
 - fix to format errors on Multisig GUI page (issue #160)
+- solo mining not working, getwork borken (issue #166)
 - ACP in advisory mode crashes cliend (issue #169)
 - ACP enforced config parameter not handled correctly in 0.9.6 (issue #170)
 - fix to connections problems for incomming connections from 0.11.x nodes (issue #171)
 - fix to gui display problems (# issue #180)
 - updates to configure script to fix dependicy detection problems (issue #190)
+- RPC dumpwallet issue empty content (issue #236)
 
 
 
