@@ -47,14 +47,14 @@
 #include <qrencode.h>
 #endif
 
-#if defined (HAVE_QT5)
+#if HAVE_QT5
 // Use QT5's new modular classes
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 #include <QPainter>
 #include "walletmodel.h"
-#endif //#if defined (HAVE_QT5)
+#endif //#if (HAVE_QT5)
 
 /** "About" dialog box */
 AboutDialog::AboutDialog(QWidget *parent) :
@@ -220,7 +220,7 @@ void OpennameDialog::on_pushButton_clicked()
 
 void OpennameDialog::on_insertButton_clicked()
 {
-#if defined (HAVE_QT5)
+#if HAVE_QT5
     if(!model || !model->getOptionsModel())
         return;
     
@@ -816,7 +816,7 @@ void PaperWalletDialog::on_getNewAddress_clicked()
 
 void PaperWalletDialog::on_printButton_clicked()
 {
-#if defined (HAVE_QT5)
+#if HAVE_QT5
     QPrinter printer(QPrinter::HighResolution);
     QPrintDialog *qpd = new QPrintDialog(&printer, this);
 

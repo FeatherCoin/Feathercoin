@@ -5,7 +5,7 @@
 #include "bitcoin-config.h"
 #endif
 
-#if defined (HAVE_QT5)
+#if HAVE_QT5
 #include "coinnectordialog.h"
 #include "ui_coinnectordialog.h"
 

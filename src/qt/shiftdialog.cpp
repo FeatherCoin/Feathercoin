@@ -6,7 +6,7 @@
 #include "bitcoin-config.h"
 #endif
 
-#if defined(HAVE_QT5)
+#if HAVE_QT5
 #include "shiftdialog.h"
 #include "ui_shiftdialog.h"
 

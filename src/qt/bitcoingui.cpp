@@ -13,7 +13,7 @@
 #include "openuridialog.h"
 #include "optionsdialog.h"
 
-#if defined (HAVE_QT5)
+#if HAVE_QT5
 #include "shiftdialog.h"
 #include "coinnectordialog.h"
 #endif
