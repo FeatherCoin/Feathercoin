@@ -1,11 +1,11 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #if defined(HAVE_CONFIG_H)
 #include "bitcoin-config.h"
 #endif
 
+#if defined (HAVE_QT5)
 #include "coinnectordialog.h"
 #include "ui_coinnectordialog.h"
 
@@ -281,3 +281,4 @@ bool CoinnectorDialog::eventFilter(QObject *object, QEvent *event)
   	
     return QDialog::eventFilter(object, event);
 }
+#endif // HAVE_QT5

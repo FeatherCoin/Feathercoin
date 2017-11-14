@@ -41,6 +41,8 @@ src/qt/test/Makefile.in
 src/test/Makefile.in
 src/test/Makefile.in
 src/test/test_bitcoin
+src/build-aux/
+
 src/stamp-h1
 
 src/qt/*.moc

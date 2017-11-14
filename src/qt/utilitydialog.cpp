@@ -47,13 +47,14 @@
 #include <qrencode.h>
 #endif
 
-
+#if defined (HAVE_QT5)
 // Use QT5's new modular classes
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 #include <QPainter>
 #include "walletmodel.h"
+#endif //#if defined (HAVE_QT5)
 
 /** "About" dialog box */
 AboutDialog::AboutDialog(QWidget *parent) :
@@ -219,6 +220,7 @@ void OpennameDialog::on_pushButton_clicked()
 
 void OpennameDialog::on_insertButton_clicked()
 {
+#if defined (HAVE_QT5)
     if(!model || !model->getOptionsModel())
         return;
     
@@ -403,6 +405,7 @@ void OpennameDialog::on_insertButton_clicked()
         ui->txtLocation->setText("");
         ui->txtContact->setText("");
     }
+#endif //HAVE_QT5
 }
 
 void OpennameDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn &sendCoinsReturn, const QString &msgArg)
@@ -810,9 +813,10 @@ void PaperWalletDialog::on_getNewAddress_clicked()
 
 }
 
+
 void PaperWalletDialog::on_printButton_clicked()
 {
-
+#if defined (HAVE_QT5)
     QPrinter printer(QPrinter::HighResolution);
     QPrintDialog *qpd = new QPrintDialog(&printer, this);
 
@@ -971,10 +975,11 @@ void PaperWalletDialog::on_printButton_clicked()
         QMessageBox::critical(this, tr("Send Coins"), tr("The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here."), QMessageBox::Ok, QMessageBox::Ok);
     }
     delete tx;
-#endif
+#endif  //#ENABLE_WALLET
     return;
-
+#endif //#HAVE_QT5
 }
+
 
 
 /** "Help message" dialog box */

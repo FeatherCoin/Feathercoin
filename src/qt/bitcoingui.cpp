@@ -12,8 +12,12 @@
 #include "notificator.h"
 #include "openuridialog.h"
 #include "optionsdialog.h"
-//#include "shiftdialog.h"
-//#include "coinnectordialog.h"
+
+#if defined (HAVE_QT5)
+#include "shiftdialog.h"
+#include "coinnectordialog.h"
+#endif
+
 #include "optionsmodel.h"
 #include "rpcconsole.h"
 #include "utilitydialog.h"

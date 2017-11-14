@@ -231,6 +231,7 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITH_PKGCONFIG],[
   fi
     if test x$bitcoin_qt_want_version == xqt5 ||  ( test x$bitcoin_qt_want_version == xauto && test x$auto_priority_version == xqt5 ); then
       QT_LIB_PREFIX=Qt5
+      HAVE_QT5=true
       bitcoin_qt_got_major_vers=5
     else
       QT_LIB_PREFIX=Qt
