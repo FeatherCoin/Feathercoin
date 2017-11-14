@@ -1,4 +1,3 @@
-Feathercoin Core integration/staging tree
 
 Feathercoin Core
 ================
