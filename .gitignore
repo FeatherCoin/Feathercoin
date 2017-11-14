@@ -1,7 +1,6 @@
 *.tar.gz
 *.exe
 *.directory
-Makefile*
 *.in
 
 #ignore binaries
@@ -11,44 +10,50 @@ src/feathercoin-cli
 src/qt/test/test_feathercoin-qt
 src/test/test_feathercoin
 
-
-# ignore files created by autoconf and conf
-src/bitcoin-config.h
-src/bitcoin-config.h
-src/Makefile.in
+# autoreconf
 Makefile.in
-Makefile
-share/qt/Info.plist
 share/setup.nsi
+share/qt/Info.plist
 src/Makefile.in
+aclocal.m4
+autom4te.cache/
+build-aux/config.guess
+build-aux/config.sub
+build-aux/depcomp
+build-aux/install-sh
+build-aux/ltmain.sh
+build-aux/m4/libtool.m4
+build-aux/m4/lt~obsolete.m4
+build-aux/m4/ltoptions.m4
+build-aux/m4/ltsugar.m4
+build-aux/m4/ltversion.m4
+build-aux/missing
+build-aux/compile
+build-aux/test-driver
+config.log
+config.status
+configure
+libtool
 src/bitcoin-config.h
+src/bitcoin-config.h.in
 src/qt/Makefile.in
 src/qt/test/Makefile.in
 src/test/Makefile.in
 src/test/Makefile.in
 src/test/test_bitcoin
 src/build-aux/
-build-aux/
+
 src/stamp-h1
 
-#ignore files created during make
 src/qt/*.moc
 src/qt/moc_*.cpp
 src/qt/forms/ui_*.h
-src/qt/Makefile.in
+
 src/qt/test/moc*.cpp
-src/qt/test/test_bitcoin-qt
-src/qt/test/Makefile.in
-
-
-autom4te.cache/
-config.log
-config.status
-configure
-
 
 .deps
 .dirstamp
+.libs
 .*.swp
 *.*~*
 *.bak
@@ -57,7 +62,7 @@ configure
 *.o
 *.o-*
 *.patch
-.bitcoin
+.feathercoin
 *.a
 *.pb.cc
 *.pb.h

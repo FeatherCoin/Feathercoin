@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin developers
-// Copyright (c) 2013-2016 The Feathercoin developers
+// Copyright (c) 2013-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,8 +12,12 @@
 #include "notificator.h"
 #include "openuridialog.h"
 #include "optionsdialog.h"
-//#include "shiftdialog.h"
-//#include "coinnectordialog.h"
+
+#if HAVE_QT5
+#include "shiftdialog.h"
+#include "coinnectordialog.h"
+#endif
+
 #include "optionsmodel.h"
 #include "rpcconsole.h"
 #include "utilitydialog.h"

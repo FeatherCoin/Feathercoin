@@ -1,4 +1,5 @@
 // Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -55,7 +56,7 @@ std::string DecodeDumpString(const std::string &str) {
     for (unsigned int pos = 0; pos < str.length(); pos++) {
         unsigned char c = str[pos];
         if (c == '%' && pos+2 < str.length()) {
-            c = (((str[pos+1]>>6)*9+((str[pos+1]-'0')&15)) << 4) | 
+            c = (((str[pos+1]>>6)*9+((str[pos+1]-'0')&15)) << 4) |
                 ((str[pos+2]>>6)*9+((str[pos+2]-'0')&15));
             pos += 2;
         }
@@ -207,7 +208,6 @@ Value importwallet(const Array& params, bool fHelp)
             }
         }
         LogPrintf("Importing %s...\n", CBitcoinAddress(keyid).ToString());
-        //if (!pwalletMain->AddKeyPubKey(key, pubkey)) {
         if (!pwalletMain->AddKey(key)) {
             fGood = false;
             continue;
@@ -241,10 +241,10 @@ Value dumpprivkey(const Array& params, bool fHelp)
     if (fHelp || params.size() != 1)
         throw runtime_error(
             "dumpprivkey \"feathercoinaddress\"\n"
-            "\nReveals the private key corresponding to 'bitcoinaddress'.\n"
+            "\nReveals the private key corresponding to 'feathercoinaddress'.\n"
             "Then the importprivkey can be used with this output\n"
             "\nArguments:\n"
-            "1. \"bitcoinaddress\"   (string, required) The bitcoin address for the private key\n"
+            "1. \"bitcoinaddress\"   (string, required) The feathercoin address for the private key\n"
             "\nResult:\n"
             "\"key\"                (string) The private key\n"
             "\nExamples:\n"
@@ -307,7 +307,7 @@ Value dumpwallet(const Array& params, bool fHelp)
     std::sort(vKeyBirth.begin(), vKeyBirth.end());
 
     // produce output
-    file << strprintf("# Wallet dump created by Bitcoin %s (%s)\n", CLIENT_BUILD, CLIENT_DATE);
+    file << strprintf("# Wallet dump created by Feathercoin %s (%s)\n", CLIENT_BUILD, CLIENT_DATE);
     file << strprintf("# * Created on %s\n", EncodeDumpTime(GetTime()));
     file << strprintf("# * Best block at time of backup was %i (%s),\n", chainActive.Height(), chainActive.Tip()->GetBlockHash().ToString());
     file << strprintf("#   mined on %s\n", EncodeDumpTime(chainActive.Tip()->nTime));
@@ -320,7 +320,7 @@ Value dumpwallet(const Array& params, bool fHelp)
         CSecret key;
         bool fCompressed;
         //if (pwalletMain->GetKey(keyid, key)) {
-        if (!pwalletMain->GetSecret(keyid, key, fCompressed)) {
+        if (pwalletMain->GetSecret(keyid, key, fCompressed)) {
             if (pwalletMain->mapAddressBook.count(keyid)) {
                 //file << strprintf("%s %s label=%s # addr=%s\n", CBitcoinSecret(key).ToString(), strTime, EncodeDumpString(pwalletMain->mapAddressBook[keyid].name), strAddr);
                 file << strprintf("%s %s label=%s # addr=%s\n", CBitcoinSecret(key, fCompressed).ToString(), strTime, EncodeDumpString(pwalletMain->mapAddressBook[keyid].name), strAddr);

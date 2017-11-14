@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
-// Copyright (c) 2013-2015 The Feathercoin developers
+// Copyright (c) 2013-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -457,15 +457,12 @@ void AddressBookPage::on_copyPriKey_clicked()
 
 void AddressBookPage::on_copySecKey_clicked()
 {
-    //hash160 = FeathercoinPrivateKey(private_key).public_key().hash160()
-    LogPrintf("addressbookpage...........................\n");
     //CWallet* pwalletMain; init.cpp
     QModelIndexList selection = ui->tableView->selectionModel()->selectedRows(AddressTableModel::Address);
     if(!selection.isEmpty())
     {
         QString addrStr = selection.at(0).data(Qt::EditRole).toString();
-        LogPrintf("addressbookpage public_address=%s\n",addrStr.toStdString());//6zdaoWaNBND4KPTR49rqoGFTyHgwGzAf81
-        
+
         CBitcoinAddress address(addrStr.toStdString());
         CKeyID keyID; //the Hash160 of its serialized public key
         if ( !address.GetKeyID(keyID) )
@@ -475,9 +472,7 @@ void AddressBookPage::on_copySecKey_clicked()
                 QMessageBox::Ok, QMessageBox::Ok);
             return;
         }
-        LogPrintf("addressbookpage CKeyID=%s\n", keyID.ToString());//82c35d4284907f248746f6b21f7aafed86d63ee5
-        
-        //FeathercoinPrivateKey(private_key)
+
         CSecret vchSecret;
 	      bool fCompressed=false;
 	      if (!pwalletMain->GetSecret(keyID, vchSecret, fCompressed))
@@ -487,9 +482,7 @@ void AddressBookPage::on_copySecKey_clicked()
 	              QMessageBox::Ok, QMessageBox::Ok);
 	          return;
 	      }
-        LogPrintf("addressbookpage vchSecret=%s\n", HexStr(vchSecret).c_str());//e2ee135cc175081810bbaa603df551f657c8e8a37aca1321883fc588022f95d6
-        	
-        //FeathercoinPrivateKey(private_key).public_key()
+
         CPubKey vchPubKey;
         if ( !pwalletMain->GetPubKey(keyID, vchPubKey))
         {
@@ -498,26 +491,14 @@ void AddressBookPage::on_copySecKey_clicked()
                 QMessageBox::Ok, QMessageBox::Ok);
             return;
         }
-        //GUIUtil::setClipboard(QString::fromStdString(HexStr(vchPubKey)));
-        LogPrintf("addressbookpage vchPubKey=%s\n", HexStr(vchPubKey).c_str());//02edb297ba63c35998ec23cfca60666bb4d0d1c3e810b93d2d20c94e3a12977440
-        
-        //FeathercoinPrivateKey(private_key).public_key().hash160()
-        LogPrintf("addressbookpage hash160,vchPubKey.GetID()=%s\n", HexStr(vchPubKey.GetID()).c_str());//e53ed686edaf7a1fb2f64687247f9084425dc382
-        
-        //FeathercoinPrivateKey(private_key).public_key()
+
         CKey key;
         fCompressed=false;
         key.SetSecret(vchSecret, fCompressed);
         std::vector<unsigned char> uret=key.GetPubKeyU(fCompressed);
-        LogPrintf("addressbookpage unCompressedPubKey =%s\n", HexStr(uret).c_str());//04edb297ba63c35998ec23cfca60666bb4d0d1c3e810b93d2d20c94e3a129774407b719ecf902de8a20c6d99ed0ad0d8c5af178640fdcb0c5dee26c41d39306998
-        
-        //FeathercoinPrivateKey(private_key).public_key().hash160()
+
         CKeyID unkeyID=CKeyID(Hash160(uret)); 
-        LogPrintf("addressbookpage hash160,unCompressedPubKey=%s\n", HexStr(unkeyID).c_str());//6f01b45dd6685d5ac1717baa46e4cda8287c160b
         GUIUtil::setClipboard(HexStr(unkeyID).c_str());
-        
-        //unCompressed address
-        LogPrintf("addressbookpage address, unPubKey=%s\n",CBitcoinAddress(unkeyID).ToString());
     }
 }
 

@@ -286,13 +286,11 @@ Value getwork(const Array& params, bool fHelp)
             "1. \"data\"       (string, optional) The hex encoded data to solve\n"
             "\nResult (when 'data' is not specified):\n"
             "{\n"
-            "  \"midstate\" : \"xxxx\",   (string) The precomputed hash state after hashing the first half of the data (DEPRECATED)\n" // deprecated
             "  \"data\" : \"xxxxx\",      (string) The block data\n"
-            "  \"hash1\" : \"xxxxx\",     (string) The formatted hash buffer for second hash (DEPRECATED)\n" // deprecated
             "  \"target\" : \"xxxx\"      (string) The little endian hash target\n"
             "}\n"
-            "\nResult (when 'data' is specified):\n"
-            "true|false       (boolean) If solving the block specified in the 'data' was successfull\n"
+            "  \"algorithm\" : hashing algorithm expected (optional)\n"
+            "If [data] is specified, verifies the PoW hash against target and returns true if successful."
             "\nExamples:\n"
             + HelpExampleCli("getwork", "")
             + HelpExampleRpc("getwork", "")
@@ -358,31 +356,34 @@ Value getwork(const Array& params, bool fHelp)
         mapNewBlock[pblock->hashMerkleRoot] = make_pair(pblock, pblock->vtx[0].vin[0].scriptSig);
 
         // Pre-build hash buffers
-        char pmidstate[32];
-        char pdata[128];
-        char phash1[64];
-        FormatHashBuffers(pblock, pmidstate, pdata, phash1);
+        unsigned int pdata[32];
+        FormatDataBuffer(pblock, pdata);
 
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
         Object result;
-        result.push_back(Pair("midstate", HexStr(BEGIN(pmidstate), END(pmidstate)))); // deprecated
-        result.push_back(Pair("data",     HexStr(BEGIN(pdata), END(pdata))));
-        result.push_back(Pair("hash1",    HexStr(BEGIN(phash1), END(phash1)))); // deprecated
+        result.push_back(Pair("data",     HexStr(BEGIN(pdata), fNeoScrypt ? (char *) &pdata[21] : END(pdata))));
         result.push_back(Pair("target",   HexStr(BEGIN(hashTarget), END(hashTarget))));
+        if (fNeoScrypt)
+            result.push_back(Pair("algorithm", "neoscrypt"));
+        else
+            result.push_back(Pair("algorithm", "scrypt:1024,1,1"));
         return result;
     }
     else
     {
         // Parse parameters
         vector<unsigned char> vchData = ParseHex(params[0].get_str());
-        if (vchData.size() != 128)
+        if (vchData.size() < 80)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter");
         CBlock* pdata = (CBlock*)&vchData[0];
 
         // Byte reverse
-        for (int i = 0; i < 128/4; i++)
-            ((unsigned int*)pdata)[i] = ByteReverse(((unsigned int*)pdata)[i]);
+        if(!fNeoScrypt) {
+            unsigned int i;
+            for(i = 9; i < 20; i++)
+                ((unsigned int *) pdata)[i] = ByteReverse(((unsigned int *) pdata)[i]);
+        }
 
         // Get saved block
         if (!mapNewBlock.count(pdata->hashMerkleRoot))

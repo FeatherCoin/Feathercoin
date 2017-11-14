@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -164,7 +165,7 @@ bool LookupNumeric(const char *pszName, CService& addr, int portDefault)
 }
 
 bool static Socks4(const CService &addrDest, SOCKET& hSocket)
-{
+{   
     LogPrintf("SOCKS4 connecting %s\n", addrDest.ToString());
     if (!addrDest.IsIPv4())
     {
@@ -199,8 +200,9 @@ bool static Socks4(const CService &addrDest, SOCKET& hSocket)
     if (pchRet[1] != 0x5a)
     {
         closesocket(hSocket);
-        if (pchRet[1] != 0x5b)
-            LogPrintf("ERROR: Proxy returned error %d\n", pchRet[1]);
+        if (pchRet[1] != 0x5b) {
+           LogPrintf("ERROR: Proxy returned error %d\n", pchRet[1]);
+        }
         return false;
     }
     LogPrintf("SOCKS4 connected %s\n", addrDest.ToString());
@@ -289,13 +291,15 @@ bool static Socks5(string strDest, int port, SOCKET& hSocket)
             ret = recv(hSocket, pchRet3, 1, 0) != 1;
             if (ret) {
                 closesocket(hSocket);
-                return error("Error reading from proxy");
+                LogPrintf("Error reading from proxy");
+                return false;
             }
             int nRecv = pchRet3[0];
             ret = recv(hSocket, pchRet3, nRecv, 0) != nRecv;
             break;
         }
-        default: closesocket(hSocket); return error("Error: malformed proxy response");
+        default: closesocket(hSocket); 
+        return error("Error: malformed proxy response");
     }
     if (ret)
     {
@@ -882,7 +886,7 @@ uint64_t CNetAddr::GetHash() const
 
 void CNetAddr::print() const
 {
-    LogPrintf("CNetAddr(%s)\n", ToString());
+   LogPrintf("CNetAddr(%s)\n", ToString());
 }
 
 // private extensions to enum Network, only returned by GetExtNetwork,
@@ -1115,7 +1119,7 @@ std::string CService::ToString() const
 
 void CService::print() const
 {
-    LogPrintf("CService(%s)\n", ToString());
+   LogPrintf("CService(%s)\n", ToString());
 }
 
 void CService::SetPort(unsigned short portIn)
@@ -1150,7 +1154,7 @@ std::string NetworkErrorString(int err)
 #ifdef STRERROR_R_CHAR_P /* GNU variant can return a pointer outside the passed buffer */
     s = strerror_r(err, buf, sizeof(buf));
 #else /* POSIX variant always returns message in buffer */
-    (void) strerror_r(err, buf, sizeof(buf));
+    if (strerror_r(err, buf, sizeof(buf))) buf[0] = 0;
 #endif
     return strprintf("%s (%d)", s, err);
 }

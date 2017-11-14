@@ -1,5 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -622,12 +623,12 @@ Value getbalance(const Array& params, bool fHelp)
     if (params[0].get_str() == "*") {
         // Calculate total balance a different way from GetBalance()
         // (GetBalance() sums up all unspent TxOuts)
-        // getbalance and getbalance '*' 0 should return the same number
+        // getbalance and "getbalance * 1 true" should return the same number
         int64_t nBalance = 0;
         for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
         {
             const CWalletTx& wtx = (*it).second;
-            if (!wtx.IsTrusted() || wtx.GetBlocksToMaturity() > 0)
+            if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || wtx.GetDepthInMainChain() < 0)
                 continue;
 
             int64_t allFee;
@@ -2232,7 +2233,7 @@ Value clearwallettransactions(const Array& params, bool fHelp)
             
             std::string strType(vchType.begin(), vchType.end());
             
-            //printf("strType %s\n", strType.c_str());
+            printf("strType %s\n", strType.c_str());
             
             if (strType == "tx")
             {

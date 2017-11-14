@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -101,6 +102,7 @@ extern bool fPrintToDebugLog;
 extern bool fServer;
 extern std::string strMiscWarning;
 extern bool fNeoScrypt;
+extern unsigned int nNeoScryptOptions;
 extern bool fNoListen;
 extern bool fLogTimestamps;
 extern volatile bool fReopenDebugLog;
@@ -553,7 +555,7 @@ template <typename Callable> void TraceThread(const char* name,  Callable func)
     std::string s = strprintf("feathercoin-%s", name);
     RenameThread(s.c_str());
     try
-    {
+    { 
         LogPrintf("%s thread start\n", name);
         func();
         LogPrintf("%s thread exit\n", name);

@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -95,6 +96,7 @@ bool fDaemon = false;
 bool fServer = false;
 string strMiscWarning;
 bool fNeoScrypt = false;
+unsigned int nNeoScryptOptions = 0;
 bool fNoListen = false;
 bool fLogTimestamps = false;
 volatile bool fReopenDebugLog = false;
@@ -179,7 +181,7 @@ void RandAddSeedPerfmon()
     {
         RAND_add(pdata, nSize, nSize/100.0);
         OPENSSL_cleanse(pdata, nSize);
-        LogPrint("rand", "RandAddSeed() %lu bytes\n", nSize);
+        // if (fDebug) LogPrint("rand", "RandAddSeed() %lu bytes\n", nSize);
     }
 #endif
 }

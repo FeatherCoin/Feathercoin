@@ -1,5 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -554,18 +555,22 @@ void StartRPCThreads()
 
     if (fUseSSL)
     {
-        rpc_ssl_context->set_options(ssl::context::no_sslv2);
+        rpc_ssl_context->set_options(ssl::context::no_sslv2 | ssl::context::no_sslv3);
 
         filesystem::path pathCertFile(GetArg("-rpcsslcertificatechainfile", "server.cert"));
         if (!pathCertFile.is_complete()) pathCertFile = filesystem::path(GetDataDir()) / pathCertFile;
         if (filesystem::exists(pathCertFile)) rpc_ssl_context->use_certificate_chain_file(pathCertFile.string());
-        else LogPrintf("ThreadRPCServer ERROR: missing server certificate file %s\n", pathCertFile.string());
+        else {
+            LogPrintf("ThreadRPCServer ERROR: missing server certificate file %s\n", pathCertFile.string());
+        }
 
         filesystem::path pathPKFile(GetArg("-rpcsslprivatekeyfile", "server.pem"));
         if (!pathPKFile.is_complete()) pathPKFile = filesystem::path(GetDataDir()) / pathPKFile;
         if (filesystem::exists(pathPKFile)) rpc_ssl_context->use_private_key_file(pathPKFile.string(), ssl::context::pem);
-        else LogPrintf("ThreadRPCServer ERROR: missing server private key file %s\n", pathPKFile.string());
-
+        else {
+            LogPrintf("ThreadRPCServer ERROR: missing server private key file %s\n", pathPKFile.string());
+        }
+        
         string strCiphers = GetArg("-rpcsslciphers", "TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH");
         SSL_CTX_set_cipher_list(rpc_ssl_context->impl(), strCiphers.c_str());
     }
@@ -658,15 +663,19 @@ void StopRPCThreads()
     BOOST_FOREACH(const boost::shared_ptr<ip::tcp::acceptor> &acceptor, rpc_acceptors)
     {
         acceptor->cancel(ec);
-        if (ec)
-            LogPrintf("%s: Warning: %s when cancelling acceptor", __func__, ec.message());
+        // if (ec)
+        //     if (fDebug) {
+        //         LogPrintf("%s: Warning: %s when cancelling acceptor", __func__, ec.message());
+        // }
     }
     rpc_acceptors.clear();
     BOOST_FOREACH(const PAIRTYPE(std::string, boost::shared_ptr<deadline_timer>) &timer, deadlineTimers)
     {
         timer.second->cancel(ec);
-        if (ec)
-            LogPrintf("%s: Warning: %s when cancelling timer", __func__, ec.message());
+        // if (ec)
+        //     if (fDebug) {
+        //         LogPrintf("%s: Warning: %s when cancelling timer", __func__, ec.message());
+        // }
     }
     deadlineTimers.clear();
 

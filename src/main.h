@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin developers
-// Copyright (c) 2013-2015 The Feathercoin developers
+// Copyright (c) 2013-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,7 +19,6 @@
 #include "core.h"
 #include "net.h"
 #include "script.h"
-#include "scrypt.h"
 #include "neoscrypt.h"
 #include "sync.h"
 #include "txmempool.h"
@@ -56,7 +55,7 @@ static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
 static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
 /** Default for -maxorphanblocks, maximum number of orphan blocks kept in memory */
-static const unsigned int DEFAULT_MAX_ORPHAN_BLOCKS = 750;
+static const unsigned int DEFAULT_MAX_ORPHAN_BLOCKS = 7500;
 /** The maximum size of a blk?????.dat file (since 0.8) */
 static const unsigned int MAX_BLOCKFILE_SIZE = 0x8000000; // 128 MiB
 /** The pre-allocation chunk size for blk?????.dat files (since 0.8) */
@@ -98,21 +97,6 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
-// The 1st hard fork
-const int nForkOne = 33000;
-// The 2nd hard fork
-const int nForkTwo = 87948;
-// The 3rd hard fork
-const int nForkThree = 204639;
-// The 4th hard fork
-const int nForkFour = 432000;
-
-static const int nTestnetFork   =  600;
-
-static const unsigned int nSwitchV2            = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
-static const unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
-
-
 /** "reject" message codes **/
 static const unsigned char REJECT_MALFORMED = 0x01;
 static const unsigned char REJECT_INVALID = 0x10;
@@ -151,7 +135,6 @@ extern CBlockIndex* pindexBest;
 extern unsigned int nTransactionsUpdated;
 extern uint64_t nLastBlockTx;
 extern uint64_t nLastBlockSize;
-extern std::map<uint256, CBlock*> mapOrphanBlocksA;
 extern std::map<uint256, COrphanBlock*> mapOrphanBlocks; 
 extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;
@@ -678,8 +661,8 @@ bool AddToBlockIndex(CBlock& block, CValidationState& state, const CDiskBlockPos
 int GetAuxPowStartBlock();
 
 // Context-independent validity checks
-bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, int nHeight, bool fCheckPOW = true);
-bool CheckBlock(const CBlock& block, CValidationState& state, int nHeight, bool fCheckPOW = true, bool fCheckMerkleRoot = true);
+bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool fCheckPOW = true);
+bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW = true, bool fCheckMerkleRoot = true);
 
 // Store block on disk
 // if dbp is provided, the file is known to already reside on disk

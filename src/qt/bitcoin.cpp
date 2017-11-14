@@ -1,5 +1,5 @@
 // Copyright (c) 2011-2015 The Bitcoin developers
-// Copyright (c)      2015 The Feathercoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -239,7 +239,7 @@ void BitcoinCore::handleRunawayException(std::exception *e)
 void BitcoinCore::initialize()
 {
     try
-    {
+    {   
         LogPrintf("Running AppInit2 in thread\n");
         int rv = AppInit2(threadGroup);
         if(rv)

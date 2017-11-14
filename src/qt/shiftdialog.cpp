@@ -6,6 +6,7 @@
 #include "bitcoin-config.h"
 #endif
 
+#if HAVE_QT5
 #include "shiftdialog.h"
 #include "ui_shiftdialog.h"
 
@@ -500,3 +501,4 @@ bool ShiftDialog::eventFilter(QObject *object, QEvent *event)
   	}
     return QDialog::eventFilter(object, event);
 }
+#endif //defined(HAVE_QT5)

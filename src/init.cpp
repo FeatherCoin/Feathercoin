@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Copyright (c)      2014 The Feathercoin developers
+// Copyright (c)      2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -63,6 +63,8 @@ enum BindFlags {
     BF_REPORT_ERROR = (1U << 1)
 };
 
+/* Assembly level processor optimisation features */
+unsigned int opt_flags = 0;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -227,7 +229,7 @@ std::string HelpMessage(HelpMessageMode hmm)
     strUsage += "  -forcednsseed          " + _("Always query for peer addresses via DNS lookup (default: 0)") + "\n";
     strUsage += "  -externalip=<ip>       " + _("Specify your own public address") + "\n";
     strUsage += "  -listen                " + _("Accept connections from outside (default: 1 if no -proxy or -connect)") + "\n";
-    strUsage += "  -maxconnections=<n>    " + _("Maintain at most <n> connections to peers (default: 125)") + "\n";
+    strUsage += "  -maxconnections=<n>    " + _("Maintain at most <n> connections to peers (default: 150)") + "\n";
     strUsage += "  -maxreceivebuffer=<n>  " + _("Maximum per-connection receive buffer, <n>*1000 bytes (default: 5000)") + "\n";
     strUsage += "  -maxsendbuffer=<n>     " + _("Maximum per-connection send buffer, <n>*1000 bytes (default: 1000)") + "\n";
     strUsage += "  -onion=<ip:port>       " + _("Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: -proxy)") + "\n";
@@ -471,6 +473,19 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     // ********************************************************* Step 2: parameter interactions
 
+#if defined (USE_SSE2)
+    opt_flags = cpu_vec_exts();
+    /* Verify hardware SSE2 support */
+    if(opt_flags & 0x00000020) {
+        printf("SSE2 optimisations enabled\n");
+        nNeoScryptOptions |= 0x1000;
+    } else {
+        printf("SSE2 unsupported, optimisations disabled\n");
+    }
+#else
+    printf("SSE2 optimisations disabled\n");
+#endif
+
     if (mapArgs.count("-bind")) {
         // when specifying an explicit binding address, you want to listen on it
         // even when -connect or -proxy is specified
@@ -482,6 +497,7 @@ bool AppInit2(boost::thread_group& threadGroup)
         // when only connecting to trusted nodes, do not seed via DNS, or listen by default
         if (SoftSetBoolArg("-dnsseed", false))
             LogPrintf("AppInit2 : parameter interaction: -connect set -> setting -dnsseed=0\n");
+
         if (SoftSetBoolArg("-listen", false))
             LogPrintf("AppInit2 : parameter interaction: -connect set -> setting -listen=0\n");
     }
@@ -502,8 +518,9 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     if (mapArgs.count("-externalip")) {
         // if an explicit public IP is specified, do not try to find others
-        if (SoftSetBoolArg("-discover", false))
+        if (SoftSetBoolArg("-discover", false)) {
             LogPrintf("AppInit2 : parameter interaction: -externalip set -> setting -discover=0\n");
+        }
     }
 
     if (GetBoolArg("-salvagewallet", false)) {
@@ -520,7 +537,7 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     // Make sure enough file descriptors are available
     int nBind = std::max((int)mapArgs.count("-bind"), 1);
-    nMaxConnections = GetArg("-maxconnections", 125);
+    nMaxConnections = GetArg("-maxconnections", 150);
     nMaxConnections = std::max(std::min(nMaxConnections, (int)(FD_SETSIZE - nBind - MIN_CORE_FILEDESCRIPTORS)), 0);
     int nFD = RaiseFileDescriptorLimit(nMaxConnections + MIN_CORE_FILEDESCRIPTORS);
     if (nFD < MIN_CORE_FILEDESCRIPTORS)
@@ -637,9 +654,11 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     if (GetBoolArg("-shrinkdebugfile", !fDebug))
         ShrinkDebugFile();
-    LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("Feathercoin version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
-    LogPrintf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
+
+        LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        LogPrintf("Feathercoin version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
+        LogPrintf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
+
 #ifdef ENABLE_WALLET
     LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
 #endif
@@ -648,6 +667,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     LogPrintf("Default data directory %s\n", GetDefaultDataDir().string());
     LogPrintf("Using data directory %s\n", strDataDir);
     LogPrintf("Using at most %i connections (%i file descriptors available)\n", nMaxConnections, nFD);
+
     std::ostringstream strErrors;
 
     if (nScriptCheckThreads) {
@@ -965,7 +985,8 @@ bool AppInit2(boost::thread_group& threadGroup)
             }
         }
         if (nFound == 0)
-            LogPrintf("No blocks matching %s were found\n", strMatch);
+             LogPrintf("No blocks matching %s were found\n", strMatch);
+
         return false;
     }
 
@@ -1026,8 +1047,9 @@ bool AppInit2(boost::thread_group& threadGroup)
                 nMaxVersion = CLIENT_VERSION;
                 pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
             }
-            else
+            else {
                 LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
+            }
             if (nMaxVersion < pwalletMain->GetVersion())
                 strErrors << _("Cannot downgrade wallet") << "\n";
             pwalletMain->SetMaxVersion(nMaxVersion);
@@ -1105,9 +1127,7 @@ bool AppInit2(boost::thread_group& threadGroup)
         if (!adb.Read(addrman))
             LogPrintf("Invalid or missing peers.dat; recreating\n");
     }
-
-    LogPrintf("Loaded %i addresses from peers.dat  %dms\n",
-           addrman.size(), GetTimeMillis() - nStart);
+    LogPrintf("Loaded %i addresses from peers.dat  %dms\n", addrman.size(), GetTimeMillis() - nStart);
 
     // ********************************************************* Step 11: start node
 
@@ -1121,8 +1141,9 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     //// debug print
     LogPrintf("mapBlockIndex.size() = %u\n",   mapBlockIndex.size());
-    LogPrintf("nBestHeight = %d\n",                   chainActive.Height());
-#ifdef ENABLE_WALLET
+    LogPrintf("nBestHeight = %d\n", chainActive.Height());
+
+#ifdef ENABLE_WALLET 
     LogPrintf("setKeyPool.size() = %u\n",      pwalletMain ? pwalletMain->setKeyPool.size() : 0);
     LogPrintf("mapWallet.size() = %u\n",       pwalletMain ? pwalletMain->mapWallet.size() : 0);
     LogPrintf("mapAddressBook.size() = %u\n",  pwalletMain ? pwalletMain->mapAddressBook.size() : 0);
