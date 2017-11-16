@@ -1,5 +1,5 @@
 ---
-name: "feathercoin-linux-0.9.6"
+name: "feathercoin-linux-0.9.6.2"
 enable_cache: true
 suites:
 - "trusty"
@@ -28,7 +28,7 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/feathercoin/feathercoin.git"
+- "url": "https://github.com/natedavis/feathercoin.git"
   "dir": "feathercoin"
 files: []
 script: |
