@@ -48,7 +48,7 @@ src/stamp-h1
 
 src/qt/*.moc
 src/qt/moc_*.cpp
-
+src/qt/forms/ui*.h
 src/qt/test/moc*.cpp
 
 .deps
