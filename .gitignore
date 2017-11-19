@@ -9,6 +9,7 @@ src/feathercoind
 src/feathercoin-cli
 src/qt/test/test_feathercoin-qt
 src/test/test_feathercoin
+src/qt/feathercoin-qt
 
 # autoreconf
 Makefile.in
