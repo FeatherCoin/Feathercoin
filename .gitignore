@@ -59,11 +59,8 @@ src/qt/test/moc*.cpp
 *.bak
 *.rej
 *.orig
-*.o
-*.o-*
 *.patch
 .feathercoin
-*.a
 *.pb.cc
 *.pb.h
 
@@ -75,6 +72,10 @@ src/qt/test/moc*.cpp
 *.raw.h
 
 # Compilation and Qt preprocessor part
+*.o
+*.o-*
+*.a
+*.lo
 src/qt/locale*.ts
 Makefile
 feathercoin-qt
