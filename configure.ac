@@ -543,7 +543,7 @@ if test x$use_pkgconfig = xyes; then
       BITCOIN_QT_CHECK([PKG_CHECK_MODULES([PROTOBUF], [protobuf], [have_protobuf=yes], [BITCOIN_QT_FAIL(libprotobuf not found)])])
       if test x$use_qr != xno; then
 	if test x$TARGET_OS != xdarwin; then
-	  BITCOIN_QT_CHECK([PKG_CHECK_MODULES([QRENCODE], [libqrencode libzxing],[LIBS="$LIBS $QRENCODE_LIBS"], [AC_MSG_ERROR(qrencode/zxing libraries not found.)])])
+	  PKG_CHECK_MODULES([QRENCODE], [libqrencode libzxing],[LIBS="$LIBS $QRENCODE_LIBS"], [AC_MSG_ERROR(qrencode/zxing libraries not found.)])
          BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, [AC_MSG_ERROR(qrencode headerfiles not found)])])
 	else 
 	 BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
