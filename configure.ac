@@ -566,13 +566,13 @@ else
   fi
 fi
 
+if test x$use_qr != xno; then
 BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, (have_qr=no [qrcode header files missing]))])
 BITCOIN_QT_CHECK([AC_CHECK_HEADER([zxing/ZXing.h],, (have_zxing=no [zxing header files missing]))])
+fi
 
 BITCOIN_QT_PATH_PROGS([PROTOC], [protoc],$protoc_bin_path)
 
-AC_CHECK_HEADER([qrencode.h],, [AC_MSG_ERROR(qrencode headerfiles not found)])
-AC_CHECK_HEADER([zxing/ZXing.h],, [AC_MSG_ERROR(zxing header files not found)])
 
 AC_MSG_CHECKING([whether to build feathercoind])
 AM_CONDITIONAL([BUILD_BITCOIND], [test x$build_feathercoind = xyes])

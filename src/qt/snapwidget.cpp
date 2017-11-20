@@ -7,11 +7,15 @@
 #else
 #include <QDesktopWidget>
 #endif
+
+#ifdef USE_QRCODE
 #include "zxing/common/GlobalHistogramBinarizer.h"
 #include <zxing/Binarizer.h>
 #include <zxing/BinaryBitmap.h>
 #include <zxing/MultiFormatReader.h>
 #include <zxing/LuminanceSource.h>
+#endif
+
 #include "qimagesource.h"
 #include "ui_snapwidget.h"
 
@@ -37,6 +41,7 @@ SnapWidget::~SnapWidget()
 
 void SnapWidget::on_snapButton_clicked() 
 {
+#ifdef USE_QRENCODE
     int _x, _y, _w, _h;
     _x = geometry().x();
     _y = geometry().y() + cancelButton->height();
@@ -73,6 +78,7 @@ void SnapWidget::on_snapButton_clicked()
         decodedString = QString(r->getText()->getText().c_str());
         delete qrDecoder;
     }
+#endif
     this->close();
 }
 
