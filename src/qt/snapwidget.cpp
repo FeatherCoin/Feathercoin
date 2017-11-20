@@ -41,6 +41,7 @@ SnapWidget::~SnapWidget()
 
 void SnapWidget::on_snapButton_clicked() 
 {
+#ifdef USE_QRENCODE
     int _x, _y, _w, _h;
     _x = geometry().x();
     _y = geometry().y() + cancelButton->height();
@@ -77,6 +78,7 @@ void SnapWidget::on_snapButton_clicked()
         decodedString = QString(r->getText()->getText().c_str());
         delete qrDecoder;
     }
+#endif
     this->close();
 }
 
