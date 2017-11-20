@@ -8,13 +8,13 @@
 #include <QDesktopWidget>
 #endif
 
-#ifdef USE_QRCODE
+//#ifdef USE_QRCODE
 #include "zxing/common/GlobalHistogramBinarizer.h"
 #include <zxing/Binarizer.h>
 #include <zxing/BinaryBitmap.h>
 #include <zxing/MultiFormatReader.h>
 #include <zxing/LuminanceSource.h>
-#endif
+//#endif
 
 #include "qimagesource.h"
 #include "ui_snapwidget.h"
