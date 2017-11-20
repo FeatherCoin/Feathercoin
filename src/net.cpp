@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -40,7 +41,7 @@
 using namespace std;
 using namespace boost;
 
-static const int MAX_OUTBOUND_CONNECTIONS = 8;
+static const int MAX_OUTBOUND_CONNECTIONS = 10;
 
 bool OpenNetworkConnection(const CAddress& addrConnect, CSemaphoreGrant *grantOutbound = NULL, const char *strDest = NULL, bool fOneShot = false);
 
@@ -59,7 +60,7 @@ static CNode* pnodeSync = NULL;
 uint64_t nLocalHostNonce = 0;
 static std::vector<SOCKET> vhListenSocket;
 CAddrMan addrman;
-int nMaxConnections = 125;
+int nMaxConnections = 150;
 
 vector<CNode*> vNodes;
 CCriticalSection cs_vNodes;
@@ -314,8 +315,11 @@ bool GetMyExternalIP2(const CService& addrConnect, const char* pszGet, const cha
 {
     SOCKET hSocket;
     if (!ConnectSocket(addrConnect, hSocket))
-        return error("GetMyExternalIP() : connection to %s failed", addrConnect.ToString());
-
+    {
+        LogPrintf("GetMyExternalIP() : connection to %s failed", addrConnect.ToString());
+        return true;
+    }
+    
     send(hSocket, pszGet, strlen(pszGet), MSG_NOSIGNAL);
 
     string strLine;
@@ -353,7 +357,10 @@ bool GetMyExternalIP2(const CService& addrConnect, const char* pszGet, const cha
         }
     }
     closesocket(hSocket);
-    return error("GetMyExternalIP() : connection closed");
+    {
+    LogPrintf("GetMyExternalIP() : connection closed");
+    return true;
+    }
 }
 
 bool GetMyExternalIP(CNetAddr& ipRet)
@@ -486,7 +493,7 @@ CNode* ConnectNode(CAddress addrConnect, const char *pszDest)
 
 
     /// debug print
-    LogPrint("net", "trying connection %s lastseen=%.1fhrs\n",
+        LogPrint("net", "trying connection %s lastseen=%.1fhrs\n",
         pszDest ? pszDest : addrConnect.ToString(),
         pszDest ? 0 : (double)(GetAdjustedTime() - addrConnect.nTime)/3600.0);
 
@@ -495,17 +502,18 @@ CNode* ConnectNode(CAddress addrConnect, const char *pszDest)
     if (pszDest ? ConnectSocketByName(addrConnect, hSocket, pszDest, Params().GetDefaultPort()) : ConnectSocket(addrConnect, hSocket))
     {
         addrman.Attempt(addrConnect);
-
         LogPrint("net", "connected %s\n", pszDest ? pszDest : addrConnect.ToString());
 
         // Set to non-blocking
 #ifdef WIN32
         u_long nOne = 1;
-        if (ioctlsocket(hSocket, FIONBIO, &nOne) == SOCKET_ERROR)
+        if (ioctlsocket(hSocket, FIONBIO, &nOne) == SOCKET_ERROR) {
             LogPrintf("ConnectSocket() : ioctlsocket non-blocking setting failed, error %s\n", NetworkErrorString(WSAGetLastError()));
+        }
 #else
-        if (fcntl(hSocket, F_SETFL, O_NONBLOCK) == SOCKET_ERROR)
+        if (fcntl(hSocket, F_SETFL, O_NONBLOCK) == SOCKET_ERROR) {
             LogPrintf("ConnectSocket() : fcntl non-blocking setting failed, error %s\n", NetworkErrorString(errno));
+        }
 #endif
 
         // Add node
@@ -932,8 +940,9 @@ void ThreadSocketHandler()
             int nInbound = 0;
 
             if (hSocket != INVALID_SOCKET)
-                if (!addr.SetSockAddr((const struct sockaddr*)&sockaddr))
+                if (!addr.SetSockAddr((const struct sockaddr*)&sockaddr)) {
                     LogPrintf("Warning: Unknown socket family\n");
+                }
 
             {
                 LOCK(cs_vNodes);
@@ -945,8 +954,9 @@ void ThreadSocketHandler()
             if (hSocket == INVALID_SOCKET)
             {
                 int nErr = WSAGetLastError();
-                if (nErr != WSAEWOULDBLOCK)
-                    LogPrintf("socket error accept failed: %s\n", NetworkErrorString(nErr));
+                // if (nErr != WSAEWOULDBLOCK) {
+                //     LogPrintf("socket error accept failed: %s\n", NetworkErrorString(nErr));
+                // }
             }
             else if (nInbound >= nMaxConnections - MAX_OUTBOUND_CONNECTIONS)
             {
@@ -1113,7 +1123,9 @@ void ThreadMapPort()
             char externalIPAddress[40];
             r = UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, externalIPAddress);
             if(r != UPNPCOMMAND_SUCCESS)
+            {
                 LogPrintf("UPnP: GetExternalIPAddress() returned %d\n", r);
+            }
             else
             {
                 if(externalIPAddress[0])
@@ -1122,7 +1134,9 @@ void ThreadMapPort()
                     AddLocal(CNetAddr(externalIPAddress), LOCAL_UPNP);
                 }
                 else
+                {
                     LogPrintf("UPnP: GetExternalIPAddress failed.\n");
+                }
             }
         }
 
@@ -1140,12 +1154,13 @@ void ThreadMapPort()
                                     port.c_str(), port.c_str(), lanaddr, strDesc.c_str(), "TCP", 0, "0");
 #endif
 
-                if(r!=UPNPCOMMAND_SUCCESS)
-                    LogPrintf("AddPortMapping(%s, %s, %s) failed with code %d (%s)\n",
-                        port, port, lanaddr, r, strupnperror(r));
+                if(r!=UPNPCOMMAND_SUCCESS) {
+                    LogPrintf("AddPortMapping(%s, %s, %s) failed with code %d (%s)\n", port, port, lanaddr, r, strupnperror(r));
+                }
                 else
-                    LogPrintf("UPnP Port Mapping successful.\n");;
-
+                {
+                    LogPrintf("UPnP Port Mapping successful.\n");
+                }
                 MilliSleep(20*60*1000); // Refresh every 20 minutes
             }
         }
@@ -1237,16 +1252,8 @@ void ThreadDNSAddressSeed()
             addrman.Add(vAdd, CNetAddr(seed.name, true));
         }
     }
-
-    LogPrintf("%d addresses found from DNS seeds\n", found);
+   LogPrintf("%d addresses found from DNS seeds\n", found);
 }
-
-
-
-
-
-
-
 
 
 
@@ -1722,14 +1729,17 @@ void static Discover(boost::thread_group& threadGroup)
                 struct sockaddr_in* s4 = (struct sockaddr_in*)(ifa->ifa_addr);
                 CNetAddr addr(s4->sin_addr);
                 if (AddLocal(addr, LOCAL_IF))
-                    LogPrintf("IPv4 %s: %s\n", ifa->ifa_name, addr.ToString());
+                {
+                    LogPrint("IPv4 %s: %s\n", ifa->ifa_name, addr.ToString());
+                }
             }
             else if (ifa->ifa_addr->sa_family == AF_INET6)
             {
                 struct sockaddr_in6* s6 = (struct sockaddr_in6*)(ifa->ifa_addr);
                 CNetAddr addr(s6->sin6_addr);
-                if (AddLocal(addr, LOCAL_IF))
+                if (AddLocal(addr, LOCAL_IF)) {
                     LogPrintf("IPv6 %s: %s\n", ifa->ifa_name, addr.ToString());
+                }
             }
         }
         freeifaddrs(myaddrs);
@@ -1759,10 +1769,13 @@ void StartNode(boost::thread_group& threadGroup)
     //
 
     if (!GetBoolArg("-dnsseed", true))
-        LogPrintf("DNS seeding disabled\n");
-    else
+         {
+         LogPrintf("DNS seeding disabled\n");
+         }
+     else
+     {
         threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "dnsseed", &ThreadDNSAddressSeed));
-
+     }
 #ifdef USE_UPNP
     // Map ports with UPnP
     MapPort(GetBoolArg("-upnp", USE_UPNP));
@@ -1811,8 +1824,9 @@ public:
                 closesocket(pnode->hSocket);
         BOOST_FOREACH(SOCKET hListenSocket, vhListenSocket)
             if (hListenSocket != INVALID_SOCKET)
-                if (closesocket(hListenSocket) == SOCKET_ERROR)
-                    LogPrintf("closesocket(hListenSocket) failed with error %s\n", NetworkErrorString(WSAGetLastError()));
+                if (closesocket(hListenSocket) == SOCKET_ERROR) {
+                   LogPrintf("closesocket(hListenSocket) failed with error %s\n", NetworkErrorString(WSAGetLastError()));
+                }
 
         // clean up some globals (to help leak detection)
         BOOST_FOREACH(CNode *pnode, vNodes)

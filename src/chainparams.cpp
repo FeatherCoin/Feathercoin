@@ -1,5 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -46,6 +47,13 @@ public:
         //how to do
         //vAlertPubKey = ParseHex("04d4da7a5dae4db797d9b0644d57a5cd50e05a70f36091cd62e2fc41c98ded06340be5a43a35e185690cd9cde5d72da8f6d065b499b06f51dcfba14aad859f443a");
         vAlertPubKey = ParseHex("043c19a29fe8f763369aea68107e82854af7b072fc7d2d2adb87d2a3b40b51ab0d0e77805096e255a87388b175fd4a49d93d9b6c878004975e41222a3b85086eef");
+        checkpointPubKey = "04c67c0114bc7cb8bb84ee0f3319e1df3339d335a15bdb04605cf2655d19212848a66d4535f3c91e943061474b7cacfd4eaa10835d35a8d4e431c68a4c4f5450ba";
+        nForkOne = 33000;
+        nForkTwo = 87948;
+        nForkThree = 204639;
+        nForkFour = 432000;
+        nNeoScryptSwitch = 1413936000;
+        nNeoScryptFork = 1414346265;
         nDefaultPort = 9336;
         nRPCPort = 9337;
         bnProofOfWorkLimit = CBigNum(~uint256(0) >> 20);
@@ -88,12 +96,12 @@ public:
         //how to do feathercoin ?
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,14); // FeatherCoin addresses start with F
         base58Prefixes[SCRIPT_ADDRESS_OLD] = std::vector<unsigned char>(1,5);
-      //  base58Prefixes[SCRIPT_ADDRESS] = list_of(96);
+        // base58Prefixes[SCRIPT_ADDRESS] = list_of(96);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,142);// 14+128
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x88)(0xBC)(0x26).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x88)(0xDA)(0xEE).convert_to_container<std::vector<unsigned char> >();
-        //base58Prefixes[EXT_SCRIPT_ADDRESS] = list_of(96);
+        // th base58Prefixes[EXT_SCRIPT_ADDRESS] = list_of(96);
         
         // Convert the pnSeeds array into usable address objects.
         for (unsigned int i = 0; i < ARRAYLEN(pnSeed); i++)
@@ -138,12 +146,17 @@ public:
         pchMessageStart[2] = 0xa5;
         pchMessageStart[3] = 0xba;
 	
-	pchMessageStartNew[0] = 0xaa;
+        pchMessageStartNew[0] = 0xaa;
         pchMessageStartNew[1] = 0xbb;
         pchMessageStartNew[2] = 0xcc;
         pchMessageStartNew[3] = 0xdd;
         //how to do
         vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
+        checkpointPubKey = "04db371d2b99df9e7962b2ce2369ada9821261e7f943a57a7ff3494d7d6c87939d3632fcaa2878bd5e45cfea0ea435fd6ee049a28ccbd0998ea3aadeb7abeed065";
+        nForkTwo = 0;
+        nForkThree = 0;
+        nForkFour = 600;
+        nNeoScryptFork = 1486758327;
         nDefaultPort = 19336;
         nRPCPort = 19337;
         strDataDir = "testnet3";
@@ -181,27 +194,49 @@ static CTestNetParams testNetParams;
 class CRegTestParams : public CTestNetParams {
 public:
     CRegTestParams() {
-        pchMessageStart[0] = 0xfa;
-        pchMessageStart[1] = 0xbf;
-        pchMessageStart[2] = 0xb5;
-        pchMessageStart[3] = 0xda;
-        nSubsidyHalvingInterval = 150;
-        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
-        genesis.nTime = 1296688602;
-        genesis.nBits = 0x207fffff;
-        genesis.nNonce = 2;
-        hashGenesisBlock = genesis.GetHash();
-        nDefaultPort = 18444;
-        strDataDir = "regtest";
-        assert(hashGenesisBlock == uint256("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
+        
+        pchMessageStart[0] = 0xda;
+        pchMessageStart[1] = 0xaf;
+        pchMessageStart[2] = 0xa5;
+        pchMessageStart[3] = 0xba;
 
+	    pchMessageStartNew[0] = 0xaa;
+        pchMessageStartNew[1] = 0xbb;
+        pchMessageStartNew[2] = 0xcc;
+        pchMessageStartNew[3] = 0xdd;
+
+        nSubsidyHalvingInterval = 256;
+        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 1);
+
+        genesis.nTime = 1396255061;
+        genesis.nBits = 0x207fffff;
+        genesis.nNonce = 3250989159;
+        genesis.nVersion = 2;
+
+        vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
+        hashGenesisBlock = genesis.GetHash();
+        nDefaultPort = 18446;
+        nRPCPort = 18447;
+        strDataDir = "regtest";
+
+        assert(genesis.hashMerkleRoot == uint256("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
+        assert(hashGenesisBlock == uint256("0x3cb269a7f1ac8338f0ac28bf2f2cf6b67d91bd5e09b82efa60fceae3d5924323"));
+
+        vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,65);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
+        base58Prefixes[SECRET_KEY]     = std::vector<unsigned char>(1,193);//65+128
+        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x35)(0x87)(0xCF).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x35)(0x83)(0x94).convert_to_container<std::vector<unsigned char> >();
+        
     }
 
     virtual bool RequireRPCPassword() const { return false; }
     virtual Network NetworkID() const { return CChainParams::REGTEST; }
 };
-//static CRegTestParams regTestParams;
+static CRegTestParams regTestParams;
 
 static CChainParams *pCurrentParams = &mainParams;
 
@@ -218,8 +253,8 @@ void SelectParams(CChainParams::Network network) {
             pCurrentParams = &testNetParams;
             break;
         case CChainParams::REGTEST:
-            //pCurrentParams = &regTestParams;
-            pCurrentParams = &testNetParams;
+            pCurrentParams = &regTestParams;
+            // pCurrentParams = &testNetParams;
             break;
         default:
             assert(false && "Unimplemented network");

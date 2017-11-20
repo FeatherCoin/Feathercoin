@@ -24,6 +24,7 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey);
 void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& nExtraNonce);
 /** Do mining precalculation */
 void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash1);
+void FormatDataBuffer(CBlock *pblock, unsigned int *pdata);
 /** Check mined block */
 bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey);
 /** Base sha256 mining transform */

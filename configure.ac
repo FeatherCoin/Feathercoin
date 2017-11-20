@@ -1,14 +1,15 @@
 dnl require autoconf 2.60 (AS_ECHO/AS_ECHO_N)
-AC_PREREQ([2.69])
+AC_PREREQ([2.60])
 define(_CLIENT_VERSION_MAJOR, 0)
 define(_CLIENT_VERSION_MINOR, 9)
 define(_CLIENT_VERSION_REVISION, 6)
-define(_CLIENT_VERSION_BUILD, 1)
+define(_CLIENT_VERSION_BUILD, 2)
+
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2017)
 AC_INIT([Feathercoin Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[info@ftc-c.com],[feathercoin])
-AC_CONFIG_AUX_DIR([src/build-aux])
-AC_CONFIG_MACRO_DIR([src/m4])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([build-aux/m4])
 AC_CANONICAL_HOST
 AH_TOP([#ifndef BITCOIN_CONFIG_H])
 AH_TOP([#define BITCOIN_CONFIG_H])
@@ -107,6 +108,12 @@ AC_ARG_ENABLE([glibc-back-compat],
   [enable backwards compatibility with glibc and libstdc++])],
   [use_glibc_compat=$enableval],
   [use_glibc_compat=no])
+
+AC_ARG_ENABLE([sse2],
+  [AC_HELP_STRING([--enable-sse2],
+  [enable SSE2 optimizations (defaults is yes)])],
+  [use_sse2=${enableval}],
+  [use_sse2=yes])
 
 AC_ARG_WITH([protoc-bindir],[AS_HELP_STRING([--with-protoc-bindir=BIN_DIR],[specify protoc bin path])], [protoc_bin_path=$withval], [])
 
@@ -298,6 +305,13 @@ if test x$use_lcov == xyes; then
   AX_CHECK_COMPILE_FLAG([--coverage],[CXXFLAGS="$CXXFLAGS --coverage"],
     [AC_MSG_ERROR("lcov testing requested but --coverage flag does not work")])
 fi
+
+if test "$use_sse2" = "yes"; then
+    AX_CHECK_COMPILE_FLAG([-msse2],[CFLAGS="$CFLAGS -msse2" && CXXFLAGS="$CXXFLAGS -msse2"])
+    AC_DEFINE([USE_SSE2],[1],[Define if SSE2 support should be compiled in])
+fi
+
+AC_DEFINE([ASM],[1],[Assembly code support])
 
 dnl Require little endian
 AC_C_BIGENDIAN([AC_MSG_ERROR("Big Endian not supported")])
@@ -528,10 +542,13 @@ if test x$use_pkgconfig = xyes; then
       PKG_CHECK_MODULES([CRYPTO], [libcrypto], [INCLUDES="$INCLUDES $CRYPTO_CFLAGS"; LIBS="$LIBS $CRYPTO_LIBS"], [AC_MSG_ERROR(libcrypto  not found.)])
       BITCOIN_QT_CHECK([PKG_CHECK_MODULES([PROTOBUF], [protobuf], [have_protobuf=yes], [BITCOIN_QT_FAIL(libprotobuf not found)])])
       if test x$use_qr != xno; then
-      #  PKG_CHECK_MODULES([ZXING], [zxing],, [AC_MSG_ERROR(libzxing  not found.)])
-        BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_zxing=no])])
-      #  PKG_CHECK_MODULES([QRENCODE], [libqrencode],, [AC_MSG_ERROR(libqrencode  not found.)])
-        BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
+	if test x$TARGET_OS != xdarwin; then
+	  PKG_CHECK_MODULES([QRENCODE], [libqrencode libzxing],[LIBS="$LIBS $QRENCODE_LIBS"], [AC_MSG_ERROR(qrencode/zxing libraries not found.)])
+         BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, [AC_MSG_ERROR(qrencode headerfiles not found)])])
+	else 
+	 BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
+         BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, BITCOIN_QT_FAIL(libzxing not found))])
+	fi  
       fi
     ]
   )
@@ -544,13 +561,20 @@ else
 
   BITCOIN_QT_CHECK(AC_CHECK_LIB([protobuf] ,[main],,BITCOIN_QT_FAIL(libprotobuf not found)))
   if test x$use_qr != xno; then
+    BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
     BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, BITCOIN_QT_FAIL(libzxing not found))])
-    BITCOIN_QT_CHECK([AC_CHECK_HEADER([zxing.h],, have_qzxing=no)])
-    BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, have_qr=no)])
   fi
 fi
 
+if test x$use_qr != xno; then
+BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, (have_qr=no [qrcode header files missing]))])
+BITCOIN_QT_CHECK([AC_CHECK_HEADER([zxing/ZXing.h],, (have_zxing=no [zxing header files missing]))])
+fi
+
 BITCOIN_QT_PATH_PROGS([PROTOC], [protoc],$protoc_bin_path)
+
+AC_CHECK_HEADER([qrencode.h],, [AC_MSG_ERROR(qrencode headerfiles not found)])
+AC_CHECK_HEADER([zxing/ZXing.h],, [AC_MSG_ERROR(zxing header files not found)])
 
 AC_MSG_CHECKING([whether to build feathercoind])
 AM_CONDITIONAL([BUILD_BITCOIND], [test x$build_feathercoind = xyes])
@@ -630,7 +654,7 @@ if test x$bitcoin_enable_qt != xno; then
 
   dnl enable qr support
   AC_MSG_CHECKING([whether to build GUI with support for QR codes])
-  if test x$have_zxing = xno; then
+  if test x$have_qr == xno; then
     if test x$use_qr == xyes; then
      AC_MSG_ERROR("QR support requested but cannot be built. use --without-qrencode")
     fi
@@ -640,8 +664,8 @@ if test x$bitcoin_enable_qt != xno; then
       AC_MSG_RESULT(yes)
       AC_DEFINE([USE_ZXING],[1],[Define if QR support should be compiled in])
       use_zxing=yes
-      AC_DEFINE([USE_QRCODE],[0],[Define if QR support should be compiled in])
-      use_qr=no
+      AC_DEFINE([USE_QRCODE],[1],[Define if QR support should be compiled in])
+      use_qr=yes
     else
       AC_MSG_RESULT(no)
     fi
@@ -677,6 +701,7 @@ AM_CONDITIONAL([BUILD_DARWIN], [test x$BUILD_OS = xdarwin])
 AM_CONDITIONAL([TARGET_WINDOWS], [test x$TARGET_OS = xwindows])
 AM_CONDITIONAL([ENABLE_WALLET],[test x$enable_wallet == xyes])
 AM_CONDITIONAL([USE_QRCODE], [test x$use_qr = xyes])
+AM_CONDITIONAL([USE_SSE2], [test x$use_sse2 = xyes])
 AM_CONDITIONAL([USE_ZXING], [test x$use_qr = xyes])
 AM_CONDITIONAL([USE_LCOV],[test x$use_lcov == xyes])
 AM_CONDITIONAL([USE_COMPARISON_TOOL],[test x$use_comparison_tool != xno])
@@ -699,6 +724,7 @@ AC_SUBST(LIBTOOL_LDFLAGS)
 AC_SUBST(USE_UPNP)
 AC_SUBST(USE_ZXING)
 AC_SUBST(USE_QRCODE)
+AC_SUBST(USE_SSE2)
 AC_SUBST(INCLUDES)
 AC_SUBST(BOOST_LIBS)
 AC_SUBST(TESTDEFS)

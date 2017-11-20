@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin developers
+// Copyright (c) 2015-2017 The Feathercoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -361,16 +362,15 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
 
             pwallet->AddToWallet(wtx, true);
             //// debug print
-            //LogPrintf("LoadWallet  %s\n", wtx.GetHash().ToString());
-            //LogPrintf(" %12d  %s  %s  %s\n",
+            // if (fDebug) LogPrintf("LoadWallet  %s\n", wtx.GetHash().ToString());
+            // if (fDebug) LogPrintf(" %12d  %s  %s  %s\n",
             //    wtx.vout[0].nValue,
             //    DateTimeStrFormat("%Y-%m-%d %H:%M:%S", wtx.GetBlockTime()),
             //    wtx.hashBlock.ToString(),
             //    wtx.mapValue["message"]);
         } else if (strType == "sxAddr")
         {
-            if (fDebug)
-                printf("WalletDB ReadKeyValue sxAddr\n");
+            // if (fDebug) printf("WalletDB ReadKeyValue sxAddr\n");
             
             CStealthAddress sxAddr;
             ssValue >> sxAddr;
@@ -526,8 +526,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             wss.fIsEncrypted = true;
         } else if (strType == "sxKeyMeta")
         {
-            if (fDebug)
-                printf("WalletDB ReadKeyValue sxKeyMeta\n");
+            // if (fDebug) printf("WalletDB ReadKeyValue sxKeyMeta\n");
             
             CKeyID keyId;
             ssKey >> keyId;
@@ -694,9 +693,9 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
         return result;
 
     LogPrintf("nFileVersion = %d\n", wss.nFileVersion);
-
+ 
     LogPrintf("Keys: %u plaintext, %u encrypted, %u w/ metadata, %u total\n",
-           wss.nKeys, wss.nCKeys, wss.nKeyMeta, wss.nKeys + wss.nCKeys);
+               wss.nKeys, wss.nCKeys, wss.nKeyMeta, wss.nKeys + wss.nCKeys);
 
     // nTimeFirstKey is only reliable if all keys have metadata
     if ((wss.nKeys + wss.nCKeys) != wss.nKeyMeta)
@@ -913,8 +912,9 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
 
     int result = dbenv.dbenv.dbrename(NULL, filename.c_str(), NULL,
                                       newFilename.c_str(), DB_AUTO_COMMIT);
-    if (result == 0)
+    if (result == 0) {
         LogPrintf("Renamed %s to %s\n", filename, newFilename);
+    }
     else
     {
         LogPrintf("Failed to rename %s to %s\n", filename, newFilename);
