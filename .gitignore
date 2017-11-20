@@ -9,7 +9,6 @@ src/feathercoind
 src/feathercoin-cli
 src/qt/test/test_feathercoin-qt
 src/test/test_feathercoin
-src/qt/feathercoin-qt
 
 # autoreconf
 Makefile.in
@@ -48,7 +47,8 @@ src/stamp-h1
 
 src/qt/*.moc
 src/qt/moc_*.cpp
-src/qt/forms/ui*.h
+src/qt/forms/ui_*.h
+
 src/qt/test/moc*.cpp
 
 .deps
@@ -75,7 +75,7 @@ src/qt/test/moc*.cpp
 *.raw.h
 
 # Compilation and Qt preprocessor part
-*.qm
+src/qt/locale*.ts
 Makefile
 feathercoin-qt
 Feathercoin-Qt.app
