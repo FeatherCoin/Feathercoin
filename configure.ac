@@ -543,11 +543,10 @@ if test x$use_pkgconfig = xyes; then
       BITCOIN_QT_CHECK([PKG_CHECK_MODULES([PROTOBUF], [protobuf], [have_protobuf=yes], [BITCOIN_QT_FAIL(libprotobuf not found)])])
       if test x$use_qr != xno; then
 	if test x$TARGET_OS != xdarwin; then
-	  PKG_CHECK_MODULES([QRENCODE], [libqrencode libzxing],[LIBS="$LIBS $QRENCODE_LIBS"], [AC_MSG_ERROR(qrencode/zxing libraries not found.)])
-         BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, [AC_MSG_ERROR(qrencode headerfiles not found)])])
+	  BITCOIN_QT_CHECK([PKG_CHECK_MODULES([QRENCODE], [libqrencode libzxing],[LIBS="$LIBS $QRENCODE_LIBS"], [have_qr=no])])
 	else 
 	 BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
-         BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, BITCOIN_QT_FAIL(libzxing not found))])
+         BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_zxing=no])])
 	fi  
       fi
     ]
@@ -561,14 +560,16 @@ else
 
   BITCOIN_QT_CHECK(AC_CHECK_LIB([protobuf] ,[main],,BITCOIN_QT_FAIL(libprotobuf not found)))
   if test x$use_qr != xno; then
-    BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
-    BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, BITCOIN_QT_FAIL(libzxing not found))])
+        BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
+        BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_qr=no])])
   fi
 fi
 
 if test x$use_qr != xno; then
-BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, (have_qr=no [qrcode header files missing]))])
-BITCOIN_QT_CHECK([AC_CHECK_HEADER([zxing/ZXing.h],, (have_zxing=no [zxing header files missing]))])
+    if test x$have_qr!=xno; then
+      BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, (have_qr=no [qrcode header files missing]))])
+      BITCOIN_QT_CHECK([AC_CHECK_HEADER([zxing/ZXing.h],, (have_zxing=no [zxing header files missing]))])
+    fi
 fi
 
 BITCOIN_QT_PATH_PROGS([PROTOC], [protoc],$protoc_bin_path)
