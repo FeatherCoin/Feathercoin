@@ -26,3 +26,5 @@ RESOURCES += \
     
 QT += \
     printsupport
+
+CONFIG += c++11
