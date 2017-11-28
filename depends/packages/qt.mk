@@ -1,21 +1,21 @@
 PACKAGE=qt
-$(package)_version=5.7.1
-$(package)_download_path=http://download.qt.io/official_releases/qt/5.7/$($(package)_version)/submodules
+$(package)_version=5.8.0
+$(package)_download_path=http://download.qt.io/official_releases/qt/5.8/$($(package)_version)/submodules
 $(package)_suffix=opensource-src-$($(package)_version).tar.gz
 $(package)_file_name=qtbase-$($(package)_suffix)
-$(package)_sha256_hash=95f83e532d23b3ddbde7973f380ecae1bac13230340557276f75f2e37984e410
+$(package)_sha256_hash=0f6ecd94abd148f1ea4ad08905308af973c6fad9e8fca7491d68dbc8fbd88872
 $(package)_dependencies=openssl zlib
 $(package)_linux_dependencies=freetype fontconfig libxcb libX11 xproto libXext
 $(package)_build_subdir=qtbase
 $(package)_qt_libs=corelib network widgets gui plugins testlib
-$(package)_patches=mac-qmake.conf mingw-uuidof.patch pidlist_absolute.patch fix-xcb-include-order.patch fix_qt_pkgconfig.patch
+$(package)_patches=mac-qmake.conf fix_build_error.patch fix_build_error2.patch
 
 $(package)_qttranslations_file_name=qttranslations-$($(package)_suffix)
-$(package)_qttranslations_sha256_hash=3a15aebd523c6d89fb97b2d3df866c94149653a26d27a00aac9b6d3020bc5a1d
+$(package)_qttranslations_sha256_hash=2dcd5ca68293c0331e5a21109b25a5e74b976ed2c728932dccab8f15ef48353a
 
 
 $(package)_qttools_file_name=qttools-$($(package)_suffix)
-$(package)_qttools_sha256_hash=22d67de915cb8cd93e16fdd38fa006224ad9170bd217c2be1e53045a8dd02f0f
+$(package)_qttools_sha256_hash=febeb5679ba3de02bae1c0fd9bf7f4635fc627f1c97ba199a7617767d82463d2
 
 $(package)_extra_sources  = $($(package)_qttranslations_file_name)
 $(package)_extra_sources += $($(package)_qttools_file_name)
@@ -28,26 +28,18 @@ $(package)_config_opts += -c++std c++11
 $(package)_config_opts += -confirm-license
 $(package)_config_opts += -dbus-runtime
 $(package)_config_opts += -hostprefix $(build_prefix)
-$(package)_config_opts += -no-alsa
-$(package)_config_opts += -no-audio-backend
 $(package)_config_opts += -no-cups
 $(package)_config_opts += -no-egl
 $(package)_config_opts += -no-eglfs
-$(package)_config_opts += -no-feature-style-windowsmobile
-$(package)_config_opts += -no-feature-style-windowsce
 $(package)_config_opts += -no-freetype
 $(package)_config_opts += -no-gif
 $(package)_config_opts += -no-glib
-$(package)_config_opts += -no-gstreamer
 $(package)_config_opts += -no-icu
 $(package)_config_opts += -no-iconv
 $(package)_config_opts += -no-kms
 $(package)_config_opts += -no-linuxfb
 $(package)_config_opts += -no-libudev
-$(package)_config_opts += -no-mitshm
 $(package)_config_opts += -no-mtdev
-$(package)_config_opts += -no-pulseaudio
-$(package)_config_opts += -no-openvg
 $(package)_config_opts += -no-reduce-relocations
 $(package)_config_opts += -no-qml-debug
 $(package)_config_opts += -no-sql-db2
@@ -78,8 +70,6 @@ $(package)_config_opts += -reduce-exports
 $(package)_config_opts += -static
 $(package)_config_opts += -silent
 $(package)_config_opts += -v
-$(package)_config_opts += -no-feature-printer
-$(package)_config_opts += -no-feature-printdialog
 
 ifneq ($(build_os),darwin)
 $(package)_config_opts_darwin = -xplatform macx-clang-linux
@@ -132,20 +122,18 @@ define $(package)_preprocess_cmds
   sed -i.old 's/if \[ "$$$$XPLATFORM_MAC" = "yes" \]; then xspecvals=$$$$(macSDKify/if \[ "$$$$BUILD_ON_MAC" = "yes" \]; then xspecvals=$$$$(macSDKify/' qtbase/configure && \
   sed -i.old 's/CGEventCreateMouseEvent(0, kCGEventMouseMoved, pos, 0)/CGEventCreateMouseEvent(0, kCGEventMouseMoved, pos, kCGMouseButtonLeft)/' qtbase/src/plugins/platforms/cocoa/qcocoacursor.mm && \
   mkdir -p qtbase/mkspecs/macx-clang-linux &&\
+  patch -p1 < $($(package)_patch_dir)/fix_build_error.patch && \
+  patch -p1 < $($(package)_patch_dir)/fix_build_error2.patch && \
   cp -f qtbase/mkspecs/macx-clang/Info.plist.lib qtbase/mkspecs/macx-clang-linux/ &&\
   cp -f qtbase/mkspecs/macx-clang/Info.plist.app qtbase/mkspecs/macx-clang-linux/ &&\
   cp -f qtbase/mkspecs/macx-clang/qplatformdefs.h qtbase/mkspecs/macx-clang-linux/ &&\
   cp -f $($(package)_patch_dir)/mac-qmake.conf qtbase/mkspecs/macx-clang-linux/qmake.conf && \
-  patch -p1 < $($(package)_patch_dir)/mingw-uuidof.patch && \
-  patch -p1 < $($(package)_patch_dir)/pidlist_absolute.patch && \
-  patch -p1 < $($(package)_patch_dir)/fix-xcb-include-order.patch && \
-  patch -p1 < $($(package)_patch_dir)/fix_qt_pkgconfig.patch && \
   echo "!host_build: QMAKE_CFLAGS     += $($(package)_cflags) $($(package)_cppflags)" >> qtbase/mkspecs/common/gcc-base.conf && \
   echo "!host_build: QMAKE_CXXFLAGS   += $($(package)_cxxflags) $($(package)_cppflags)" >> qtbase/mkspecs/common/gcc-base.conf && \
   echo "!host_build: QMAKE_LFLAGS     += $($(package)_ldflags)" >> qtbase/mkspecs/common/gcc-base.conf && \
   sed -i.old "s|QMAKE_CFLAGS            = |!host_build: QMAKE_CFLAGS            = $($(package)_cflags) $($(package)_cppflags) |" qtbase/mkspecs/win32-g++/qmake.conf && \
   sed -i.old "s|QMAKE_LFLAGS            = |!host_build: QMAKE_LFLAGS            = $($(package)_ldflags) |" qtbase/mkspecs/win32-g++/qmake.conf && \
-  sed -i.old "s|QMAKE_CXXFLAGS          = |!host_build: QMAKE_CXXFLAGS            = $($(package)_cxxflags) $($(package)_cppflags) |" qtbase/mkspecs/win32-g++/qmake.conf
+  sed -i.old "s|QMAKE_CXXFLAGS          = |!host_build: QMAKE_CXXFLAGS          = $($(package)_cxxflags) $($(package)_cppflags) |" qtbase/mkspecs/win32-g++/qmake.conf
 
 endef
 
