@@ -40,7 +40,7 @@ script: |
   FAKETIME_HOST_PROGS=""
   FAKETIME_PROGS="date ar ranlib nm"
   HOST_CFLAGS="-O2 -g"
-  HOST_CXXFLAGS="-O2 -g"
+  HOST_CXXFLAGS="-O2 -g -std=c++11"
   HOST_LDFLAGS=-static-libstdc++
 
   export QT_RCC_TEST=1
