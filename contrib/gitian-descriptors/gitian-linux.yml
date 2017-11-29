@@ -2,7 +2,7 @@
 name: "feathercoin-linux-0.9.6.2"
 enable_cache: true
 suites:
-- "xenial"
+- "trusty"
 architectures:
 - "amd64"
 packages:
@@ -27,7 +27,6 @@ packages:
 - "bsdmainutils"
 - "ca-certificates"
 - "python"
-- "cmake"
 remotes:
 - "url": "https://github.com/natedavis/feathercoin.git"
   "dir": "feathercoin"
