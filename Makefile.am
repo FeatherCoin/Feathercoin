@@ -15,7 +15,7 @@ OSX_DEPLOY_SCRIPT=$(top_srcdir)/contrib/macdeploy/macdeployqtplus
 OSX_FANCY_PLIST=$(top_srcdir)/contrib/macdeploy/fancy.plist
 OSX_INSTALLER_ICONS=$(top_srcdir)/src/qt/res/icons/feathercoin.icns
 OSX_PLIST=$(top_srcdir)/share/qt/Info.plist #not installed
-OSX_QT_TRANSLATIONS = da,de,es,hu,ru,uk,zh_CN,zh_TW
+OSX_QT_TRANSLATIONS = 
 
 DIST_DOCS = $(wildcard doc/*.md) $(wildcard doc/release-notes/*.md)
 
@@ -82,7 +82,7 @@ OSX_APP_BUILT=$(OSX_APP)/Contents/PkgInfo $(OSX_APP)/Contents/Resources/empty.lp
 
 if BUILD_DARWIN
 $(OSX_DMG): $(OSX_APP_BUILT) $(OSX_PACKAGING)
-	$(OSX_DEPLOY_SCRIPT) $(OSX_APP) -add-qt-tr $(OSX_QT_TRANSLATIONS) -dmg -fancy $(OSX_FANCY_PLIST) -verbose 2
+	$(OSX_DEPLOY_SCRIPT) $(OSX_APP) -dmg -fancy $(OSX_FANCY_PLIST) -verbose 2
 
 else
 $(OSX_DMG): $(OSX_APP_BUILT) $(OSX_PACKAGING)
