@@ -2,7 +2,7 @@
 name: "feathercoin-linux-0.9.6.2"
 enable_cache: true
 suites:
-- "trusty"
+- "xenial"
 architectures:
 - "amd64"
 packages:
