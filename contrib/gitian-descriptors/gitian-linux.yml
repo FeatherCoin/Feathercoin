@@ -27,6 +27,7 @@ packages:
 - "bsdmainutils"
 - "ca-certificates"
 - "python"
+- "cmake"
 remotes:
 - "url": "https://github.com/natedavis/feathercoin.git"
   "dir": "feathercoin"
