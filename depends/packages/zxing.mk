@@ -1,7 +1,7 @@
 package=zxing
 $(package)_version=0.0.1
 $(package)_download_path=https://api.github.com/repos/glassechidna/zxing-cpp/tarball
-$(package)_file_name=glassechidna-zxing-cpp-07e5600.tar.gz
+$(package)_file_name=master
 $(package)_sha256_hash=75a12556e40b28db65906768566379b6a0b6dddb7bfd281343ec239efe74799e
 
 define $(package)_set_vars
