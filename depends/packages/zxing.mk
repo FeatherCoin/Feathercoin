@@ -1,8 +1,8 @@
 package=zxing
 $(package)_version=0.0.1
-$(package)_download_path=https://github.com/glassechidna/zxing-cpp/archive
-$(package)_file_name=master.zip
-$(package)_sha256_hash=f57675d77b05fb8db16a1dfddd55c1c52ed6ad5f59c49ac59cff9e3ca41387b1
+$(package)_download_path=https://api.github.com/repos/glassechidna/zxing-cpp/tarball
+$(package)_file_name=glassechidna-zxing-cpp-07e5600.tar.gz
+$(package)_sha256_hash=75a12556e40b28db65906768566379b6a0b6dddb7bfd281343ec239efe74799e
 
 define $(package)_set_vars
   $(package)_cxxflags=-std=c++11
