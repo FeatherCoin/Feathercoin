@@ -59,7 +59,6 @@ src/qt/test/moc*.cpp
 *.bak
 *.rej
 *.orig
-*.patch
 .feathercoin
 *.pb.cc
 *.pb.h
