@@ -19,9 +19,9 @@ FORMS += \
     ../src/qt/forms/signverifymessagedialog.ui \
     ../src/qt/forms/snapwidget.ui \
     ../src/qt/forms/transactiondescdialog.ui \
+    ../src/qt/forms/paperwalletdialog.ui \
 
 RESOURCES += \
-    ../src/qt/bitcoin.qrc \
     ../src/qt/feathercoin.qrc
     
 QT += \

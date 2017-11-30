@@ -4,6 +4,7 @@ define(_CLIENT_VERSION_MAJOR, 0)
 define(_CLIENT_VERSION_MINOR, 9)
 define(_CLIENT_VERSION_REVISION, 6)
 define(_CLIENT_VERSION_BUILD, 2)
+
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2017)
 AC_INIT([Feathercoin Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[info@ftc-c.com],[feathercoin])
@@ -541,10 +542,12 @@ if test x$use_pkgconfig = xyes; then
       PKG_CHECK_MODULES([CRYPTO], [libcrypto], [INCLUDES="$INCLUDES $CRYPTO_CFLAGS"; LIBS="$LIBS $CRYPTO_LIBS"], [AC_MSG_ERROR(libcrypto  not found.)])
       BITCOIN_QT_CHECK([PKG_CHECK_MODULES([PROTOBUF], [protobuf], [have_protobuf=yes], [BITCOIN_QT_FAIL(libprotobuf not found)])])
       if test x$use_qr != xno; then
-      #  PKG_CHECK_MODULES([ZXING], [zxing],, [AC_MSG_ERROR(libzxing  not found.)])
-        BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_zxing=no])])
-      #  PKG_CHECK_MODULES([QRENCODE], [libqrencode],, [AC_MSG_ERROR(libqrencode  not found.)])
-        BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
+	if test x$TARGET_OS != xdarwin; then
+	  BITCOIN_QT_CHECK([PKG_CHECK_MODULES([QRENCODE], [libqrencode libzxing],[LIBS="$LIBS $QRENCODE_LIBS"], [have_qr=no])])
+	else 
+	 BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
+         BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_zxing=no])])
+	fi  
       fi
     ]
   )
@@ -557,13 +560,20 @@ else
 
   BITCOIN_QT_CHECK(AC_CHECK_LIB([protobuf] ,[main],,BITCOIN_QT_FAIL(libprotobuf not found)))
   if test x$use_qr != xno; then
-    BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, BITCOIN_QT_FAIL(libzxing not found))])
-    BITCOIN_QT_CHECK([AC_CHECK_HEADER([zxing.h],, have_qzxing=no)])
-    BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, have_qr=no)])
+        BITCOIN_QT_CHECK([AC_CHECK_LIB([qrencode], [main],, [have_qr=no])])
+        BITCOIN_QT_CHECK([AC_CHECK_LIB([zxing], [main],, [have_qr=no])])
   fi
 fi
 
+if test x$use_qr != xno; then
+    if test x$have_qr!=xno; then
+      BITCOIN_QT_CHECK([AC_CHECK_HEADER([qrencode.h],, (have_qr=no [qrcode header files missing]))])
+      BITCOIN_QT_CHECK([AC_CHECK_HEADER([zxing/ZXing.h],, (have_zxing=no [zxing header files missing]))])
+    fi
+fi
+
 BITCOIN_QT_PATH_PROGS([PROTOC], [protoc],$protoc_bin_path)
+
 
 AC_MSG_CHECKING([whether to build feathercoind])
 AM_CONDITIONAL([BUILD_BITCOIND], [test x$build_feathercoind = xyes])
@@ -643,7 +653,7 @@ if test x$bitcoin_enable_qt != xno; then
 
   dnl enable qr support
   AC_MSG_CHECKING([whether to build GUI with support for QR codes])
-  if test x$have_zxing = xno; then
+  if test x$have_qr == xno; then
     if test x$use_qr == xyes; then
      AC_MSG_ERROR("QR support requested but cannot be built. use --without-qrencode")
     fi

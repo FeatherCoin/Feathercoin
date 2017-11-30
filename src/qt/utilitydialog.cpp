@@ -45,6 +45,8 @@
 
 #ifdef USE_QRCODE
 #include <qrencode.h>
+#include <zxing/LuminanceSource.h>
+#include <zxing/MultiFormatReader.h>
 #endif
 
 #if HAVE_QT5

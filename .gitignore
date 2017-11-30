@@ -45,6 +45,8 @@ src/build-aux/
 
 src/stamp-h1
 
+#ignore files created during make
+*.lo
 src/qt/*.moc
 src/qt/moc_*.cpp
 src/qt/forms/ui_*.h
@@ -59,11 +61,8 @@ src/qt/test/moc*.cpp
 *.bak
 *.rej
 *.orig
-*.o
-*.o-*
 *.patch
 .feathercoin
-*.a
 *.pb.cc
 *.pb.h
 
@@ -75,7 +74,11 @@ src/qt/test/moc*.cpp
 *.raw.h
 
 # Compilation and Qt preprocessor part
-*.qm
+*.o
+*.o-*
+*.a
+*.lo
+src/qt/locale*.ts
 Makefile
 feathercoin-qt
 Feathercoin-Qt.app
