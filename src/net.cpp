@@ -1250,6 +1250,7 @@ void ThreadDNSAddressSeed()
                 }
             }
             addrman.Add(vAdd, CNetAddr(seed.name, true));
+	    LogPrintf("%s, %s added\n", seed.name,CNetAddr(seed.name, true));
         }
     }
    LogPrintf("%d addresses found from DNS seeds\n", found);
