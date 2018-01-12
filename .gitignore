@@ -1,10 +1,10 @@
 *.tar.gz
 
 *.exe
-src/bitcoin
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-tx
+src/feathercoin
+src/feathercoind
+src/feathercoin-cli
+src/feathercoin-tx
 src/test/test_bitcoin
 src/qt/test/test_bitcoin-qt
 
@@ -55,7 +55,7 @@ src/qt/test/moc*.cpp
 *.o
 *.o-*
 *.patch
-.bitcoin
+.feathercoin
 *.a
 *.pb.cc
 *.pb.h
@@ -74,12 +74,12 @@ src/qt/test/moc*.cpp
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-bitcoin-qt
-Bitcoin-Qt.app
+feathercoin-qt
+Feathercoin-Qt.app
 
 # Unit-tests
 Makefile.test
-bitcoin-qt_test
+feathercoin-qt_test
 src/test/buildenv.py
 
 # Resources cpp
