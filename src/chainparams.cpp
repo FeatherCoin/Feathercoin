@@ -102,6 +102,7 @@ public:
         nPruneAfterHeight = 100000;
 
         consensus.nForkOne = 33000;
+        consensus.nForkTwo = 87948;
 
         genesis = CreateGenesisBlock(1317972665, 2084524493, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -195,6 +196,8 @@ public:
         nDefaultPort = 19336;
         nPruneAfterHeight = 1000;
 
+        consensus.nForkTwo = 0;
+
         genesis = CreateGenesisBlock(1396255061, 3250989159, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
@@ -271,6 +274,8 @@ public:
         pchMessageStart[3] = 0xba;
         nDefaultPort = 18446;
         nPruneAfterHeight = 1000;
+
+        consensus.nForkTwo = 0;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
