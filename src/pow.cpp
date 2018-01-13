@@ -19,6 +19,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return nProofOfWorkLimit;
 
     int nHeight = pindexLast->nHeight + 1;
+
+    // 4th Hard fork, reset difficulty
+    if (nHeight == params.nForkFour)
+        return params.powNeoScryptLimit;
+
     int nTargetTimespan = params.nPowTargetTimespan;
     int nTargetSpacing = params.nPowTargetSpacing;
 

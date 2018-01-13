@@ -101,6 +101,7 @@ UniValue generateBlocks(boost::shared_ptr<CReserveScript> coinbaseScript, int nG
     int nHeightStart = 0;
     int nHeightEnd = 0;
     int nHeight = 0;
+    unsigned int profile = 0x0;
 
     {   // Don't keep cs_main locked
         LOCK(cs_main);
@@ -120,7 +121,9 @@ UniValue generateBlocks(boost::shared_ptr<CReserveScript> coinbaseScript, int nG
             LOCK(cs_main);
             IncrementExtraNonce(pblock, chainActive.Tip(), nExtraNonce);
         }
-        while (nMaxTries > 0 && pblock->nNonce < nInnerLoopCount && !CheckProofOfWork(pblock->GetPoWHash(), pblock->nBits, Params().GetConsensus())) {
+        if (pblock->GetBlockTime() < Params().GetConsensus().nNeoScryptFork)
+            profile = 0x3;
+        while (nMaxTries > 0 && pblock->nNonce < nInnerLoopCount && !CheckProofOfWork(pblock->GetPoWHash(profile), pblock->nBits, Params().GetConsensus())) {
             ++pblock->nNonce;
             --nMaxTries;
         }

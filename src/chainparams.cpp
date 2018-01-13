@@ -66,6 +66,7 @@ public:
         consensus.BIP34Height = 432000;
         consensus.BIP34Hash = uint256S("0x966e30dd04d09232f6f690a04664cd3258abe43eeda2f2291d93706aa494aa54");
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powNeoScryptLimit = 490733567;
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
         consensus.nPowTargetSpacing = 2.5 * 60; // 2.5 mins
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -104,6 +105,9 @@ public:
         consensus.nForkOne = 33000;
         consensus.nForkTwo = 87948;
         consensus.nForkThree = 204639;
+        consensus.nForkFour = 432000;
+        consensus.nNeoScryptSwitch = 1413936000;
+        consensus.nNeoScryptFork = 1414346265;
 
         genesis = CreateGenesisBlock(1317972665, 2084524493, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -167,6 +171,7 @@ public:
         consensus.BIP34Height = 600;
         consensus.BIP34Hash = uint256S("0x03d3e9191e34ca47e86b1dd8d22213f20c6058bd2533eea04ab7d3655eb13646");
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powNeoScryptLimit = 490733567;
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 2.5 * 60; // 2.5 mins
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -199,6 +204,9 @@ public:
 
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
+        consensus.nForkFour = 600;
+        consensus.nNeoScryptSwitch = 1413936000;
+        consensus.nNeoScryptFork = 1486758327;
 
         genesis = CreateGenesisBlock(1396255061, 3250989159, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -251,6 +259,7 @@ public:
         consensus.BIP34Height = -1; // BIP34 has not necessarily activated on regtest
         consensus.BIP34Hash = uint256();
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powNeoScryptLimit = 545259519;
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 2.5 * 60; // 2.5 mins
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -279,6 +288,9 @@ public:
 
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
+        consensus.nForkFour = 0;
+        consensus.nNeoScryptSwitch = 1413936000;
+        consensus.nNeoScryptFork = 1486758327;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();

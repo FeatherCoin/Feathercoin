@@ -17,9 +17,8 @@ uint256 CBlockHeader::GetHash() const
     return SerializeHash(*this);
 }
 
-uint256 CBlockHeader::GetPoWHash() const
+uint256 CBlockHeader::GetPoWHash(unsigned int profile) const
 {
-    unsigned int profile = 0x3;
     uint256 hash;
 
     neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);
