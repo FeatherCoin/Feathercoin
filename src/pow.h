@@ -6,6 +6,8 @@
 #ifndef BITCOIN_POW_H
 #define BITCOIN_POW_H
 
+#include "crypto/neoscrypt.h"
+
 #include "consensus/params.h"
 
 #include <stdint.h>
