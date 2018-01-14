@@ -137,12 +137,17 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         nActualTimespan = nActualTimespanMax;
 
     // Retarget
-    const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     arith_uint256 bnNew;
     bnNew.SetCompact(pindexLast->nBits);
+    bool fShift = bnNew.bits() > 235;
+    if (fShift)
+        bnNew >>= 1;
     bnNew *= nActualTimespan;
     bnNew /= nTargetTimespan;
+    if (fShift)
+        bnNew <<= 1;
 
+    const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     if (bnNew > bnPowLimit)
         bnNew = bnPowLimit;
 
