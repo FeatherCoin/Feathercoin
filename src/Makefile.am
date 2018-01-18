@@ -84,6 +84,7 @@ BITCOIN_CORE_H = \
   chainparamsbase.h \
   chainparamsseeds.h \
   checkpoints.h \
+  checkpointsync.h \
   checkqueue.h \
   clientversion.h \
   coincontrol.h \
@@ -111,6 +112,7 @@ BITCOIN_CORE_H = \
   net.h \
   netbase.h \
   noui.h \
+  opensslkey.h \
   policy/fees.h \
   policy/policy.h \
   policy/rbf.h \
@@ -130,6 +132,8 @@ BITCOIN_CORE_H = \
   streams.h \
   support/allocators/secure.h \
   support/allocators/zeroafterfree.h \
+  support/allocators.h \
+  support/allocators.cpp \
   support/cleanse.h \
   support/pagelocker.h \
   sync.h \
@@ -171,6 +175,7 @@ libbitcoin_server_a_SOURCES = \
   blockencodings.cpp \
   chain.cpp \
   checkpoints.cpp \
+  checkpointsync.cpp \
   httprpc.cpp \
   httpserver.cpp \
   init.cpp \
@@ -301,6 +306,7 @@ libbitcoin_common_a_SOURCES = \
   key.cpp \
   keystore.cpp \
   netbase.cpp \
+  opensslkey.cpp \
   protocol.cpp \
   scheduler.cpp \
   script/sign.cpp \

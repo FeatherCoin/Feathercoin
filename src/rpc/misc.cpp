@@ -13,6 +13,7 @@
 #include "timedata.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "checkpointsync.h"
 #ifdef ENABLE_WALLET
 #include "wallet/wallet.h"
 #include "wallet/walletdb.h"
@@ -445,6 +446,67 @@ UniValue setmocktime(const UniValue& params, bool fHelp)
     }
 
     return NullUniValue;
+}
+
+// RPC commands related to sync checkpoints
+// get information of sync-checkpoint (first introduced in ppcoin)
+UniValue getcheckpoint(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+            "getcheckpoint\n"
+            "Show info of synchronized checkpoint.\n");
+
+    UniValue result(UniValue::VARR);
+    UniValue entry(UniValue::VOBJ);
+    CBlockIndex* pindexCheckpoint;
+
+    entry.push_back(Pair("synccheckpoint", hashSyncCheckpoint.ToString().c_str()));
+    if (mapBlockIndex.count(hashSyncCheckpoint))
+    {
+        pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+        entry.push_back(Pair("height", pindexCheckpoint->nHeight));
+        entry.push_back(Pair("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime()));
+    }
+    if (mapArgs.count("-checkpointkey"))
+        entry.push_back(Pair("checkpointmaster", true));
+    result.push_back(entry);
+
+    return result;
+}
+
+UniValue sendcheckpoint(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "sendcheckpoint <blockhash>\n"
+            "Send a synchronized checkpoint.\n");
+
+    if (!mapArgs.count("-checkpointkey") || CSyncCheckpoint::strMasterPrivKey.empty())
+        throw runtime_error("Not a checkpointmaster node, first set checkpointkey in configuration and restart client. ");
+
+    string strHash = params[0].get_str();
+    uint256 hash = uint256S(strHash);
+
+    if (!SendSyncCheckpoint(hash))
+        throw runtime_error("Failed to send checkpoint, check log. ");
+
+    UniValue result(UniValue::VARR);
+    UniValue entry(UniValue::VOBJ);
+    CBlockIndex* pindexCheckpoint;
+
+    entry.push_back(Pair("synccheckpoint", hashSyncCheckpoint.ToString().c_str()));
+    if (mapBlockIndex.count(hashSyncCheckpoint))
+    {
+        pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+        entry.push_back(Pair("height", pindexCheckpoint->nHeight));
+        entry.push_back(Pair("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime()));
+    }
+    if (mapArgs.count("-checkpointkey"))
+        entry.push_back(Pair("checkpointmaster", true));
+    result.push_back(entry);
+
+    return result;
 }
 
 static const CRPCCommand commands[] =

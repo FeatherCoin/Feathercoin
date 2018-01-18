@@ -314,3 +314,37 @@ bool CBitcoinSecret::SetString(const std::string& strSecret)
 {
     return SetString(strSecret.c_str());
 }
+
+
+void CBitcoinOpenSecret::SetKey(const COpenKey& vchSecret)
+{
+    assert(vchSecret.IsValid());
+    SetData(Params().Base58Prefix(CChainParams::SECRET_KEY), vchSecret.begin(), vchSecret.size());
+    if (vchSecret.IsCompressed())
+        vchData.push_back(1);
+}
+
+COpenKey CBitcoinOpenSecret::GetKey()
+{
+    COpenKey ret;
+    assert(vchData.size() >= 32);
+    ret.Set(vchData.begin(), vchData.begin() + 32, vchData.size() > 32 && vchData[32] == 1);
+    return ret;
+}
+
+bool CBitcoinOpenSecret::IsValid() const
+{
+    bool fExpectedFormat = vchData.size() == 32 || (vchData.size() == 33 && vchData[32] == 1);
+    bool fCorrectVersion = vchVersion == Params().Base58Prefix(CChainParams::SECRET_KEY);
+    return fExpectedFormat && fCorrectVersion;
+}
+
+bool CBitcoinOpenSecret::SetString(const char* pszSecret)
+{
+    return CBase58Data::SetString(pszSecret) && IsValid();
+}
+
+bool CBitcoinOpenSecret::SetString(const std::string& strSecret)
+{
+    return SetString(strSecret.c_str());
+}
