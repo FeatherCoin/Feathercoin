@@ -206,8 +206,8 @@
         <translation>Barra de ferramentas</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
-        <translation>Solicitar pagos (xenera códigos QR e bitcoin: URIs)</translation>
+        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
+        <translation>Solicitar pagos (xenera códigos QR e feathercoin: URIs)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -218,8 +218,8 @@
         <translation>Amosar a listaxe de etiquetas e direccións para recibir empregadas</translation>
     </message>
     <message>
-        <source>Open a bitcoin: URI or payment request</source>
-        <translation>Abrir un bitcoin: URI ou solicitude de pago</translation>
+        <source>Open a feathercoin: URI or payment request</source>
+        <translation>Abrir un feathercoin: URI ou solicitude de pago</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
