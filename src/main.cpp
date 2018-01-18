@@ -5008,6 +5008,20 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             vRecv >> LIMITED_STRING(pfrom->strSubVer, MAX_SUBVERSION_LENGTH);
             pfrom->cleanSubVer = SanitizeString(pfrom->strSubVer);
         }
+
+        // Disconnect certain incompatible clients
+        const char *badSubVers[] = { "/LitecoinCore", "/DigitalcoinV3.0", "/Satoshi", "/bridgecoinCore", "/DrVenkman", "/Madcoin", "/Worldcoin Business Center", "/WorldcoinFoundation"};
+        for (int x = 0; x < 3; x++)
+        {
+            if (pfrom->cleanSubVer.find(badSubVers[x], 0) == 0)
+            {
+                LogPrintf("invalid subver %s at %s, disconnecting\n", pfrom->cleanSubVer, pfrom->addr.ToString());
+                pfrom->PushMessage("reject", strCommand, REJECT_INVALID, string("invalid client subver"));
+                pfrom->fDisconnect = true;
+                return true;
+            }
+        }
+
         if (!vRecv.empty()) {
             vRecv >> pfrom->nStartingHeight;
         }
