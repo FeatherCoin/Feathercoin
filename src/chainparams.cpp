@@ -108,6 +108,7 @@ public:
         consensus.nForkTwo = 87948;
         consensus.nForkThree = 204639;
         consensus.nForkFour = 432000;
+        consensus.nTimeLimit = 2313000;
         consensus.nNeoScryptSwitch = 1413936000;
         consensus.nNeoScryptFork = 1414346265;
 
@@ -209,6 +210,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 600;
+        consensus.nTimeLimit = 1000;
         consensus.nNeoScryptSwitch = 1413936000;
         consensus.nNeoScryptFork = 1486758327;
 
