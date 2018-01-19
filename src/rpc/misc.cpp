@@ -509,6 +509,40 @@ UniValue sendcheckpoint(const UniValue& params, bool fHelp)
     return result;
 }
 
+UniValue makekeypair(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "makekeypair [prefix]\n"
+            "Make a public/private key pair.\n"
+            "[prefix] is optional preferred prefix for the public key.\n");
+
+    string strPrefix = "";
+    if (params.size() > 0)
+        strPrefix = params[0].get_str();
+
+    COpenKey key;
+    COpenPubKey pubkey;
+    int nCount = 0;
+    do
+    {
+        key.MakeNewKey(false);
+        pubkey = key.GetPubKey();
+        nCount++;
+    } while (nCount < 10000 && strPrefix != HexStr(pubkey.begin(), pubkey.end()).substr(0, strPrefix.size()));
+
+    if (strPrefix != HexStr(pubkey.begin(), pubkey.end()).substr(0, strPrefix.size()))
+        return NullUniValue;
+
+    UniValue result(UniValue::VARR);
+    UniValue entry(UniValue::VOBJ);
+    entry.push_back(Pair("PublicKey", HexStr(pubkey.begin(), pubkey.end())));
+    entry.push_back(Pair("PrivateKey", CBitcoinOpenSecret(key).ToString()));
+    result.push_back(entry);
+
+    return result;
+}
+
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         okSafeMode
   //  --------------------- ------------------------  -----------------------  ----------
@@ -519,6 +553,7 @@ static const CRPCCommand commands[] =
     { "util",               "signmessagewithprivkey", &signmessagewithprivkey, true  },
     { "util",               "getcheckpoint",          &getcheckpoint,          true  },
     { "util",               "sendcheckpoint",         &sendcheckpoint,         true  },
+    { "util",               "makekeypair",            &makekeypair,            true  },
 
     /* Not shown in help */
     { "hidden",             "setmocktime",            &setmocktime,            true  },
