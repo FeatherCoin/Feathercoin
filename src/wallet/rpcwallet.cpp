@@ -2610,8 +2610,6 @@ static const CRPCCommand commands[] =
     { "wallet",             "importpubkey",             &importpubkey,             true  },
     { "wallet",             "keypoolrefill",            &keypoolrefill,            true  },
     { "wallet",             "listaccounts",             &listaccounts,             false },
-    { "wallet",             "getcheckpoint",            &getcheckpoint,            true  },
-    { "wallet",             "sendcheckpoint",           &sendcheckpoint,           true  },
     { "wallet",             "listaddressgroupings",     &listaddressgroupings,     false },
     { "wallet",             "listlockunspent",          &listlockunspent,          false },
     { "wallet",             "listreceivedbyaccount",    &listreceivedbyaccount,    false },

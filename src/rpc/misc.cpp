@@ -517,6 +517,8 @@ static const CRPCCommand commands[] =
     { "util",               "createmultisig",         &createmultisig,         true  },
     { "util",               "verifymessage",          &verifymessage,          true  },
     { "util",               "signmessagewithprivkey", &signmessagewithprivkey, true  },
+    { "util",               "getcheckpoint",          &getcheckpoint,          true  },
+    { "util",               "sendcheckpoint",         &sendcheckpoint,         true  },
 
     /* Not shown in help */
     { "hidden",             "setmocktime",            &setmocktime,            true  },
