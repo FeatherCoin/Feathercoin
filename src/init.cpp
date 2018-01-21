@@ -1386,6 +1386,12 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                         MIN_BLOCKS_TO_KEEP);
                 }
 
+                uiInterface.InitMessage(_("Checking ACP ..."));
+                if (!CheckCheckpointPubKey()) {
+                    strLoadError = _("Checking ACP pubkey failed");
+                    break;
+                }
+
                 {
                     LOCK(cs_main);
                     CBlockIndex* tip = chainActive.Tip();
