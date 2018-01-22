@@ -101,6 +101,10 @@ public:
         pchMessageStart[1] = 0xc0;
         pchMessageStart[2] = 0xb6;
         pchMessageStart[3] = 0xdb;
+        pchMessageStartNew[0] = 0x41;
+        pchMessageStartNew[1] = 0x15;
+        pchMessageStartNew[2] = 0x1a;
+        pchMessageStartNew[3] = 0x21;
         nDefaultPort = 9336;
         nPruneAfterHeight = 100000;
 
@@ -204,6 +208,10 @@ public:
         pchMessageStart[1] = 0xaf;
         pchMessageStart[2] = 0xa5;
         pchMessageStart[3] = 0xba;
+        pchMessageStartNew[0] = 0x91;
+        pchMessageStartNew[1] = 0x65;
+        pchMessageStartNew[2] = 0x6a;
+        pchMessageStartNew[3] = 0x71;
         nDefaultPort = 19336;
         nPruneAfterHeight = 1000;
 
@@ -291,12 +299,17 @@ public:
         pchMessageStart[1] = 0xaf;
         pchMessageStart[2] = 0xa5;
         pchMessageStart[3] = 0xba;
+        pchMessageStartNew[0] = 0xd1;
+        pchMessageStartNew[1] = 0xa5;
+        pchMessageStartNew[2] = 0xaa;
+        pchMessageStartNew[3] = 0xb1;
         nDefaultPort = 18446;
         nPruneAfterHeight = 1000;
 
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nVersionBitSwitch = 400;
         consensus.nNeoScryptSwitch = 1413936000;
         consensus.nNeoScryptFork = 1486758327;
 

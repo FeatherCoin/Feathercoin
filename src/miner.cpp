@@ -142,7 +142,11 @@ CBlockTemplate* BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, bo
     CBlockIndex* pindexPrev = chainActive.Tip();
     nHeight = pindexPrev->nHeight + 1;
 
-    pblock->nVersion = ComputeBlockVersion(pindexPrev, chainparams.GetConsensus());
+    if (nHeight >= Params().GetConsensus().nVersionBitSwitch)
+        pblock->nVersion = ComputeBlockVersion(pindexPrev, chainparams.GetConsensus());
+    else
+        pblock->nVersion = 2;
+
     // -regtest only: allow overriding block.nVersion with
     // -blockversion=N to test forking scenarios
     if (chainparams.MineBlocksOnDemand())
