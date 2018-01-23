@@ -5037,7 +5037,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         }
 
         // Disconnect certain incompatible clients
-        const char *badSubVers[] = { "/LitecoinCore", "/DigitalcoinV3.0", "/Satoshi", "/bridgecoinCore", "/DrVenkman", "/Madcoin", "/Worldcoin Business Center", "/WorldcoinFoundation"};
+        const char *badSubVers[] = { "/ViaBTC", "/LitecoinCore", "/DigitalcoinV3.0", "/Satoshi", "/bridgecoinCore", "/DrVenkman", "/Madcoin", "/Worldcoin Business Center", "/WorldcoinFoundation"};
         for (int x = 0; x < 3; x++)
         {
             if (pfrom->cleanSubVer.find(badSubVers[x], 0) == 0)
