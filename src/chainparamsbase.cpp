@@ -38,7 +38,7 @@ public:
 static CBaseMainParams mainParams;
 
 /**
- * Testnet (v3)
+ * Testnet (v4)
  */
 class CBaseTestNetParams : public CBaseChainParams
 {
@@ -46,7 +46,7 @@ public:
     CBaseTestNetParams()
     {
         nRPCPort = 19337;
-        strDataDir = "testnet3";
+        strDataDir = "testnet4";
     }
 };
 static CBaseTestNetParams testNetParams;

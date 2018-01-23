@@ -177,12 +177,12 @@ public:
         consensus.powNeoScryptLimit = uint256S("0000003fffff0000000000000000000000000000000000000000000000000000");
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 2.5 * 60; // 2.5 mins
-        consensus.checkpointPubKey = "04db371d2b99df9e7962b2ce2369ada9821261e7f943a57a7ff3494d7d6c87939d3632fcaa2878bd5e45cfea0ea435fd6ee049a28ccbd0998ea3aadeb7abeed065";
-        consensus.vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
+        consensus.checkpointPubKey = "0421c27bb6580b05dcda1f47e59274489f094a3e85d96bbc38d5befd10eee97397ec8a93b6d8d79e8370239a8f39adf66322b41dafe83066bbcee6144e4c41a699";
+        consensus.vAlertPubKey = ParseHex("04ee30d11e8de34c8c40410d7aefed4865e9d9978335239dd4869e62651030d9a18332537c03ff24580fe668cfcdf087341715b56b1c0788b600631ed4445d3280");
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 1512; // 75% of 2016 block
-        consensus.nMinerConfirmationWindow = 2016;
+        consensus.nRuleChangeActivationThreshold = 375; // 75% of 500 block
+        consensus.nMinerConfirmationWindow = 500;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -209,14 +209,14 @@ public:
 
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
-        consensus.nForkFour = 600;
-        consensus.nTimeLimit = 1000;
+        consensus.nForkFour = 0;
+        consensus.nTimeLimit = 100;
         consensus.nNeoScryptSwitch = 1413936000;
         consensus.nNeoScryptFork = 1486758327;
 
-        genesis = CreateGenesisBlock(1396255061, 3250989159, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1396255061, 677449, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
+        assert(consensus.hashGenesisBlock == uint256S("0x7734b3734ab1f0d0758e6c274622a377092549df05f6a4fe6939cbc754939169"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -224,9 +224,9 @@ public:
         vSeeds.push_back(CDNSSeedData("testnet-explorer2.feathercoin.com","feathercoin.com", false));
         vSeeds.push_back(CDNSSeedData("testnet-dnsseed.feathercoin.com","feathercoin.com", false));
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,65);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,193);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x35)(0x87)(0xCF).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x35)(0x83)(0x94).convert_to_container<std::vector<unsigned char> >();
 
