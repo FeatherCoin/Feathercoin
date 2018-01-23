@@ -74,11 +74,11 @@ src/qt/test/moc*.cpp
 *.raw.h
 
 # Compilation and Qt preprocessor part
+*.qm
 *.o
 *.o-*
 *.a
 *.lo
-src/qt/locale*.ts
 Makefile
 feathercoin-qt
 Feathercoin-Qt.app
