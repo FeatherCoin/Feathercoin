@@ -151,21 +151,21 @@ public:
         pchMessageStartNew[2] = 0xcc;
         pchMessageStartNew[3] = 0xdd;
         //how to do
-        vAlertPubKey = ParseHex("04e7b36458cb1db28567a99391109bc55a0c55623836d93d8794db6549dcc590012d1f5e23c786b752650dadce34fe5504dd7332450392eeb8292e62b211920c78");
-        checkpointPubKey = "04db371d2b99df9e7962b2ce2369ada9821261e7f943a57a7ff3494d7d6c87939d3632fcaa2878bd5e45cfea0ea435fd6ee049a28ccbd0998ea3aadeb7abeed065";
+        vAlertPubKey = ParseHex("04ee30d11e8de34c8c40410d7aefed4865e9d9978335239dd4869e62651030d9a18332537c03ff24580fe668cfcdf087341715b56b1c0788b600631ed4445d3280");
+        checkpointPubKey = "0421c27bb6580b05dcda1f47e59274489f094a3e85d96bbc38d5befd10eee97397ec8a93b6d8d79e8370239a8f39adf66322b41dafe83066bbcee6144e4c41a699";
         nForkTwo = 0;
         nForkThree = 0;
-        nForkFour = 600;
+        nForkFour = 0;
         nNeoScryptFork = 1486758327;
         nDefaultPort = 19336;
         nRPCPort = 19337;
-        strDataDir = "testnet3";
+        strDataDir = "testnet4";
 
         // Modify the testnet genesis block so the timestamp is valid for a later start.
         genesis.nTime    = 1396255061;
-        genesis.nNonce   = 3250989159;
+        genesis.nNonce   = 677449;
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x8e8b634d2f2800398261b7adcfbb6ace490e1746e62123ec2bf8010f9fc98b17"));
+        assert(hashGenesisBlock == uint256("0x7734b3734ab1f0d0758e6c274622a377092549df05f6a4fe6939cbc754939169"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -176,9 +176,9 @@ public:
 
         // Boost sucks, and should not be used. Workaround for Boost not being compatible with C++11;
         
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,65);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
-        base58Prefixes[SECRET_KEY]     = std::vector<unsigned char>(1,193);//65+128
+        base58Prefixes[SECRET_KEY]     = std::vector<unsigned char>(1,239);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x35)(0x87)(0xCF).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x35)(0x83)(0x94).convert_to_container<std::vector<unsigned char> >();
     }
