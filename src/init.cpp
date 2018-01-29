@@ -12,6 +12,7 @@
 #include "init.h"
 #include "util.h"
 #include "ui_interface.h"
+#include "checkpointsync.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -652,6 +653,12 @@ bool AppInit2(boost::thread_group& threadGroup)
             return InitError(strprintf(_("Invalid amount for -mininput=<amount>: '%s'"), mapArgs["-mininput"].c_str()));
     }
 
+	if (mapArgs.count("-checkpointkey")) // ppcoin: checkpoint master priv key
+    {
+        if (!SetCheckpointPrivKey(GetArg("-checkpointkey", "")))
+            return InitError(_("Unable to sign checkpoint, wrong checkpointkey?"));
+    }
+
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 
     std::string strDataDir = GetDataDir().string();
@@ -928,6 +935,12 @@ bool AppInit2(boost::thread_group& threadGroup)
                 if (!VerifyDB(GetArg("-checklevel", 3),
                               GetArg( "-checkblocks", 288))) {
                     strLoadError = _("Corrupted block database detected");
+                    break;
+                }
+
+                uiInterface.InitMessage(_("Checking ACP ..."));
+                if (!CheckCheckpointPubKey()) {
+                    strLoadError = _("Checking ACP pubkey failed");
                     break;
                 }
             } catch(std::exception &e) {

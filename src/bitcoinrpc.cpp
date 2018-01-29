@@ -255,6 +255,8 @@ static const CRPCCommand vRPCCommands[] =
     { "listsinceblock",         &listsinceblock,         false,     false,      true },
     { "dumpprivkey",            &dumpprivkey,            true,      false,      true },
     { "importprivkey",          &importprivkey,          false,     false,      true },
+    { "getcheckpoint",          &getcheckpoint,          true,      false,      false },
+    { "sendcheckpoint",         &sendcheckpoint,         true,      false,      false },
     { "listunspent",            &listunspent,            false,     false,      true },
     { "getrawtransaction",      &getrawtransaction,      false,     false,      false },
     { "createrawtransaction",   &createrawtransaction,   false,     false,      false },

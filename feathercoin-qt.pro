@@ -292,7 +292,8 @@ SOURCES += src/qt/bitcoin.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
-    src/qt/splashscreen.cpp
+    src/qt/splashscreen.cpp \
+    src/checkpointsync.cpp
 
 RESOURCES += src/qt/bitcoin.qrc
 
