@@ -3,7 +3,7 @@ Feathercoin Core
 ================
 
 
-Status - Feathercoin 0.9.6.2  Production Release
+Status - Feathercoin 0.9.6.2.1  Patch release for minor patches
 --------------------------------------------------------------
 
 

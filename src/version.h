@@ -25,11 +25,11 @@ extern const std::string CLIENT_DATE;
 //
 // network protocol versioning
 //
-// Client version    Protocol version
-//     60008            0.8.4
+//  Protocol version   Client version
+//     60008            0.8.4   Android wallet 3.04
 //     70003            0.9.6    
 //     70005            0.9.6.1
-//     70006            0.9.6.2
+//     70006            0.9.6.2 Android wallet 3.05
 
 static const int PROTOCOL_VERSION = 70006;
 

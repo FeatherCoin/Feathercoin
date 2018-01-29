@@ -7,7 +7,7 @@ define(_CLIENT_VERSION_BUILD, 2)
 
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2017)
-AC_INIT([Feathercoin Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[info@ftc-c.com],[feathercoin])
+AC_INIT([Feathercoin Core],[_CLIENT_VERSION_MAJOR._CLIENT_VERSION_MINOR._CLIENT_VERSION_REVISION],[feather@feathercoin.com],[feathercoin])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
 AC_CANONICAL_HOST
