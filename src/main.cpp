@@ -2242,15 +2242,9 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         if (GetBlockTime() <= pindexPrev->GetMedianTimePast())
             return state.Invalid(error("AcceptBlock() : block's timestamp is too early"));
 
-    // limit block in future accepted in chain to only a time window of 15 min
-    if (GetBlockTime() > GetAdjustedTime() + 15 * 60)
-        return error("AcceptBlock() : block's timestamp too far in the future");
-
-
-    // Check timestamp against prev it should not be more then 2 times the window
-    if (((nHeight > nForkTwo) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 2 * 30 * 60)) ||
-	  ((nHeight >= nForkThree || fTestNet) && (GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60))) // or 15 minutes
-        return error("AcceptBlock() : block's timestamp is too early compare to last block");
+        // Check timestamp against prev it should not be more then 2 times the window
+        if (GetBlockTime() <= pindexPrev->GetBlockTime() - 2 * 60 * 60)
+            return error("AcceptBlock() : block's timestamp is too early compare to last block");
 			
         // Check that all transactions are finalized
         BOOST_FOREACH(const CTransaction& tx, vtx)
