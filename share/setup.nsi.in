@@ -75,7 +75,7 @@ Section -Main SEC0000
     SetOverwrite on
     File ../src/qt/@BITCOIN_GUI_NAME@@EXEEXT@
     File /oname=COPYING.txt ../COPYING
-    File /oname=readme.txt ../README_windows.txt
+    File /oname=readme.txt ../doc/README_windows.txt
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 SectionEnd
