@@ -28,7 +28,7 @@ extern int nBaseMaturity;
 static const int BASE_MATURITY = 100;
 static const int BASE_MATURITY_TESTNET = 100;
 /* Offset for the above to allow safe network propagation, in blocks (confirmations) */
-static const int BASE_MATURITY_OFFSET = 1;
+static const int BASE_MATURITY_OFFSET = 20;
 /* Maturity threshold for regular transactions, in blocks (confirmations) */
 static const int TX_MATURITY = 6;
 
@@ -80,11 +80,8 @@ const int nForkOne = 33000;
 const int nForkTwo = 87948;
 const int nForkThree = 204639;
 const int nForkFour = 432000;
-
-static const int nTestnetFork   =  0;
-
-static const unsigned int nSwitchV2            = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
-static const unsigned int nTestnetSwitchV2     = 1406473140; // Sun, 27 Jul 2014 14:59:00 GMT
+const unsigned int nNeoScryptFork = 1414346265;
+static const unsigned int nSwitchV2 = 1413936000; // Wed, 22 Oct 2014 00:00:00 GMT
 
 extern CScript COINBASE_FLAGS;
 
@@ -1381,29 +1378,10 @@ public:
         vMerkleTree.clear();
     }
 
-    /* Calculates block proof-of-work hash using either NeoScrypt or Scrypt */
-    uint256 GetPoWHash() const {
-        unsigned int profile = 0x0;
+    /* Calculates block proof-of-work hash using either NeoScrypt 0x0 or Scrypt 0x3 */
+    uint256 GetPoWHash(unsigned int profile) const {
         uint256 hash;
 
-        /* All blocks generated up to this time point are Scrypt only */
-        if((fTestNet && (nTime < nTestnetSwitchV2)) ||
-          (!fTestNet && (nTime < nSwitchV2))) {
-            profile = 0x3;
-        } else {
-            /* All these blocks must be v2+ with valid nHeight */
-            int nHeight = GetBlockHeight();
-            if(fTestNet) {
-                if(nHeight < nTestnetFork)
-                  profile = 0x3;
-            } else {
-                if(nHeight < nForkFour)
-                  profile = 0x3;
-            }
-        }
-
-        /* Apply optimisation options if any */
-        profile |= nNeoScryptOptions;
         /* Hash the block header */
         neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);
 
@@ -1552,10 +1530,14 @@ public:
 
     void print() const
     {
+        unsigned int profile = 0x0;
+        if (nTime < nNeoScryptFork)
+            profile = 0x3;
+            
         printf("CBlock(hash=%s, input=%s, PoW=%s, ver=%d, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%"PRIszu")\n",
             GetHash().ToString().c_str(),
             HexStr(BEGIN(nVersion),BEGIN(nVersion)+80,false).c_str(),
-            GetPoWHash().ToString().c_str(),
+            GetPoWHash(profile).ToString().c_str(),
             nVersion,
             hashPrevBlock.ToString().c_str(),
             hashMerkleRoot.ToString().c_str(),

@@ -1102,132 +1102,84 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 
     // The next block
     int nHeight = pindexLast->nHeight + 1;
-    
-    /* The 4th hard fork and testnet hard fork */
-    if((nHeight >= nForkFour) || (fTestNet && (nHeight >= nTestnetFork))) {
-        if(!fNeoScrypt) fNeoScrypt = true;
-        /* Difficulty reset after the switch */
-        if((nHeight == nForkFour) || (fTestNet && (nHeight == nTestnetFork)))
-          return(bnNeoScryptSwitch.GetCompact());
-    }
 
-	if (nHeight >= nForkOne)
+    if (!fTestNet && nHeight == nForkFour)
+        return bnNeoScryptSwitch.GetCompact();
+
+	if (!fTestNet && nHeight >= nForkOne)
 		nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
 
-    if (nHeight >= nForkTwo)
+    if (!fTestNet && nHeight >= nForkTwo)
 		nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
 
 	if (nHeight >= nForkThree || fTestNet) {
         nTargetTimespan = 60; // 1 minute timespan
         nTargetSpacing = 60; // 1 minute block
 	}
-
+  
     // 2016 blocks initial, 504 after the 1st, 126 after the 2nd hard fork, 15 after the 3rd hard fork
     int nInterval = nTargetTimespan / nTargetSpacing;
 
-    bool fHardFork = (nHeight == nForkOne) || (nHeight == nForkTwo) || (nHeight == nForkThree) || (nHeight == nForkFour);
-    if(fTestNet) {
-        if (nHeight == nTestnetFork) {
-            fHardFork = true;
-        } else {
-            fHardFork = false;
-        }
-    }
+    bool fHardFork = nHeight == nForkOne || nHeight == nForkTwo;
 
     // Difficulty rules regular blocks
-    if((nHeight % nInterval != 0) && !(fHardFork) && (nHeight < nForkThree)) {
-
-        // Special difficulty rule for testnet:
-        if (fTestNet)
-        {
-            // If the new block's timestamp is more than 2* 2.5 minutes
-            // then allow mining of a min-difficulty block.
-            if (pblock->nTime > pindexLast->nTime + nTargetSpacing*2)
-                return nProofOfWorkLimit;
-            else
-            {
-                // Return the last non-special-min-difficulty-rules-block
-                const CBlockIndex* pindex = pindexLast;
-                while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
-                    pindex = pindex->pprev;
-                return pindex->nBits;
-            }
-        }
-
+    if(!fTestNet && (nHeight % nInterval != 0) && !(fHardFork) && (nHeight < nForkThree))
         return pindexLast->nBits;
-    }
 
     // The 1st retarget after genesis
-    if(nInterval >= nHeight) nInterval = nHeight - 1;
+    if (nInterval >= nHeight)
+        nInterval = nHeight - 1;
 
     // Go back by nInterval
     const CBlockIndex* pindexFirst = pindexLast;
     for(int i = 0; pindexFirst && i < nInterval; i++)
-      pindexFirst = pindexFirst->pprev;
+        pindexFirst = pindexFirst->pprev;
     assert(pindexFirst);
 
     int nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-
-    printf("RETARGET: nActualTimespan = %d before bounds\n", nActualTimespan);
+    int nActualTimespanAvg = 0;
 
     // Additional averaging over 4x nInterval window
-    if((nHeight >= nForkTwo) && (nHeight < nForkThree)) {
+    if(!fTestNet && (nHeight >= nForkTwo) && (nHeight < nForkThree)) {
         nInterval *= 4;
 
         const CBlockIndex* pindexFirst = pindexLast;
         for(int i = 0; pindexFirst && i < nInterval; i++)
-          pindexFirst = pindexFirst->pprev;
+            pindexFirst = pindexFirst->pprev;
 
-        int nActualTimespanLong =
-          (pindexLast->GetBlockTime() - pindexFirst->GetBlockTime())/4;
+        int nActualTimespanLong = (pindexLast->GetBlockTime() - pindexFirst->GetBlockTime()) / 4;
 
         // Average between short and long windows
-        int nActualTimespanAvg = (nActualTimespan + nActualTimespanLong)/2;
-
-        // Apply .25 damping
-        nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
-        nActualTimespan /= 4;
-
-        printf("RETARGET: nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",
-          nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+        nActualTimespanAvg = (nActualTimespan + nActualTimespanLong) / 2;
     }
-	
-	// Additional averaging over 15, 120 and 480 block window
+
+    // Additional averaging over 15, 120 and 480 block window
     if((nHeight >= nForkThree) || fTestNet) {
-	
-        nInterval *= 480;
+        nInterval = 480;
 
         int pindexFirstShortTime = 0;
         int pindexFirstMediumTime = 0;
         const CBlockIndex* pindexFirstLong = pindexLast;
-		for(int i = 0; pindexFirstLong && i < nInterval && i < nHeight - 1; i++) {  // i < nHeight - 1 special rule for testnet
-			pindexFirstLong = pindexFirstLong->pprev;
-			if (i == 14) {
+        for(int i = 0; pindexFirstLong && i < nInterval && i < nHeight - 1; i++) {
+            pindexFirstLong = pindexFirstLong->pprev;
+            if (i == 14)
                 pindexFirstShortTime = pindexFirstLong->GetBlockTime();
-			}
-			if (i == 119) {
+
+            if (i == 119)
                 pindexFirstMediumTime = pindexFirstLong->GetBlockTime();
-			}
-		}
+        }
 
-		int nActualTimespanShort =
-            (pindexLast->GetBlockTime() - pindexFirstShortTime)/15;
-		
-		int nActualTimespanMedium =
-            (pindexLast->GetBlockTime() - pindexFirstMediumTime)/120;
+        int nActualTimespanShort = (pindexLast->GetBlockTime() - pindexFirstShortTime) / 15;
+        int nActualTimespanMedium = (pindexLast->GetBlockTime() - pindexFirstMediumTime) / 120;
+        int nActualTimespanLong = (pindexLast->GetBlockTime() - pindexFirstLong->GetBlockTime()) / 480;
 
-        int nActualTimespanLong =
-			(pindexLast->GetBlockTime() - pindexFirstLong->GetBlockTime())/480;
+        nActualTimespanAvg = (nActualTimespanShort + nActualTimespanMedium + nActualTimespanLong) / 3;
+    }
 
-        int nActualTimespanAvg = 0;
-        nActualTimespanAvg = (nActualTimespanShort + nActualTimespanMedium + nActualTimespanLong)/3;
-
-		// Apply .25 damping
-		nActualTimespan = nActualTimespanAvg + 3*nTargetTimespan;
-		nActualTimespan /= 4;
-
-		printf("RETARGET: nActualTimespanShort = %d, nActualTimespanMedium = %d, nActualTimespanLong = %d, nActualTimeSpanAvg = %d, nActualTimespan (damped) = %d\n",
-		nActualTimespanShort, nActualTimespanMedium, nActualTimespanLong, nActualTimespanAvg, nActualTimespan);
+    // Apply .25 damping
+    if (nHeight >= nForkTwo || fTestNet) {
+        nActualTimespan = nActualTimespanAvg + 3 * nTargetTimespan;
+        nActualTimespan /= 4;
     }
 
     // The initial settings (4.0 difficulty limiter)
@@ -1235,7 +1187,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     int nActualTimespanMin = nTargetTimespan/4;
 
     // The 1st hard fork (1.4142857 aka 41% difficulty limiter)
-    if(nHeight >= nForkOne) {
+    if(!fTestNet && nHeight >= nForkOne && nHeight < nForkTwo) {
         nActualTimespanMax = nTargetTimespan*99/70;
         nActualTimespanMin = nTargetTimespan*70/99;
     }
@@ -1246,11 +1198,10 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
         nActualTimespanMin = nTargetTimespan*453/494;
     }
 
-    if(nActualTimespan < nActualTimespanMin) nActualTimespan = nActualTimespanMin;
-    if(nActualTimespan > nActualTimespanMax) nActualTimespan = nActualTimespanMax;
-
-    printf("RETARGET: nActualTimespan = %d after bounds\n", nActualTimespan);
-    printf("RETARGET: nTargetTimespan = %d, nTargetTimespan/nActualTimespan = %.4f\n", nTargetTimespan, (float) nTargetTimespan/nActualTimespan);
+    if(nActualTimespan < nActualTimespanMin)
+        nActualTimespan = nActualTimespanMin;
+    if(nActualTimespan > nActualTimespanMax)
+        nActualTimespan = nActualTimespanMax;
 
     // Retarget
     CBigNum bnNew;
@@ -1260,10 +1211,6 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 
     if (bnNew > bnProofOfWorkLimit)
         bnNew = bnProofOfWorkLimit;
-
-    printf("GetNextWorkRequired RETARGET\n");
-     printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
-    printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
 
     return bnNew.GetCompact();
 }
@@ -1275,7 +1222,6 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
     CBigNum bnTarget;
     bnTarget.SetCompact(nBits);
 
-
     // Check range
     if (bnTarget <= 0 || bnTarget > bnProofOfWorkLimit)
         return error("CheckProofOfWork() : nBits below minimum work");
@@ -1283,7 +1229,6 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
     // Check proof of work matches claimed amount
     if (hash > bnTarget.getuint256())
         return error("CheckProofOfWork() : hash doesn't match nBits");
-
 
     return true;
 }
@@ -2166,9 +2111,17 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return state.DoS(100, error("CheckBlock() : size limits failed"));
 
+    unsigned int profile = 0x0;
+    if (GetBlockTime() < nNeoScryptFork)
+        profile = 0x3;
+
     // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(GetPoWHash(), nBits))
+    if (fCheckPOW && !CheckProofOfWork(GetPoWHash(profile), nBits))
         return state.DoS(50, error("CheckBlock() : proof-of-work verification failed"));
+
+    // Check timestamp
+    if (GetBlockTime() > GetAdjustedTime() + 2 * 60 * 60)
+        return state.Invalid(error("CheckBlock() : block timestamp too far in the future"));
 
     // First transaction must be coinbase, the rest must not be
     if (vtx.empty() || !vtx[0].IsCoinBase())
@@ -2229,7 +2182,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         nHeight = pindexPrev->nHeight+1;
 
         /* Don't accept v1 blocks after this point */
-        if((fTestNet && (nTime > nTestnetSwitchV2)) || (!fTestNet && (nTime > nSwitchV2))) {
+        if (!fTestNet && nTime > nSwitchV2) {
             CScript expect = CScript() << nHeight;
             if(!std::equal(expect.begin(), expect.end(), vtx[0].vin[0].scriptSig.begin()))
                 return(state.DoS(100, error("AcceptBlock() : incorrect block height in coin base")));
@@ -2242,10 +2195,6 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         // Check timestamp against prev
         if (GetBlockTime() <= pindexPrev->GetMedianTimePast())
             return state.Invalid(error("AcceptBlock() : block's timestamp is too early"));
-
-        // Check timestamp against prev it should not be more then 2 times the window
-        if (GetBlockTime() <= pindexPrev->GetBlockTime() - 2 * 60 * 60)
-            return error("AcceptBlock() : block's timestamp is too early compare to last block");
 			
         // Check that all transactions are finalized
         BOOST_FOREACH(const CTransaction& tx, vtx)
@@ -4556,7 +4505,7 @@ void FormatDataBuffer(CBlock *pblock, unsigned int *pdata) {
     data.nBits          = pblock->nBits;
     data.nNonce         = pblock->nNonce;
 
-    if(fNeoScrypt) {
+    if(pblock->nTime >= nNeoScryptFork) {
         /* Copy the LE data */
         for(i = 0; i < 20; i++)
           pdata[i] = ((unsigned int *) &data)[i];
@@ -4574,7 +4523,11 @@ void FormatDataBuffer(CBlock *pblock, unsigned int *pdata) {
 
 bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 {
-    uint256 hash = pblock->GetPoWHash();
+    unsigned int profile = 0x0;
+    if (pblock->GetBlockTime() < nNeoScryptFork)
+        profile = 0x3;
+
+    uint256 hash = pblock->GetPoWHash(profile);
     uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
     if (hash > hashTarget)
@@ -4648,10 +4601,11 @@ void static FeathercoinMiner(CWallet *pwallet)
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
         while(true) {
             unsigned int nHashesDone = 0;
-            unsigned int profile = fNeoScrypt ? 0x0 : 0x3;
+            unsigned int profile = 0x0;
+            if (pblock->nTime < nNeoScryptFork)
+                profile = 0x3;
             uint256 hash;
 
-            profile |= nNeoScryptOptions;
 
             while(true) {
                 neoscrypt((unsigned char *) &pblock->nVersion, (unsigned char *) &hash, profile);
