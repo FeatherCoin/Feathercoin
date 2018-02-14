@@ -1,10 +1,7 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
+// Copyright (c) 2013-2018 The Feathercoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
-#if defined(HAVE_CONFIG_H)
-#include "config/bitcoin-config.h"
-#endif
 
 #include "splashscreen.h"
 
@@ -30,10 +27,10 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QWidget(0, f), curAlignment(0)
 {
     // set reference point, paddings
-    int paddingRight            = 30;
-    int paddingTop              = 50;
-    int titleVersionVSpace      = 17;
-    int titleCopyrightVSpace    = 40;
+    int paddingRight            = 231;
+    int paddingTop              = 260;
+    int titleVersionVSpace      = 13;
+    int titleCopyrightVSpace    = 26;
 
     float fontFactor            = 1.0;
     float devicePixelRatio      = 1.0;
@@ -42,15 +39,15 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
 #endif
 
     // define text to place
-    QString titleText       = tr(PACKAGE_NAME);
+    QString titleText       = tr("Feathercoin Core");
     QString versionText     = QString("Version %1").arg(QString::fromStdString(FormatFullVersion()));
-    QString copyrightText   = QString::fromUtf8(CopyrightHolders(strprintf("\xc2\xA9 %u-%u ", 2013, COPYRIGHT_YEAR)).c_str());
+    QString copyrightText   = QChar(0xA9)+QString(" 2013-%1 ").arg(COPYRIGHT_YEAR) + QString(tr("The Feathercoin Core developers"));
     QString titleAddText    = networkStyle->getTitleAddText();
 
     QString font            = QApplication::font().toString();
 
     // create a bitmap according to device pixelratio
-    QSize splashSize(480*devicePixelRatio,320*devicePixelRatio);
+    QSize splashSize(585*devicePixelRatio,350*devicePixelRatio);
     pixmap = QPixmap(splashSize);
 
 #if QT_VERSION > 0x050100
@@ -68,28 +65,31 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     QRect rGradient(QPoint(0,0), splashSize);
     pixPaint.fillRect(rGradient, gradient);
 
-    // draw the bitcoin icon, expected size of PNG: 1024x1024
-    QRect rectIcon(QPoint(-150,-122), QSize(430,430));
+//    draw the bitcoin icon, expected size of PNG: 1024x1024
+    QRect rectIcon(QPoint(0,0), QSize(585,350));
 
-    const QSize requiredSize(1024,1024);
-    QPixmap icon(networkStyle->getAppIcon().pixmap(requiredSize));
+    const QSize requiredSize(584,350);
+//  QPixmap icon(networkStyle->getAppIcon().pixmap(requiredSize));
+//  Feathercoin Fix for networkStyle calling bitcoin.png image / icon for Splashscreen
+    QPixmap icon(":/icons/splash", "QSize");
 
     pixPaint.drawPixmap(rectIcon, icon);
 
     // check font size and drawing with
-    pixPaint.setFont(QFont(font, 33*fontFactor));
+    pixPaint.setFont(QFont(font, 24*fontFactor));
     QFontMetrics fm = pixPaint.fontMetrics();
-    int titleTextWidth = fm.width(titleText);
-    if (titleTextWidth > 176) {
-        fontFactor = fontFactor * 176 / titleTextWidth;
+    int titleTextWidth  = fm.width(titleText);
+    if(titleTextWidth > 160) {
+        // strange font rendering, Arial probably not found
+        fontFactor = 0.75;
     }
 
-    pixPaint.setFont(QFont(font, 33*fontFactor));
+    pixPaint.setFont(QFont(font, 20*fontFactor));
     fm = pixPaint.fontMetrics();
     titleTextWidth  = fm.width(titleText);
     pixPaint.drawText(pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight,paddingTop,titleText);
 
-    pixPaint.setFont(QFont(font, 15*fontFactor));
+    pixPaint.setFont(QFont(font, 12*fontFactor));
 
     // if the version string is to long, reduce size
     fm = pixPaint.fontMetrics();
@@ -101,13 +101,8 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     pixPaint.drawText(pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight+2,paddingTop+titleVersionVSpace,versionText);
 
     // draw copyright stuff
-    {
-        pixPaint.setFont(QFont(font, 10*fontFactor));
-        const int x = pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight;
-        const int y = paddingTop+titleCopyrightVSpace;
-        QRect copyrightRect(x, y, pixmap.width() - x - paddingRight, pixmap.height() - y);
-        pixPaint.drawText(copyrightRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, copyrightText);
-    }
+    pixPaint.setFont(QFont(font, 10*fontFactor));
+    pixPaint.drawText(pixmap.width()/devicePixelRatio-titleTextWidth-paddingRight,paddingTop+titleCopyrightVSpace,copyrightText);
 
     // draw additional text if special network
     if(!titleAddText.isEmpty()) {
@@ -141,13 +136,7 @@ SplashScreen::~SplashScreen()
 void SplashScreen::slotFinish(QWidget *mainWin)
 {
     Q_UNUSED(mainWin);
-
-    /* If the window is minimized, hide() will be ignored. */
-    /* Make sure we de-minimize the splashscreen window before hiding */
-    if (isMinimized())
-        showNormal();
     hide();
-    deleteLater(); // No more need for this
 }
 
 static void InitMessage(SplashScreen *splash, const std::string &message)
