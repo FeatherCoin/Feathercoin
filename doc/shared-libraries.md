@@ -3,7 +3,7 @@ Shared Libraries
 
 ## bitcoinconsensus
 
-The purpose of this library is to make the verification functionality that is critical to Bitcoin's consensus available to other applications, e.g. to language bindings.
+The purpose of this library is to make the verification functionality that is critical to Feathercoin's consensus available to other applications, e.g. to language bindings.
 
 ### API
 
@@ -43,7 +43,7 @@ The interface is defined in the C header `bitcoinconsensus.h` located in  `src/s
 - `bitcoinconsensus_ERR_AMOUNT_REQUIRED` - Input amount is required if WITNESS is used
 
 ### Example Implementations
-- [NBitcoin](https://github.com/NicolasDorier/NBitcoin/blob/master/NBitcoin/Script.cs#L814) (.NET Bindings)
+- [NFeathercoin](https://github.com/NicolasDorier/NFeathercoin/blob/master/NFeathercoin/Script.cs#L814) (.NET Bindings)
 - [node-libbitcoinconsensus](https://github.com/bitpay/node-libbitcoinconsensus) (Node.js Bindings)
 - [java-libbitcoinconsensus](https://github.com/dexX7/java-libbitcoinconsensus) (Java Bindings)
 - [bitcoinconsensus-php](https://github.com/Bit-Wasp/bitcoinconsensus-php) (PHP Bindings)
