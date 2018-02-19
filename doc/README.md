@@ -1,9 +1,31 @@
-Feathercoin Core 0.13.2
-=====================
+
+Copyright (c) 2009-2018 Feathercoin Developers
 
 Setup
 ---------------------
-[Feathercoin Core](http://bitcoin.org/en/download) is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more.
+
+[Feathercoin Core] is the original Feathercoin client and it builds the backbone of the network. However, it downloads and stores the entire history of Feathercoin transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. 
+
+Binary downloads are avilable here : https://www.feathercoin.com/
+
+### Download the .deb file or install the zxing binaries available after installing the Feathercoin PPA  
+
+(http://forum.feathercoin.com/topic/8327/guide-feathercoin-wallet-ppa-and-binaries-on-ubuntu-and-debian-linux)  
+
+As Super user (or sudo) create a file named **OpenSuse.list** in the directory 
+
+    /etc/apt/sources.list.d 
+
+For your OS, copy the command into /etc/apt/sources.list.d and save it.  
+    
+    deb http://download.opensuse.org/repositories/home:/wellenreiter01/xUbuntu_16.04 ./
+
+download the repository key:
+    wget http://download.opensuse.org/repositories/home:/wellenreiter01/Debian_7.0/Release.key    
+   
+Then add the key to your system:
+
+    sudo apt-key add Release.key
 
 Running
 ---------------------
@@ -13,8 +35,8 @@ The following are some helpful notes on how to run Feathercoin on your native pl
 
 Unpack the files into a directory and run:
 
-- `bin/bitcoin-qt` (GUI) or
-- `bin/bitcoind` (headless)
+- `bin/Feathercoin-qt` (GUI) or
+- `bin/Feathercoind` (headless)
 
 ### Windows
 
@@ -26,10 +48,7 @@ Drag Feathercoin-Core to your applications folder, and then run Feathercoin-Core
 
 ### Need Help?
 
-* See the documentation at the [Feathercoin Wiki](https://en.bitcoin.it/wiki/Main_Page)
-for help and more information.
-* Ask for help on [#bitcoin](http://webchat.freenode.net?channels=bitcoin) on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net?channels=bitcoin).
-* Ask for help on the [FeathercoinTalk](https://bitcointalk.org/) forums, in the [Technical Support board](https://bitcointalk.org/index.php?board=4.0).
+* Ask for help in the [Forum](http://forum.feathercoin.com) 
 
 Building
 ---------------------
@@ -58,11 +77,6 @@ The Feathercoin repo's [root README](/README.md) contains relevant information o
 - [BIPS](bips.md)
 - [Dnsseed Policy](dnsseed-policy.md)
 - [Benchmarking](benchmarking.md)
-
-### Resources
-* Discuss on the [FeathercoinTalk](https://bitcointalk.org/) forums, in the [Development & Technical Discussion board](https://bitcointalk.org/index.php?board=6.0).
-* Discuss project-specific development on #bitcoin-core-dev on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net/?channels=bitcoin-core-dev).
-* Discuss general Feathercoin development on #bitcoin-dev on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net/?channels=bitcoin-dev).
 
 ### Miscellaneous
 - [Assets Attribution](assets-attribution.md)
