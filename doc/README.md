@@ -1,5 +1,3 @@
-Feathercoin 0.13.1
-==================
 
 Copyright (c) 2009-2018 Feathercoin Developers
 
@@ -42,11 +40,19 @@ Unpack the files into a directory and run:
 
 ### Windows
 
-Unpack the files into a directory, and then run Feathercoin-qt.exe.
+Unpack the files into a directory, and then run bitcoin-qt.exe.
+
+### OS X
+
+Drag Feathercoin-Core to your applications folder, and then run Feathercoin-Core.
+
+### Need Help?
+
+* Ask for help in the [Forum](http://forum.feathercoin.com) 
 
 Building
 ---------------------
-The following are developer notes on how to build Bitcoin on your native platform. They are not complete guides, but include notes on the necessary libraries, compile flags, etc.
+The following are developer notes on how to build Feathercoin on your native platform. They are not complete guides, but include notes on the necessary libraries, compile flags, etc.
 
 - [OS X Build Notes](build-osx.md)
 - [Unix Build Notes](build-unix.md)
@@ -56,7 +62,7 @@ The following are developer notes on how to build Bitcoin on your native platfor
 
 Development
 ---------------------
-The Bitcoin repo's [root README](/README.md) contains relevant information on the development process and automated testing.
+The Feathercoin repo's [root README](/README.md) contains relevant information on the development process and automated testing.
 
 - [Developer Notes](developer-notes.md)
 - [Multiwallet Qt Development](multiwallet-qt.md)
