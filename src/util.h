@@ -48,7 +48,7 @@ public:
 
 extern bool fPrintToConsole;
 extern bool fPrintToDebugLog;
-
+extern unsigned int nNeoScryptOptions;
 extern bool fLogTimestamps;
 extern bool fLogTimeMicros;
 extern bool fLogIPs;

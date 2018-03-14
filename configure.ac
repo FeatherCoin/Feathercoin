@@ -13,6 +13,7 @@ AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/bitcoin-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
+AM_PROG_AS
 
 BITCOIN_DAEMON_NAME=feathercoind
 BITCOIN_GUI_NAME=feathercoin-qt
@@ -186,6 +187,12 @@ AC_ARG_ENABLE([asm],
 if test "x$use_asm" = xyes; then
   AC_DEFINE(USE_ASM, 1, [Define this symbol to build in assembly routines])
 fi
+
+AC_ARG_ENABLE([sse2],
+  [AC_HELP_STRING([--enable-sse2],
+  [enable SSE2 optimizations (defaults is yes)])],
+  [use_sse2=${enableval}],
+  [use_sse2=yes])
 
 AC_ARG_WITH([system-univalue],
   [AS_HELP_STRING([--with-system-univalue],
@@ -497,6 +504,11 @@ fi
 
 if test x$use_lcov_branch != xno; then
   AC_SUBST(LCOV_OPTS, "$LCOV_OPTS --rc lcov_branch_coverage=1")
+fi
+
+if test "$use_sse2" = "yes"; then
+    AX_CHECK_COMPILE_FLAG([-msse2],[CFLAGS="$CFLAGS -msse2" && CXXFLAGS="$CXXFLAGS -msse2"])
+    AC_DEFINE([USE_SSE2],[1],[Define if SSE2 support should be compiled in])
 fi
 
 dnl Check for endianness
@@ -1205,6 +1217,7 @@ AM_CONDITIONAL([ENABLE_QT],[test x$bitcoin_enable_qt = xyes])
 AM_CONDITIONAL([ENABLE_QT_TESTS],[test x$BUILD_TEST_QT = xyes])
 AM_CONDITIONAL([ENABLE_BENCH],[test x$use_bench = xyes])
 AM_CONDITIONAL([USE_QRCODE], [test x$use_qr = xyes])
+AM_CONDITIONAL([USE_SSE2], [test x$use_sse2 = xyes])
 AM_CONDITIONAL([USE_LCOV],[test x$use_lcov = xyes])
 AM_CONDITIONAL([GLIBC_BACK_COMPAT],[test x$use_glibc_compat = xyes])
 AM_CONDITIONAL([HARDEN],[test x$use_hardening = xyes])
@@ -1246,6 +1259,7 @@ AC_SUBST(SSE42_CXXFLAGS)
 AC_SUBST(LIBTOOL_APP_LDFLAGS)
 AC_SUBST(USE_UPNP)
 AC_SUBST(USE_QRCODE)
+AC_SUBST(USE_SSE2)
 AC_SUBST(BOOST_LIBS)
 AC_SUBST(TESTDEFS)
 AC_SUBST(LEVELDB_TARGET_FLAGS)
