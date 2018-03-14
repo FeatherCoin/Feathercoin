@@ -22,9 +22,12 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if (nHeight >= params.nForkOne)
         nTargetTimespan = (7 * 24 * 60 * 60) / 8; // 7/8 days
 
+    if (nHeight >= params.nForkTwo)
+        nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
+
     int64_t nInterval = nTargetTimespan / nTargetSpacing;
 
-    bool fHardFork = nHeight == params.nForkOne;
+    bool fHardFork = nHeight == params.nForkOne || nHeight == params.nForkTwo;
 
     // Only change once per difficulty adjustment interval
     if ((pindexLast->nHeight+1) % nInterval != 0 && !fHardFork)
@@ -59,14 +62,36 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     int64_t nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
 
+    if (nHeight >= params.nForkTwo) {
+        nInterval *= 4;
+        const CBlockIndex* pindexFirst = pindexLast;
+        for(int i = 0; pindexFirst && i < nInterval; i++)
+            pindexFirst = pindexFirst->pprev;
+
+        int nActualTimespanLong = (pindexLast->GetBlockTime() - pindexFirst->GetBlockTime())/4;
+
+        // Average between short and long windows
+        int nActualTimespanAvg = (nActualTimespan + nActualTimespanLong) / 2;
+
+        // Apply .25 damping
+        nActualTimespan = nActualTimespanAvg + 3 * nTargetTimespan;
+        nActualTimespan /= 4;
+    }
+
     // The initial settings (4.0 difficulty limiter)
     int nActualTimespanMax = nTargetTimespan*4;
     int nActualTimespanMin = nTargetTimespan/4;
 
     // The 1st hard fork (1.4142857 aka 41% difficulty limiter)
-    if (nHeight >= params.nForkOne) {
+    if (nHeight >= params.nForkOne && nHeight < params.nForkTwo) {
         nActualTimespanMax = nTargetTimespan*99/70;
         nActualTimespanMin = nTargetTimespan*70/99;
+    }
+
+    // The 2nd hard fork (1.0905077 aka 9% difficulty limiter)
+    if (nHeight >= params.nForkTwo) {
+        nActualTimespanMax = nTargetTimespan*494/453;
+        nActualTimespanMin = nTargetTimespan*453/494;
     }
 
     // Limit adjustment step
