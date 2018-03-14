@@ -19,7 +19,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     // 4th Hard fork, reset difficulty
     if (nHeight == params.nForkFour)
-        return params.powNeoScryptLimit;
+        return UintToArith256(params.powNeoScryptLimit).GetCompact();
 
     int nTargetTimespan = params.nPowTargetTimespan;
     int nTargetSpacing = params.nPowTargetSpacing;
