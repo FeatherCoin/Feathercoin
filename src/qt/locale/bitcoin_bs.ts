@@ -14,8 +14,8 @@
 <context>
     <name>BitcoinGUI</name>
     <message>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     </context>
 <context>
@@ -33,8 +33,8 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     </context>
 <context>
@@ -160,8 +160,8 @@
 <context>
     <name>bitcoin-core</name>
     <message>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Jezrga</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Jezrga</translation>
     </message>
     </context>
 </TS>
