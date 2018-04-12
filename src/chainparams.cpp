@@ -333,8 +333,8 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
-        consensus.nNeoScryptSwitch = 1413936000;
-        consensus.nNeoScryptFork = 1486758327;
+        consensus.nNeoScryptSwitch = 1613936000;
+        consensus.nNeoScryptFork = 1686758327;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
