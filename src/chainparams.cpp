@@ -138,6 +138,8 @@ public:
         vSeeds.emplace_back("dnsseed.feathercoin.com");
         vSeeds.emplace_back("dnsseed.alltheco.in");
         vSeeds.emplace_back("dnsseed.bushstar.co.uk");
+        vSeeds.emplace_back("dnsseed-static.feathercoin.ch");
+        vSeeds.emplace_back("dnsseed.feathercoin.ch");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,14);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
