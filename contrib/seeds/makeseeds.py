@@ -14,13 +14,7 @@ MIN_BLOCKS = 337600
 
 # These are hosts that have been observed to be behaving strangely (e.g.
 # aggressively connecting to every node).
-SUSPICIOUS_HOSTS = {
-    "130.211.129.106", "178.63.107.226",
-    "83.81.130.26", "88.198.17.7", "148.251.238.178", "176.9.46.6",
-    "54.173.72.127", "54.174.10.182", "54.183.64.54", "54.194.231.211",
-    "54.66.214.167", "54.66.220.137", "54.67.33.14", "54.77.251.214",
-    "54.94.195.96", "54.94.200.247"
-}
+SUSPICIOUS_HOSTS = {}
 
 import re
 import sys
@@ -30,7 +24,7 @@ import collections
 PATTERN_IPV4 = re.compile(r"^((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})):(\d+)$")
 PATTERN_IPV6 = re.compile(r"^\[([0-9a-z:]+)\]:(\d+)$")
 PATTERN_ONION = re.compile(r"^([abcdefghijklmnopqrstuvwxyz234567]{16}\.onion):(\d+)$")
-PATTERN_AGENT = re.compile(r"^(/Satoshi:0.13.(1|2|99)/|/Satoshi:0.14.(0|1|2|99)/|/Satoshi:0.15.(0|1|2|99)/)$")
+PATTERN_AGENT = re.compile(r"^(/Feathercoin:0.9.6.2/|/Feathercoin:0.13.(0|1|2|99)/|/Feathercoin:0.16.(0|99)/)$")
 
 def parseline(line):
     sline = line.split()
