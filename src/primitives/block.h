@@ -62,6 +62,8 @@ public:
 
     uint256 GetHash() const;
 
+    uint256 GetPoWHash(unsigned int profile) const;
+
     int64_t GetBlockTime() const
     {
         return (int64_t)nTime;
