@@ -16,6 +16,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
 
     int nHeight = pindexLast->nHeight + 1;
+
+    // 4th Hard fork, reset difficulty
+    if (nHeight == params.nForkFour)
+        return UintToArith256(params.powNeoScryptLimit).GetCompact();
+
     int nTargetTimespan = params.nPowTargetTimespan;
     int nTargetSpacing = params.nPowTargetSpacing;
 
