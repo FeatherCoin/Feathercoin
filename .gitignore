@@ -1,10 +1,10 @@
 *.tar.gz
 
 *.exe
-src/bitcoin
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-tx
+src/feathercoin
+src/feathercoind
+src/feathercoin-cli
+src/feathercoin-tx
 src/test/test_bitcoin
 src/test/test_bitcoin_fuzzy
 src/qt/test/test_bitcoin-qt
@@ -80,13 +80,13 @@ src/qt/bitcoin-qt.includes
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-bitcoin-qt
-Bitcoin-Qt.app
+feathercoin-qt
+Feathercoin-Qt.app
 background.tiff*
 
 # Unit-tests
 Makefile.test
-bitcoin-qt_test
+feathercoin-qt_test
 
 # Resources cpp
 qrc_*.cpp
