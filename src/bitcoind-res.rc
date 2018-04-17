@@ -19,7 +19,7 @@ BEGIN
             VALUE "CompanyName",        "Feathercoin"
             VALUE "FileDescription",    "feathercoind (Feathercoin node with a JSON-RPC server)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "bitcoind"
+            VALUE "InternalName",       "feathercoind"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
             VALUE "OriginalFilename",   "feathercoind.exe"
