@@ -22,6 +22,15 @@ namespace Checkpoints
 //! Returns last CBlockIndex* that is a checkpoint
 CBlockIndex* GetLastCheckpoint(const CCheckpointData& data);
 
+//! Return conservative estimate of total number of blocks, 0 if unknown
+int GetTotalBlocksEstimate(const CCheckpointData& data);
+
+//! Returns the last available checkpoint in the main chain
+uint256 GetLastAvailableCheckpoint(const CCheckpointData& data);
+
+//! Returns the block hash of latest hardened checkpoint, if empty genesis block returned
+uint256 GetLatestHardenedCheckpoint(const CCheckpointData& data);
+
 } //namespace Checkpoints
 
 #endif // BITCOIN_CHECKPOINTS_H
