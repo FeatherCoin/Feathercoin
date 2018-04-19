@@ -331,6 +331,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nTimeLimit = 0;
         consensus.nNeoScryptFork = 1524127760;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
