@@ -312,6 +312,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nTimeLimit = 0;
         consensus.nVersionBitSwitch = 400;
         consensus.nNeoScryptSwitch = 1524127760;
         consensus.nNeoScryptFork = 1524127760;
