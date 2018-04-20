@@ -92,7 +92,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
         CBlockIndex* pindex = pindexSyncCheckpoint;
         while (pindex->nHeight > pindexCheckpointRecv->nHeight)
             if (!(pindex = pindex->pprev))
-            	return error("ValidateSyncCheckpoint: pprev1 null - block index structure failure");
+                return error("ValidateSyncCheckpoint: pprev1 null - block index structure failure");
 
         if (pindex->GetBlockHash() != hashCheckpoint)
         {
@@ -106,15 +106,15 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
     // checkpoint. Trace back to the same height of current checkpoint
     // to verify.
     CBlockIndex* pindex = pindexCheckpointRecv;
-	while (pindex->nHeight > pindexSyncCheckpoint->nHeight)
-	    if (!(pindex = pindex->pprev))
-		    return error("ValidateSyncCheckpoint: pprev2 null - block index structure failure");
-		            
-	if (pindex->GetBlockHash() != hashSyncCheckpoint)
+    while (pindex->nHeight > pindexSyncCheckpoint->nHeight)
+        if (!(pindex = pindex->pprev))
+            return error("ValidateSyncCheckpoint: pprev2 null - block index structure failure");
+
+    if (pindex->GetBlockHash() != hashSyncCheckpoint)
     {
         hashInvalidCheckpoint = hashCheckpoint;
         return error("ValidateSyncCheckpoint: new sync-checkpoint %s is not a descendant of current sync-checkpoint %s", hashCheckpoint.ToString().c_str(), hashSyncCheckpoint.ToString().c_str());
-	}
+    }
     return true;
 }
 
@@ -136,17 +136,17 @@ bool AcceptPendingSyncCheckpoint()
     if (hashPendingCheckpoint != ArithToUint256(arith_uint256(0)) && mapBlockIndex.count(hashPendingCheckpoint))
     {
         if (!ValidateSyncCheckpoint(hashPendingCheckpoint))
-		{
-		    hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
-		    checkpointMessagePending.SetNull();
-		    return false;
-		}
+        {
+            hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
+            checkpointMessagePending.SetNull();
+            return false;
+        }
 
         if (!WriteSyncCheckpoint(hashPendingCheckpoint))
             return error("AcceptPendingSyncCheckpoint(): failed to write sync checkpoint %s", hashPendingCheckpoint.ToString().c_str());
 
-		hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
-		checkpointMessage = checkpointMessagePending;
+        hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
+        checkpointMessage = checkpointMessagePending;
         checkpointMessagePending.SetNull();
 
         // Relay the checkpoint
@@ -157,7 +157,7 @@ bool AcceptPendingSyncCheckpoint()
             });
         }
 
-		return true;
+        return true;
     }
     return false;
 }
@@ -236,7 +236,7 @@ bool CheckCheckpointPubKey()
 {
     string strPubKey = "";
     string strMasterPubKey = Params().GetConsensus().checkpointPubKey;
-	
+
     if (!pblocktree->ReadCheckpointPubKey(strPubKey) || strPubKey != strMasterPubKey)
     {
         // write checkpoint master key to db
@@ -310,10 +310,10 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
     if (!CheckSignature())
         return false;
 
-	LOCK(cs_hashSyncCheckpoint);
+    LOCK(cs_hashSyncCheckpoint);
     if (!mapBlockIndex.count(hashCheckpoint))
     {
-    	// We haven't received the checkpoint chain, keep the checkpoint as pending
+        // We haven't received the checkpoint chain, keep the checkpoint as pending
         hashPendingCheckpoint = hashCheckpoint;
         checkpointMessagePending = *this;
 
@@ -323,9 +323,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
     if (!ValidateSyncCheckpoint(hashCheckpoint))
         return false;
 
-	CBlockIndex* pindexCheckpoint = mapBlockIndex[hashCheckpoint];
-
-	if (!WriteSyncCheckpoint(hashCheckpoint))
+    if (!WriteSyncCheckpoint(hashCheckpoint))
         return error("ProcessSyncCheckpoint(): failed to write sync checkpoint %s", hashCheckpoint.ToString().c_str());
 
     checkpointMessage = *this;
