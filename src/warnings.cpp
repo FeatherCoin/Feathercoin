@@ -85,7 +85,7 @@ std::string GetWarnings(const std::string& strFor)
     // If detected invalid checkpoint enter safe mode
     if (hashInvalidCheckpoint != ArithToUint256(arith_uint256(0)))
     {
-        strStatusBar = strRPC = "WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.";
+        strStatusBar = "WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.";
         strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.");
     }
 
