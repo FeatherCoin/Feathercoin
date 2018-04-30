@@ -45,7 +45,6 @@ std::string GetWarnings(const std::string& strFor)
 {
     int nPriority = 0;
     std::string strStatusBar;
-    std::string strRPC;
     std::string strGUI;
     const std::string uiAlertSeperator = "<hr />";
 
@@ -55,9 +54,6 @@ std::string GetWarnings(const std::string& strFor)
         strStatusBar = "This is a pre-release test build - use at your own risk - do not use for mining or merchant applications";
         strGUI = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
     }
-
-    if (gArgs.GetBoolArg("-testsafemode", DEFAULT_TESTSAFEMODE))
-        strStatusBar = strRPC = strGUI = "testsafemode enabled";
 
     // Checkpoint warning
     if (strCheckpointWarning != "")
@@ -76,20 +72,20 @@ std::string GetWarnings(const std::string& strFor)
     if (fLargeWorkForkFound)
     {
         nPriority = 2000;
-        strStatusBar = strRPC = "Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.";
+        strStatusBar = "Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.";
         strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.");
     }
     else if (fLargeWorkInvalidChainFound)
     {
         nPriority = 2000;
-        strStatusBar = strRPC = "Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.";
+        strStatusBar = "Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.";
         strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
     }
 
     // If detected invalid checkpoint enter safe mode
     if (hashInvalidCheckpoint != ArithToUint256(arith_uint256(0)))
     {
-        strStatusBar = strRPC = "WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.";
+        strStatusBar = "WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.";
         strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.");
     }
 
@@ -111,8 +107,6 @@ std::string GetWarnings(const std::string& strFor)
         return strGUI;
     else if (strFor == "statusbar")
         return strStatusBar;
-    else if (strFor == "rpc")
-        return strRPC;
     assert(!"GetWarnings(): invalid parameter");
     return "error";
 }
