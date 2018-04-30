@@ -135,6 +135,7 @@ public:
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
         vSeeds.emplace_back("dnsseed.feathercoin.com");
+        vSeeds.emplace_back("dnsseed1.feathercoin.com");
         vSeeds.emplace_back("dnsseed.alltheco.in");
         vSeeds.emplace_back("dnsseed.bushstar.co.uk");
 
