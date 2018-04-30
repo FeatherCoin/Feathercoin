@@ -124,6 +124,7 @@ public:
 
         // Note that of those with the service bits flag, most only support a subset of possible options
         vSeeds.push_back(CDNSSeedData("feathercoin.com", "dnsseed.feathercoin.com", false));
+        vSeeds.push_back(CDNSSeedData("feathercoin.com", "dnsseed1.feathercoin.com", false));
         vSeeds.push_back(CDNSSeedData("feathercoin.com", "explorer2.feathercoin.com", false));
         vSeeds.push_back(CDNSSeedData("alltheco.in", "dnsseed.alltheco.in", false));
         vSeeds.push_back(CDNSSeedData("ftc-c.com", "block.ftc-c.com", false));
