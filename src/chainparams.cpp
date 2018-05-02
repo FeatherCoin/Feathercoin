@@ -170,7 +170,7 @@ public:
             // Data as of block 0000000000000000002d6cca6761c99b3c2e936f9a0e304b7c7651a993f461de (height 506081).
             1520948476, // * UNIX timestamp of last known number of transactions
             4229159,  // * total number of transactions between genesis and that timestamp
-                        //   (the tx=... number in the SetBestChain debug.log lines)
+                        //   (the tx=... number in the ChainStateFlushed debug.log lines)
             0.03         // * estimated number of transactions per second after that timestamp
         };
 
