@@ -1,5 +1,6 @@
 dist_man1_MANS=
 
+
 if BUILD_BITCOIND
   dist_man1_MANS+=feathercoind.1
 endif
