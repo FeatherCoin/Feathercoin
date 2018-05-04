@@ -164,8 +164,7 @@ UniValue getnewaddress(const JSONRPCRequest& request)
 
     OutputType output_type = pwallet->m_default_address_type;
     if (!request.params[1].isNull()) {
-        output_type = ParseOutputType(request.params[1].get_str(), pwallet->m_default_address_type);
-        if (output_type == OutputType::NONE) {
+        if (!ParseOutputType(request.params[1].get_str(), output_type)) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Unknown address type '%s'", request.params[1].get_str()));
         }
     }
@@ -282,10 +281,9 @@ UniValue getrawchangeaddress(const JSONRPCRequest& request)
         pwallet->TopUpKeyPool();
     }
 
-    OutputType output_type = pwallet->m_default_change_type != OutputType::NONE ? pwallet->m_default_change_type : pwallet->m_default_address_type;
+    OutputType output_type = pwallet->m_default_change_type != OutputType::CHANGE_AUTO ? pwallet->m_default_change_type : pwallet->m_default_address_type;
     if (!request.params[0].isNull()) {
-        output_type = ParseOutputType(request.params[0].get_str(), output_type);
-        if (output_type == OutputType::NONE) {
+        if (!ParseOutputType(request.params[0].get_str(), output_type)) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Unknown address type '%s'", request.params[0].get_str()));
         }
     }
@@ -1317,8 +1315,7 @@ UniValue addmultisigaddress(const JSONRPCRequest& request)
 
     OutputType output_type = pwallet->m_default_address_type;
     if (!request.params[3].isNull()) {
-        output_type = ParseOutputType(request.params[3].get_str(), output_type);
-        if (output_type == OutputType::NONE) {
+        if (!ParseOutputType(request.params[3].get_str(), output_type)) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Unknown address type '%s'", request.params[3].get_str()));
         }
     }
@@ -3152,9 +3149,13 @@ UniValue listunspent(const JSONRPCRequest& request)
 
     UniValue results(UniValue::VARR);
     std::vector<COutput> vecOutputs;
-    LOCK2(cs_main, pwallet->cs_wallet);
+    {
+        LOCK2(cs_main, pwallet->cs_wallet);
+        pwallet->AvailableCoins(vecOutputs, !include_unsafe, nullptr, nMinimumAmount, nMaximumAmount, nMinimumSumAmount, nMaximumCount, nMinDepth, nMaxDepth);
+    }
 
-    pwallet->AvailableCoins(vecOutputs, !include_unsafe, nullptr, nMinimumAmount, nMaximumAmount, nMinimumSumAmount, nMaximumCount, nMinDepth, nMaxDepth);
+    LOCK(pwallet->cs_wallet);
+
     for (const COutput& out : vecOutputs) {
         CTxDestination address;
         const CScript& scriptPubKey = out.tx->tx->vout[out.i].scriptPubKey;
@@ -3170,10 +3171,11 @@ UniValue listunspent(const JSONRPCRequest& request)
         if (fValidAddress) {
             entry.pushKV("address", EncodeDestination(address));
 
-            if (pwallet->mapAddressBook.count(address)) {
-                entry.pushKV("label", pwallet->mapAddressBook[address].name);
+            auto i = pwallet->mapAddressBook.find(address);
+            if (i != pwallet->mapAddressBook.end()) {
+                entry.pushKV("label", i->second.name);
                 if (IsDeprecatedRPCEnabled("accounts")) {
-                    entry.pushKV("account", pwallet->mapAddressBook[address].name);
+                    entry.pushKV("account", i->second.name);
                 }
             }
 
@@ -3317,8 +3319,8 @@ UniValue fundrawtransaction(const JSONRPCRequest& request)
             if (options.exists("changeAddress")) {
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Cannot specify both changeAddress and address_type options");
             }
-            coinControl.m_change_type = ParseOutputType(options["change_type"].get_str(), pwallet->m_default_change_type);
-            if (coinControl.m_change_type == OutputType::NONE) {
+            coinControl.m_change_type = pwallet->m_default_change_type;
+            if (!ParseOutputType(options["change_type"].get_str(), *coinControl.m_change_type)) {
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Unknown change type '%s'", options["change_type"].get_str()));
             }
         }
