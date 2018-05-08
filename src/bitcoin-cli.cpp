@@ -104,14 +104,13 @@ static int AppInitRPC(int argc, char* argv[])
         return EXIT_FAILURE;
     }
     if (argc < 2 || HelpRequested(gArgs) || gArgs.IsArgSet("-version")) {
-        std::string strUsage = strprintf("%s RPC client version", PACKAGE_NAME) + " " + FormatFullVersion() + "\n";
+        std::string strUsage = PACKAGE_NAME " RPC client version " + FormatFullVersion() + "\n";
         if (!gArgs.IsArgSet("-version")) {
-            strUsage += "\nUsage:\n"
-                  "  feathercoin-cli [options] <command> [params]  " + strprintf("Send command to %s", PACKAGE_NAME) + "\n" +
-                  "  feathercoin-cli [options] -named <command> [name=value] ... " + strprintf("Send command to %s (with named arguments)", PACKAGE_NAME) + "\n" +
-                  "  feathercoin-cli [options] help                List commands\n" +
-                  "  feathercoin-cli [options] help <command>      Get help for a command\n";
-
+            strUsage += "\n"
+                "Usage:  feathercoin-cli [options] <command> [params]  Send command to " PACKAGE_NAME "\n"
+                "or:     feathercoin-cli [options] -named <command> [name=value]...  Send command to " PACKAGE_NAME " (with named arguments)\n"
+                "or:     feathercoin-cli [options] help                List commands\n"
+                "or:     feathercoin-cli [options] help <command>      Get help for a command\n";
             strUsage += "\n" + gArgs.GetHelpMessage();
         }
 
