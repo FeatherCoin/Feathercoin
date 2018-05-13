@@ -1730,6 +1730,9 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
     int halvings = (nHeight + 306960) / consensusParams.nSubsidyHalvingInterval;
 
+    if (Params().NetworkIDString() == CBaseChainParams::REGTEST)
+        halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
         return 0;
