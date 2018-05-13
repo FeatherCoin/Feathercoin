@@ -585,6 +585,12 @@ static bool AcceptToMemoryPoolWorker(const CChainParams& chainparams, CTxMemPool
     if (fRequireStandard && !IsStandardTx(tx, reason, witnessEnabled))
         return state.DoS(0, false, REJECT_NONSTANDARD, reason);
 
+    // Do not work on transactions that are too small.
+    // A transaction with 1 segwit input and 1 P2WPHK output has non-witness size of 82 bytes.
+    // Transactions smaller than this are not relayed to reduce unnecessary malloc overhead.
+    if (::GetSerializeSize(tx, SER_NETWORK, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS) < MIN_STANDARD_TX_NONWITNESS_SIZE)
+        return state.DoS(0, false, REJECT_NONSTANDARD, "tx-size-small");
+
     // Only accept nLockTime-using transactions that can be mined in the next
     // block; we don't want our mempool filled up with transactions that can't
     // be mined yet.
@@ -1135,6 +1141,10 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex, const Consensus
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
     int halvings = (nHeight + 306960) / consensusParams.nSubsidyHalvingInterval;
+
+    if (Params().NetworkIDString() == CBaseChainParams::REGTEST)
+        halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64)
         return 0;
@@ -2818,6 +2828,7 @@ bool CChainState::ResetBlockFailureFlags(CBlockIndex *pindex) {
         if (pindex->nStatus & BLOCK_FAILED_MASK) {
             pindex->nStatus &= ~BLOCK_FAILED_MASK;
             setDirtyBlockIndex.insert(pindex);
+            m_failed_blocks.erase(pindex);
         }
         pindex = pindex->pprev;
     }
