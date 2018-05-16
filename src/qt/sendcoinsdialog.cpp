@@ -328,15 +328,6 @@ void SendCoinsDialog::on_sendButton_clicked()
         questionString.append("<span style='color:#aa0000; font-weight:bold;'>");
         questionString.append(BitcoinUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), txFee));
         questionString.append("</span><br />");
-
-        // append RBF message according to transaction's signalling
-        questionString.append("<span style='font-size:10pt; font-weight:normal;'>");
-        if (ui->optInRBF->isChecked()) {
-            questionString.append(tr("You can increase the fee later (signals Replace-By-Fee, BIP-125)."));
-        } else {
-            questionString.append(tr("Not signalling Replace-By-Fee, BIP-125."));
-        }
-        questionString.append("</span>");
     }
 
     // add total amount in all subdivision units
