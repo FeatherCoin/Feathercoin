@@ -354,6 +354,7 @@ void SetupServerArgs()
     // Do not translate _(...) -help-debug options, Many technical terms, and only a very small audience, so is unnecessary stress to translators.
     gArgs.AddArg("-?", _("Print this help message and exit"), false, OptionsCategory::OPTIONS);
     gArgs.AddArg("-version", _("Print version and exit"), false, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-alerts", strprintf(_("Receive and display P2P network alerts (default: %u)"), DEFAULT_ALERTS), false, OptionsCategory::OPTIONS);
     gArgs.AddArg("-alertnotify=<cmd>", _("Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)"), false, OptionsCategory::OPTIONS);
     gArgs.AddArg("-assumevalid=<hex>", strprintf(_("If this block is in the chain assume that it and its ancestors are valid and potentially skip their script verification (0 to verify all, default: %s, testnet: %s)"), defaultChainParams->GetConsensus().defaultAssumeValid.GetHex(), testnetChainParams->GetConsensus().defaultAssumeValid.GetHex()), false, OptionsCategory::OPTIONS);
     gArgs.AddArg("-blocksdir=<dir>", _("Specify blocks directory (default: <datadir>/blocks)"), false, OptionsCategory::OPTIONS);
