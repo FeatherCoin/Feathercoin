@@ -151,7 +151,8 @@ bool AcceptPendingSyncCheckpoint()
         if (!checkpointMessage.IsNull())
         {
             g_connman->ForEachNode([](CNode* pnode) {
-                checkpointMessage.RelayTo(pnode);
+                if (pnode->supportACPMessages)
+                    checkpointMessage.RelayTo(pnode);
             });
         }
 
