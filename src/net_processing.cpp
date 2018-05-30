@@ -1732,6 +1732,9 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             State(pfrom->GetId())->fHaveWitness = true;
         }
 
+        if((nServices & NODE_ACP))
+            pfrom->supportACPMessages = true;
+
         // Potentially mark this peer as a preferred download peer.
         {
         LOCK(cs_main);

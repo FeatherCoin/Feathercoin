@@ -280,6 +280,11 @@ enum ServiceFlags : uint64_t {
     // serving the last 288 (2 day) blocks
     // See BIP159 for details on how this is implemented.
     NODE_NETWORK_LIMITED = (1 << 10),
+    // NODE_ACP means the node supports Automatic Checkpointing
+    // If this is turned off then the node will not receive checkpoints from other nodes aware of this
+    // flag. Bit 24 from the start of the experimental range has been set for this Feathercoin feature
+    // to not clash with Bitcoin's future developments.
+    NODE_ACP = (1 << 24),
 
     // Bits 24-31 are reserved for temporary experiments. Just pick a bit that
     // isn't getting used, or one not being used much, and notify the

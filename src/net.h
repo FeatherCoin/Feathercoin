@@ -693,7 +693,8 @@ public:
     std::set<uint256> setKnown;
     int64_t nNextAddrSend;
     int64_t nNextLocalAddrSend;
-	uint256 hashCheckpointKnown;
+    uint256 hashCheckpointKnown;
+    bool supportACPMessages;
 
     // inventory based relay
     CRollingBloomFilter filterInventoryKnown;

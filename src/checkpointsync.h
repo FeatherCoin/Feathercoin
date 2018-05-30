@@ -112,7 +112,7 @@ public:
     bool RelayTo(CNode* pfrom) const
     {
         // returns true if wasn't already sent
-        if (g_connman && pfrom->hashCheckpointKnown != hashCheckpoint)
+        if (g_connman && pfrom->hashCheckpointKnown != hashCheckpoint && pfrom->supportACPMessages)
         {
             pfrom->hashCheckpointKnown = hashCheckpoint;
             g_connman->PushMessage(pfrom, CNetMsgMaker(pfrom->GetSendVersion()).Make(NetMsgType::CHECKPOINT, *this));
