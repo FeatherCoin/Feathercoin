@@ -904,7 +904,7 @@ bool AppInitParameterInteraction()
     const CChainParams& chainparams = Params();
     // ********************************************************* Step 2: parameter interactions
 
-#if defined (USE_SSE2)
+#if defined (USE_ASM)
     nNeoScryptOptions |= 0x1000;
 #endif
 

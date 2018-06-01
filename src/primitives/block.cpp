@@ -6,10 +6,11 @@
 #include <primitives/block.h>
 
 #include <hash.h>
-#include "crypto/neoscrypt.h"
+#include <crypto/neoscrypt.h>
 #include <tinyformat.h>
 #include <utilstrencodings.h>
 #include <crypto/common.h>
+#include <util.h>
 
 uint256 CBlockHeader::GetHash() const
 {
@@ -20,6 +21,7 @@ uint256 CBlockHeader::GetPoWHash(unsigned int profile) const
 {
     uint256 hash;
 
+    profile |= nNeoScryptOptions;
     neoscrypt((unsigned char *) &nVersion, (unsigned char *) &hash, profile);
 
     return(hash);
