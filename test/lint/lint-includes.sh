@@ -6,9 +6,12 @@
 #
 # Check for duplicate includes.
 # Guard against accidental introduction of new Boost dependencies.
+# Check includes: Check for duplicate includes. Enforce bracket syntax includes.
+
+IGNORE_REGEXP="/(leveldb|secp256k1|univalue)/"
 
 filter_suffix() {
-    git ls-files | grep -E "^src/.*\.${1}"'$' | grep -Ev "/(leveldb|secp256k1|univalue)/"
+    git ls-files | grep -E "^src/.*\.${1}"'$' | grep -Ev "${IGNORE_REGEXP}"
 }
 
 EXIT_CODE=0
@@ -32,6 +35,14 @@ for CPP_FILE in $(filter_suffix cpp); do
         EXIT_CODE=1
     fi
 done
+
+INCLUDED_CPP_FILES=$(git grep -E "^#include [<\"][^>\"]+\.cpp[>\"]" -- "*.cpp" "*.h")
+if [[ ${INCLUDED_CPP_FILES} != "" ]]; then
+    echo "The following files #include .cpp files:"
+    echo "${INCLUDED_CPP_FILES}"
+    echo
+    EXIT_CODE=1
+fi
 
 EXPECTED_BOOST_INCLUDES=(
     boost/algorithm/string.hpp
@@ -96,5 +107,13 @@ for EXPECTED_BOOST_INCLUDE in "${EXPECTED_BOOST_INCLUDES[@]}"; do
         EXIT_CODE=1
     fi
 done
+
+QUOTE_SYNTAX_INCLUDES=$(git grep '^#include "' -- "*.cpp" "*.h" | grep -Ev "${IGNORE_REGEXP}")
+if [[ ${QUOTE_SYNTAX_INCLUDES} != "" ]]; then
+    echo "Please use bracket syntax includes (\"#include <foo.h>\") instead of quote syntax includes:"
+    echo "${QUOTE_SYNTAX_INCLUDES}"
+    echo
+    EXIT_CODE=1
+fi
 
 exit ${EXIT_CODE}
