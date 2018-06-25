@@ -115,7 +115,7 @@ public:
         const CNetMsgMaker msgMaker(pfrom->GetSendVersion());
 
         // returns true if wasn't already sent
-        if (pfrom->hashCheckpointKnown != hashCheckpoint)
+        if (pfrom->hashCheckpointKnown != hashCheckpoint && pfrom->supportACPMessages)
         {
             CConnman& connman = *g_connman;
             pfrom->hashCheckpointKnown = hashCheckpoint;
