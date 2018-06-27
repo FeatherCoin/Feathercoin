@@ -2100,7 +2100,7 @@ void CWallet::ResendWalletTransactions(int64_t nBestBlockTime, CConnman* connman
  */
 
 
-CAmount CWallet::GetBalance(const isminefilter& filter) const
+CAmount CWallet::GetBalance(const isminefilter& filter, const int min_depth) const
 {
     CAmount nTotal = 0;
     {
@@ -2108,7 +2108,7 @@ CAmount CWallet::GetBalance(const isminefilter& filter) const
         for (const auto& entry : mapWallet)
         {
             const CWalletTx* pcoin = &entry.second;
-            if (pcoin->IsTrusted()) {
+            if (pcoin->IsTrusted() && pcoin->GetDepthInMainChain() >= min_depth) {
                 nTotal += pcoin->GetAvailableCredit(true, filter);
             }
         }
