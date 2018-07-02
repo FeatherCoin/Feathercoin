@@ -90,7 +90,6 @@ from test_framework.mininode import (
     CBlockHeader,
     CInv,
     NODE_WITNESS,
-    network_thread_start,
     P2PInterface,
     mininode_lock,
     msg_block,
@@ -238,15 +237,11 @@ class SendHeadersTest(BitcoinTestFramework):
         return [int(x, 16) for x in all_hashes]
 
     def run_test(self):
-        # Setup the p2p connections and start up the network thread.
+        # Setup the p2p connections
         inv_node = self.nodes[0].add_p2p_connection(BaseNode())
         # Make sure NODE_NETWORK is not set for test_node, so no block download
         # will occur outside of direct fetching
         test_node = self.nodes[0].add_p2p_connection(BaseNode(), services=NODE_WITNESS)
-
-        network_thread_start()
-
-        # Test logic begins here
         inv_node.wait_for_verack()
         test_node.wait_for_verack()
 
@@ -306,6 +301,7 @@ class SendHeadersTest(BitcoinTestFramework):
                 test_node.clear_block_announcements()  # since we requested headers...
             elif i == 2:
                 # this time announce own block via headers
+                inv_node.clear_block_announcements()
                 height = self.nodes[0].getblockcount()
                 last_time = self.nodes[0].getblock(self.nodes[0].getbestblockhash())['time']
                 block_time = last_time + 1
@@ -315,6 +311,7 @@ class SendHeadersTest(BitcoinTestFramework):
                 test_node.wait_for_getdata([new_block.sha256])
                 test_node.send_message(msg_block(new_block))
                 test_node.sync_with_ping()  # make sure this block is processed
+                wait_until(lambda: inv_node.block_announced, timeout=60, lock=mininode_lock)
                 inv_node.clear_block_announcements()
                 test_node.clear_block_announcements()
 
