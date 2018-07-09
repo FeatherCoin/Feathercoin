@@ -7,7 +7,6 @@
 #include <clientversion.h>
 #include <core_io.h>
 #include <crypto/ripemd160.h>
-#include <init.h>
 #include <key_io.h>
 #include <validation.h>
 #include <httpserver.h>
@@ -78,7 +77,7 @@ static UniValue validateaddress(const JSONRPCRequest& request)
             ret.pushKV("address", currentAddress);
 
             CScript scriptPubKey = GetScriptForDestination(dest);
-            ret.pushKV("scriptPubKey", HexStr(scriptPubKey.begin(), scriptPubKey.end()));;
+            ret.pushKV("scriptPubKey", HexStr(scriptPubKey.begin(), scriptPubKey.end()));
 
             UniValue detail = DescribeAddress(dest);
             ret.pushKVs(detail);
