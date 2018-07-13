@@ -4378,7 +4378,9 @@ int CMerkleTx::GetBlocksToMaturity() const
 {
     if (!IsCoinBase())
         return 0;
-    return std::max(0, (COINBASE_MATURITY+COINBASE_MATURITY_OFFSET) - GetDepthInMainChain());
+    int chain_depth = GetDepthInMainChain();
+    assert(chain_depth >= 0); // coinbase tx should not be conflicted
+    return std::max(0, (COINBASE_MATURITY+COINBASE_MATURITY_OFFSET) - chain_depth);
 }
 
 
