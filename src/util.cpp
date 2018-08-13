@@ -86,7 +86,6 @@ const char * const BITCOIN_PID_FILENAME = "feathercoind.pid";
 unsigned int nNeoScryptOptions = 0;
 
 ArgsManager gArgs;
-CTranslationInterface translationInterface;
 
 /** Init OpenSSL library multithreading support */
 static std::unique_ptr<CCriticalSection[]> ppmutexOpenSSL;
