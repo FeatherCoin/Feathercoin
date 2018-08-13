@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2009-2018 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -859,9 +859,13 @@ bool ArgsManager::ReadConfigStream(std::istream& stream, std::string& error, boo
         }
 
         // Check that the arg is known
-        if (!IsArgKnown(strKey) && !ignore_invalid_keys) {
-            error = strprintf("Invalid configuration value %s", option.first.c_str());
-            return false;
+        if (!IsArgKnown(strKey)) {
+            if (!ignore_invalid_keys) {
+                error = strprintf("Invalid configuration value %s", option.first.c_str());
+                return false;
+            } else {
+                LogPrintf("Ignoring unknown configuration value %s\n", option.first);
+            }
         }
     }
     return true;
@@ -1021,7 +1025,7 @@ bool FileCommit(FILE *file)
         LogPrintf("%s: fdatasync failed: %d\n", __func__, errno);
         return false;
     }
-    #elif defined(__APPLE__) && defined(F_FULLFSYNC)
+    #elif defined(MAC_OSX) && defined(F_FULLFSYNC)
     if (fcntl(fileno(file), F_FULLFSYNC, 0) == -1) { // Manpage says "value other than -1" is returned on success
         LogPrintf("%s: fcntl F_FULLFSYNC failed: %d\n", __func__, errno);
         return false;

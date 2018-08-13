@@ -98,11 +98,10 @@ static int AppInitRawTx(int argc, char* argv[])
 
     if (argc < 2 || HelpRequested(gArgs)) {
         // First part of help message is specific to this utility
-        std::string strUsage = strprintf("%s feathercoin-tx utility version", PACKAGE_NAME) + " " + FormatFullVersion() + "\n\n" +
-            "Usage:\n"
-              "  feathercoin-tx [options] <hex-tx> [commands]  Update hex-encoded feathercoin transaction\n" +
-              "  feathercoin-tx [options] -create [commands]   Create hex-encoded feathercoin transaction\n" +
-              "\n";
+        std::string strUsage = PACKAGE_NAME " feathercoin-tx utility version " + FormatFullVersion() + "\n\n" +
+            "Usage:  feathercoin-tx [options] <hex-tx> [commands]  Update hex-encoded feathercoin transaction\n" +
+            "or:     feathercoin-tx [options] -create [commands]   Create hex-encoded feathercoin transaction\n" +
+            "\n";
         strUsage += gArgs.GetHelpMessage();
 
         fprintf(stdout, "%s", strUsage.c_str());

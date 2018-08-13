@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016-2017 The Bitcoin Core developers
+# Copyright (c) 2016-2018 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the dumpwallet RPC."""
@@ -81,16 +81,13 @@ class WalletDumpTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
         self.extra_args = [["-keypool=90", "-addresstype=legacy", "-deprecatedrpc=addwitnessaddress"]]
+        self.rpc_timeout = 120
 
     def setup_network(self, split=False):
-        # Use 1 minute timeout because the initial getnewaddress RPC can take
-        # longer than the default 30 seconds due to an expensive
-        # CWallet::TopUpKeyPool call, and the encryptwallet RPC made later in
-        # the test often takes even longer.
-        self.add_nodes(self.num_nodes, extra_args=self.extra_args, timewait=60)
+        self.add_nodes(self.num_nodes, extra_args=self.extra_args)
         self.start_nodes()
 
-    def run_test (self):
+    def run_test(self):
         wallet_unenc_dump = os.path.join(self.nodes[0].datadir, "wallet.unencrypted.dump")
         wallet_enc_dump = os.path.join(self.nodes[0].datadir, "wallet.encrypted.dump")
 

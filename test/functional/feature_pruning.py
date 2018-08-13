@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2017 The Bitcoin Core developers
+# Copyright (c) 2014-2018 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the pruning code.
@@ -10,7 +10,8 @@ This test takes 30 mins or more (up to 2 hours)
 """
 
 from test_framework.test_framework import BitcoinTestFramework
-from test_framework.util import *
+from test_framework.util import assert_equal, assert_greater_than, assert_raises_rpc_error, connect_nodes, mine_large_block, sync_blocks, wait_until
+
 import os
 
 MIN_BLOCKS_TO_KEEP = 288
@@ -28,6 +29,7 @@ class PruneTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 6
+        self.rpc_timewait = 900
 
         # Create nodes 0 and 1 to mine.
         # Create node 2 to test pruning.
@@ -54,7 +56,7 @@ class PruneTest(BitcoinTestFramework):
         sync_blocks(self.nodes[0:5])
 
     def setup_nodes(self):
-        self.add_nodes(self.num_nodes, self.extra_args, timewait=900)
+        self.add_nodes(self.num_nodes, self.extra_args)
         self.start_nodes()
 
     def create_big_chain(self):

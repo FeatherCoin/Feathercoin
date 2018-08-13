@@ -69,7 +69,7 @@ static bool AppInit(int argc, char* argv[])
 
     // Process help and version before taking care about datadir
     if (HelpRequested(gArgs) || gArgs.IsArgSet("-version")) {
-        std::string strUsage = strprintf("%s Daemon", PACKAGE_NAME) + " version " + FormatFullVersion() + "\n";
+        std::string strUsage = PACKAGE_NAME " Daemon version " + FormatFullVersion() + "\n";
 
         if (gArgs.IsArgSet("-version"))
         {
@@ -77,9 +77,7 @@ static bool AppInit(int argc, char* argv[])
         }
         else
         {
-            strUsage += "\nUsage:\n"
-                  "  feathercoind [options]                     " + strprintf("Start %s Daemon", PACKAGE_NAME) + "\n";
-
+            strUsage += "\nUsage:  feathercoind [options]                     Start " PACKAGE_NAME " Daemon\n";
             strUsage += "\n" + gArgs.GetHelpMessage();
         }
 
@@ -94,7 +92,7 @@ static bool AppInit(int argc, char* argv[])
             fprintf(stderr, "Error: Specified data directory \"%s\" does not exist.\n", gArgs.GetArg("-datadir", "").c_str());
             return false;
         }
-        if (!gArgs.ReadConfigFiles(error)) {
+        if (!gArgs.ReadConfigFiles(error, true)) {
             fprintf(stderr, "Error reading configuration file: %s\n", error.c_str());
             return false;
         }
