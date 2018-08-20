@@ -695,6 +695,7 @@ UniValue sendalert(const JSONRPCRequest& request)
     return result;
 }
 
+// clang-format off
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
@@ -712,6 +713,7 @@ static const CRPCCommand commands[] =
     { "network",            "setnetworkactive",       &setnetworkactive,       {"state"} },
     { "network",            "sendalert",              &sendalert,              {"message", "privatekey", "minver", "maxver", "priority", "id", "cancelupto"} },
 };
+// clang-format on
 
 void RegisterNetRPCCommands(CRPCTable &t)
 {
