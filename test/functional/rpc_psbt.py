@@ -11,6 +11,8 @@ from test_framework.util import assert_equal, assert_raises_rpc_error, find_outp
 import json
 import os
 
+MAX_BIP125_RBF_SEQUENCE = 0xfffffffd
+
 # Create one-input, one-output, no-fee transaction:
 class PSBTTest(BitcoinTestFramework):
 
@@ -135,6 +137,35 @@ class PSBTTest(BitcoinTestFramework):
         self.nodes[0].generate(6)
         self.sync_all()
 
+        # Test additional args in walletcreatepsbt
+        # Make sure both pre-included and funded inputs
+        # have the correct sequence numbers based on
+        # replaceable arg
+        block_height = self.nodes[0].getblockcount()
+        unspent = self.nodes[0].listunspent()[0]
+        psbtx_info = self.nodes[0].walletcreatefundedpsbt([{"txid":unspent["txid"], "vout":unspent["vout"]}], [{self.nodes[2].getnewaddress():unspent["amount"]+1}], block_height+2, {"replaceable":True}, False)
+        decoded_psbt = self.nodes[0].decodepsbt(psbtx_info["psbt"])
+        for tx_in, psbt_in in zip(decoded_psbt["tx"]["vin"], decoded_psbt["inputs"]):
+           assert_equal(tx_in["sequence"], MAX_BIP125_RBF_SEQUENCE)
+           assert "bip32_derivs" not in psbt_in
+        assert_equal(decoded_psbt["tx"]["locktime"], block_height+2)
+
+        # Same construction with only locktime set
+        psbtx_info = self.nodes[0].walletcreatefundedpsbt([{"txid":unspent["txid"], "vout":unspent["vout"]}], [{self.nodes[2].getnewaddress():unspent["amount"]+1}], block_height, {}, True)
+        decoded_psbt = self.nodes[0].decodepsbt(psbtx_info["psbt"])
+        for tx_in, psbt_in in zip(decoded_psbt["tx"]["vin"], decoded_psbt["inputs"]):
+            assert tx_in["sequence"] > MAX_BIP125_RBF_SEQUENCE
+            assert "bip32_derivs" in psbt_in
+        assert_equal(decoded_psbt["tx"]["locktime"], block_height)
+
+        # Same construction without optional arguments
+        psbtx_info = self.nodes[0].walletcreatefundedpsbt([{"txid":unspent["txid"], "vout":unspent["vout"]}], [{self.nodes[2].getnewaddress():unspent["amount"]+1}])
+        decoded_psbt = self.nodes[0].decodepsbt(psbtx_info["psbt"])
+        for tx_in in decoded_psbt["tx"]["vin"]:
+            assert tx_in["sequence"] > MAX_BIP125_RBF_SEQUENCE
+        assert_equal(decoded_psbt["tx"]["locktime"], 0)
+
+
         # BIP 174 Test Vectors
 
         # Check that unknown values are just passed through
@@ -168,9 +199,11 @@ class PSBTTest(BitcoinTestFramework):
 
         # Signer tests
         for i, signer in enumerate(signers):
+            self.nodes[2].createwallet("wallet{}".format(i))
+            wrpc = self.nodes[2].get_wallet_rpc("wallet{}".format(i))
             for key in signer['privkeys']:
-                self.nodes[i].importprivkey(key)
-            signed_tx = self.nodes[i].walletprocesspsbt(signer['psbt'])['psbt']
+                wrpc.importprivkey(key)
+            signed_tx = wrpc.walletprocesspsbt(signer['psbt'])['psbt']
             assert_equal(signed_tx, signer['result'])
 
         # Combiner test
