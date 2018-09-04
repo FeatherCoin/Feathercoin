@@ -71,13 +71,17 @@ void static inline DeleteLock(void* cs) {}
 #define AssertLockNotHeld(cs) AssertLockNotHeldInternal(#cs, __FILE__, __LINE__, &cs)
 
 /**
- * Template mixin that adds -Wthread-safety locking
- * annotations to a subset of the mutex API.
+ * Template mixin that adds -Wthread-safety locking annotations and lock order
+ * checking to a subset of the mutex API.
  */
 template <typename PARENT>
 class LOCKABLE AnnotatedMixin : public PARENT
 {
 public:
+    ~AnnotatedMixin() {
+        DeleteLock((void*)this);
+    }
+
     void lock() EXCLUSIVE_LOCK_FUNCTION()
     {
         PARENT::lock();
@@ -92,6 +96,8 @@ public:
     {
         return PARENT::try_lock();
     }
+
+    using UniqueLock = std::unique_lock<PARENT>;
 };
 
 /**
