@@ -172,12 +172,12 @@ CAlert CAlert::getAlertByHash(const uint256 &hash)
     return retval;
 }
 
-bool CAlert::ProcessAlert(const std::vector<unsigned char>& alertKey, bool fThread)
+bool CAlert::ProcessAlert(const std::vector<unsigned char>& alertKey)
 {
     if (!CheckSignature(alertKey))
-        return false;
+        return error("CAlert::ProcessAlert: verify signature failed");
     if (!IsInEffect())
-        return false;
+        return error("CAlert::ProcessAlert: Expired");
 
     // alert.nID=max is reserved for if the alert key is
     // compromised. It must have a pre-defined message,
@@ -226,37 +226,31 @@ bool CAlert::ProcessAlert(const std::vector<unsigned char>& alertKey, bool fThre
         {
             const CAlert& alert = item.second;
             if (alert.Cancels(*this))
-                return false;
+                return error("CAlert::ProcessAlert: Cancelled");
         }
 
         // Add to mapAlerts
         mapAlerts.insert(make_pair(GetHash(), *this));
-        // Notify UI and -alertnotify if it applies to me
+
         if(AppliesToMe())
         {
             uiInterface.NotifyAlertChanged(GetHash(), CT_NEW);
-            Notify(strStatusBar, fThread);
+            Notify(strStatusBar);
         }
     }
 
     return true;
 }
 
-void CAlert::Notify(const std::string& strMessage, bool fThread)
+void CAlert::Notify(const std::string& strMessage)
 {
-    std::string strCmd = gArgs.GetArg("-alertnotify", "");
-    if (strCmd.empty()) return;
-
     // Alert text should be plain ascii coming from a trusted source, but to
     // be safe we first strip anything not in safeChars, then add single quotes around
     // the whole string before passing it to the shell:
     std::string singleQuote("'");
     std::string safeStatus = SanitizeString(strMessage);
     safeStatus = singleQuote+safeStatus+singleQuote;
-    boost::replace_all(strCmd, "%s", safeStatus);
 
-    if (fThread)
-        boost::thread t(runCommand, strCmd); // thread runs free
-    else
-        runCommand(strCmd);
+    std::thread t(runCommand, safeStatus);
+    t.detach(); // thread runs free
 }

@@ -1232,7 +1232,7 @@ static void CheckForkWarningConditions() EXCLUSIVE_LOCKS_REQUIRED(cs_main)
         {
             std::string warning = std::string("'Warning: Large-work fork detected, forking after block ") +
                 pindexBestForkBase->phashBlock->ToString() + std::string("'");
-            CAlert::Notify(warning, true);
+            CAlert::Notify(warning);
         }
         if (pindexBestForkTip && pindexBestForkBase)
         {
@@ -2206,7 +2206,7 @@ static void DoWarning(const std::string& strWarning)
     static bool fWarned = false;
     SetMiscWarning(strWarning);
     if (!fWarned) {
-        CAlert::Notify(strWarning, true);
+        CAlert::Notify(strWarning);
         fWarned = true;
     }
 }
