@@ -680,17 +680,15 @@ UniValue sendalert(const JSONRPCRequest& request)
         alert.RelayTo(pnode);
     });
 
-    UniValue result(UniValue::VARR);
-    UniValue entry(UniValue::VOBJ);
-    entry.push_back(Pair("strStatusBar", alert.strStatusBar));
-    entry.push_back(Pair("nVersion", alert.nVersion));
-    entry.push_back(Pair("nMinVer", alert.nMinVer));
-    entry.push_back(Pair("nMaxVer", alert.nMaxVer));
-    entry.push_back(Pair("nPriority", alert.nPriority));
-    entry.push_back(Pair("nID", alert.nID));
+    UniValue result(UniValue::VOBJ);
+    result.pushKV("strStatusBar", alert.strStatusBar);
+    result.pushKV("nVersion", alert.nVersion);
+    result.pushKV("nMinVer", alert.nMinVer);
+    result.pushKV("nMaxVer", alert.nMaxVer);
+    result.pushKV("nPriority", alert.nPriority);
+    result.pushKV("nID", alert.nID);
     if (alert.nCancel > 0)
-        entry.push_back(Pair("nCancel", alert.nCancel));
-    result.push_back(entry);
+        result.pushKV("nCancel", alert.nCancel);
 
     return result;
 }

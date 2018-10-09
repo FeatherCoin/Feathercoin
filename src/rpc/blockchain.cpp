@@ -861,20 +861,18 @@ UniValue getcheckpoint(const JSONRPCRequest& request)
             "getcheckpoint\n"
             "Show info of synchronized checkpoint.\n");
 
-    UniValue result(UniValue::VARR);
-    UniValue entry(UniValue::VOBJ);
+    UniValue result(UniValue::VOBJ);
     CBlockIndex* pindexCheckpoint;
 
-    entry.push_back(Pair("synccheckpoint", hashSyncCheckpoint.ToString().c_str()));
+    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString().c_str());
     if (mapBlockIndex.count(hashSyncCheckpoint))
     {
         pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-        entry.push_back(Pair("height", pindexCheckpoint->nHeight));
-        entry.push_back(Pair("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime()));
+        result.pushKV("height", pindexCheckpoint->nHeight);
+        result.pushKV("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime());
     }
     if (gArgs.IsArgSet("-checkpointkey"))
-        entry.push_back(Pair("checkpointmaster", true));
-    result.push_back(entry);
+        result.pushKV("checkpointmaster", true);
 
     return result;
 }
@@ -895,20 +893,18 @@ UniValue sendcheckpoint(const JSONRPCRequest& request)
     if (!SendSyncCheckpoint(hash))
         throw std::runtime_error("Failed to send checkpoint, check log. ");
 
-    UniValue result(UniValue::VARR);
-    UniValue entry(UniValue::VOBJ);
+    UniValue result(UniValue::VOBJ);
     CBlockIndex* pindexCheckpoint;
 
-    entry.push_back(Pair("synccheckpoint", hashSyncCheckpoint.ToString().c_str()));
+    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString().c_str());
     if (mapBlockIndex.count(hashSyncCheckpoint))
     {
         pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-        entry.push_back(Pair("height", pindexCheckpoint->nHeight));
-        entry.push_back(Pair("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime()));
+        result.pushKV("height", pindexCheckpoint->nHeight);
+        result.pushKV("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime());
     }
     if (gArgs.IsArgSet("-checkpointkey"))
-        entry.push_back(Pair("checkpointmaster", true));
-    result.push_back(entry);
+        result.pushKV("checkpointmaster", true);
 
     return result;
 }
