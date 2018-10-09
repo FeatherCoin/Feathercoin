@@ -53,7 +53,7 @@ Build Bitcoin Core
     You can disable the GUI build by passing `--without-gui` to configure.
 
         ./autogen.sh
-        ./configure
+        ./configure --disable-shared --enable-static
         make
 
 3.  It is recommended to build and run the unit tests:

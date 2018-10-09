@@ -19,7 +19,7 @@ To Build
 
 ```bash
 ./autogen.sh
-./configure
+./configure --disable-shared --enable-static
 make
 make install # optional
 ```
@@ -255,7 +255,7 @@ This example lists the steps necessary to setup and build a command line only, n
     git clone https://github.com/bitcoin/bitcoin.git
     cd bitcoin/
     ./autogen.sh
-    ./configure --disable-wallet --without-gui --without-miniupnpc
+    ./configure --disable-wallet --without-gui --without-miniupnpc --disable-shared --enable-static
     make check
 
 Note:
