@@ -18,7 +18,7 @@ Twitter: https://twitter.com/Feathercoin
 Forum: http://forum.feathercoin.com/
 
 
-What is Feathercoin?
+What else is Feathercoin?
 ----------------
 
 Feathercoin is an experimental digital currency that enables instant payments to
@@ -28,8 +28,13 @@ out collectively by the network. Feathercoin Core is the name of open source
 software which enables the use of this currency.
 
 For more information, as well as an immediately useable, binary version of
-the Feathercoin Core software, see these [downloads](https://github.com/FeatherCoin/Feathercoin/releases).
+the Feathercoin Core software, see these [downloads](https://github.com/FeatherCoin/Feathercoin/releases/latest).
 
+Copying and compiling
+---------------------
+
+While the master branch is tested and table under normal conditions, it is subject to change without notice.
+For production installations use the latest release source code contained in these [downloads](https://github.com/FeatherCoin/Feathercoin/releases/latest).
 
 License
 -------
