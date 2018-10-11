@@ -54,7 +54,6 @@ EXPECTED_BOOST_INCLUDES=(
     boost/chrono/chrono.hpp
     boost/date_time/posix_time/posix_time.hpp
     boost/filesystem.hpp
-    boost/filesystem/detail/utf8_codecvt_facet.hpp
     boost/filesystem/fstream.hpp
     boost/multi_index/hashed_index.hpp
     boost/multi_index/ordered_index.hpp
@@ -63,7 +62,6 @@ EXPECTED_BOOST_INCLUDES=(
     boost/optional.hpp
     boost/preprocessor/cat.hpp
     boost/preprocessor/stringize.hpp
-    boost/scoped_array.hpp
     boost/signals2/connection.hpp
     boost/signals2/last_value.hpp
     boost/signals2/signal.hpp

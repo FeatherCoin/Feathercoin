@@ -11,7 +11,12 @@ namespace fsbridge {
 
 FILE *fopen(const fs::path& p, const char *mode)
 {
+#ifndef WIN32
     return ::fopen(p.string().c_str(), mode);
+#else
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>,wchar_t> utf8_cvt;
+    return ::_wfopen(p.wstring().c_str(), utf8_cvt.from_bytes(mode).c_str());
+#endif
 }
 
 #ifndef WIN32
@@ -91,5 +96,21 @@ bool FileLock::TryLock()
     return true;
 }
 #endif
+
+std::string get_filesystem_error_message(const fs::filesystem_error& e)
+{
+#ifndef WIN32
+    return e.what();
+#else
+    // Convert from Multi Byte to utf-16
+    std::string mb_string(e.what());
+    int size = MultiByteToWideChar(CP_ACP, 0, mb_string.c_str(), mb_string.size(), nullptr, 0);
+
+    std::wstring utf16_string(size, L'\0');
+    MultiByteToWideChar(CP_ACP, 0, mb_string.c_str(), mb_string.size(), &*utf16_string.begin(), size);
+    // Convert from utf-16 to utf-8
+    return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().to_bytes(utf16_string);
+#endif
+}
 
 } // fsbridge

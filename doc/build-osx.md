@@ -53,7 +53,7 @@ Build Bitcoin Core
     You can disable the GUI build by passing `--without-gui` to configure.
 
         ./autogen.sh
-        ./configure
+        ./configure --disable-shared --enable-static
         make
 
 3.  It is recommended to build and run the unit tests:
@@ -63,6 +63,17 @@ Build Bitcoin Core
 4.  You can also create a .dmg that contains the .app bundle (optional):
 
         make deploy
+
+Disable-wallet mode
+--------------------
+When the intention is to run only a P2P node without a wallet, Bitcoin Core may be compiled in
+disable-wallet mode with:
+
+    ./configure --disable-wallet
+
+In this case there is no dependency on Berkeley DB 4.8.
+
+Mining is also possible in disable-wallet mode using the `getblocktemplate` RPC call.
 
 Running
 -------

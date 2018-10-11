@@ -29,6 +29,7 @@
 #include <stdint.h>
 #include <string>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 #include <boost/thread/condition_variable.hpp> // for boost::thread_interrupted
@@ -348,7 +349,7 @@ std::string CopyrightHolders(const std::string& strPrefix);
  * @return The return value of sched_setschedule(), or 1 on systems without
  * sched_setschedule().
  */
-int ScheduleBatchPriority(void);
+int ScheduleBatchPriority();
 
 namespace util {
 
@@ -361,6 +362,21 @@ template <typename TsetT, typename Tsrc>
 inline void insert(std::set<TsetT>& dst, const Tsrc& src) {
     dst.insert(src.begin(), src.end());
 }
+
+#ifdef WIN32
+class WinCmdLineArgs
+{
+public:
+    WinCmdLineArgs();
+    ~WinCmdLineArgs();
+    std::pair<int, char**> get();
+
+private:
+    int argc;
+    char** argv;
+    std::vector<std::string> args;
+};
+#endif
 
 } // namespace util
 

@@ -10,7 +10,6 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
 
 /** Filesystem operations and types */
 namespace fs = boost::filesystem;
@@ -38,6 +37,8 @@ namespace fsbridge {
         void* hFile = (void*)-1; // INVALID_HANDLE_VALUE
 #endif
     };
+
+    std::string get_filesystem_error_message(const fs::filesystem_error& e);
 };
 
 #endif // BITCOIN_FS_H
