@@ -16,6 +16,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
 
     int nHeight = pindexLast->nHeight + 1;
+
+    // 4th Hard fork, reset difficulty
+    if (nHeight == params.nForkFour)
+        return UintToArith256(params.powNeoScryptLimit).GetCompact();
+
     int nTargetTimespan = params.nPowTargetTimespan;
     int nTargetSpacing = params.nPowTargetSpacing;
 
@@ -56,11 +61,14 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return pindexLast->nBits;
     }
 
-    // Go back by what we want to be 14 days worth of blocks
-    int nHeightFirst = pindexLast->nHeight - (nInterval-1);
-    assert(nHeightFirst >= 0);
-    const CBlockIndex* pindexFirst = pindexLast->GetAncestor(nHeightFirst);
-    assert(pindexFirst);
+    // The 1st retarget after genesis
+    if (nInterval >= nHeight)
+        nInterval = nHeight - 1;
+
+    // Go back by nInterval
+    const CBlockIndex* pindexFirst = pindexLast;
+    for (int i = 0; pindexFirst && i < nInterval; i++)
+        pindexFirst = pindexFirst->pprev;
 
     if (params.fPowNoRetargeting)
         return pindexLast->nBits;
