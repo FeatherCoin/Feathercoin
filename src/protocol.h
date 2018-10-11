@@ -238,6 +238,11 @@ extern const char *GETBLOCKTXN;
  * @since protocol version 70014 as described by BIP 152
  */
 extern const char *BLOCKTXN;
+/**
+ * Contains a checkpoint braodcasted by a central checkpointing node
+ * @since protocol version 61000
+ */
+extern const char *CHECKPOINT;
 };
 
 /* Get a vector of all valid message types (see above) */

@@ -3,8 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <arith_uint256.h>
 #include <sync.h>
 #include <clientversion.h>
+#include <checkpointsync.h>
 #include <util.h>
 #include <warnings.h>
 
@@ -50,6 +52,13 @@ std::string GetWarnings(const std::string& strFor)
         strGUI = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
     }
 
+    // Checkpoint warning
+    if (strCheckpointWarning != "")
+    {
+        strStatusBar = strCheckpointWarning;
+        strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + strCheckpointWarning;
+    }
+
     // Misc warnings like out of disk space and clock is wrong
     if (strMiscWarning != "")
     {
@@ -66,6 +75,13 @@ std::string GetWarnings(const std::string& strFor)
     {
         strStatusBar = "Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.";
         strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
+    }
+
+    // If detected invalid checkpoint enter safe mode
+    if (hashInvalidCheckpoint != ArithToUint256(arith_uint256(0)))
+    {
+        strStatusBar = "WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.";
+        strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.");
     }
 
     if (strFor == "gui")
