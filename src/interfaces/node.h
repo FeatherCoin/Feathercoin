@@ -9,6 +9,7 @@
 #include <amount.h>     // For CAmount
 #include <net.h>        // For CConnman::NumConnections
 #include <netaddress.h> // For Network
+#include <ui_interface.h> // For ChangeType
 
 #include <functional>
 #include <memory>
@@ -209,7 +210,7 @@ public:
     virtual std::unique_ptr<Handler> handleNotifyNetworkActiveChanged(NotifyNetworkActiveChangedFn fn) = 0;
 
     //! Register handler for notify alert messages.
-    using NotifyAlertChangedFn = std::function<void()>;
+    using NotifyAlertChangedFn = std::function<void(const uint256 &hash, ChangeType status)>;
     virtual std::unique_ptr<Handler> handleNotifyAlertChanged(NotifyAlertChangedFn fn) = 0;
 
     //! Register handler for ban list messages.

@@ -10,6 +10,7 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <vector>
 
 namespace Consensus {
 
@@ -68,6 +69,7 @@ struct Params {
     uint256 powLimit;
     uint256 powNeoScryptLimit;
     std::string checkpointPubKey;
+    std::vector<unsigned char> vAlertPubKey;
     bool fPowAllowMinDifficultyBlocks;
     bool fPowNoRetargeting;
     int64_t nPowTargetSpacing;

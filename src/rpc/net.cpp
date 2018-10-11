@@ -4,6 +4,8 @@
 
 #include <rpc/server.h>
 
+#include <alert.h>
+#include <base58.h>
 #include <chainparams.h>
 #include <clientversion.h>
 #include <core_io.h>
@@ -20,6 +22,8 @@
 #include <utilstrencodings.h>
 #include <version.h>
 #include <warnings.h>
+#include <key.h>
+#include <key_io.h>
 
 #include <univalue.h>
 
@@ -624,6 +628,71 @@ static UniValue setnetworkactive(const JSONRPCRequest& request)
     return g_connman->GetNetworkActive();
 }
 
+UniValue sendalert(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() < 6)
+        throw std::runtime_error(
+            "sendalert \"message\" \"privatekey\" \"minver\" \"maxver\" \"priority\" \"id\" (cancelupto)\n"
+            "\"message\"      (String required) is the alert text message\n"
+            "\"privatekey\"   (String required) is base58 hex string of alert master private key\n"
+            "\"minver\"       (Numeric required) is the minimum applicable internal client version\n"
+            "\"maxver\"       (Numeric required) is the maximum applicable internal client version\n"
+            "\"priority\"     (Numeric required) is integer priority number\n"
+            "\"id\"           (Numeric required) is the alert id\n"
+            "\"cancelupto\"   (Numeric) cancels all alert id's up to this number\n"
+            "Returns true or false.");
+
+    if (!g_connman)
+        throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
+
+    // Prepare the alert message
+    CAlert alert;
+    alert.strStatusBar = request.params[0].get_str();
+    alert.nMinVer = request.params[2].get_int();
+    alert.nMaxVer = request.params[3].get_int();
+    alert.nPriority = request.params[4].get_int();
+    alert.nID = request.params[5].get_int();
+    if (request.params.size() > 6)
+        alert.nCancel = request.params[6].get_int();
+    alert.nVersion = PROTOCOL_VERSION;
+    alert.nRelayUntil = GetAdjustedTime() + 365*24*60*60;
+    alert.nExpiration = GetAdjustedTime() + 365*24*60*60;
+
+    CDataStream sMsg(SER_NETWORK, PROTOCOL_VERSION);
+    sMsg << (CUnsignedAlert)alert;
+    alert.vchMsg = std::vector<unsigned char>(sMsg.begin(), sMsg.end());
+
+    // Prepare master key and sign alert message
+    CKey key = DecodeSecret(request.params[1].get_str());
+    if (!key.IsValid())
+        throw std::runtime_error("Invalid alert master key");
+
+    if (!key.Sign(Hash(alert.vchMsg.begin(), alert.vchMsg.end()), alert.vchSig))
+        throw std::runtime_error(
+            "Unable to sign alert, check alert master key?\n");
+
+    // Process alert
+    if(!alert.ProcessAlert(Params().GetConsensus().vAlertPubKey))
+        throw std::runtime_error("Failed to process alert.\n");
+
+    // Relay alert
+    g_connman->ForEachNode([alert](CNode* pnode) {
+        alert.RelayTo(pnode);
+    });
+
+    UniValue result(UniValue::VOBJ);
+    result.pushKV("strStatusBar", alert.strStatusBar);
+    result.pushKV("nVersion", alert.nVersion);
+    result.pushKV("nMinVer", alert.nMinVer);
+    result.pushKV("nMaxVer", alert.nMaxVer);
+    result.pushKV("nPriority", alert.nPriority);
+    result.pushKV("nID", alert.nID);
+    if (alert.nCancel > 0)
+        result.pushKV("nCancel", alert.nCancel);
+
+    return result;
+}
+
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
@@ -639,6 +708,7 @@ static const CRPCCommand commands[] =
     { "network",            "listbanned",             &listbanned,             {} },
     { "network",            "clearbanned",            &clearbanned,            {} },
     { "network",            "setnetworkactive",       &setnetworkactive,       {"state"} },
+    { "network",            "sendalert",              &sendalert,              {"message", "privatekey", "minver", "maxver", "priority", "id", "cancelupto"} },
 };
 
 void RegisterNetRPCCommands(CRPCTable &t)
