@@ -13,6 +13,7 @@ AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/bitcoin-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
+AM_PROG_AS
 
 BITCOIN_DAEMON_NAME=feathercoind
 BITCOIN_GUI_NAME=feathercoin-qt

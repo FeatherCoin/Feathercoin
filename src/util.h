@@ -45,6 +45,7 @@ public:
     boost::signals2::signal<std::string (const char* psz)> Translate;
 };
 
+extern unsigned int nNeoScryptOptions;
 extern CTranslationInterface translationInterface;
 
 extern const char * const BITCOIN_CONF_FILENAME;
