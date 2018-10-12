@@ -1185,7 +1185,9 @@ void static ProcessGetBlockData(CNode* pfrom, const CChainParams& chainparams, c
             // as the network format matches the format on disk
             std::vector<uint8_t> block_data;
             if (!ReadRawBlockFromDisk(block_data, pindex, chainparams.MessageStart())) {
-                assert(!"cannot load block from disk");
+                if (!ReadRawBlockFromDisk(block_data, pindex, chainparams.MessageStartOld())) {
+                    assert(!"cannot load block from disk");
+                }
             }
             connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::BLOCK, MakeSpan(block_data)));
             // Don't set pblock as we've sent the block
