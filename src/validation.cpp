@@ -1120,7 +1120,7 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex, const Consensus
     return true;
 }
 
-bool ReadRawBlockFromDisk(std::vector<uint8_t>& block, const CDiskBlockPos& pos, const CMessageHeader::MessageStartChars& message_start)
+bool ReadRawBlockFromDisk(std::vector<uint8_t>& block, const CDiskBlockPos& pos, const CMessageHeader::MessageStartChars& message_start, const CMessageHeader::MessageStartChars& message_start_old)
 {
     CDiskBlockPos hpos = pos;
     hpos.nPos -= 8; // Seek back 8 bytes for meta header
@@ -1136,9 +1136,9 @@ bool ReadRawBlockFromDisk(std::vector<uint8_t>& block, const CDiskBlockPos& pos,
         filein >> blk_start >> blk_size;
 
         if (memcmp(blk_start, message_start, CMessageHeader::MESSAGE_START_SIZE)) {
-            return error("%s: Block magic mismatch for %s: %s versus expected %s", __func__, pos.ToString(),
-                    HexStr(blk_start, blk_start + CMessageHeader::MESSAGE_START_SIZE),
-                    HexStr(message_start, message_start + CMessageHeader::MESSAGE_START_SIZE));
+            if (memcmp(blk_start, message_start_old, CMessageHeader::MESSAGE_START_SIZE)) {
+                return error("%s: Block magic mismatch", __func__);
+            }
         }
 
         if (blk_size > MAX_SIZE) {
@@ -1155,7 +1155,7 @@ bool ReadRawBlockFromDisk(std::vector<uint8_t>& block, const CDiskBlockPos& pos,
     return true;
 }
 
-bool ReadRawBlockFromDisk(std::vector<uint8_t>& block, const CBlockIndex* pindex, const CMessageHeader::MessageStartChars& message_start)
+bool ReadRawBlockFromDisk(std::vector<uint8_t>& block, const CBlockIndex* pindex, const CMessageHeader::MessageStartChars& message_start, const CMessageHeader::MessageStartChars& message_start_old)
 {
     CDiskBlockPos block_pos;
     {
@@ -1163,7 +1163,7 @@ bool ReadRawBlockFromDisk(std::vector<uint8_t>& block, const CBlockIndex* pindex
         block_pos = pindex->GetBlockPos();
     }
 
-    return ReadRawBlockFromDisk(block, block_pos, message_start);
+    return ReadRawBlockFromDisk(block, block_pos, message_start, message_start_old);
 }
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
