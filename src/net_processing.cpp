@@ -1184,10 +1184,8 @@ void static ProcessGetBlockData(CNode* pfrom, const CChainParams& chainparams, c
             // Fast-path: in this case it is possible to serve the block directly from disk,
             // as the network format matches the format on disk
             std::vector<uint8_t> block_data;
-            if (!ReadRawBlockFromDisk(block_data, pindex, chainparams.MessageStart())) {
-                if (!ReadRawBlockFromDisk(block_data, pindex, chainparams.MessageStartOld())) {
-                    assert(!"cannot load block from disk");
-                }
+            if (!ReadRawBlockFromDisk(block_data, pindex, chainparams.MessageStart(), chainparams.MessageStartOld())) {
+                assert(!"cannot load block from disk");
             }
             connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::BLOCK, MakeSpan(block_data)));
             // Don't set pblock as we've sent the block
@@ -1731,6 +1729,9 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             State(pfrom->GetId())->fHaveWitness = true;
         }
 
+        if((nServices & NODE_ACP))
+            pfrom->supportACPMessages = true;
+
         // Potentially mark this peer as a preferred download peer.
         {
         LOCK(cs_main);
@@ -1790,9 +1791,6 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         int64_t nTimeOffset = nTime - GetTime();
         pfrom->nTimeOffset = nTimeOffset;
         AddTimeData(pfrom->addr, nTimeOffset);
-
-        if (!IsInitialBlockDownload())
-            AskForPendingSyncCheckpoint(pfrom);
 
         // Feeler connections exist only to verify if address is online.
         if (pfrom->fFeeler) {
@@ -2863,7 +2861,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         CSyncCheckpoint checkpoint;
         vRecv >> checkpoint;
 
-        if (checkpoint.ProcessSyncCheckpoint(pfrom))
+        if (checkpoint.ProcessSyncCheckpoint())
         {
             LogPrintf("%s: hashCheckpoint=%s\n", __func__, checkpoint.hashCheckpoint.ToString().c_str());
 
