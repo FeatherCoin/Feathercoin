@@ -141,7 +141,7 @@ bool AcceptPendingSyncCheckpoint()
         return false;
 
     if (!WriteSyncCheckpoint(hashPendingCheckpoint))
-        return error("AcceptPendingSyncCheckpoint(): failed to write sync checkpoint %s", hashPendingCheckpoint.ToString().c_str());
+        return error("%s: failed to write sync checkpoint %s", __func__, hashPendingCheckpoint.ToString().c_str());
 
     hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
     checkpointMessage = checkpointMessagePending;
