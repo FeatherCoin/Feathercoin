@@ -27,7 +27,7 @@ extern std::string strCheckpointWarning;
 bool WriteSyncCheckpoint(const uint256& hashCheckpoint);
 bool AcceptPendingSyncCheckpoint();
 uint256 AutoSelectSyncCheckpoint();
-bool CheckSyncCheckpoint(const uint256& hashBlock, const CBlockIndex* pindexPrev);
+bool CheckSyncCheckpoint(const CBlockIndex* pindexNew);
 bool ResetSyncCheckpoint();
 bool CheckCheckpointPubKey();
 bool SetCheckpointPrivKey(std::string strPrivKey);
