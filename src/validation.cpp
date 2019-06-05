@@ -3458,11 +3458,7 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
 
     // Check that the block satisfies synchronized checkpoint
     if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(pindex))
-    {
-        pindex->nStatus |= BLOCK_FAILED_VALID;
-        setDirtyBlockIndex.insert(pindex);
         return error("%s: rejected by synchronized checkpoint", __func__);
-    }
 
     // Write block to history file
     if (fNewBlock) *fNewBlock = true;

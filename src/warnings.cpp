@@ -55,13 +55,6 @@ std::string GetWarnings(const std::string& strFor)
         strGUI = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
     }
 
-    // Checkpoint warning
-    if (strCheckpointWarning != "")
-    {
-        strStatusBar = strCheckpointWarning;
-        strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + strCheckpointWarning;
-    }
-
     // Misc warnings like out of disk space and clock is wrong
     if (strMiscWarning != "")
     {
