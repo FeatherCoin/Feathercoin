@@ -103,6 +103,7 @@ static UniValue generateBlocks(const CScript& coinbase_script, int nGenerate, ui
 {
     int nHeightEnd = 0;
     int nHeight = 0;
+    unsigned int profile = 0x3;
 
     {   // Don't keep cs_main locked
         LOCK(cs_main);
@@ -121,7 +122,7 @@ static UniValue generateBlocks(const CScript& coinbase_script, int nGenerate, ui
             LOCK(cs_main);
             IncrementExtraNonce(pblock, ::ChainActive().Tip(), nExtraNonce);
         }
-        while (nMaxTries > 0 && pblock->nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(pblock->GetHash(), pblock->nBits, Params().GetConsensus()) && !ShutdownRequested()) {
+        while (nMaxTries > 0 && pblock->nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(pblock->GetPoWHash(profile), pblock->nBits, Params().GetConsensus()) && !ShutdownRequested()) {
             ++pblock->nNonce;
             --nMaxTries;
         }
