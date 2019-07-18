@@ -66,12 +66,12 @@
         <translation>Adresy ôdbiyraniŏ</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Tukej sōm adresy Bitcoin na kere posyłŏsz płaty. Dycki wybaduj wielość i adresã ôdbiyrŏcza przed posłaniym mōnet.</translation>
+        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Tukej sōm adresy Feathercoin na kere posyłŏsz płaty. Dycki wybaduj wielość i adresã ôdbiyrŏcza przed posłaniym mōnet.</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Tukej sōm adresy Bitcoin do ôdbiyraniŏ płatōw. Zalycŏ sie używaniŏ nowych adres ôdbiorczych dlŏ kożdyj transakcyje.</translation>
+        <source>These are your Feathercoin addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Tukej sōm adresy Feathercoin do ôdbiyraniŏ płatōw. Zalycŏ sie używaniŏ nowych adres ôdbiorczych dlŏ kożdyj transakcyje.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -176,8 +176,8 @@
         <translation>Przituplikuj szyfrowanie portmanyja</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
-        <translation>Pozōr: jeźli zaszyfrujesz swōj portmanyj i stracisz hasło &lt;b&gt;STRACISZ WSZYJSKE SWOJE BITCOINY&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FEATHERCOINS&lt;/b&gt;!</source>
+        <translation>Pozōr: jeźli zaszyfrujesz swōj portmanyj i stracisz hasło &lt;b&gt;STRACISZ WSZYJSKE SWOJE FEATHERCOINY&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -338,8 +338,8 @@
         <translation>Proxy je &lt;b&gt;zapuszczone&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a Bitcoin address</source>
-        <translation>Poślij mōnety na adresã Bitcoin</translation>
+        <source>Send coins to a Feathercoin address</source>
+        <translation>Poślij mōnety na adresã Feathercoin</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -362,8 +362,8 @@
         <translation>&amp;Weryfikuj wiadōmość...</translation>
     </message>
     <message>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     <message>
         <source>&amp;Send</source>
@@ -386,12 +386,12 @@
         <translation>Szyfruj klucze prywatne, kere sōm we twojim portmanyju</translation>
     </message>
     <message>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
         <translation>Podpisz wiadōmości swojōm adresōm coby dowiyść jejich posiadanie</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
-        <translation>Zweryfikuj wiadōmość, coby wejzdrzeć sie, iże ôstała podpisanŏ podanōm adresōm Bitcoin.</translation>
+        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
+        <translation>Zweryfikuj wiadōmość, coby wejzdrzeć sie, iże ôstała podpisanŏ podanōm adresōm Feathercoin.</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -410,8 +410,8 @@
         <translation>Lajsta szkart</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
-        <translation>Żōndej płatu (gyneruje kod QR jak tyż URI bitcoin:)</translation>
+        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
+        <translation>Żōndej płatu (gyneruje kod QR jak tyż URI feathercoin:)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -422,16 +422,16 @@
         <translation>Pokŏż wykŏz adres i etyket użytych do ôdbiyraniŏ</translation>
     </message>
     <message>
-        <source>Open a bitcoin: URI or payment request</source>
-        <translation>Ôdewrzij URI bitcoin: abo żōndanie płatu</translation>
+        <source>Open a feathercoin: URI or payment request</source>
+        <translation>Ôdewrzij URI feathercoin: abo żōndanie płatu</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>Ôp&amp;cyje piski nakŏzań</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Bitcoin network</source>
-        <translation><numerusform>%n aktywne połōnczynie do necu Bitcoin</numerusform><numerusform>%n aktywnych połōnczyń do necu Bitcoin</numerusform><numerusform>%n aktywnych skuplowań do necu Bitcoin</numerusform></translation>
+        <source>%n active connection(s) to Feathercoin network</source>
+        <translation><numerusform>%n aktywne połōnczynie do necu Feathercoin</numerusform><numerusform>%n aktywnych połōnczyń do necu Feathercoin</numerusform><numerusform>%n aktywnych skuplowań do necu Feathercoin</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -478,7 +478,7 @@
         <translation>&amp;Adresy posyłaniŏ</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
+        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
         <translation>Pokŏż pōmoc %1 coby zobŏczyć wykŏz wszyjskich ôpcyji piski nakŏzań.</translation>
     </message>
     <message>
@@ -558,8 +558,8 @@
         <translation>Portmanyj je &lt;b&gt;zaszyfrowany&lt;/b&gt; i terŏźnie &lt;b&gt;zaszperowany&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>A fatal error occurred. Bitcoin can no longer continue safely and will quit.</source>
-        <translation>Przitrefiōł sie krytyczny feler. Bitcoin niy poradzi kōntynuować bezpiycznie i ôstanie zawrzity.</translation>
+        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
+        <translation>Przitrefiōł sie krytyczny feler. Feathercoin niy poradzi kōntynuować bezpiycznie i ôstanie zawrzity.</translation>
     </message>
 </context>
 <context>
@@ -748,8 +748,8 @@
         <translation>Edytuj adresã posyłaniŏ</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Bitcoin address.</source>
-        <translation>Wkludzōnŏ adresa "%1" niyma nŏleżnōm adresōm Bitcoin.</translation>
+        <source>The entered address "%1" is not a valid Feathercoin address.</source>
+        <translation>Wkludzōnŏ adresa "%1" niyma nŏleżnōm adresōm Feathercoin.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -841,8 +841,8 @@
         <translation>Użyj ôbranego folderu datōw</translation>
     </message>
     <message>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Feathercoin</source>
+        <translation>Feathercoin</translation>
     </message>
     <message>
         <source>At least %1 GB of data will be stored in this directory, and it will grow over time.</source>
@@ -853,8 +853,8 @@
         <translation>Kole %1 GB datōw ôstanie spamiyntane w tym katalogu.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
-        <translation>%1 sebiere i spamiyntŏ kopijõ kety blokōw Bitcoin.</translation>
+        <source>%1 will download and store a copy of the Feathercoin block chain.</source>
+        <translation>%1 sebiere i spamiyntŏ kopijõ kety blokōw Feathercoin.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -884,12 +884,12 @@
         <translation>Formular</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
-        <translation>Świyże transakcyje mogōm niy być jeszcze widzialne, a tedyć saldo portmanyja może być niynŏleżne. Te detale bydōm nŏleżne, kej portmanyj zakōńczy synchrōnizacyjõ z necym bitcoin, zgodnie z miyniōnym ôpisym.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the feathercoin network, as detailed below.</source>
+        <translation>Świyże transakcyje mogōm niy być jeszcze widzialne, a tedyć saldo portmanyja może być niynŏleżne. Te detale bydōm nŏleżne, kej portmanyj zakōńczy synchrōnizacyjõ z necym feathercoin, zgodnie z miyniōnym ôpisym.</translation>
     </message>
     <message>
-        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Prōba wydaniŏ bitcoinōw kere niy sōm jeszcze wyświytlōne za transakcyjŏ ôstanie ôdciepniyntŏ bez nec.</translation>
+        <source>Attempting to spend feathercoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Prōba wydaniŏ feathercoinōw kere niy sōm jeszcze wyświytlōne za transakcyjŏ ôstanie ôdciepniyntŏ bez nec.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1042,8 +1042,8 @@
         <translation>&amp;Wydej niyprzituplowanõ wydŏwkã</translation>
     </message>
     <message>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Autōmatycznie ôdewrzij port klijynta Bitcoin na routerze. Ta ôpcyjŏ funguje ino jeźli twōj router podpiyrŏ UPnP i je ôno zapuszczone.</translation>
+        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Autōmatycznie ôdewrzij port klijynta Feathercoin na routerze. Ta ôpcyjŏ funguje ino jeźli twōj router podpiyrŏ UPnP i je ôno zapuszczone.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1058,8 +1058,8 @@
         <translation>Zwōl na skuplowania przichodzōnce</translation>
     </message>
     <message>
-        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
-        <translation>Skupluj sie z necym Bitcoin bez SOCKS5 proxy.</translation>
+        <source>Connect to the Feathercoin network through a SOCKS5 proxy.</source>
+        <translation>Skupluj sie z necym Feathercoin bez SOCKS5 proxy.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1090,8 +1090,8 @@
         <translation>Tor</translation>
     </message>
     <message>
-        <source>Connect to the Bitcoin network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Skupluj sie z necym Bitcoin ze pōmocōm ôsobnego proxy SOCKS5 dlŏ necu TOR</translation>
+        <source>Connect to the Feathercoin network through a separate SOCKS5 proxy for Tor hidden services.</source>
+        <translation>Skupluj sie z necym Feathercoin ze pōmocōm ôsobnego proxy SOCKS5 dlŏ necu TOR</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1137,8 +1137,8 @@
         <translation>Formular</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Wyświytlanŏ informacyjŏ może być niyterŏźnŏ. Twōj portmanyj synchrōnizuje sie autōmatycznie z necym bitcoin zarŏz po tym, jak zrychtowane je skuplowanie, ale proces tyn niy ôstoł jeszcze skōńczōny.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Wyświytlanŏ informacyjŏ może być niyterŏźnŏ. Twōj portmanyj synchrōnizuje sie autōmatycznie z necym feathercoin zarŏz po tym, jak zrychtowane je skuplowanie, ale proces tyn niy ôstoł jeszcze skōńczōny.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -1172,8 +1172,8 @@
         <translation>Bedynōng URI</translation>
     </message>
     <message>
-        <source>'bitcoin://' is not a valid URI. Use 'bitcoin:' instead.</source>
-        <translation>'bitcoin://' to niyma nŏleżne URI. Użyj 'bitcoin:'.</translation>
+        <source>'feathercoin://' is not a valid URI. Use 'feathercoin:' instead.</source>
+        <translation>'feathercoin://' to niyma nŏleżne URI. Użyj 'feathercoin:'.</translation>
     </message>
     <message>
         <source>Payment request network doesn't match client network.</source>
@@ -1218,8 +1218,8 @@
         <translation>Kwota</translation>
     </message>
     <message>
-        <source>Enter a Bitcoin address (e.g. %1)</source>
-        <translation>Wkludź adresã Bitcoin (bp. %1)</translation>
+        <source>Enter a Feathercoin address (e.g. %1)</source>
+        <translation>Wkludź adresã Feathercoin (bp. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1438,8 +1438,8 @@
         <translation>&amp;Etyketa:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
-        <translation>Ôpcyjōnalnŏ wiadōmość do prziwstōniŏ do żōndaniŏ płatu, kerŏ bydzie wyświytlanŏ, kej żōndanie ôstanie ôdewrzōne. Napōmniynie: wiadōmość ta niy ôstanie wysłanŏ z płatym w nec Bitcoin.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
+        <translation>Ôpcyjōnalnŏ wiadōmość do prziwstōniŏ do żōndaniŏ płatu, kerŏ bydzie wyświytlanŏ, kej żōndanie ôstanie ôdewrzōne. Napōmniynie: wiadōmość ta niy ôstanie wysłanŏ z płatym w nec Feathercoin.</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -1643,8 +1643,8 @@
         <translation>Utworzynie transakcyje niy podarziło sie!</translation>
     </message>
     <message>
-        <source>Warning: Invalid Bitcoin address</source>
-        <translation>Pozōr: niynŏleżnŏ adresa Bitcoin</translation>
+        <source>Warning: Invalid Feathercoin address</source>
+        <translation>Pozōr: niynŏleżnŏ adresa Feathercoin</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -1666,8 +1666,8 @@
         <translation>To je normalny płat.</translation>
     </message>
     <message>
-        <source>The Bitcoin address to send the payment to</source>
-        <translation>Adresa Bitcoin, na kerõ chcesz posłać płat</translation>
+        <source>The Feathercoin address to send the payment to</source>
+        <translation>Adresa Feathercoin, na kerõ chcesz posłać płat</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -1686,8 +1686,8 @@
         <translation>Wiadōmość:</translation>
     </message>
     <message>
-        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
-        <translation>Wiadōmość, kerŏ ôstała prziwstōnŏ do URI bitcoin:, kerŏ bydzie przechowowanŏ z transakcyjōm w cylach informacyjnych. Napōmniynie: Ta wiadōmość niy bydzie rozszyrzowanŏ w necu Bitcoin.</translation>
+        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
+        <translation>Wiadōmość, kerŏ ôstała prziwstōnŏ do URI feathercoin:, kerŏ bydzie przechowowanŏ z transakcyjōm w cylach informacyjnych. Napōmniynie: Ta wiadōmość niy bydzie rozszyrzowanŏ w necu Feathercoin.</translation>
     </message>
     </context>
 <context>
@@ -1955,8 +1955,8 @@
 <context>
     <name>bitcoin-core</name>
     <message>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Core</translation>
+        <source>Feathercoin Core</source>
+        <translation>Feathercoin Core</translation>
     </message>
     <message>
         <source>The %s developers</source>

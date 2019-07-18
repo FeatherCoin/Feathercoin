@@ -62,8 +62,8 @@
         <translation>Dirección destino</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Estas son tus direcciones Bitcoin para enviar pagos. Chequea siempre el monto y la dirección destino antes de mandar monedas.
+        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Estas son tus direcciones Feathercoin para enviar pagos. Chequea siempre el monto y la dirección destino antes de mandar monedas.
 </translation>
     </message>
     <message>
@@ -158,8 +158,8 @@
         <translation>Confirmar cifrado de la billetera</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
-        <translation>Advertencia: si usted cifra su billetera y olvida su Frase de Contraseña, usted &lt;b&gt; PERDERÁ TODOS SUS BITCOINS&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FEATHERCOINS&lt;/b&gt;!</source>
+        <translation>Advertencia: si usted cifra su billetera y olvida su Frase de Contraseña, usted &lt;b&gt; PERDERÁ TODOS SUS FEATHERCOINS&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
