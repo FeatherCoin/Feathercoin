@@ -704,6 +704,8 @@ public:
     std::set<uint256> setKnown;
     int64_t nNextAddrSend GUARDED_BY(cs_sendProcessing){0};
     int64_t nNextLocalAddrSend GUARDED_BY(cs_sendProcessing){0};
+    uint256 hashCheckpointKnown;
+    bool supportACPMessages{false};
 
     // inventory based relay
     CRollingBloomFilter filterInventoryKnown GUARDED_BY(cs_inventory);

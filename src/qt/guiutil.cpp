@@ -815,8 +815,8 @@ QString formatServicesStr(quint64 mask)
 {
     QStringList strList;
 
-    // Just scan the last 8 bits for now.
-    for (int i = 0; i < 8; i++) {
+    // Just scan the last 25 bits for now.
+    for (int i = 0; i < 25; i++) {
         uint64_t check = 1 << i;
         if (mask & check)
         {
@@ -824,6 +824,11 @@ QString formatServicesStr(quint64 mask)
             {
             case NODE_NETWORK:
                 strList.append("NETWORK");
+                break;
+            // Bitcoin normally checks 8 bits but due to ACP using a bit in the experimental range as designated 
+            // by Bitcoin, Feathercoin has extended the check to 25 bits which now includes the previously exluded
+            // NODE_NETWORK_LIMITED using bit 10 which shows as UNKNOWN unless handled here.
+            case NODE_NETWORK_LIMITED:
                 break;
             case NODE_GETUTXO:
                 strList.append("GETUTXO");
@@ -836,6 +841,9 @@ QString formatServicesStr(quint64 mask)
                 break;
             case NODE_XTHIN:
                 strList.append("XTHIN");
+                break;
+            case NODE_ACP:
+                strList.append("ACP");
                 break;
             default:
                 strList.append(QString("%1[%2]").arg("UNKNOWN").arg(check));
