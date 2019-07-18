@@ -722,7 +722,7 @@ fi
 
 if test x$TARGET_OS != xwindows; then
   # All windows code is PIC, forcing it on just adds useless compile warnings
-  AX_CHECK_COMPILE_FLAG([-fPIC],[PIC_FLAGS="-fPIC"])
+  AX_CHECK_COMPILE_FLAG([-fPIC],[PIC_FLAGS="-fPIC" && CFLAGS="$CFLAGS -fPIC"])
 fi
 
 # All versions of gcc that we commonly use for building are subject to bug
