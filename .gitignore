@@ -86,6 +86,9 @@ feathercoin-qt
 Feathercoin-Qt.app
 background.tiff*
 
+# Qt Creator
+Makefile.am.user
+
 # Unit-tests
 Makefile.test
 feathercoin-qt_test
