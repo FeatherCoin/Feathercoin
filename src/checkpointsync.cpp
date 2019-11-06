@@ -68,13 +68,20 @@ static CSyncCheckpoint checkpointMessagePending;
 // Only descendant of current sync-checkpoint is allowed
 bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
 {
-    if (!mapBlockIndex.count(hashSyncCheckpoint))
-        return error("%s: block index missing for current sync-checkpoint %s", __func__, hashSyncCheckpoint.ToString());
-    if (!mapBlockIndex.count(hashCheckpoint))
-        return error("%s: block index missing for received sync-checkpoint %s", __func__, hashCheckpoint.ToString());
+    CBlockIndex* pindexSyncCheckpoint;
+    CBlockIndex* pindexCheckpointRecv;
 
-    CBlockIndex* pindexSyncCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-    CBlockIndex* pindexCheckpointRecv = mapBlockIndex[hashCheckpoint];
+    {
+        LOCK(cs_main);
+
+        if (!mapBlockIndex.count(hashSyncCheckpoint))
+            return error("%s: block index missing for current sync-checkpoint %s", __func__, hashSyncCheckpoint.ToString());
+        if (!mapBlockIndex.count(hashCheckpoint))
+            return error("%s: block index missing for received sync-checkpoint %s", __func__, hashCheckpoint.ToString());
+
+        pindexSyncCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+        pindexCheckpointRecv = mapBlockIndex[hashCheckpoint];
+    }
 
     if (pindexCheckpointRecv->nHeight <= pindexSyncCheckpoint->nHeight)
     {

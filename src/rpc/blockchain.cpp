@@ -933,11 +933,14 @@ static UniValue getcheckpoint(const JSONRPCRequest& request)
     CBlockIndex* pindexCheckpoint;
 
     result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString());
-    if (mapBlockIndex.count(hashSyncCheckpoint))
     {
-        pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-        result.pushKV("height", pindexCheckpoint->nHeight);
-        result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+        LOCK(cs_main);
+        if (mapBlockIndex.count(hashSyncCheckpoint))
+        {
+            pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+            result.pushKV("height", pindexCheckpoint->nHeight);
+            result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+        }
     }
     if (gArgs.IsArgSet("-checkpointkey"))
         result.pushKV("checkpointmaster", true);
@@ -981,11 +984,14 @@ static UniValue sendcheckpoint(const JSONRPCRequest& request)
     CBlockIndex* pindexCheckpoint;
 
     result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString());
-    if (mapBlockIndex.count(hashSyncCheckpoint))
     {
-        pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-        result.pushKV("height", pindexCheckpoint->nHeight);
-        result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+        LOCK(cs_main);
+        if (mapBlockIndex.count(hashSyncCheckpoint))
+        {
+            pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+            result.pushKV("height", pindexCheckpoint->nHeight);
+            result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+        }
     }
     if (gArgs.IsArgSet("-checkpointkey"))
         result.pushKV("checkpointmaster", true);
