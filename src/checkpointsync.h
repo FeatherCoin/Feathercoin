@@ -46,7 +46,6 @@ public:
 
     void SetNull();
     std::string ToString() const;
-    void print() const;
 };
 
 class CSyncCheckpoint : public CUnsignedSyncCheckpoint

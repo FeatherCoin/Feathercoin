@@ -87,7 +87,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
                 return error("%s: pprev1 null - block index structure failure", __func__);
         if (pindex->GetBlockHash() != hashCheckpoint)
         {
-            return error("%s: new sync-checkpoint %s is conflicting with current sync-checkpoint %s", __func__, hashCheckpoint.ToString().c_str(), hashSyncCheckpoint.ToString().c_str());
+            return error("%s: new sync-checkpoint %s is conflicting with current sync-checkpoint %s", __func__, hashCheckpoint.ToString(), hashSyncCheckpoint.ToString());
         }
         return false; // ignore older checkpoint
     }
@@ -175,7 +175,7 @@ bool CheckSyncCheckpoint(const CBlockIndex* pindexNew)
 
     // Reset checkpoint to Genesis block if not found or initialised
     if (hashSyncCheckpoint == ArithToUint256(arith_uint256(0))) {
-        LogPrintf("%s: hashSyncCheckpoint not initialised, setting to genesis block: %s\n",__func__, Params().GetConsensus().hashGenesisBlock.ToString().c_str());
+        LogPrintf("%s: hashSyncCheckpoint not initialised, setting to genesis block: %s\n",__func__, Params().GetConsensus().hashGenesisBlock.ToString());
         WriteSyncCheckpoint(Params().GetConsensus().hashGenesisBlock);
         return true;
     }
@@ -304,12 +304,7 @@ std::string CUnsignedSyncCheckpoint::ToString() const
             "    hashCheckpoint = %s\n"
             ")\n",
         nVersion,
-        hashCheckpoint.ToString().c_str());
-}
-
-void CUnsignedSyncCheckpoint::print() const
-{
-    printf("%s", ToString().c_str());
+        hashCheckpoint.ToString());
 }
 
 CSyncCheckpoint::CSyncCheckpoint()
