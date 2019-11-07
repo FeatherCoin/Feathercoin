@@ -104,7 +104,7 @@ build
 *.gcno
 *.gcda
 /*.info
-test_bitcoin.coverage/
+test_feathercoin.coverage/
 total.coverage/
 coverage_percent.txt
 
