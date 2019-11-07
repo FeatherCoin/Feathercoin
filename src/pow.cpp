@@ -70,10 +70,17 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     for (int i = 0; pindexFirst && i < nInterval; i++)
         pindexFirst = pindexFirst->pprev;
 
+    return CalculateNextWorkRequired(pindexLast, pindexFirst->GetBlockTime(), nTargetTimespan, nTargetSpacing, params);
+}
+
+unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, int nTargetTimespan, int nTargetSpacing, const Consensus::Params& params)
+{
     if (params.fPowNoRetargeting)
         return pindexLast->nBits;
 
-    int64_t nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
+    int64_t nActualTimespan = pindexLast->GetBlockTime() - nFirstBlockTime;
+    int nHeight = pindexLast->nHeight + 1;
+    int64_t nInterval = nTargetTimespan / nTargetSpacing;
     int nActualTimespanAvg = 0;
 
     if (nHeight >= params.nForkTwo && nHeight < params.nForkThree) {
