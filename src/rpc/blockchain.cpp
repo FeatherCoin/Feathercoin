@@ -917,18 +917,30 @@ static UniValue getcheckpoint(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
-            "getcheckpoint\n"
-            "Show info of synchronized checkpoint.\n");
+            RPCHelpMan{"getcheckpoint",
+                "Show info of synchronized checkpoint.\n",
+                {},
+                RPCResult{
+                    "\"synccheckpoint\" : \"hash\"    (string) hash of the current checkpointed block\n"
+                },
+                RPCExamples{
+                    HelpExampleCli("getcheckpoint", "")
+                    + HelpExampleRpc("getcheckpoint", "")
+                }
+            }.ToString());
 
     UniValue result(UniValue::VOBJ);
     CBlockIndex* pindexCheckpoint;
 
-    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString().c_str());
-    if (mapBlockIndex.count(hashSyncCheckpoint))
+    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString());
     {
-        pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-        result.pushKV("height", pindexCheckpoint->nHeight);
-        result.pushKV("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime());
+        LOCK(cs_main);
+        if (mapBlockIndex.count(hashSyncCheckpoint))
+        {
+            pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+            result.pushKV("height", pindexCheckpoint->nHeight);
+            result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+        }
     }
     if (gArgs.IsArgSet("-checkpointkey"))
         result.pushKV("checkpointmaster", true);
@@ -940,8 +952,24 @@ static UniValue sendcheckpoint(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
-            "sendcheckpoint <blockhash>\n"
-            "Send a synchronized checkpoint.\n");
+            RPCHelpMan{"sendcheckpoint",
+                "Send a synchronized checkpoint.\n",
+                {
+                    {"blockhash", RPCArg::Type::STR_HEX, RPCArg::Optional::NO, "The block hash"},
+                },
+                RPCResult{
+                    "{\n"
+                    "  \"synccheckpoint\" : \"hash\"    (string) hash of the current checkpointed block\n"
+                    "  \"height\" : n                   (number, optional) height of the current checkpointed block\n"
+                    "  \"timestamp\" : timestamp        (number, optional) timestamp of the current checkpointed block\n"
+                    "  \"checkpointmaster\" : xx        (boolean) wheter the node is the checkpoint master\n"
+                    "}\n"
+                },
+                RPCExamples{
+                    HelpExampleCli("sendcheckpoint",  "\"00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09\"")
+                    + HelpExampleRpc("sendcheckpoint",  "\"00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09\"")
+                }
+            }.ToString());
 
     if (!gArgs.IsArgSet("-checkpointkey") || CSyncCheckpoint::strMasterPrivKey.empty())
         throw std::runtime_error("Not a checkpointmaster node, first set checkpointkey in configuration and restart client. ");
@@ -955,12 +983,15 @@ static UniValue sendcheckpoint(const JSONRPCRequest& request)
     UniValue result(UniValue::VOBJ);
     CBlockIndex* pindexCheckpoint;
 
-    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString().c_str());
-    if (mapBlockIndex.count(hashSyncCheckpoint))
+    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString());
     {
-        pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-        result.pushKV("height", pindexCheckpoint->nHeight);
-        result.pushKV("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime());
+        LOCK(cs_main);
+        if (mapBlockIndex.count(hashSyncCheckpoint))
+        {
+            pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+            result.pushKV("height", pindexCheckpoint->nHeight);
+            result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+        }
     }
     if (gArgs.IsArgSet("-checkpointkey"))
         result.pushKV("checkpointmaster", true);

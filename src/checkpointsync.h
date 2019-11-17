@@ -4,7 +4,7 @@
 // Distributed under conditional MIT/X11 open source software license
 // see the accompanying file COPYING
 #ifndef BITCOIN_CHECKPOINTSYNC_H
-#define  BITCOIN_CHECKPOINTSYNC_H
+#define BITCOIN_CHECKPOINTSYNC_H
 
 #include <serialize.h>
 #include <uint256.h>
@@ -46,7 +46,6 @@ public:
 
     void SetNull();
     std::string ToString() const;
-    void print() const;
 };
 
 class CSyncCheckpoint : public CUnsignedSyncCheckpoint

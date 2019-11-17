@@ -1,3 +1,6 @@
+#ifndef BITCOIN_CRYPTO_NEOSCRYPT_H
+#define BITCOIN_CRYPTO_NEOSCRYPT_H
+
 #if (__cplusplus)
 extern "C" {
 #endif
@@ -46,3 +49,5 @@ typedef unsigned char hash_digest[DIGEST_SIZE];
     U32TO8_BE((p) + 4, (unsigned int)((v)      ));
 
 #endif
+
+#endif // BITCOIN_CRYPTO_NEOSCRYPT_H

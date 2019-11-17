@@ -7,7 +7,6 @@
 Version 1 compact blocks are pre-segwit (txids)
 Version 2 compact blocks are post-segwit (wtxids)
 """
-from decimal import Decimal
 import random
 
 from test_framework.blocktools import create_block, create_coinbase, add_witness_commitment
@@ -109,7 +108,7 @@ class CompactBlocksTest(BitcoinTestFramework):
         tip = node.getbestblockhash()
         mtp = node.getblockheader(tip)['mediantime']
         block = create_block(int(tip, 16), create_coinbase(height + 1), mtp + 1)
-        block.nVersion = 4
+        block.nVersion = 0x20000000
         if segwit:
             add_witness_commitment(block)
         block.solve()
@@ -266,7 +265,7 @@ class CompactBlocksTest(BitcoinTestFramework):
             # a witness address.
             address = node.getnewaddress(address_type='bech32')
             value_to_send = node.getbalance()
-            node.sendtoaddress(address, satoshi_round(value_to_send - Decimal(0.1)))
+            node.sendtoaddress(address, satoshi_round(value_to_send - 1))
             node.generate(1)
 
         segwit_tx_generated = False

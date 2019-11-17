@@ -72,7 +72,6 @@ BITCOIN_TESTS =\
   test/bech32_tests.cpp \
   test/bip32_tests.cpp \
   test/blockchain_tests.cpp \
-  test/blockencodings_tests.cpp \
   test/blockfilter_tests.cpp \
   test/bloom_tests.cpp \
   test/bswap_tests.cpp \
@@ -566,7 +565,7 @@ endif
 if TARGET_WINDOWS
 else
 if ENABLE_BENCH
-	@echo "Running bench/bench_bitcoin -evals=1 -scaling=0..."
+	@echo "Running bench/bench_feathercoin -evals=1 -scaling=0..."
 	$(BENCH_BINARY) -evals=1 -scaling=0 > /dev/null
 endif
 endif

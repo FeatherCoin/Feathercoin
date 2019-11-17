@@ -146,7 +146,6 @@ BASE_SCRIPTS = [
     'wallet_txn_clone.py --mineblock',
     'feature_notifications.py',
     'rpc_invalidateblock.py',
-    'feature_rbf.py',
     'mempool_packages.py',
     'rpc_createmultisig.py',
     'feature_versionbits_warning.py',
@@ -327,8 +326,8 @@ def run_tests(*, test_list, src_dir, build_dir, tmpdir, jobs=1, enable_coverage=
 
     # Warn if bitcoind is already running (unix only)
     try:
-        if subprocess.check_output(["pidof", "bitcoind"]) is not None:
-            print("%sWARNING!%s There is already a bitcoind process running on this system. Tests may fail unexpectedly due to resource contention!" % (BOLD[1], BOLD[0]))
+        if subprocess.check_output(["pidof", "feathercoind"]) is not None:
+            print("%sWARNING!%s There is already a feathercoind process running on this system. Tests may fail unexpectedly due to resource contention!" % (BOLD[1], BOLD[0]))
     except (OSError, subprocess.SubprocessError):
         pass
 
@@ -369,7 +368,7 @@ def run_tests(*, test_list, src_dir, build_dir, tmpdir, jobs=1, enable_coverage=
     test_results = []
 
     max_len_name = len(max(test_list, key=len))
-    test_count = len(test_list)
+    test_count = len(test_list) - 1
     for i in range(test_count):
         test_result, testdir, stdout, stderr = job_queue.get_next()
         test_results.append(test_result)

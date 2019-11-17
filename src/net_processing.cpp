@@ -3082,23 +3082,14 @@ bool PeerLogicValidation::ProcessMessages(CNode* pfrom, std::atomic<bool>& inter
 
     msg.SetVersion(pfrom->GetRecvVersion());
     // Scan for message start
-    if (pfrom->nVersion) {
-        if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
-            if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStart(), CMessageHeader::MESSAGE_START_SIZE) == 0)
-                fMagic = false;
-        } else {
-            if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStartOld(), CMessageHeader::MESSAGE_START_SIZE) == 0)
-                fMagic = true;
-        }
+    if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStart(), CMessageHeader::MESSAGE_START_SIZE) == 0) {
+        fMagic = false;
+    } else if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStartOld(), CMessageHeader::MESSAGE_START_SIZE) == 0) {
+        fMagic = true;
     } else {
-        if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStartOld(), CMessageHeader::MESSAGE_START_SIZE) == 0) {
-            fMagic = true;
-        } else if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStart(), CMessageHeader::MESSAGE_START_SIZE) == 0) {
-            fMagic = false;
-        } else {
-            LogPrint(BCLog::NET, "PROCESSMESSAGE: INVALID MESSAGESTART %s peer=%d hdr=%s pchMessageStart=%s\n", SanitizeString(msg.hdr.GetCommand()), pfrom->GetId(), msg.hdr.pchMessageStart, chainparams.MessageStart());
-            return fMoreWork;
-        }
+        LogPrint(BCLog::NET, "PROCESSMESSAGE: INVALID MESSAGESTART %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->GetId());
+        pfrom->fDisconnect = true;
+        return false;
     }
 
     // Read header
