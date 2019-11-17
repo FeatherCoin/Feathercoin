@@ -61,7 +61,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         self.sync_all()
 
         # ensure that setting changePosition in fundraw with an exact match is handled properly
-        rawmatch = self.nodes[2].createrawtransaction([], {self.nodes[2].getnewaddress():50})
+        rawmatch = self.nodes[2].createrawtransaction([], {self.nodes[2].getnewaddress():80})
         rawmatch = self.nodes[2].fundrawtransaction(rawmatch, {"changePosition":1, "subtractFeeFromOutputs":[0]})
         assert_equal(rawmatch["changepos"], -1)
 
@@ -213,7 +213,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         dec_tx  = self.nodes[2].decoderawtransaction(rawtx)
         assert_equal(utx['txid'], dec_tx['vin'][0]['txid'])
 
-        assert_raises_rpc_error(-5, "changeAddress must be a valid bitcoin address", self.nodes[2].fundrawtransaction, rawtx, {'changeAddress':'foobar'})
+        assert_raises_rpc_error(-5, "changeAddress must be a valid feathercoin address", self.nodes[2].fundrawtransaction, rawtx, {'changeAddress':'foobar'})
 
         ############################################################
         # test a fundrawtransaction with a provided change address #
@@ -528,7 +528,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         self.sync_all()
 
         # make sure funds are received at node1
-        assert_equal(oldBalance+Decimal('51.10000000'), self.nodes[0].getbalance())
+        assert_equal(oldBalance+Decimal('81.10000000'), self.nodes[0].getbalance())
 
 
         ###############################################
@@ -588,7 +588,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         self.sync_all()
         self.nodes[0].generate(1)
         self.sync_all()
-        assert_equal(oldBalance+Decimal('50.19000000'), self.nodes[0].getbalance()) #0.19+block reward
+        assert_equal(oldBalance+Decimal('80.19000000'), self.nodes[0].getbalance()) #0.19+block reward
 
         #####################################################
         # test fundrawtransaction with OP_RETURN and no vin #
@@ -659,7 +659,7 @@ class RawTransactionsTest(BitcoinTestFramework):
         inputs = []
         outputs = {self.nodes[3].getnewaddress() : 1}
         rawtx = self.nodes[3].createrawtransaction(inputs, outputs)
-        result = self.nodes[3].fundrawtransaction(rawtx) # uses min_relay_tx_fee (set by settxfee)
+        result = self.nodes[3].fundrawtransaction(rawtx, {"feeRate": 1*min_relay_tx_fee}) # uses min_relay_tx_fee (set by settxfee)
         result2 = self.nodes[3].fundrawtransaction(rawtx, {"feeRate": 2*min_relay_tx_fee})
         result3 = self.nodes[3].fundrawtransaction(rawtx, {"feeRate": 10*min_relay_tx_fee})
         result_fee_rate = result['fee'] * 1000 / count_bytes(result['hex'])

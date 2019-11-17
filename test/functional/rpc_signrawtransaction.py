@@ -154,7 +154,7 @@ class SignRawTransactionsTest(BitcoinTestFramework):
         p2sh_p2wsh_address = self.nodes[1].addmultisigaddress(1, [embedded_address["pubkey"]], "", "p2sh-segwit")
         # send transaction to P2SH-P2WSH 1-of-1 multisig address
         self.nodes[0].generate(101)
-        self.nodes[0].sendtoaddress(p2sh_p2wsh_address["address"], 49.999)
+        self.nodes[0].sendtoaddress(p2sh_p2wsh_address["address"], 79.999)
         self.nodes[0].generate(1)
         self.sync_all()
         # Find the UTXO for the transaction node[1] should have received, check witnessScript matches
@@ -163,7 +163,7 @@ class SignRawTransactionsTest(BitcoinTestFramework):
         p2sh_redeemScript = CScript([OP_0, sha256(hex_str_to_bytes(p2sh_p2wsh_address["redeemScript"]))])
         assert_equal(unspent_output["redeemScript"], bytes_to_hex_str(p2sh_redeemScript))
         # Now create and sign a transaction spending that output on node[0], which doesn't know the scripts or keys
-        spending_tx = self.nodes[0].createrawtransaction([unspent_output], {self.nodes[1].getnewaddress(): Decimal("49.998")})
+        spending_tx = self.nodes[0].createrawtransaction([unspent_output], {self.nodes[1].getnewaddress(): Decimal("79.998")})
         spending_tx_signed = self.nodes[0].signrawtransactionwithkey(spending_tx, [embedded_privkey], [unspent_output])
         # Check the signing completed successfully
         assert 'complete' in spending_tx_signed

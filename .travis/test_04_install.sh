@@ -36,3 +36,10 @@ fi
 travis_retry DOCKER_EXEC apt-get update
 travis_retry DOCKER_EXEC apt-get install --no-install-recommends --no-upgrade -qq $PACKAGES $DOCKER_PACKAGES
 
+if [ "$PYTHON" = 1 ]; then
+  travis_retry DOCKER_EXEC "apt-get install -y python3-distutils"
+fi
+
+if [ "$NEOSCRYPT" = 1 ]; then
+  travis_retry DOCKER_EXEC "apt-get install -y python3-dev && git clone https://github.com/FeatherCoin/neoscrypt-python.git && cd neoscrypt-python && python3 setup.py install --user"
+fi
