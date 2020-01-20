@@ -1591,6 +1591,12 @@ bool AppInitMain(InitInterfaces& interfaces)
                             MIN_BLOCKS_TO_KEEP);
                     }
 
+                    uiInterface.InitMessage(_("Checking ACP ..."));
+                    if (!CheckCheckpointPubKey()) {
+                        strLoadError = _("Checking ACP pubkey failed");
+                        break;
+                    }
+
                     CBlockIndex* tip = chainActive.Tip();
                     RPCNotifyBlockChange(true, tip);
                     if (tip && tip->nTime > GetAdjustedTime() + 2 * 60 * 60) {
