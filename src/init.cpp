@@ -1540,12 +1540,6 @@ bool AppInitMain()
                     }
                 }
                 
-                uiInterface.InitMessage(_("Checking ACP ..."));
-                if (!CheckCheckpointPubKey()) {
-                    strLoadError = _("Checking ACP pubkey failed");
-                    break;
-                }
-
                 if (!is_coinsview_empty) {
                     uiInterface.InitMessage(_("Verifying blocks..."));
                     if (fHavePruned && gArgs.GetArg("-checkblocks", DEFAULT_CHECKBLOCKS) > MIN_BLOCKS_TO_KEEP) {
@@ -1555,6 +1549,12 @@ bool AppInitMain()
 
                     {
                         LOCK(cs_main);
+                        uiInterface.InitMessage(_("Checking ACP ..."));
+                        if (!CheckCheckpointPubKey()) {
+                            strLoadError = _("Checking ACP pubkey failed");
+                            break;
+                        }
+
                         CBlockIndex* tip = chainActive.Tip();
                         RPCNotifyBlockChange(true, tip);
                         if (tip && tip->nTime > GetAdjustedTime() + 2 * 60 * 60) {
