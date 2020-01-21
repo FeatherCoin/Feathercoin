@@ -6456,7 +6456,7 @@ bool ProcessMessages(CNode* pfrom)
 
         // at this point, any failure means we can delete the current message
         it++;
-        bool fMagic;
+        bool fMagic{true};
 
         // Scan for message start
         if (pfrom->nVersion) {
