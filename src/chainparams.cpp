@@ -69,7 +69,7 @@ public:
         consensus.powNeoScryptLimit = uint256S("0000003fffff0000000000000000000000000000000000000000000000000000");
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
         consensus.nPowTargetSpacing = 2.5 * 60; // 2.5 mins
-        consensus.checkpointPubKey = "04c67c0114bc7cb8bb84ee0f3319e1df3339d335a15bdb04605cf2655d19212848a66d4535f3c91e943061474b7cacfd4eaa10835d35a8d4e431c68a4c4f5450ba";
+        consensus.checkpointPubKey = "0425165000270c45a2df329bb6cc179782e1ddcdd9afc6240b5f465d49b8f480635c43e6b194e98f69e9827fa7a62d4791ee96c9fa90ec11e45af5d6b2dbb76774";
         consensus.vAlertPubKey = ParseHex("043c19a29fe8f763369aea68107e82854af7b072fc7d2d2adb87d2a3b40b51ab0d0e77805096e255a87388b175fd4a49d93d9b6c878004975e41222a3b85086eef");
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;

@@ -1386,14 +1386,14 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                         MIN_BLOCKS_TO_KEEP);
                 }
 
-                uiInterface.InitMessage(_("Checking ACP ..."));
-                if (!CheckCheckpointPubKey()) {
-                    strLoadError = _("Checking ACP pubkey failed");
-                    break;
-                }
-
                 {
                     LOCK(cs_main);
+                    uiInterface.InitMessage(_("Checking ACP ..."));
+                    if (!CheckCheckpointPubKey()) {
+                        strLoadError = _("Checking ACP pubkey failed");
+                        break;
+                    }
+
                     CBlockIndex* tip = chainActive.Tip();
                     if (tip && tip->nTime > GetAdjustedTime() + 2 * 60 * 60) {
                         strLoadError = _("The block database contains a block which appears to be from the future. "
