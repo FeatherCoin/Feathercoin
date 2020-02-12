@@ -170,21 +170,21 @@ public:
 };
 
 /**
- * Testnet (v4)
+ * Testnet (v5)
  */
 class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
         consensus.nSubsidyHalvingInterval = 2100000;
-        consensus.BIP34Height = 1;
-        consensus.BIP34Hash = uint256S("0x1caab189318ac7a857f327ebc08fa9d2e9768f46b9f00cabc9a914a1184a29a2");
-        consensus.BIP65Height = 451;
-        consensus.BIP66Height = 451;
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.powNeoScryptLimit = uint256S("0000003fffff0000000000000000000000000000000000000000000000000000");
-        consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // two weeks
-        consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.BIP34Height = 16;
+        consensus.BIP34Hash = uint256();
+        consensus.BIP65Height = 0;
+        consensus.BIP66Height = 0;
+        consensus.powLimit = uint256S("0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powNeoScryptLimit = uint256();
+        consensus.nPowTargetTimespan = 60;
+        consensus.nPowTargetSpacing = 60;
         consensus.checkpointPubKey = "0421c27bb6580b05dcda1f47e59274489f094a3e85d96bbc38d5befd10eee97397ec8a93b6d8d79e8370239a8f39adf66322b41dafe83066bbcee6144e4c41a699";
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
@@ -196,19 +196,19 @@ public:
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1514764800; // Jan 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1546300800; // Jan 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // Deployment of SegWit (BIP141, BIP143, and BIP147)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1514764800; // Jan 1st, 2018
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1546300800; // Jan 1st, 2019
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000100010");
+        consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x54fe00bf048fffe073889abebe84f11a616053ed1e43c3954a0a7e0e20c76219"); //1354312
+        consensus.defaultAssumeValid = uint256S("0x00");
 
         pchMessageStart[0] = 0x91;
         pchMessageStart[1] = 0x65;
@@ -229,11 +229,11 @@ public:
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
         consensus.nTimeLimit = 100;
-        consensus.nNeoScryptFork = 1524127760;
+        consensus.nNeoScryptFork = 1581518000;
 
-        genesis = CreateGenesisBlock(1396255061, 677449, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1581517800, 80014, 0x1f00ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x7734b3734ab1f0d0758e6c274622a377092549df05f6a4fe6939cbc754939169"));
+        assert(consensus.hashGenesisBlock == uint256S("0x79e4683a94fb0374ac9d52638b594dcf0318975acb8b275e280f93c082c0964c"));
         assert(genesis.hashMerkleRoot == uint256S("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
 
         vFixedSeeds.clear();
@@ -259,14 +259,13 @@ public:
 
         checkpointData = {
             {
-                {6000, uint256S("488c04227b4bf26dfd9ae3b39f0f4ded29573e96530c7a161d57ff53af0c88d0")},
+                {0, uint256S("79e4683a94fb0374ac9d52638b594dcf0318975acb8b275e280f93c082c0964c")},
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from rpc: getchaintxstats 4096 0000000000000037a8cd3e06cd5edbfe9dd1dbcc5dacab279376ef7cfc2b4c75
-            /* nTime    */ 1517011548,
-            /* nTxCount */ 6003,
+            /* nTime    */ 1581517800,
+            /* nTxCount */ 1,
             /* dTxRate  */ 0.016
         };
 
