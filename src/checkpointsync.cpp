@@ -49,7 +49,6 @@
 
 #include <checkpointsync.h>
 
-#include <arith_uint256.h>
 #include <chainparams.h>
 #include <key_io.h>
 #include <logging.h>
@@ -58,9 +57,9 @@
 #include <validation.h>
 
 // Synchronized checkpoint (centrally broadcasted)
-std::string CSyncCheckpoint::strMasterPrivKey = "";
-uint256 hashSyncCheckpoint = ArithToUint256(arith_uint256(0));
-static uint256 hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
+std::string CSyncCheckpoint::strMasterPrivKey;
+uint256 hashSyncCheckpoint;
+static uint256 hashPendingCheckpoint;
 CSyncCheckpoint checkpointMessage;
 static CSyncCheckpoint checkpointMessagePending;
 
@@ -127,13 +126,13 @@ bool WriteSyncCheckpoint(const uint256& hashCheckpoint)
 bool AcceptPendingSyncCheckpoint()
 {
     LOCK(cs_main);
-    bool havePendingCheckpoint = hashPendingCheckpoint != ArithToUint256(arith_uint256(0)) && mapBlockIndex.count(hashPendingCheckpoint);
+    bool havePendingCheckpoint = hashPendingCheckpoint != uint256() && mapBlockIndex.count(hashPendingCheckpoint);
     if (!havePendingCheckpoint)
         return false;
 
     if (!ValidateSyncCheckpoint(hashPendingCheckpoint))
     {
-        hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
+        hashPendingCheckpoint = uint256();
         checkpointMessagePending.SetNull();
         return false;
     }
@@ -144,7 +143,7 @@ bool AcceptPendingSyncCheckpoint()
     if (!WriteSyncCheckpoint(hashPendingCheckpoint))
         return error("%s: failed to write sync checkpoint %s", __func__, hashPendingCheckpoint.ToString());
 
-    hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
+    hashPendingCheckpoint = uint256();
     checkpointMessage = checkpointMessagePending;
     checkpointMessagePending.SetNull();
 
@@ -165,25 +164,28 @@ uint256 AutoSelectSyncCheckpoint()
 {
     // Search backward for a block with specified depth policy
     const CBlockIndex *pindex = chainActive.Tip();
-    while (pindex->pprev && pindex->nHeight + static_cast<int>(gArgs.GetArg("-checkpointdepth", DEFAULT_AUTOCHECKPOINT)) > chainActive.Tip()->nHeight)
+    while (pindex->pprev && pindex->nHeight + gArgs.GetArg("-checkpointdepth", DEFAULT_AUTOCHECKPOINT) > chainActive.Tip()->nHeight)
         pindex = pindex->pprev;
     return pindex->GetBlockHash();
 }
 
 // Check against synchronized checkpoint
-bool CheckSyncCheckpoint(const CBlockIndex* pindexNew)
+bool CheckSyncCheckpoint(const CBlockIndex* pindexNew, uint256 hashBlock, int nHeight)
 {
     LOCK(cs_main);
-    assert(pindexNew != NULL);
-    if (pindexNew->nHeight == 0)
-        return true;
-    const uint256& hashBlock = pindexNew->GetBlockHash();
-    int nHeight = pindexNew->nHeight;
 
-    // Reset checkpoint to Genesis block if not found or initialised
-    if (hashSyncCheckpoint == ArithToUint256(arith_uint256(0))) {
-        LogPrintf("%s: hashSyncCheckpoint not initialised, setting to genesis block: %s\n",__func__, Params().GetConsensus().hashGenesisBlock.ToString());
-        WriteSyncCheckpoint(Params().GetConsensus().hashGenesisBlock);
+    // Genesis block
+    if ((pindexNew && pindexNew->nHeight == 0) || nHeight == 0) {
+        return true;
+    }
+
+    if (pindexNew) {
+        hashBlock = pindexNew->GetBlockHash();
+        nHeight = pindexNew->nHeight;
+    }
+
+    // Checkpoint on default
+    if (hashSyncCheckpoint == uint256()) {
         return true;
     }
 
@@ -208,22 +210,15 @@ bool CheckSyncCheckpoint(const CBlockIndex* pindexNew)
     return true;
 }
 
-// Reset synchronized checkpoint to the assume valid block
+// Reset synchronized checkpoint to the genesis block
 bool ResetSyncCheckpoint()
 {
     LOCK(cs_main);
 
     if (!WriteSyncCheckpoint(Params().GetConsensus().hashGenesisBlock))
-        return error("%s: failed to write sync checkpoint %s", __func__, Params().GetConsensus().defaultAssumeValid.ToString());
+        return error("%s: failed to reset sync checkpoint to genesis block", __func__);
 
     return true;
-}
-
-void AskForPendingSyncCheckpoint(CNode* pfrom)
-{
-    LOCK(cs_main);
-    if (pfrom && hashPendingCheckpoint != ArithToUint256(arith_uint256(0)) && !mapBlockIndex.count(hashPendingCheckpoint))
-        pfrom->AskFor(CInv(MSG_BLOCK, hashPendingCheckpoint));
 }
 
 // Verify sync checkpoint master pubkey and reset sync checkpoint if changed
@@ -300,7 +295,7 @@ bool SendSyncCheckpoint(uint256 hashCheckpoint)
 void CUnsignedSyncCheckpoint::SetNull()
 {
     nVersion = 1;
-    hashCheckpoint = ArithToUint256(arith_uint256(0));
+    hashCheckpoint = uint256();
 }
 
 std::string CUnsignedSyncCheckpoint::ToString() const
@@ -336,16 +331,13 @@ uint256 CSyncCheckpoint::GetHash() const
     return Hash(this->vchMsg.begin(), this->vchMsg.end());
 }
 
-bool CSyncCheckpoint::RelayTo(CNode* pfrom) const
+void CSyncCheckpoint::RelayTo(CNode* pfrom) const
 {
-    // returns true if wasn't already sent
     if (g_connman && pfrom->hashCheckpointKnown != hashCheckpoint && pfrom->supportACPMessages)
     {
         pfrom->hashCheckpointKnown = hashCheckpoint;
         g_connman->PushMessage(pfrom, CNetMsgMaker(pfrom->GetSendVersion()).Make(NetMsgType::CHECKPOINT, *this));
-        return true;
     }
-    return false;
 }
 
 // Verify signature of sync-checkpoint message
@@ -363,7 +355,7 @@ bool CSyncCheckpoint::CheckSignature()
 }
 
 // Process synchronized checkpoint
-bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
+bool CSyncCheckpoint::ProcessSyncCheckpoint()
 {
     if (!CheckSignature())
         return false;
@@ -376,9 +368,6 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
         checkpointMessagePending = *this;
         LogPrintf("%s: pending for sync-checkpoint %s\n", __func__, hashCheckpoint.ToString());
 
-        if (pfrom)
-            pfrom->AskFor(CInv(MSG_BLOCK, hashCheckpoint));
-
         return false;
     }
 
@@ -389,7 +378,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint(CNode* pfrom)
         return error("%s: failed to write sync checkpoint %s\n", __func__, hashCheckpoint.ToString());
 
     checkpointMessage = *this;
-    hashPendingCheckpoint = ArithToUint256(arith_uint256(0));
+    hashPendingCheckpoint = uint256();
     checkpointMessagePending.SetNull();
 
     return true;

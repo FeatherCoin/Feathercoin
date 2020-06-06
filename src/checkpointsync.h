@@ -23,9 +23,8 @@ extern CSyncCheckpoint checkpointMessage;
 bool WriteSyncCheckpoint(const uint256& hashCheckpoint);
 bool AcceptPendingSyncCheckpoint();
 uint256 AutoSelectSyncCheckpoint();
-bool CheckSyncCheckpoint(const CBlockIndex* pindexNew);
+bool CheckSyncCheckpoint(const CBlockIndex* pindexNew, uint256 hashBlock = uint256(), int nHeight = std::numeric_limits<int>::max());
 bool ResetSyncCheckpoint();
-void AskForPendingSyncCheckpoint(CNode* pfrom);
 bool CheckCheckpointPubKey();
 bool SetCheckpointPrivKey(std::string strPrivKey);
 bool SendSyncCheckpoint(uint256 hashCheckpoint);
@@ -68,9 +67,9 @@ public:
     void SetNull();
     bool IsNull() const;
     uint256 GetHash() const;
-    bool RelayTo(CNode* pfrom) const;
+    void RelayTo(CNode* pfrom) const;
     bool CheckSignature();
-    bool ProcessSyncCheckpoint(CNode* pfrom = nullptr);
+    bool ProcessSyncCheckpoint();
 };
 
 #endif

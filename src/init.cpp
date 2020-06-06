@@ -1582,6 +1582,15 @@ bool AppInitMain(InitInterfaces& interfaces)
                 }
             }
 
+            {
+                LOCK(cs_main);
+                uiInterface.InitMessage(_("Checking ACP ..."));
+                if (!CheckCheckpointPubKey()) {
+                    strLoadError = _("Checking ACP pubkey failed");
+                    break;
+                }
+            }
+
             try {
                 LOCK(cs_main);
                 if (!is_coinsview_empty) {
@@ -1589,12 +1598,6 @@ bool AppInitMain(InitInterfaces& interfaces)
                     if (fHavePruned && gArgs.GetArg("-checkblocks", DEFAULT_CHECKBLOCKS) > MIN_BLOCKS_TO_KEEP) {
                         LogPrintf("Prune: pruned datadir may not have more than %d blocks; only checking available blocks\n",
                             MIN_BLOCKS_TO_KEEP);
-                    }
-
-                    uiInterface.InitMessage(_("Checking ACP ..."));
-                    if (!CheckCheckpointPubKey()) {
-                        strLoadError = _("Checking ACP pubkey failed");
-                        break;
                     }
 
                     CBlockIndex* tip = chainActive.Tip();
