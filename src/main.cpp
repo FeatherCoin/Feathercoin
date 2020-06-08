@@ -6456,37 +6456,17 @@ bool ProcessMessages(CNode* pfrom)
 
         // at this point, any failure means we can delete the current message
         it++;
-        bool fMagic{true};
 
         // Scan for message start
-        if (pfrom->nVersion) {
-            if(pfrom->nVersion >= NEW_MAGIC_VERSION) {
-                if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStartNew(), MESSAGE_START_SIZE) != 0)
-                    fOk = false;
-                else
-                    fMagic = true;
-            } else {
-                if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStart(), MESSAGE_START_SIZE) != 0)
-                    fOk = false;
-                else
-                    fMagic = false;
-            }
-        } else {
-            if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStartNew(), MESSAGE_START_SIZE) == 0) {
-                fMagic = true;
-            } else if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStart(), MESSAGE_START_SIZE) == 0) {
-                fMagic = false;
-            } else {
-                LogPrintf("PROCESSMESSAGE: INVALID MESSAGESTART %s peer=%d hdr=%s pchMessageStart=%s\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id, msg.hdr.pchMessageStart, chainparams.MessageStart());
-                fOk = false;
-                break;
-            }
+        if (memcmp(msg.hdr.pchMessageStart, chainparams.MessageStartNew(), MESSAGE_START_SIZE) != 0) {
+            LogPrintf("PROCESSMESSAGE: INVALID MESSAGESTART %s peer=%d\n", SanitizeString(msg.hdr.GetCommand()), pfrom->id);
+            fOk = false;
+            break;
         }
 
         // Read header
         CMessageHeader& hdr = msg.hdr;
-        bool validHeader = fMagic ? hdr.IsValid(chainparams.MessageStartNew()) : hdr.IsValid(chainparams.MessageStart());
-        if (!validHeader)
+        if (!hdr.IsValid(chainparams.MessageStartNew()))
         {
             LogPrintf("PROCESSMESSAGE: ERRORS IN HEADER %s peer=%d\n", SanitizeString(hdr.GetCommand()), pfrom->id);
             continue;

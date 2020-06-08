@@ -501,30 +501,12 @@ void CNode::PushVersion()
     CAddress addrYou = (addr.IsRoutable() && !IsProxy(addr) ? addr : CAddress(CService("0.0.0.0", 0), addr.nServices));
     CAddress addrMe = CAddress(CService(), nLocalServices);
     GetRandBytes((unsigned char*)&nLocalHostNonce, sizeof(nLocalHostNonce));
-
-    if (nVersion) {
-        if (nVersion >= NEW_MAGIC_VERSION)
-          PushVersionMessage(true, PROTOCOL_VERSION, (uint64_t)nLocalServices, nTime, addrYou, addrMe,
-            nLocalHostNonce, strSubVersion, nBestHeight, ::fRelayTxes);
-        else
-          PushVersionMessage(false, PROTOCOL_VERSION, (uint64_t)nLocalServices, nTime, addrYou, addrMe,
-            nLocalHostNonce, strSubVersion, nBestHeight, ::fRelayTxes);
-    } else {
-        /* If a peer version isn't known, send two messages using both magic numbers the old 1st;
-         * dual magic peers decode both, process the 1st (old) and ignore the 2nd (new) with no consequences,
-         * old magic peers decode and process the old + "MESSAGESTART NOT FOUND" and "SKIPPED 24 BYTES",
-         * future new magic only peers decode and process the new + "SKIPPED 130 BYTES" */
-        PushVersionMessage(false, PROTOCOL_VERSION, (uint64_t)nLocalServices, nTime, addrYou, addrMe,
-          nLocalHostNonce, strSubVersion, nBestHeight, ::fRelayTxes);
-        PushVersionMessage(true, PROTOCOL_VERSION, (uint64_t)nLocalServices, nTime, addrYou, addrMe,
-          nLocalHostNonce, strSubVersion, nBestHeight, ::fRelayTxes);
-        LogPrintf("Peer %s unknown, sending version using dual magic\n", addr.ToString().c_str());
-    }
-
     if (fLogIPs)
         LogPrint("net", "send version message: version %d, blocks=%d, us=%s, them=%s, peer=%d\n", PROTOCOL_VERSION, nBestHeight, addrMe.ToString(), addrYou.ToString(), id);
     else
         LogPrint("net", "send version message: version %d, blocks=%d, us=%s, peer=%d\n", PROTOCOL_VERSION, nBestHeight, addrMe.ToString(), id);
+    PushMessage(NetMsgType::VERSION, PROTOCOL_VERSION, (uint64_t)nLocalServices, nTime, addrYou, addrMe,
+                nLocalHostNonce, strSubVersion, nBestHeight, ::fRelayTxes);
 }
 
 
@@ -2600,28 +2582,10 @@ void CNode::AskFor(const CInv& inv)
 
 void CNode::BeginMessage(const char* pszCommand) EXCLUSIVE_LOCK_FUNCTION(cs_vSend)
 {
-    bool fMagic = true;
-
-    if (nVersion && nVersion < NEW_MAGIC_VERSION)
-        fMagic = false;
-
     ENTER_CRITICAL_SECTION(cs_vSend);
     assert(ssSend.size() == 0);
-    if (fMagic)
-        ssSend << CMessageHeader(Params().MessageStartNew(), pszCommand, 0);
-    else
-        ssSend << CMessageHeader(Params().MessageStart(), pszCommand, 0);
+    ssSend << CMessageHeader(Params().MessageStartNew(), pszCommand, 0);
     LogPrint("net", "sending: %s ", SanitizeString(pszCommand));
-}
-
-void CNode::BeginVersionMessage(bool fMagic) {
-    ENTER_CRITICAL_SECTION(cs_vSend);
-    assert(ssSend.size() == 0);
-    if (fMagic)
-        ssSend << CMessageHeader(Params().MessageStartNew(), NetMsgType::VERSION, 0);
-    else
-        ssSend << CMessageHeader(Params().MessageStart(), NetMsgType::VERSION, 0);
-    LogPrint("net", "sending: %s ", SanitizeString(NetMsgType::VERSION));
 }
 
 void CNode::AbortMessage() UNLOCK_FUNCTION(cs_vSend)
