@@ -1041,12 +1041,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
             }
         }
     }
-	
-	if (mapArgs.count("-checkpointkey")) // ppcoin: checkpoint master priv key
-	{
-		if (!SetCheckpointPrivKey(GetArg("-checkpointkey", "")))
-			return InitError(_("Unable to sign checkpoint, wrong checkpointkey?"));
-	}
+
+    // Include NODE_ACP in services. Currently no arg to toggle this behaviour.
+    nLocalServices = ServiceFlags(nLocalServices | NODE_ACP);
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 

@@ -279,6 +279,11 @@ enum ServiceFlags : uint64_t {
     // Indicates that a node can be asked for blocks and transactions including
     // witness data.
     NODE_WITNESS = (1 << 3),
+    // NODE_ACP means the node supports Automatic Checkpointing
+    // If this is turned off then the node will not receive checkpoints from other nodes aware of this
+    // flag. Bit 24 from the start of the experimental range has been set for this Feathercoin feature
+    // to not clash with Bitcoin's future developments.
+    NODE_ACP = (1 << 24),
 
     // Bits 24-31 are reserved for temporary experiments. Just pick a bit that
     // isn't getting used, or one not being used much, and notify the

@@ -403,6 +403,7 @@ public:
     int64_t nNextAddrSend;
     int64_t nNextLocalAddrSend;
     uint256 hashCheckpointKnown;
+    bool supportACPMessages{false};
 
     // inventory based relay
     CRollingBloomFilter filterInventoryKnown;
