@@ -1164,12 +1164,6 @@ bool AppInitParameterInteraction()
         }
     }
 
-    if (gArgs.IsArgSet("-checkpointkey")) // Checkpoint master priv key
-    {
-        if (!SetCheckpointPrivKey(gArgs.GetArg("-checkpointkey", "")))
-            return InitError(_("Unable to sign checkpoint, wrong checkpointkey?"));
-    }
-
     // Include NODE_ACP in services. Currently no arg to toggle this behaviour.
     nLocalServices = ServiceFlags(nLocalServices | NODE_ACP);
 
@@ -1540,6 +1534,15 @@ bool AppInitMain()
                     }
                 }
                 
+                {
+                    LOCK(cs_main);
+                    uiInterface.InitMessage(_("Checking ACP ..."));
+                    if (!CheckCheckpointPubKey()) {
+                        strLoadError = _("Checking ACP pubkey failed");
+                        break;
+                    }
+                }
+
                 if (!is_coinsview_empty) {
                     uiInterface.InitMessage(_("Verifying blocks..."));
                     if (fHavePruned && gArgs.GetArg("-checkblocks", DEFAULT_CHECKBLOCKS) > MIN_BLOCKS_TO_KEEP) {
@@ -1549,11 +1552,6 @@ bool AppInitMain()
 
                     {
                         LOCK(cs_main);
-                        uiInterface.InitMessage(_("Checking ACP ..."));
-                        if (!CheckCheckpointPubKey()) {
-                            strLoadError = _("Checking ACP pubkey failed");
-                            break;
-                        }
 
                         CBlockIndex* tip = chainActive.Tip();
                         RPCNotifyBlockChange(true, tip);

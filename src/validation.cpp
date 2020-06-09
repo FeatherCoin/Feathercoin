@@ -1814,6 +1814,11 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
         return true;
     }
 
+    // Check that the block satisfies synchronized checkpoint
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(nullptr, block.GetHash(), pindex->nHeight)) {
+        return state.DoS(100, error("%s: Block rejected by synchronized checkpoint", __func__), REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
+    }
+
     nBlocksTotal++;
 
     bool fScriptChecks = true;
@@ -2191,9 +2196,6 @@ void static UpdateTip(const CBlockIndex *pindexNew, const CChainParams& chainPar
     if (!warningMessages.empty())
         LogPrintf(" warning='%s'", boost::algorithm::join(warningMessages, ", "));
     LogPrintf("\n");
-
-    if (pindexBestHeader->pprev)
-        CheckSyncCheckpoint(pindexBestHeader->GetBlockHash(), pindexBestHeader->pprev);
 }
 
 /** Disconnect chainActive's tip.
@@ -3163,7 +3165,7 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationSta
                                  strprintf("rejected nVersion=0x%08x block", block.nVersion));
 
     // Check that the block satisfies synchronized checkpoint
-    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), pindexPrev))
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(nullptr, block.GetHash(), nHeight))
         return state.Invalid(error("%s : rejected by synchronized checkpoint", __func__),
                              REJECT_OBSOLETE, "bad-version");
 
@@ -3469,10 +3471,6 @@ bool ProcessNewBlock(const CChainParams& chainparams, const std::shared_ptr<cons
     CValidationState state; // Only used to report errors, not invalidity - ignore it
     if (!g_chainstate.ActivateBestChain(state, chainparams, pblock))
         return error("%s: ActivateBestChain failed", __func__);
-
-    // If responsible for sync-checkpoint send it
-    if (!CSyncCheckpoint::strMasterPrivKey.empty() && (int)gArgs.GetArg("-checkpointdepth", -1) >= 0)
-        SendSyncCheckpoint(AutoSelectSyncCheckpoint());
 
     return true;
 }

@@ -831,42 +831,6 @@ UniValue getcheckpoint(const JSONRPCRequest& request)
         entry.push_back(Pair("height", pindexCheckpoint->nHeight));
         entry.push_back(Pair("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime()));
     }
-    if (gArgs.IsArgSet("-checkpointkey"))
-        entry.push_back(Pair("checkpointmaster", true));
-    result.push_back(entry);
-
-    return result;
-}
-
-UniValue sendcheckpoint(const JSONRPCRequest& request)
-{
-    if (request.fHelp || request.params.size() != 1)
-        throw std::runtime_error(
-            "sendcheckpoint <blockhash>\n"
-            "Send a synchronized checkpoint.\n");
-
-    if (!gArgs.IsArgSet("-checkpointkey") || CSyncCheckpoint::strMasterPrivKey.empty())
-        throw std::runtime_error("Not a checkpointmaster node, first set checkpointkey in configuration and restart client. ");
-
-    std::string strHash = request.params[0].get_str();
-    uint256 hash = uint256S(strHash);
-
-    if (!SendSyncCheckpoint(hash))
-        throw std::runtime_error("Failed to send checkpoint, check log. ");
-
-    UniValue result(UniValue::VARR);
-    UniValue entry(UniValue::VOBJ);
-    CBlockIndex* pindexCheckpoint;
-
-    entry.push_back(Pair("synccheckpoint", hashSyncCheckpoint.ToString().c_str()));
-    if (mapBlockIndex.count(hashSyncCheckpoint))
-    {
-        pindexCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-        entry.push_back(Pair("height", pindexCheckpoint->nHeight));
-        entry.push_back(Pair("timestamp", (boost::int64_t) pindexCheckpoint->GetBlockTime()));
-    }
-    if (gArgs.IsArgSet("-checkpointkey"))
-        entry.push_back(Pair("checkpointmaster", true));
     result.push_back(entry);
 
     return result;
@@ -1692,7 +1656,6 @@ static const CRPCCommand commands[] =
     { "blockchain",         "getblockhash",           &getblockhash,           {"height"} },
     { "blockchain",         "getblockheader",         &getblockheader,         {"blockhash","verbose"} },
     { "blockchain",         "getcheckpoint",          &getcheckpoint,          {} },
-    { "blockchain",         "sendcheckpoint",         &sendcheckpoint,         {"blockhash"} },
     { "blockchain",         "getchaintips",           &getchaintips,           {} },
     { "blockchain",         "getdifficulty",          &getdifficulty,          {} },
     { "blockchain",         "getmempoolancestors",    &getmempoolancestors,    {"txid","verbose"} },
