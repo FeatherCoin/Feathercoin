@@ -1833,6 +1833,11 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
         return true;
     }
 
+    // Check that the block satisfies synchronized checkpoint
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(pindex)) {
+        return state.DoS(100, error("%s: Block rejected by synchronized checkpoint", __func__), REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
+    }
+
     nBlocksTotal++;
 
     bool fScriptChecks = true;
@@ -3181,6 +3186,11 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationSta
             return state.DoS(100, error("%s: forked chain older than last checkpoint (height %d)", __func__, nHeight), REJECT_CHECKPOINT, "bad-fork-prior-to-checkpoint");
     }
 
+    // Check that the block satisfies synchronized checkpoint
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(nullptr, block.GetHash(), nHeight)) {
+        return state.DoS(100, error("%s: Block rejected by synchronized checkpoint", __func__), REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
+    }
+
     // Check timestamp against prev
     if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast())
         return state.Invalid(false, REJECT_INVALID, "time-too-old", "block's timestamp is too early");
@@ -3455,10 +3465,6 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
     // (but if it does not build on our best tip, let the SendMessages loop relay it)
     if (!IsInitialBlockDownload() && chainActive.Tip() == pindex->pprev)
         GetMainSignals().NewPoWValidBlock(pindex, pblock);
-
-    // Check that the block satisfies synchronized checkpoint
-    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(pindex))
-        return error("%s: rejected by synchronized checkpoint", __func__);
 
     // Write block to history file
     if (fNewBlock) *fNewBlock = true;

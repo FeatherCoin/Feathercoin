@@ -4,12 +4,11 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <alert.h>
-#include <arith_uint256.h>
 #include <sync.h>
 #include <clientversion.h>
-#include <checkpointsync.h>
 #include <util.h>
 #include <warnings.h>
+#include <uint256.h>
 #include <utilstrencodings.h>
 
 CCriticalSection cs_warnings;
@@ -73,13 +72,6 @@ std::string GetWarnings(const std::string& strFor)
         nPriority = 2000;
         strStatusBar = "Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.";
         strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
-    }
-
-    // If detected invalid checkpoint enter safe mode
-    if (hashInvalidCheckpoint != ArithToUint256(arith_uint256(0)))
-    {
-        strStatusBar = "WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.";
-        strGUI += (strGUI.empty() ? "" : uiAlertSeperator) + _("WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.");
     }
 
     // Alerts

@@ -1801,10 +1801,6 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             pfrom->fDisconnect = true;
         }
 
-        // Ask for pending sync-checkpoint if any
-        if (!IsInitialBlockDownload())
-            AskForPendingSyncCheckpoint(pfrom);
-
         return true;
     }
 
@@ -2740,9 +2736,6 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         }
         bool fNewBlock = false;
         ProcessNewBlock(chainparams, pblock, forceProcessing, &fNewBlock);
-        // Ask for pending sync-checkpoint if any
-        if (!IsInitialBlockDownload())
-            AskForPendingSyncCheckpoint(pfrom);
         if (fNewBlock) {
             pfrom->nLastBlockTime = GetTime();
         } else {
@@ -2884,7 +2877,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         CSyncCheckpoint checkpoint;
         vRecv >> checkpoint;
 
-        if (checkpoint.ProcessSyncCheckpoint(pfrom))
+        if (checkpoint.ProcessSyncCheckpoint())
         {
             // Relay checkpoint
             pfrom->hashCheckpointKnown = checkpoint.hashCheckpoint;
