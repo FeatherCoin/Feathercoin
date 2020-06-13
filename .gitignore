@@ -2,14 +2,14 @@
 
 *.exe
 *.pdb
-src/bitcoin
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-tx
-src/bitcoin-wallet
-src/test/test_bitcoin
-src/test/test_bitcoin_fuzzy
-src/qt/test/test_bitcoin-qt
+src/feathercoin
+src/feathercoind
+src/feathercoin-cli
+src/feathercoin-tx
+src/feathercoin-wallet
+src/test/test_feathercoin
+src/test/test_feathercoin_fuzzy
+src/qt/test/test_feathercoin-qt
 
 # autoreconf
 Makefile.in
@@ -88,8 +88,8 @@ src/qt/bitcoin-qt.includes
 *.qm
 Makefile
 !depends/Makefile
-bitcoin-qt
-Bitcoin-Qt.app
+feathercoin-qt
+Feathercoin-Qt.app
 background.tiff*
 
 # Qt Creator
@@ -97,7 +97,7 @@ Makefile.am.user
 
 # Unit-tests
 Makefile.test
-bitcoin-qt_test
+feathercoin-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -110,7 +110,7 @@ build
 *.gcno
 *.gcda
 /*.info
-test_bitcoin.coverage/
+test_feathercoin.coverage/
 total.coverage/
 coverage_percent.txt
 
