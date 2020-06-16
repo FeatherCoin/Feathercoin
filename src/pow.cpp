@@ -25,12 +25,17 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if (nHeight >= params.nForkTwo)
         nTargetTimespan = (7 * 24 * 60 * 60) / 32; // 7/32 days
 
+    if (nHeight >= params.nForkThree) {
+        nTargetTimespan = 60; // 1 minute timespan
+        nTargetSpacing = 60; // 1 minute block
+    }
+
     int64_t nInterval = nTargetTimespan / nTargetSpacing;
 
     bool fHardFork = nHeight == params.nForkOne || nHeight == params.nForkTwo;
 
     // Only change once per difficulty adjustment interval
-    if ((pindexLast->nHeight+1) % nInterval != 0 && !fHardFork)
+    if ((pindexLast->nHeight+1) % nInterval != 0 && !fHardFork && nHeight < params.nForkThree)
     {
         if (params.fPowAllowMinDifficultyBlocks)
         {
@@ -68,8 +73,9 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     int64_t nActualTimespan = pindexLast->GetBlockTime() - nFirstBlockTime;
     int nHeight = pindexLast->nHeight + 1;
     int64_t nInterval = nTargetTimespan / nTargetSpacing;
+    int nActualTimespanAvg = 0;
 
-    if (nHeight >= params.nForkTwo) {
+    if (nHeight >= params.nForkTwo && nHeight < params.nForkThree) {
         nInterval *= 4;
         const CBlockIndex* pindexFirst = pindexLast;
         for(int i = 0; pindexFirst && i < nInterval; i++)
@@ -78,8 +84,30 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
         int nActualTimespanLong = (pindexLast->GetBlockTime() - pindexFirst->GetBlockTime())/4;
 
         // Average between short and long windows
-        int nActualTimespanAvg = (nActualTimespan + nActualTimespanLong) / 2;
+        nActualTimespanAvg = (nActualTimespan + nActualTimespanLong) / 2;
+    }
 
+    if (nHeight >= params.nForkThree) {
+        nInterval = 480;
+
+        int pindexFirstShortTime = 0;
+        int pindexFirstMediumTime = 0;
+        const CBlockIndex* pindexFirstLong = pindexLast;
+        for(int i = 0; pindexFirstLong && i < nInterval && i < nHeight - 1; i++) {
+            pindexFirstLong = pindexFirstLong->pprev;
+            if (i == 14)
+                pindexFirstShortTime = pindexFirstLong->GetBlockTime();
+            if (i == 119)
+                pindexFirstMediumTime = pindexFirstLong->GetBlockTime();
+        }
+        int nActualTimespanShort = (pindexLast->GetBlockTime() - pindexFirstShortTime) / 15;
+        int nActualTimespanMedium = (pindexLast->GetBlockTime() - pindexFirstMediumTime)/120;
+        int nActualTimespanLong = (pindexLast->GetBlockTime() - pindexFirstLong->GetBlockTime())/480;
+
+        nActualTimespanAvg = (nActualTimespanShort + nActualTimespanMedium + nActualTimespanLong) / 3;
+    }
+
+    if (nHeight >= params.nForkTwo) {
         // Apply .25 damping
         nActualTimespan = nActualTimespanAvg + 3 * nTargetTimespan;
         nActualTimespan /= 4;
