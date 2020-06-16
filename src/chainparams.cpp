@@ -92,6 +92,7 @@ public:
         m_assumed_chain_state_size = 1;
 
         consensus.nForkOne = 33000;
+        consensus.nForkTwo = 87948;
 
         genesis = CreateGenesisBlock(1317972665, 2084524493, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -186,6 +187,8 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
+        consensus.nForkTwo = 0;
+
         genesis = CreateGenesisBlock(1581517800, 80014, 0x1f00ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x79e4683a94fb0374ac9d52638b594dcf0318975acb8b275e280f93c082c0964c"));
@@ -269,6 +272,8 @@ public:
         m_assumed_chain_state_size = 0;
 
         UpdateActivationParametersFromArgs(args);
+
+        consensus.nForkTwo = 0;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
