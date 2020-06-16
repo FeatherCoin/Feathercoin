@@ -91,6 +91,8 @@ public:
         m_assumed_blockchain_size = 3;
         m_assumed_chain_state_size = 1;
 
+        consensus.nForkOne = 33000;
+
         genesis = CreateGenesisBlock(1317972665, 2084524493, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2"));
