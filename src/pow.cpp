@@ -16,6 +16,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
 
     int nHeight = pindexLast->nHeight + 1;
+
+    // 4th Hard fork, reset difficulty
+    if (nHeight == params.nForkFour)
+        return UintToArith256(params.powNeoScryptLimit).GetCompact();
+
     int nTargetTimespan = params.nPowTargetTimespan;
     int nTargetSpacing = params.nPowTargetSpacing;
 
@@ -37,30 +42,26 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     // Only change once per difficulty adjustment interval
     if ((pindexLast->nHeight+1) % nInterval != 0 && !fHardFork && nHeight < params.nForkThree)
     {
-        if (params.fPowAllowMinDifficultyBlocks)
-        {
-            // Special difficulty rule for testnet:
-            // If the new block's timestamp is more than 2* 10 minutes
-            // then allow mining of a min-difficulty block.
-            if (pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.nPowTargetSpacing*2)
-                return nProofOfWorkLimit;
-            else
-            {
-                // Return the last non-special-min-difficulty-rules-block
-                const CBlockIndex* pindex = pindexLast;
-                while (pindex->pprev && pindex->nHeight % nInterval != 0 && pindex->nBits == nProofOfWorkLimit)
-                    pindex = pindex->pprev;
-                return pindex->nBits;
-            }
-        }
         return pindexLast->nBits;
     }
 
-    // Go back by what we want to be 14 days worth of blocks
-    int nHeightFirst = pindexLast->nHeight - (nInterval-1);
-    assert(nHeightFirst >= 0);
-    const CBlockIndex* pindexFirst = pindexLast->GetAncestor(nHeightFirst);
-    assert(pindexFirst);
+    if (params.fPowAllowMinDifficultyBlocks)
+    {
+        // Special difficulty rule for testnet:
+        // If the new block's timestamp is more than 10 minutes
+        // then allow mining of a min-difficulty block.
+        if (pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.nPowTargetSpacing * 10)
+            return nProofOfWorkLimit;
+    }
+
+    // The 1st retarget after genesis
+    if (nInterval >= nHeight)
+        nInterval = nHeight - 1;
+
+    // Go back by nInterval
+    const CBlockIndex* pindexFirst = pindexLast;
+    for (int i = 0; pindexFirst && i < nInterval; i++)
+        pindexFirst = pindexFirst->pprev;
 
     return CalculateNextWorkRequired(pindexLast, pindexFirst->GetBlockTime(), nTargetTimespan, nTargetSpacing, params);
 }

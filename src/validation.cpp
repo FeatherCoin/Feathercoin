@@ -1163,6 +1163,8 @@ bool ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos, const Consensus::P
     }
 
     unsigned int profile = 0x3;
+    if (block.GetBlockTime() >= consensusParams.nNeoScryptFork)
+        profile = 0x0;
 
     // Check the header
     if (!CheckProofOfWork(block.GetPoWHash(profile), block.nBits, consensusParams))
@@ -3194,6 +3196,8 @@ static bool FindUndoPos(CValidationState &state, int nFile, FlatFilePos &pos, un
 static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
     unsigned int profile = 0x3;
+    if (block.GetBlockTime() >= consensusParams.nNeoScryptFork)
+        profile = 0x0;
 
     // Check proof of work matches claimed amount
     if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(profile), block.nBits, consensusParams))

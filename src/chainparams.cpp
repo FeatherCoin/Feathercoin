@@ -61,6 +61,7 @@ public:
         consensus.SegwitHeight = 2157120; // 118ebe35057df2a42cfbbea8eb330e6f39da9e4b087202ce509b7a6bf7666f1e
         consensus.MinBIP9WarningHeight = 2157120 + 20160; // segwit activation height + miner confirmation window
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powNeoScryptLimit = uint256S("0000003fffff0000000000000000000000000000000000000000000000000000");
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 2.5 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -94,6 +95,8 @@ public:
         consensus.nForkOne = 33000;
         consensus.nForkTwo = 87948;
         consensus.nForkThree = 204639;
+        consensus.nForkFour = 432000;
+        consensus.nNeoScryptFork = 1414346265;
 
         genesis = CreateGenesisBlock(1317972665, 2084524493, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -162,7 +165,8 @@ public:
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
         consensus.MinBIP9WarningHeight = 501; // segwit activation height + miner confirmation window
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powNeoScryptLimit = uint256();
         consensus.nPowTargetTimespan = 60;
         consensus.nPowTargetSpacing = 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -190,6 +194,8 @@ public:
 
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
+        consensus.nForkFour = 0;
+        consensus.nNeoScryptFork = 1581518000;
 
         genesis = CreateGenesisBlock(1581517800, 80014, 0x1f00ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -248,6 +254,7 @@ public:
         consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powNeoScryptLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 2.5 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -277,6 +284,8 @@ public:
 
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
+        consensus.nForkFour = 0;
+        consensus.nNeoScryptFork = 1524127760;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
