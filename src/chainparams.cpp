@@ -96,6 +96,7 @@ public:
         consensus.nForkTwo = 87948;
         consensus.nForkThree = 204639;
         consensus.nForkFour = 432000;
+        consensus.nTimeLimit = 2236032;
         consensus.nNeoScryptFork = 1414346265;
 
         genesis = CreateGenesisBlock(1317972665, 2084524493, 0x1e0ffff0, 1, 50 * COIN);
@@ -195,6 +196,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nTimeLimit = 100;
         consensus.nNeoScryptFork = 1581518000;
 
         genesis = CreateGenesisBlock(1581517800, 80014, 0x1f00ffff, 1, 50 * COIN);
@@ -285,6 +287,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nTimeLimit = 0;
         consensus.nNeoScryptFork = 1524127760;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
