@@ -87,6 +87,13 @@ public:
         pchMessageStart[1] = 0x15;
         pchMessageStart[2] = 0x1a;
         pchMessageStart[3] = 0x21;
+
+        // End of the bridge from old to new pchMessageStart
+        pchMessageStartOld[0] = 0xfb;
+        pchMessageStartOld[1] = 0xc0;
+        pchMessageStartOld[2] = 0xb6;
+        pchMessageStartOld[3] = 0xdb;
+
         nDefaultPort = 9336;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 3;
@@ -188,6 +195,12 @@ public:
         pchMessageStart[1] = 0x65;
         pchMessageStart[2] = 0x6a;
         pchMessageStart[3] = 0x71;
+
+        pchMessageStartOld[0] = 0xda;
+        pchMessageStartOld[1] = 0xaf;
+        pchMessageStartOld[2] = 0xa5;
+        pchMessageStartOld[3] = 0xba;
+
         nDefaultPort = 19336;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 1;
@@ -277,6 +290,12 @@ public:
         pchMessageStart[1] = 0xa5;
         pchMessageStart[2] = 0xaa;
         pchMessageStart[3] = 0xb1;
+
+        pchMessageStartOld[0] = 0xda;
+        pchMessageStartOld[1] = 0xaf;
+        pchMessageStartOld[2] = 0xa5;
+        pchMessageStartOld[3] = 0xba;
+
         nDefaultPort = 18446;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
