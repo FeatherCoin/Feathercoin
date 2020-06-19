@@ -113,6 +113,7 @@ BITCOIN_CORE_H = \
   chainparams.h \
   chainparamsbase.h \
   chainparamsseeds.h \
+  checkpointsync.h \
   checkqueue.h \
   clientversion.h \
   coins.h \
@@ -264,6 +265,7 @@ libbitcoin_server_a_SOURCES = \
   blockencodings.cpp \
   blockfilter.cpp \
   chain.cpp \
+  checkpointsync.cpp \
   consensus/tx_verify.cpp \
   flatfile.cpp \
   httprpc.cpp \

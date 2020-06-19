@@ -15,6 +15,7 @@
 #include <blockfilter.h>
 #include <chain.h>
 #include <chainparams.h>
+#include <checkpointsync.h>
 #include <compat/sanity.h>
 #include <consensus/validation.h>
 #include <fs.h>
@@ -544,6 +545,9 @@ void SetupServerArgs()
     gArgs.AddArg("-rpcuser=<user>", "Username for JSON-RPC connections", ArgsManager::ALLOW_ANY, OptionsCategory::RPC);
     gArgs.AddArg("-rpcworkqueue=<n>", strprintf("Set the depth of the work queue to service RPC calls (default: %d)", DEFAULT_HTTP_WORKQUEUE), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::RPC);
     gArgs.AddArg("-server", "Accept command line and JSON-RPC commands", ArgsManager::ALLOW_ANY, OptionsCategory::RPC);
+
+    gArgs.AddArg("-checkpointdepth", "Set block depth to checkpoint", ArgsManager::ALLOW_INT, OptionsCategory::CHECKPOINTING);
+    gArgs.AddArg("-checkpointkey", "Set private key to sign checkpoint messages", ArgsManager::ALLOW_STRING, OptionsCategory::CHECKPOINTING);
 
 #if HAVE_DECL_DAEMON
     gArgs.AddArg("-daemon", "Run in the background as a daemon and accept commands", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
@@ -1163,6 +1167,15 @@ bool AppInitParameterInteraction()
 
     nMaxTipAge = gArgs.GetArg("-maxtipage", DEFAULT_MAX_TIP_AGE);
 
+    if (gArgs.IsArgSet("-checkpointkey")) // Checkpoint master priv key
+    {
+        if (!SetCheckpointPrivKey(gArgs.GetArg("-checkpointkey", "")))
+            return InitError("Unable to sign checkpoint, wrong checkpointkey?");
+    }
+
+    // Include NODE_ACP in services. Currently no arg to toggle this behaviour.
+    nLocalServices = ServiceFlags(nLocalServices | NODE_ACP);
+
     return true;
 }
 
@@ -1581,6 +1594,15 @@ bool AppInitMain(InitInterfaces& interfaces)
                 uiInterface.InitMessage(_("Rewinding blocks...").translated);
                 if (!RewindBlockIndex(chainparams)) {
                     strLoadError = _("Unable to rewind the database to a pre-fork state. You will need to redownload the blockchain").translated;
+                    break;
+                }
+            }
+
+            {
+                LOCK(cs_main);
+                uiInterface.InitMessage("Checking ACP ...");
+                if (!CheckCheckpointPubKey()) {
+                    strLoadError = "Checking ACP pubkey failed";
                     break;
                 }
             }

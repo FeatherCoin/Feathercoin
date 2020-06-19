@@ -733,6 +733,8 @@ public:
     bool fGetAddr{false};
     int64_t nNextAddrSend GUARDED_BY(cs_sendProcessing){0};
     int64_t nNextLocalAddrSend GUARDED_BY(cs_sendProcessing){0};
+    uint256 hashCheckpointKnown;
+    bool supportACPMessages{false};
 
     const bool m_addr_relay_peer;
     bool IsAddrRelayPeer() const { return m_addr_relay_peer; }
