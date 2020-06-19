@@ -361,7 +361,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint()
         return false;
 
     LOCK(cs_main);
-    if (!mapBlockIndex.count(hashCheckpoint))
+    if (!mapBlockIndex.count(hashCheckpoint) || !chainActive.Contains(mapBlockIndex[hashCheckpoint]))
     {
         // We haven't received the checkpoint chain, keep the checkpoint as pending
         hashPendingCheckpoint = hashCheckpoint;
