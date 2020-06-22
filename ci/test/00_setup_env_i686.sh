@@ -12,3 +12,5 @@ export PACKAGES="g++-multilib python3-zmq"
 export GOAL="install"
 export BITCOIN_CONFIG="--enable-zmq --with-gui=qt5 --enable-bip70 --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++"
 export CONFIG_SHELL="/bin/dash"
+export NEOSCRYPT=1
+export PYTHON=1

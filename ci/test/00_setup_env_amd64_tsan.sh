@@ -12,3 +12,4 @@ export PACKAGES="clang llvm python3-zmq qtbase5-dev qttools5-dev-tools libssl-de
 export NO_DEPENDS=1
 export GOAL="install"
 export BITCOIN_CONFIG="--enable-zmq --disable-wallet --with-gui=qt5 CPPFLAGS=-DDEBUG_LOCKORDER --with-sanitizers=thread --disable-hardening --disable-asm CC=clang CXX=clang++"
+export NEOSCRYPT=1
