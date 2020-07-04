@@ -93,7 +93,11 @@ std::shared_ptr<CBlock> FinalizeBlock(std::shared_ptr<CBlock> pblock)
 
     pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
 
-    while (!CheckProofOfWork(pblock->GetHash(), pblock->nBits, Params().GetConsensus())) {
+    unsigned int profile = 0x3;
+    if (pblock->GetBlockTime() >= Params().GetConsensus().nNeoScryptFork)
+        profile = 0x0;
+
+    while (!CheckProofOfWork(pblock->GetPoWHash(profile), pblock->nBits, Params().GetConsensus())) {
         ++(pblock->nNonce);
     }
 
