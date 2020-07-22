@@ -115,7 +115,6 @@ bool WriteSyncCheckpoint(const uint256& hashCheckpoint)
     if (!pblocktree->WriteSyncCheckpoint(hashCheckpoint))
         return error("%s: failed to write to txdb sync checkpoint %s", __func__, hashCheckpoint.ToString());
 
-    ::ChainstateActive().ForceFlushStateToDisk();
     hashSyncCheckpoint = hashCheckpoint;
     return true;
 }
@@ -227,7 +226,6 @@ bool CheckCheckpointPubKey()
             return error("%s: failed to reset sync-checkpoint", __func__);
         if (!pblocktree->WriteCheckpointPubKey(strMasterPubKey))
             return error("%s: failed to write new checkpoint master key to db", __func__);
-        ::ChainstateActive().ForceFlushStateToDisk();
     }
 
     return true;
