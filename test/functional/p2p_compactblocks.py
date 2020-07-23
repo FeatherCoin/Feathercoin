@@ -108,7 +108,7 @@ class CompactBlocksTest(BitcoinTestFramework):
         tip = node.getbestblockhash()
         mtp = node.getblockheader(tip)['mediantime']
         block = create_block(int(tip, 16), create_coinbase(height + 1), mtp + 1)
-        block.nVersion = 4
+        block.nVersion = 0x20000000
         if segwit:
             add_witness_commitment(block)
         block.solve()

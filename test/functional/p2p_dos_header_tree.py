@@ -20,7 +20,7 @@ import os
 class RejectLowDifficultyHeadersTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
-        self.chain = 'testnet3'  # Use testnet chain because it has an early checkpoint
+        self.chain = 'testnet5'  # Use testnet chain because it has an early checkpoint
         self.num_nodes = 2
 
     def add_options(self, parser):
@@ -51,7 +51,7 @@ class RejectLowDifficultyHeadersTest(BitcoinTestFramework):
         self.nodes[0].p2p.sync_with_ping()
         assert {
             'height': 546,
-            'hash': '000000002a936ca763904c3c35fce2f3556c559c0214345d31b1bcebf76acb70',
+            'hash': 'c889c0fb27bf7c669cff1cf9407f768cde2a084e1dc527baa6dadbed9b22bf29',
             'branchlen': 546,
             'status': 'headers-only',
         } in self.nodes[0].getchaintips()
@@ -69,7 +69,7 @@ class RejectLowDifficultyHeadersTest(BitcoinTestFramework):
         self.nodes[0].p2p.sync_with_ping()
         assert {
             "height": 2,
-            "hash": "00000000b0494bd6c3d5ff79c497cfce40831871cbf39b1bc28bd1dac817dc39",
+            "hash": "c506ded74a0ce7f5e92c882e29ddb5034e1b1736bc6ec9ecc9a3b372f1e8eb2d",
             "branchlen": 2,
             "status": "headers-only",
         } in self.nodes[0].getchaintips()
@@ -80,7 +80,7 @@ class RejectLowDifficultyHeadersTest(BitcoinTestFramework):
         self.nodes[1].p2p.sync_with_ping()
         assert {
             "height": 2,
-            "hash": "00000000b0494bd6c3d5ff79c497cfce40831871cbf39b1bc28bd1dac817dc39",
+            "hash": "c506ded74a0ce7f5e92c882e29ddb5034e1b1736bc6ec9ecc9a3b372f1e8eb2d",
             "branchlen": 2,
             "status": "headers-only",
         } in self.nodes[1].getchaintips()

@@ -37,7 +37,9 @@ class BumpFeeTest(BitcoinTestFramework):
         self.extra_args = [[
             "-walletrbf={}".format(i),
             "-mintxfee=0.00002",
+            "-fallbackfee=0.0002",
             "-deprecatedrpc=totalFee",
+            "-maxtxfee=0.1",
         ] for i in range(self.num_nodes)]
 
     def skip_test_if_missing_module(self):
@@ -272,7 +274,13 @@ def test_settxfee(rbf_node, dest_address):
 
 
 def test_maxtxfee_fails(test, rbf_node, dest_address):
-    test.restart_node(1, ['-maxtxfee=0.00003'] + test.extra_args[1])
+    test.restart_node(1, [
+        '-maxtxfee=0.00003',
+        "-walletrbf=1",
+        "-mintxfee=0.00002",
+        "-fallbackfee=0.0002",
+        "-deprecatedrpc=totalFee",
+        ])
     rbf_node.walletpassphrase(WALLET_PASSPHRASE, WALLET_PASSPHRASE_TIMEOUT)
     rbfid = spend_one_input(rbf_node, dest_address)
     assert_raises_rpc_error(-4, "Unable to create transaction: Fee exceeds maximum configured by -maxtxfee", rbf_node.bumpfee, rbfid)

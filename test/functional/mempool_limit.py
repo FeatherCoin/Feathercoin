@@ -17,6 +17,7 @@ class MempoolLimitTest(BitcoinTestFramework):
             "-acceptnonstdtxn=1",
             "-maxmempool=5",
             "-spendzeroconfchange=0",
+            "-mintxfee=0.00001",
         ]]
 
     def skip_test_if_missing_module(self):
@@ -45,7 +46,7 @@ class MempoolLimitTest(BitcoinTestFramework):
         txid = self.nodes[0].sendrawtransaction(txFS['hex'])
 
         relayfee = self.nodes[0].getnetworkinfo()['relayfee']
-        base_fee = relayfee*100
+        base_fee = relayfee*10000
         for i in range (3):
             txids.append([])
             txids[i] = create_lots_of_big_transactions(self.nodes[0], txouts, utxos[30*i:30*i+30], 30, (i+1)*base_fee)
