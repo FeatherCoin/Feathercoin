@@ -9,11 +9,6 @@ export LC_ALL=C.UTF-8
 mkdir -p "${BASE_SCRATCH_DIR}"
 ccache echo "Creating ccache dir if it didn't already exist"
 
-if [ ! -d ${DIR_QA_ASSETS} ]; then
-  git clone https://github.com/bitcoin-core/qa-assets ${DIR_QA_ASSETS}
-fi
-export DIR_FUZZ_IN=${DIR_QA_ASSETS}/fuzz_seed_corpus/
-
 mkdir -p "${BASE_BUILD_DIR}/sanitizer-output/"
 export ASAN_OPTIONS=""
 export LSAN_OPTIONS="suppressions=${BASE_BUILD_DIR}/test/sanitizer_suppressions/lsan"
@@ -47,6 +42,11 @@ DOCKER_EXEC echo "Number of CPUs \(nproc\): $(nproc)"
 
 ${CI_RETRY_EXE} DOCKER_EXEC apt-get update
 ${CI_RETRY_EXE} DOCKER_EXEC apt-get install --no-install-recommends --no-upgrade -qq $PACKAGES $DOCKER_PACKAGES
+
+if [ ! -d ${DIR_QA_ASSETS} ]; then
+  DOCKER_EXEC git clone https://github.com/bitcoin-core/qa-assets ${DIR_QA_ASSETS}
+fi
+export DIR_FUZZ_IN=${DIR_QA_ASSETS}/fuzz_seed_corpus/
 
 if [ "$PYTHON" = 1 ]; then
   travis_retry DOCKER_EXEC "apt-get install -y python3-distutils"
