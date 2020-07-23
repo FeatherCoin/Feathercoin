@@ -13,6 +13,7 @@
 #include <versionbitsinfo.h>
 
 #include <assert.h>
+#include <limits>
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -242,15 +243,15 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("79e4683a94fb0374ac9d52638b594dcf0318975acb8b275e280f93c082c0964c")},
+                {546, uint256S("c889c0fb27bf7c669cff1cf9407f768cde2a084e1dc527baa6dadbed9b22bf29")},
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from rpc: getchaintxstats 4096 0000000000000037a8cd3e06cd5edbfe9dd1dbcc5dacab279376ef7cfc2b4c75
-            /* nTime    */ 1581517800,
-            /* nTxCount */ 1,
-            /* dTxRate  */ 0.016
+            // Data from rpc: getchaintxstats 545 c889c0fb27bf7c669cff1cf9407f768cde2a084e1dc527baa6dadbed9b22bf29
+            /* nTime    */ 1581570241,
+            /* nTxCount */ 547,
+            /* dTxRate  */ 0.01200996055444148
         };
     }
 };
@@ -262,7 +263,7 @@ class CRegTestParams : public CChainParams {
 public:
     explicit CRegTestParams(const ArgsManager& args) {
         strNetworkID = "regtest";
-        consensus.nSubsidyHalvingInterval = 256;
+        consensus.nSubsidyHalvingInterval = 150;
         consensus.BIP34Height = 500; // BIP34 activated on regtest (Used in functional tests)
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in functional tests)
@@ -273,7 +274,7 @@ public:
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.powNeoScryptLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 3.5 * 24 * 60 * 60; // two weeks
-        consensus.nPowTargetSpacing = 2.5 * 60;
+        consensus.nPowTargetSpacing = 10 * 60;
         consensus.checkpointPubKey = "0421c27bb6580b05dcda1f47e59274489f094a3e85d96bbc38d5befd10eee97397ec8a93b6d8d79e8370239a8f39adf66322b41dafe83066bbcee6144e4c41a699";
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
@@ -309,8 +310,8 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
-        consensus.nTimeLimit = 0;
-        consensus.nNeoScryptFork = 1524127760;
+        consensus.nTimeLimit = std::numeric_limits<int>::max();
+        consensus.nNeoScryptFork = 1515840635;
 
         genesis = CreateGenesisBlock(1515840634, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
