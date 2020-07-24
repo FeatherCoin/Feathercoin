@@ -1056,6 +1056,7 @@ static bool MaybePunishNode(NodeId nodeid, const CValidationState& state, bool v
         return true;
     case ValidationInvalidReason::RECENT_CONSENSUS_CHANGE:
     case ValidationInvalidReason::BLOCK_TIME_FUTURE:
+    case ValidationInvalidReason::BLOCK_TIME_PAST:
     case ValidationInvalidReason::TX_NOT_STANDARD:
     case ValidationInvalidReason::TX_MISSING_INPUTS:
     case ValidationInvalidReason::TX_PREMATURE_SPEND:
