@@ -1798,6 +1798,12 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
     assert(*pindex->phashBlock == block.GetHash());
     int64_t nTimeStart = GetTimeMicros();
 
+    // Check that the block satisfies synchronized checkpoint
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), pindex->nHeight)) {
+        return state.DoS(0, error("%s: Block rejected by synchronized checkpoint", __func__),
+                             REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
+    }
+
     // Check it again in case a previous version let a bad block in
     // NOTE: We don't currently (re-)invoke ContextualCheckBlock() or
     // ContextualCheckBlockHeader() here. This means that if we add a new
@@ -1831,11 +1837,6 @@ bool CChainState::ConnectBlock(const CBlock& block, CValidationState& state, CBl
         if (!fJustCheck)
             view.SetBestBlock(pindex->GetBlockHash());
         return true;
-    }
-
-    // Check that the block satisfies synchronized checkpoint
-    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(pindex)) {
-        return state.DoS(100, error("%s: Block rejected by synchronized checkpoint", __func__), REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
     }
 
     nBlocksTotal++;
@@ -3187,8 +3188,9 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationSta
     }
 
     // Check that the block satisfies synchronized checkpoint
-    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(nullptr, block.GetHash(), nHeight)) {
-        return state.DoS(100, error("%s: Block rejected by synchronized checkpoint", __func__), REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), nHeight)) {
+        return state.DoS(0, error("%s: Block rejected by synchronized checkpoint", __func__),
+                             REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
     }
 
     // Check timestamp against prev
