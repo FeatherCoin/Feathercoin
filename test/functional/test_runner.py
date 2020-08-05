@@ -191,6 +191,7 @@ BASE_SCRIPTS = [
     'rpc_help.py',
     'feature_help.py',
     'feature_shutdown.py',
+    'feature_checkpointsync.py',
     # Don't append tests at the end to avoid merge conflicts
     # Put them in a random line within the section that fits their approximate run-time
 ]
@@ -368,7 +369,7 @@ def run_tests(*, test_list, src_dir, build_dir, tmpdir, jobs=1, enable_coverage=
     test_results = []
 
     max_len_name = len(max(test_list, key=len))
-    test_count = len(test_list) - 1
+    test_count = len(test_list)
     for i in range(test_count):
         test_result, testdir, stdout, stderr = job_queue.get_next()
         test_results.append(test_result)
