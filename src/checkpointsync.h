@@ -7,6 +7,7 @@
 #define BITCOIN_CHECKPOINTSYNC_H
 
 #include <serialize.h>
+#include <sync.h>
 #include <uint256.h>
 
 #include <string>
@@ -19,6 +20,7 @@ class uint256;
 
 extern uint256 hashSyncCheckpoint;
 extern CSyncCheckpoint checkpointMessage;
+extern CCriticalSection cs_hashSyncCheckpoint;
 
 bool WriteSyncCheckpoint(const uint256& hashCheckpoint);
 bool AcceptPendingSyncCheckpoint();

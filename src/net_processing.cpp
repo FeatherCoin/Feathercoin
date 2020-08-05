@@ -2057,7 +2057,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
 
             // Relay sync-checkpoint
             {
-                LOCK(cs_main);
+                LOCK(cs_hashSyncCheckpoint);
                 if (!checkpointMessage.IsNull())
                     checkpointMessage.RelayTo(pfrom);
             }
