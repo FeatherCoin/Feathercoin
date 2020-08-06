@@ -1653,9 +1653,6 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             State(pfrom->GetId())->fHaveWitness = true;
         }
 
-        if((nServices & NODE_ACP))
-            pfrom->supportACPMessages = true;
-
         // Potentially mark this peer as a preferred download peer.
         {
         LOCK(cs_main);
@@ -1689,11 +1686,15 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             connman->MarkAddressGood(pfrom->addr);
         }
 
-        // Relay sync-checkpoint
-        {
-            LOCK(cs_main);
-            if (!checkpointMessage.IsNull())
-                checkpointMessage.RelayTo(pfrom);
+        if((nServices & NODE_ACP)) {
+            pfrom->supportACPMessages = true;
+
+            // Relay sync-checkpoint
+            {
+                LOCK(cs_hashSyncCheckpoint);
+                if (!checkpointMessage.IsNull())
+                    checkpointMessage.RelayTo(pfrom);
+            }
         }
 
         // Relay alerts
