@@ -538,25 +538,6 @@ bool PeerHasHeader(CNodeState *state, CBlockIndex *pindex)
     return false;
 }
 
-/** Find the last common ancestor two blocks have.
- *  Both pa and pb must be non-NULL. */
-CBlockIndex* LastCommonAncestor(CBlockIndex* pa, CBlockIndex* pb) {
-    if (pa->nHeight > pb->nHeight) {
-        pa = pa->GetAncestor(pb->nHeight);
-    } else if (pb->nHeight > pa->nHeight) {
-        pb = pb->GetAncestor(pa->nHeight);
-    }
-
-    while (pa != pb && pa && pb) {
-        pa = pa->pprev;
-        pb = pb->pprev;
-    }
-
-    // Eventually all chain branches meet at the genesis block.
-    assert(pa == pb);
-    return pa;
-}
-
 /** Update pindexLastCommonBlock and add not-in-flight missing successors to vBlocks, until it has
  *  at most count entries. */
 void FindNextBlocksToDownload(NodeId nodeid, unsigned int count, std::vector<CBlockIndex*>& vBlocks, NodeId& nodeStaller, const Consensus::Params& consensusParams) {
@@ -646,6 +627,25 @@ void FindNextBlocksToDownload(NodeId nodeid, unsigned int count, std::vector<CBl
 }
 
 } // anon namespace
+
+/** Find the last common ancestor two blocks have.
+ *  Both pa and pb must be non-NULL. */
+CBlockIndex* LastCommonAncestor(CBlockIndex* pa, CBlockIndex* pb) {
+    if (pa->nHeight > pb->nHeight) {
+        pa = pa->GetAncestor(pb->nHeight);
+    } else if (pb->nHeight > pa->nHeight) {
+        pb = pb->GetAncestor(pa->nHeight);
+    }
+
+    while (pa != pb && pa && pb) {
+        pa = pa->pprev;
+        pb = pb->pprev;
+    }
+
+    // Eventually all chain branches meet at the genesis block.
+    assert(pa == pb);
+    return pa;
+}
 
 bool GetNodeStateStats(NodeId nodeid, CNodeStateStats &stats) {
     LOCK(cs_main);
@@ -2330,6 +2330,12 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     int64_t nTimeStart = GetTimeMicros();
 
+    // Check that the block satisfies synchronized checkpoint
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), pindex->nHeight)) {
+        return state.DoS(0, error("%s: Block rejected by synchronized checkpoint", __func__),
+                         REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
+    }
+
     // Check it again in case a previous version let a bad block in
     if (!CheckBlock(block, state, chainparams.GetConsensus(), !fJustCheck, !fJustCheck))
         return error("%s: Consensus::CheckBlock: %s", __func__, FormatStateMessage(state));
@@ -2353,11 +2359,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
             // This block is an ancestor of a checkpoint: disable script checks
             fScriptChecks = false;
         }
-    }
-
-    // Check that the block satisfies synchronized checkpoint
-    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(nullptr, block.GetHash(), pindex->nHeight)) {
-        return state.DoS(100, error("%s: Block rejected by synchronized checkpoint", __func__), REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
     }
 
     int64_t nTime1 = GetTimeMicros(); nTimeCheck += nTime1 - nTimeStart;
@@ -3520,8 +3521,9 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
         return state.DoS(100, false, REJECT_INVALID, "bad-diffbits", false, "incorrect proof of work");
 
     // Check that the block satisfies synchronized checkpoint
-    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(nullptr, block.GetHash(), nHeight)) {
-        return state.DoS(100, error("%s: Block rejected by synchronized checkpoint", __func__), REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), nHeight)) {
+        return state.DoS(0, error("%s: Block rejected by synchronized checkpoint", __func__),
+                         REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
     }
 
     // Check timestamp against prev
@@ -5076,9 +5078,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             State(pfrom->GetId())->fHaveWitness = true;
         }
 
-        if((pfrom->nServices & NODE_ACP))
-            pfrom->supportACPMessages = true;
-
         // Potentially mark this peer as a preferred download peer.
         {
         LOCK(cs_main);
@@ -5115,11 +5114,14 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             addrman.Good(pfrom->addr);
         }
 		
-		// Relay sync-checkpoint
-		{
-            LOCK(cs_main);
-            if (!checkpointMessage.IsNull())
-                checkpointMessage.RelayTo(pfrom);
+        if((pfrom->nServices & NODE_ACP)) {
+            pfrom->supportACPMessages = true;
+            // Relay sync-checkpoint
+            {
+                LOCK(cs_hashSyncCheckpoint);
+                if (!checkpointMessage.IsNull())
+                    checkpointMessage.RelayTo(pfrom);
+            }
         }
 
         // Relay alerts

@@ -7,6 +7,7 @@
 #define BITCOIN_CHECKPOINTSYNC_H
 
 #include <serialize.h>
+#include <sync.h>
 #include <uint256.h>
 
 #include <string>
@@ -19,12 +20,12 @@ class uint256;
 
 extern uint256 hashSyncCheckpoint;
 extern CSyncCheckpoint checkpointMessage;
+extern CCriticalSection cs_hashSyncCheckpoint;
 
 bool WriteSyncCheckpoint(const uint256& hashCheckpoint);
 bool AcceptPendingSyncCheckpoint();
 uint256 AutoSelectSyncCheckpoint();
-bool CheckSyncCheckpoint(const CBlockIndex* pindexNew, uint256 hashBlock = uint256(), int nHeight = std::numeric_limits<int>::max());
-bool ResetSyncCheckpoint();
+bool CheckSyncCheckpoint(const uint256 hashBlock, const int nHeight);
 bool CheckCheckpointPubKey();
 
 // Synchronized checkpoint (introduced first in ppcoin)
