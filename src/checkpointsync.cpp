@@ -66,13 +66,19 @@ CCriticalSection cs_hashSyncCheckpoint;
 // Only descendant of current sync-checkpoint is allowed
 bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
 {
-    if (!mapBlockIndex.count(hashSyncCheckpoint))
-        return error("%s: block index missing for current sync-checkpoint %s", __func__, hashSyncCheckpoint.ToString());
-    if (!mapBlockIndex.count(hashCheckpoint))
-        return error("%s: block index missing for received sync-checkpoint %s", __func__, hashCheckpoint.ToString());
+    CBlockIndex* pindexSyncCheckpoint = nullptr;
+    CBlockIndex* pindexCheckpointRecv = nullptr;
 
-    CBlockIndex* pindexSyncCheckpoint = mapBlockIndex[hashSyncCheckpoint];
-    CBlockIndex* pindexCheckpointRecv = mapBlockIndex[hashCheckpoint];
+    {
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
+        if (!mapBlockIndex.count(hashSyncCheckpoint))
+            return error("%s: block index missing for current sync-checkpoint %s", __func__, hashSyncCheckpoint.ToString());
+        if (!mapBlockIndex.count(hashCheckpoint))
+            return error("%s: block index missing for received sync-checkpoint %s", __func__, hashCheckpoint.ToString());
+
+        pindexSyncCheckpoint = mapBlockIndex[hashSyncCheckpoint];
+        pindexCheckpointRecv = mapBlockIndex[hashCheckpoint];
+    }
 
     if (pindexCheckpointRecv->nHeight <= pindexSyncCheckpoint->nHeight)
     {
@@ -85,6 +91,7 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
                 return error("%s: pprev1 null - block index structure failure", __func__);
         if (pindex->GetBlockHash() != hashCheckpoint)
         {
+            LOCK(cs_hashSyncCheckpoint);
             return error("%s: new sync-checkpoint %s is conflicting with current sync-checkpoint %s", __func__, hashCheckpoint.ToString(), hashSyncCheckpoint.ToString());
         }
         return false; // ignore older checkpoint
@@ -98,10 +105,14 @@ bool ValidateSyncCheckpoint(uint256 hashCheckpoint)
         if (!(pindex = pindex->pprev))
             return error("%s: pprev2 null - block index structure failure", __func__);
 
-    if (pindex->GetBlockHash() != hashSyncCheckpoint)
     {
-        return error("%s: new sync-checkpoint %s is not a descendant of current sync-checkpoint %s", __func__, hashCheckpoint.ToString(), hashSyncCheckpoint.ToString());
+        LOCK(cs_hashSyncCheckpoint);
+        if (pindex->GetBlockHash() != hashSyncCheckpoint)
+        {
+            return error("%s: new sync-checkpoint %s is not a descendant of current sync-checkpoint %s", __func__, hashCheckpoint.ToString(), hashSyncCheckpoint.ToString());
+        }
     }
+
     return true;
 }
 
@@ -117,17 +128,24 @@ bool WriteSyncCheckpoint(const uint256& hashCheckpoint)
 bool AcceptPendingSyncCheckpoint()
 {
     {
-        LOCK(cs_hashSyncCheckpoint);
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
         bool havePendingCheckpoint = hashPendingCheckpoint != uint256() && mapBlockIndex.count(hashPendingCheckpoint);
         if (!havePendingCheckpoint)
             return false;
+    }
 
-        if (!ValidateSyncCheckpoint(hashPendingCheckpoint))
-        {
-            hashPendingCheckpoint = uint256();
-            checkpointMessagePending.SetNull();
-            return false;
-        }
+    uint256 hashPendingCheckpointTmp;
+    {
+        LOCK(cs_hashSyncCheckpoint);
+        hashPendingCheckpointTmp = hashPendingCheckpoint;
+    }
+
+    if (!ValidateSyncCheckpoint(hashPendingCheckpointTmp))
+    {
+        LOCK(cs_hashSyncCheckpoint);
+        hashPendingCheckpoint = uint256();
+        checkpointMessagePending.SetNull();
+        return false;
     }
 
     {
@@ -173,42 +191,57 @@ uint256 AutoSelectSyncCheckpoint()
 // Check against synchronized checkpoint
 bool CheckSyncCheckpoint(const uint256 hashBlock, const int nHeight)
 {
+    // Genesis block
+    if (nHeight == 0) {
+        return true;
+    }
+
     CBlockIndex* tip = nullptr;
     {
         LOCK(cs_main);
         tip = chainActive.Tip();
     }
 
-    LOCK(cs_hashSyncCheckpoint);
-
-    // Genesis block
-    if (nHeight == 0) {
-        return true;
-    }
-
-    // Checkpoint on default
-    if (hashSyncCheckpoint == uint256()) {
-        return true;
-    }
-
-    // sync-checkpoint should always be accepted block
-    assert(mapBlockIndex.count(hashSyncCheckpoint));
-    const CBlockIndex* pindexSync = mapBlockIndex[hashSyncCheckpoint];
-
-    if (nHeight > pindexSync->nHeight)
     {
-        // Trace back to same height as sync-checkpoint
-        const CBlockIndex* pindex = tip;
-        while (pindex->nHeight > pindexSync->nHeight)
-            if (!(pindex = pindex->pprev))
-                return error("%s: pprev null - block index structure failure", __func__);
-        if (pindex->nHeight < pindexSync->nHeight || pindex->GetBlockHash() != hashSyncCheckpoint)
-            return false; // only descendant of sync-checkpoint can pass check
+        LOCK(cs_hashSyncCheckpoint);
+
+        // Checkpoint on default
+        if (hashSyncCheckpoint == uint256()) {
+            return true;
+        }
     }
-    if (nHeight == pindexSync->nHeight && hashBlock != hashSyncCheckpoint)
-        return error("%s: Same height with sync-checkpoint", __func__);
-    if (nHeight < pindexSync->nHeight && !mapBlockIndex.count(hashBlock))
-        return error("%s: Lower height than sync-checkpoint", __func__);
+
+    CBlockIndex* pindexSyncTemp = nullptr;
+    {
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
+        // sync-checkpoint should always be accepted block
+        assert(mapBlockIndex.count(hashSyncCheckpoint));
+        pindexSyncTemp = mapBlockIndex[hashSyncCheckpoint];
+    }
+
+    const CBlockIndex* pindexSync = pindexSyncTemp;
+
+    {
+        LOCK(cs_hashSyncCheckpoint);
+        if (nHeight > pindexSync->nHeight)
+        {
+            // Trace back to same height as sync-checkpoint
+            const CBlockIndex* pindex = tip;
+            while (pindex->nHeight > pindexSync->nHeight)
+                if (!(pindex = pindex->pprev))
+                    return error("%s: pprev null - block index structure failure", __func__);
+            if (pindex->nHeight < pindexSync->nHeight || pindex->GetBlockHash() != hashSyncCheckpoint)
+                return false; // only descendant of sync-checkpoint can pass check
+        }
+        if (nHeight == pindexSync->nHeight && hashBlock != hashSyncCheckpoint)
+            return error("%s: Same height with sync-checkpoint", __func__);
+    }
+
+    {
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
+        if (nHeight < pindexSync->nHeight && !mapBlockIndex.count(hashBlock))
+            return error("%s: Lower height than sync-checkpoint", __func__);
+    }
     return true;
 }
 
@@ -377,7 +410,7 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint()
         return false;
 
     {
-        LOCK(cs_hashSyncCheckpoint);
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
 
         if (!mapBlockIndex.count(hashCheckpoint)) {
             // We haven't received the checkpoint chain, keep the checkpoint as pending
@@ -387,10 +420,10 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint()
 
             return false;
         }
+    }
 
-        if (!ValidateSyncCheckpoint(hashCheckpoint)) {
-            return false;
-        }
+    if (!ValidateSyncCheckpoint(hashCheckpoint)) {
+        return false;
     }
 
     CBlockIndex* bad_fork = nullptr;
