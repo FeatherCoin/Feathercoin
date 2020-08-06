@@ -101,20 +101,20 @@ BOOST_AUTO_TEST_CASE(rpc_togglenetwork)
     netState = find_value(r.get_obj(), "networkactive").get_bool();
     BOOST_CHECK_EQUAL(netState, true);
 }
-/* TODO generate Feathercoin specific data
+
 BOOST_AUTO_TEST_CASE(rpc_rawsign)
 {
     UniValue r;
     // input is a 1-of-2 multisig (so is output):
     std::string prevout =
-      "[{\"txid\":\"b4cc287e58f87cdae59417329f710f3ecd75a4ee1d2872b7248f50977c8493f3\","
-      "\"vout\":1,\"scriptPubKey\":\"a914b10c9df5f7edf436c697f02f1efdba4cf399615187\","
-      "\"redeemScript\":\"512103debedc17b3df2badbcdd86d5feb4562b86fe182e5998abd8bcd4f122c6155b1b21027e940bb73ab8732bfdf7f9216ecefca5b94d6df834e77e108f68e66f126044c052ae\"}]";
+        "[{\"txid\":\"8a0bfd2f643890320ead5580ded5231c65de6ef987a65596f833c3856c34db6d\","
+        "\"vout\":1,\"scriptPubKey\":\"a91488a491285adefe06b1056812edf764187a58286087\","
+        "\"redeemScript\":\"51210359b85e3da2f57e4664f4fe8b90f3ac7d31e0a3962908e7f1b135fc957f92b685210253b998f9c181c12370346863b936543c8f72e9070fb84fbd1fadf1ee6ea2a7d052ae\"}]";
     r = CallRPC(std::string("createrawtransaction ")+prevout+" "+
-      "{\"3HqAe9LtNBjnsfM4CyYaWTnvCaUYT7v4oZ\":11}");
+      "{\"3E9Wxx3WPx4Zt2Tckq8jYF7yTQwFN3vBv2\":0.59}");
     std::string notsigned = r.get_str();
-    std::string privkey1 = "\"KzsXybp9jX64P5ekX1KUxRQ79Jht9uzW7LorgwE65i5rWACL6LQe\"";
-    std::string privkey2 = "\"Kyhdf5LuKTRx4ge69ybABsiUAWjVRK4XGxAKk2FQLp2HjGMy87Z4\"";
+    std::string privkey1 = "\"N5NbVFYBu6nwef2Q3KL1F9vCXTHALa86g79jcgPYUQk86onW3LB6\"";
+    std::string privkey2 = "\"N619kNkWER6eLeAKWozX1FTsgARqzjFCJbjrLYMpUfDTzJeLeJry\"";
     InitInterfaces interfaces;
     interfaces.chain = interfaces::MakeChain();
     g_rpc_interfaces = &interfaces;
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(rpc_rawsign)
     BOOST_CHECK(find_value(r.get_obj(), "complete").get_bool() == true);
     g_rpc_interfaces = nullptr;
 }
-*/
+
 BOOST_AUTO_TEST_CASE(rpc_createraw_op_return)
 {
     BOOST_CHECK_NO_THROW(CallRPC("createrawtransaction [{\"txid\":\"a3b807410df0b60fcb9736768df5823938b2f838694939ba45f3c0a1bff150ed\",\"vout\":0}] {\"data\":\"68656c6c6f776f726c64\"}"));

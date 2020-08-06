@@ -33,7 +33,15 @@ from test_framework.util import (
     assert_is_hash_string,
 )
 from test_framework.blocktools import (
+    create_block,
+    create_coinbase,
     TIME_GENESIS_BLOCK,
+)
+from test_framework.messages import (
+    msg_block,
+)
+from test_framework.mininode import (
+    P2PInterface,
 )
 
 
@@ -53,7 +61,7 @@ class BlockchainTest(BitcoinTestFramework):
         self._test_getdifficulty()
         self._test_getnetworkhashps()
         self._test_stopatheight()
-        #self._test_waitforblockheight() # TODO Fix high-hash error
+        self._test_waitforblockheight()
         assert self.nodes[0].verifychain(4, 0)
 
     def mine_chain(self):
@@ -172,7 +180,7 @@ class BlockchainTest(BitcoinTestFramework):
         node = self.nodes[0]
         res = node.gettxoutsetinfo()
 
-        assert_equal(res['total_amount'], Decimal('16000.00000000'))
+        assert_equal(res['total_amount'], Decimal('13960.00000000'))
         assert_equal(res['transactions'], 200)
         assert_equal(res['height'], 200)
         assert_equal(res['txouts'], 200)
@@ -260,12 +268,12 @@ class BlockchainTest(BitcoinTestFramework):
         self.start_node(0)
         assert_equal(self.nodes[0].getblockcount(), 207)
 
-#    def _test_waitforblockheight(self):
-#        self.log.info("Test waitforblockheight")
-#        node = self.nodes[0]
-#        node.add_p2p_connection(P2PInterface())
+    def _test_waitforblockheight(self):
+        self.log.info("Test waitforblockheight")
+        node = self.nodes[0]
+        node.add_p2p_connection(P2PInterface())
 
-#        current_height = node.getblock(node.getbestblockhash())['height']
+        current_height = node.getblock(node.getbestblockhash())['height']
 
         # Create a fork somewhere below our current height, invalidate the tip
         # of that fork, and then ensure that waitforblockheight still
@@ -274,30 +282,30 @@ class BlockchainTest(BitcoinTestFramework):
         # (Previously this was broken based on setting
         # `rpc/blockchain.cpp:latestblock` incorrectly.)
         #
-#        b20hash = node.getblockhash(20)
-#        b20 = node.getblock(b20hash)
+        b20hash = node.getblockhash(20)
+        b20 = node.getblock(b20hash)
 
-#        def solve_and_send_block(prevhash, height, time):
-#            b = create_block(prevhash, create_coinbase(height), time)
-#            b.solve()
-#            node.p2p.send_message(msg_block(b))
-#            node.p2p.sync_with_ping()
-#            return b
+        def solve_and_send_block(prevhash, height, time):
+            b = create_block(prevhash, create_coinbase(height), time)
+            b.solve()
+            node.p2p.send_message(msg_block(b))
+            node.p2p.sync_with_ping()
+            return b
 
-#        b21f = solve_and_send_block(int(b20hash, 16), 21, b20['time'] + 1)
-#        b22f = solve_and_send_block(b21f.sha256, 22, b21f.nTime + 1)
+        b21f = solve_and_send_block(int(b20hash, 16), 21, b20['time'] + 1)
+        b22f = solve_and_send_block(b21f.sha256, 22, b21f.nTime + 1)
 
-#        node.invalidateblock(b22f.hash)
+        node.invalidateblock(b22f.hash)
 
-#        def assert_waitforheight(height, timeout=2):
-#            assert_equal(
-#                node.waitforblockheight(height=height, timeout=timeout)['height'],
-#                current_height)
+        def assert_waitforheight(height, timeout=2):
+            assert_equal(
+                node.waitforblockheight(height=height, timeout=timeout)['height'],
+                current_height)
 
-#        assert_waitforheight(0)
-#        assert_waitforheight(current_height - 1)
-#        assert_waitforheight(current_height)
-#        assert_waitforheight(current_height + 1)
+        assert_waitforheight(0)
+        assert_waitforheight(current_height - 1)
+        assert_waitforheight(current_height)
+        assert_waitforheight(current_height + 1)
 
 
 if __name__ == '__main__':

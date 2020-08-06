@@ -173,7 +173,7 @@ class MiningTest(BitcoinTestFramework):
         assert_submitblock(bad_block, 'time-too-new', 'time-too-new')
         bad_block.nTime = 0
         assert_template(node, bad_block, 'time-too-old')
-        #assert_submitblock(bad_block, 'time-too-old', 'time-too-old') # TODO Fix high-hash error
+        assert_submitblock(bad_block, 'time-too-old', 'time-too-old')
 
         self.log.info("getblocktemplate: Test not best block")
         bad_block = copy.deepcopy(block)
@@ -229,7 +229,7 @@ class MiningTest(BitcoinTestFramework):
         bad_block_time = copy.deepcopy(block)
         bad_block_time.nTime = 1
         bad_block_time.solve()
-        #assert_raises_rpc_error(-25, 'time-too-old', lambda: node.submitheader(hexdata=b2x(CBlockHeader(bad_block_time).serialize()))) # TODO Fix high-hash error
+        assert_raises_rpc_error(-25, 'time-too-old', lambda: node.submitheader(hexdata=b2x(CBlockHeader(bad_block_time).serialize()))) # TODO Fix high-hash error
 
         # Should ask for the block from a p2p node, if they announce the header as well:
         node.add_p2p_connection(P2PDataStore())
@@ -240,7 +240,7 @@ class MiningTest(BitcoinTestFramework):
 
         # Building a few blocks should give the same results
         node.generatetoaddress(10, node.get_deterministic_priv_key().address)
-        #assert_raises_rpc_error(-25, 'time-too-old', lambda: node.submitheader(hexdata=b2x(CBlockHeader(bad_block_time).serialize()))) # # TODO Fix high-hash error
+        assert_raises_rpc_error(-25, 'time-too-old', lambda: node.submitheader(hexdata=b2x(CBlockHeader(bad_block_time).serialize()))) # # TODO Fix high-hash error
         assert_raises_rpc_error(-25, 'bad-prevblk', lambda: node.submitheader(hexdata=b2x(CBlockHeader(bad_block2).serialize())))
         node.submitheader(hexdata=b2x(CBlockHeader(block).serialize()))
         node.submitheader(hexdata=b2x(CBlockHeader(bad_block_root).serialize()))

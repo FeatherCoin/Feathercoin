@@ -19,13 +19,13 @@ static void TestBlockSubsidyHalvings(const Consensus::Params& consensusParams)
     CAmount nInitialSubsidy = 200 * COIN;
 
     CAmount nPreviousSubsidy = nInitialSubsidy * 2; // for height == 0
-    bool prereduced = true;
+    bool reduced = true;
     BOOST_CHECK_EQUAL(nPreviousSubsidy, nInitialSubsidy * 2);
     for (int nHalvings = 0; nHalvings < maxHalvings; nHalvings++) {
         int nHeight = nHalvings * consensusParams.nSubsidyHalvingInterval - 306960;
-        if (nHeight + 306960 > consensusParams.nForkThree && prereduced) {
+        if (nHeight + 306960 >= consensusParams.nForkThree && reduced) {
             nPreviousSubsidy = 80 * COIN;
-            prereduced = false;
+            reduced = false;
         }
         CAmount nSubsidy = GetBlockSubsidy(nHeight + 306960, consensusParams);
         BOOST_CHECK(nSubsidy <= nInitialSubsidy);
@@ -40,6 +40,8 @@ static void TestBlockSubsidyHalvings(int nSubsidyHalvingInterval)
     Consensus::Params consensusParams;
     consensusParams.nSubsidyHalvingInterval = nSubsidyHalvingInterval;
     TestBlockSubsidyHalvings(consensusParams);
+    TestBlockSubsidyHalvings(150); // As in regtest
+    TestBlockSubsidyHalvings(1000); // Just another interval
 }
 
 BOOST_AUTO_TEST_CASE(block_subsidy_test)

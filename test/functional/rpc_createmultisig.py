@@ -86,16 +86,16 @@ class RpcCreateMultiSigTest(BitcoinTestFramework):
         node0.generate(100)
         self.sync_all()
 
-        #bal0 = node0.getbalance()
+        bal0 = node0.getbalance()
         bal1 = node1.getbalance()
         bal2 = node2.getbalance()
 
         height = node0.getblockchaininfo()["blocks"]
         assert 150 < height < 350
-        #total = 149 * 80 + (height - 149 - 100) * 40
+        total = 149 * 80 + (height - 149 - 100) * 40
         assert bal1 == 0
         assert bal2 == self.moved
-        #assert bal0 + bal1 + bal2 == total
+        assert bal0 + bal1 + bal2 == total
 
     def do_multisig(self):
         node0, node1, node2 = self.nodes

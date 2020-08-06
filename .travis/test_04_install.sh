@@ -42,4 +42,5 @@ fi
 
 if [ "$NEOSCRYPT" = 1 ]; then
   travis_retry DOCKER_EXEC "apt-get install -y python3-dev && git clone https://github.com/FeatherCoin/neoscrypt-python.git && cd neoscrypt-python && python3 setup.py install --user"
+  travis_retry DOCKER_EXEC "apt-get install -y python3 python3-pip && pip3 install litecoin_scrypt"
 fi

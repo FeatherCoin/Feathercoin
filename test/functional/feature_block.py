@@ -616,7 +616,7 @@ class FullBlockTest(BitcoinTestFramework):
         while b47.neoscrypt < target:
             b47.nNonce += 1
             b47.rehash()
-        self.sync_blocks([b47], False, force_send=True, reject_reason='high-hash') # TODO Fix high-hash error
+        self.sync_blocks([b47], False, force_send=True, reject_reason='high-hash')
 
         self.log.info("Reject a block with a timestamp >2 hours in the future")
         self.move_tip(44)
@@ -1198,6 +1198,58 @@ class FullBlockTest(BitcoinTestFramework):
         tx = self.create_tx(tx1, 0, 0, CScript([OP_TRUE]))
         b89a = self.update_block("89a", [tx])
         self.sync_blocks([b89a], success=False, reject_reason='bad-txns-inputs-missingorspent', reconnect=True)
+
+        self.log.info("Test a re-org of one week's worth of blocks (1088 blocks)")
+
+        self.move_tip(88)
+        LARGE_REORG_SIZE = 1088
+        blocks = []
+        spend = out[32]
+        for i in range(89, LARGE_REORG_SIZE + 89):
+            b = self.next_block(i, spend, version=4)
+            tx = CTransaction()
+            script_length = MAX_BLOCK_BASE_SIZE - len(b.serialize()) - 69
+            script_output = CScript([b'\x00' * script_length])
+            tx.vout.append(CTxOut(0, script_output))
+            tx.vin.append(CTxIn(COutPoint(b.vtx[1].sha256, 0)))
+            b = self.update_block(i, [tx])
+            assert_equal(len(b.serialize()), MAX_BLOCK_BASE_SIZE)
+            blocks.append(b)
+            self.save_spendable_output()
+            spend = self.get_spendable_output()
+
+        self.sync_blocks(blocks, True, timeout=480)
+        chain1_tip = i
+
+        # now create alt chain of same length
+        self.move_tip(88)
+        blocks2 = []
+        for i in range(89, LARGE_REORG_SIZE + 89):
+            blocks2.append(self.next_block("alt" + str(i), version=4))
+        self.sync_blocks(blocks2, False, force_send=True)
+
+        # extend alt chain to trigger re-org
+        block = self.next_block("alt" + str(chain1_tip + 1), version=4)
+        self.sync_blocks([block], True, timeout=480)
+
+        # ... and re-org back to the first chain
+        self.move_tip(chain1_tip)
+        block = self.next_block(chain1_tip + 1, version=4)
+        self.sync_blocks([block], False, force_send=True)
+        block = self.next_block(chain1_tip + 2, version=4)
+        self.sync_blocks([block], True, timeout=480)
+
+        self.log.info("Reject a block with an invalid block header version")
+        b_v1 = self.next_block('b_v1', version=1)
+        self.sync_blocks([b_v1], success=False, force_send=True, reject_reason='bad-version(0x00000001)')
+
+        self.move_tip(chain1_tip + 2)
+        b_cb34 = self.next_block('b_cb34', version=4)
+        b_cb34.vtx[0].vin[0].scriptSig = b_cb34.vtx[0].vin[0].scriptSig[:-1]
+        b_cb34.vtx[0].rehash()
+        b_cb34.hashMerkleRoot = b_cb34.calc_merkle_root()
+        b_cb34.solve()
+        self.sync_blocks([b_cb34], success=False, reject_reason='bad-cb-height', reconnect=True)
 
     # Helper methods
     ################

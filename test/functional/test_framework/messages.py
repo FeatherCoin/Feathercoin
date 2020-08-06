@@ -27,6 +27,7 @@ import neoscrypt
 import socket
 import struct
 import time
+import litecoin_scrypt
 
 from test_framework.siphash import siphash256
 from test_framework.util import hex_str_to_bytes, bytes_to_hex_str, assert_equal
@@ -585,7 +586,10 @@ class CBlockHeader:
             r += struct.pack("<I", self.nNonce)
             self.sha256 = uint256_from_str(hash256(r))
             self.hash = encode(hash256(r)[::-1], 'hex_codec').decode('ascii')
-            self.neoscrypt = uint256_from_str(neoscrypt.getPoWHash(r))
+            if self.nTime < 1515840634:
+                self.neoscrypt = uint256_from_str(litecoin_scrypt.getPoWHash(r))
+            else:
+                self.neoscrypt = uint256_from_str(neoscrypt.getPoWHash(r))
 
     def rehash(self):
         self.sha256 = None

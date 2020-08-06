@@ -51,7 +51,7 @@ static void DeserializeAndCheckBlockTest(benchmark::State& state)
 
         CValidationState validationState;
         bool checked = CheckBlock(block, validationState, chainParams->GetConsensus());
-        //assert(checked); // TODO feathercoin find failure
+        //assert(checked); // TODO generate Feathercoin block similar to 413567
     }
 }
 

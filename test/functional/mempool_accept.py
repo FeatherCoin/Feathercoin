@@ -115,6 +115,31 @@ class MempoolAcceptanceTest(BitcoinTestFramework):
             rawtxs=[raw_tx_0],
         )
 
+        self.log.info('A transaction that replaces a mempool transaction')
+        tx.deserialize(BytesIO(hex_str_to_bytes(raw_tx_0)))
+        tx.vout[0].nValue -= int(fee * COIN)  # Double the fee
+        tx.vin[0].nSequence = BIP125_SEQUENCE_NUMBER + 1  # Now, opt out of RBF
+        raw_tx_0 = node.signrawtransactionwithwallet(bytes_to_hex_str(tx.serialize()))['hex']
+        tx.deserialize(BytesIO(hex_str_to_bytes(raw_tx_0)))
+        txid_0 = tx.rehash()
+        self.check_mempool_result(
+            result_expected=[{'txid': txid_0, 'allowed': True}],
+            rawtxs=[raw_tx_0],
+        )
+
+        self.log.info('A transaction that conflicts with an unconfirmed tx')
+        # Send the transaction that replaces the mempool transaction and opts out of replaceability
+        node.sendrawtransaction(hexstring=bytes_to_hex_str(tx.serialize()), allowhighfees=True)
+        # take original raw_tx_0
+        tx.deserialize(BytesIO(hex_str_to_bytes(raw_tx_0)))
+        tx.vout[0].nValue -= int(4 * fee * COIN)  # Set more fee
+        # skip re-signing the tx
+        self.check_mempool_result(
+            result_expected=[{'txid': tx.rehash(), 'allowed': False, 'reject-reason': '18: txn-mempool-conflict'}],
+            rawtxs=[bytes_to_hex_str(tx.serialize())],
+            allowhighfees=True,
+        )
+
         self.log.info('A transaction with missing inputs, that never existed')
         tx.deserialize(BytesIO(hex_str_to_bytes(raw_tx_0)))
         tx.vin[0].prevout = COutPoint(hash=int('ff' * 32, 16), n=14)

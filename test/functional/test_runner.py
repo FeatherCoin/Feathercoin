@@ -146,6 +146,7 @@ BASE_SCRIPTS = [
     'wallet_txn_clone.py --mineblock',
     'feature_notifications.py',
     'rpc_invalidateblock.py',
+    'feature_rbf.py',
     'mempool_packages.py',
     'rpc_createmultisig.py',
     'feature_versionbits_warning.py',
