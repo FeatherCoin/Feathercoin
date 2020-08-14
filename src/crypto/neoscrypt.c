@@ -32,7 +32,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "crypto/neoscrypt.h"
+#include <crypto/neoscrypt.h>
 
 /* SHA-256 */
 
@@ -274,14 +274,6 @@ void neoscrypt_pbkdf2_sha256(const unsigned char *password, unsigned int passwor
 
 /* NeoScrypt */
 
-#ifdef USE_ASM
-
-extern void neoscrypt_copy(void *dstp, const void *srcp, unsigned int len);
-extern void neoscrypt_erase(void *dstp, unsigned int len);
-extern void neoscrypt_xor(void *dstp, const void *srcp, unsigned int len);
-
-#else
-
 /* Salsa20, rounds must be a multiple of 2 */
 static void neoscrypt_salsa(unsigned int *X, unsigned int rounds) {
     unsigned int x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, t;
@@ -460,9 +452,6 @@ void neoscrypt_xor(void *dstp, const void *srcp, unsigned int len) {
     }
 }
 
-#endif /* USE_ASM */
-
-
 /* BLAKE2s */
 
 /* Parameter block of 32 bytes */
@@ -494,12 +483,6 @@ static const unsigned int blake2s_IV[8] = {
     0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
     0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19
 };
-
-#ifdef USE_ASM
-
-extern void blake2s_compress(blake2s_state *S);
-
-#else
 
 /* Buffer mixer (compressor) */
 static void blake2s_compress(blake2s_state *S) {
@@ -1904,8 +1887,6 @@ static void blake2s_compress(blake2s_state *S) {
     S->h[7] ^= v[7] ^ v[15];
 }
 
-#endif /* USE_ASM */
-
 static void blake2s_update(blake2s_state *S, const unsigned char *input,
   unsigned int input_size) {
     unsigned int left, fill;
@@ -2074,13 +2055,6 @@ void neoscrypt_fastkdf(const unsigned char *password, unsigned int password_len,
 
 #else
 
-#ifdef USE_ASM
-
-extern void neoscrypt_fastkdf_opt(const unsigned char *password, const unsigned char *salt,
-  unsigned char *output, unsigned int mode);
-
-#else
-
 /* Initialisation vector with a parameter block XOR'ed in */
 static const unsigned int blake2s_IV_P_XOR[8] = {
     0x6B08C647, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
@@ -2171,12 +2145,8 @@ void neoscrypt_fastkdf_opt(const unsigned char *password, const unsigned char *s
     }
 }
 
-#endif /* USE_ASM */
-
 #endif /* !(OPT) */
 
-
-#ifndef USE_ASM
 
 /* Configurable optimised block mixer */
 static void neoscrypt_blkmix(unsigned int *X, unsigned int *Y, unsigned int r, unsigned int mixmode) {
@@ -2396,5 +2366,3 @@ void neoscrypt(const unsigned char *password, unsigned char *output, unsigned in
     }
 
 }
-
-#endif /* !(USE_ASM) */

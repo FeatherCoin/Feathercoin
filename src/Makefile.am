@@ -284,7 +284,6 @@ crypto_libbitcoin_crypto_a_SOURCES = \
 
 if USE_ASM
 crypto_libbitcoin_crypto_a_SOURCES += \
-  crypto/neoscrypt_asm.S \
   crypto/sha256_sse4.cpp
 endif
 

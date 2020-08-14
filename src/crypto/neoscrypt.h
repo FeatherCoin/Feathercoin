@@ -1,9 +1,8 @@
+#ifndef BITCOIN_CRYPTO_NEOSCRYPT_H
+#define BITCOIN_CRYPTO_NEOSCRYPT_H
+
 #if (__cplusplus)
 extern "C" {
-#endif
-
-#if defined(HAVE_CONFIG_H)
-#include "bitcoin-config.h"
 #endif
 
 void neoscrypt(const unsigned char *password, unsigned char *output,
@@ -50,3 +49,5 @@ typedef unsigned char hash_digest[DIGEST_SIZE];
     U32TO8_BE((p) + 4, (unsigned int)((v)      ));
 
 #endif
+
+#endif // BITCOIN_CRYPTO_NEOSCRYPT_H
