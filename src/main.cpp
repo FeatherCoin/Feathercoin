@@ -3521,7 +3521,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
         return state.DoS(100, false, REJECT_INVALID, "bad-diffbits", false, "incorrect proof of work");
 
     // Check that the block satisfies synchronized checkpoint
-    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), nHeight)) {
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), nHeight, pindexPrev)) {
         return state.DoS(0, error("%s: Block rejected by synchronized checkpoint", __func__),
                          REJECT_CHECKPOINT, "bad-block-checkpoint-sync");
     }
