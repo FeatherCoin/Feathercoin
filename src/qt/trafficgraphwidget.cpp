@@ -9,7 +9,7 @@
 #include <QPainter>
 #include <QColor>
 #include <QTimer>
-
+#include <QPainterPath>
 #include <cmath>
 
 #define DESIRED_SAMPLES         800
