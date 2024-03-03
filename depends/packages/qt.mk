@@ -1,6 +1,6 @@
 PACKAGE=qt
 $(package)_version=5.9.8
-$(package)_download_path=https://download.qt.io/official_releases/qt/5.9/$($(package)_version)/submodules
+$(package)_download_path=https://download.qt.io/new_archive/qt/5.9/$($(package)_version)/submodules
 $(package)_suffix=opensource-src-$($(package)_version).tar.xz
 $(package)_file_name=qtbase-$($(package)_suffix)
 $(package)_sha256_hash=9b9dec1f67df1f94bce2955c5604de992d529dde72050239154c56352da0907d
@@ -8,7 +8,7 @@ $(package)_dependencies=openssl zlib
 $(package)_linux_dependencies=freetype fontconfig libxcb
 $(package)_build_subdir=qtbase
 $(package)_qt_libs=corelib network widgets gui plugins testlib
-$(package)_patches=fix_qt_pkgconfig.patch mac-qmake.conf fix_configure_mac.patch fix_no_printer.patch fix_rcc_determinism.patch fix_riscv64_arch.patch xkb-default.patch no-xlib.patch
+$(package)_patches=fix_qt_pkgconfig.patch mac-qmake.conf fix_configure_mac.patch fix_no_printer.patch fix_rcc_determinism.patch fix_riscv64_arch.patch xkb-default.patch no-xlib.patch fix_limits_header.patch
 
 $(package)_qttranslations_file_name=qttranslations-$($(package)_suffix)
 $(package)_qttranslations_sha256_hash=fb5a47799754af73d3bf501fe513342cfe2fc37f64e80df5533f6110e804220c
@@ -174,6 +174,7 @@ define $(package)_preprocess_cmds
   echo "!host_build: QMAKE_LFLAGS     += $($(package)_ldflags)" >> qtbase/mkspecs/common/gcc-base.conf && \
   patch -p1 -i $($(package)_patch_dir)/fix_riscv64_arch.patch &&\
   patch -p1 -i $($(package)_patch_dir)/no-xlib.patch &&\
+  patch -p1 -i $($(package)_patch_dir)/fix_limits_header.patch && \
   echo "QMAKE_LINK_OBJECT_MAX = 10" >> qtbase/mkspecs/win32-g++/qmake.conf &&\
   echo "QMAKE_LINK_OBJECT_SCRIPT = object_script" >> qtbase/mkspecs/win32-g++/qmake.conf &&\
   sed -i.old "s|QMAKE_CFLAGS           += |!host_build: QMAKE_CFLAGS            = $($(package)_cflags) $($(package)_cppflags) |" qtbase/mkspecs/win32-g++/qmake.conf && \
