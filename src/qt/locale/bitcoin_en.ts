@@ -85,12 +85,12 @@
     </message>
     <message>
         <location line="+7"/>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+5"/>
-        <source>These are your Bitcoin addresses for receiving payments. Use the &apos;Create new receiving address&apos; button in the receive tab to create new addresses.
+        <source>These are your Feathercoin addresses for receiving payments. Use the &apos;Create new receiving address&apos; button in the receive tab to create new addresses.
 Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -212,16 +212,21 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+0"/>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR FEATHERCOINS&lt;/b&gt;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Remember that encrypting your wallet cannot fully protect your feathercoins from being stolen by malware infecting your computer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <location line="+57"/>
         <source>Wallet encrypted</source>
         <translation type="unfinished"></translation>
@@ -237,12 +242,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+55"/>
-        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+59"/>
         <source>Wallet to be encrypted</source>
         <translation type="unfinished"></translation>
     </message>
@@ -346,7 +346,17 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation>Show general overview of wallet</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+7"/>
+        <source>Send coins to a Feathercoin address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>&amp;Transactions</source>
         <translation>&amp;Transactions</translation>
     </message>
@@ -411,12 +421,37 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation>&amp;Change Passphrase...</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+3"/>
+        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Load Partially Signed Feathercoin Transaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Load Partially Signed Feathercoin Transaction from clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Open &amp;URI...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+1"/>
+        <source>Open a feathercoin: URI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Create Wallet...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -426,7 +461,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+210"/>
+        <location line="+7"/>
+        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+203"/>
         <source>Wallet:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -434,6 +474,14 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <location line="+351"/>
         <source>Click to disable network activity.</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location line="+0"/>
+        <source>%n active connection(s) to Feathercoin network</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location line="+2"/>
@@ -461,12 +509,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1065"/>
-        <source>Send coins to a Bitcoin address</source>
-        <translation>Send coins to a Bitcoin address</translation>
-    </message>
-    <message>
-        <location line="+67"/>
+        <location line="-998"/>
         <source>Backup wallet to another location</source>
         <translation>Backup wallet to another location</translation>
     </message>
@@ -506,17 +549,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation>Encrypt the private keys that belong to your wallet</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
-        <translation>Sign messages with your Bitcoin addresses to prove you own them</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
-        <translation>Verify messages to ensure they were signed with specified Bitcoin addresses</translation>
-    </message>
-    <message>
-        <location line="+129"/>
+        <location line="+138"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
@@ -536,12 +569,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation>Tabs toolbar</translation>
     </message>
     <message>
-        <location line="-281"/>
-        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+75"/>
+        <location line="-206"/>
         <source>Show the list of used sending addresses and labels</source>
         <translation type="unfinished"></translation>
     </message>
@@ -555,16 +583,8 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <source>&amp;Command-line options</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <location line="+556"/>
-        <source>%n active connection(s) to Bitcoin network</source>
-        <translation>
-            <numerusform>%n active connection to Bitcoin network</numerusform>
-            <numerusform>%n active connections to Bitcoin network</numerusform>
-        </translation>
-    </message>
     <message>
-        <location line="+80"/>
+        <location line="+636"/>
         <source>Indexing blocks on disk...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -622,22 +642,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Load Partially Signed Bitcoin Transaction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Load PSBT from clipboard...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Load Partially Signed Bitcoin Transaction from clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Node window</source>
         <translation type="unfinished"></translation>
     </message>
@@ -657,12 +667,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Open a bitcoin: URI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+6"/>
         <source>Open Wallet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -692,12 +697,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+6"/>
         <source>&amp;Mask values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1167,12 +1167,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+77"/>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+33"/>
+        <location line="+110"/>
         <source>Address &quot;%1&quot; already exists as a receiving address with label &quot;%2&quot; and so cannot be added as a sending address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1187,7 +1182,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="-10"/>
+        <source>The entered address &quot;%1&quot; is not a valid Feathercoin address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>New key generation failed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1286,12 +1286,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation>Use a custom data directory:</translation>
     </message>
     <message>
-        <location filename="../intro.cpp" line="+32"/>
-        <source>Bitcoin</source>
-        <translation type="unfinished">Bitcoin</translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location filename="../intro.cpp" line="+40"/>
         <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1306,12 +1301,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+6"/>
         <source>The wallet will also be stored in this directory.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1321,7 +1311,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="-92"/>
+        <source>Feathercoin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+122"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
@@ -1349,6 +1344,11 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <location line="+79"/>
+        <source>%1 will download and store a copy of the Feathercoin block chain.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModalOverlay</name>
@@ -1359,12 +1359,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+119"/>
-        <source>Recent transactions may not yet be visible, and therefore your wallet&apos;s balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
+        <source>Recent transactions may not yet be visible, and therefore your wallet&apos;s balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the feathercoin network, as detailed below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+19"/>
-        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <source>Attempting to spend feathercoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1430,7 +1430,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     <name>OpenURIDialog</name>
     <message>
         <location filename="../forms/openuridialog.ui" line="+14"/>
-        <source>Open bitcoin URI</source>
+        <source>Open feathercoin URI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1495,7 +1495,17 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+104"/>
+        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Connect to the Feathercoin network through a SOCKS5 proxy.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+37"/>
         <location line="+187"/>
         <source>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</source>
         <translation type="unfinished"></translation>
@@ -1508,7 +1518,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+35"/>
+        <source>Connect to the Feathercoin network through a separate SOCKS5 proxy for Tor onion services.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+111"/>
         <source>Hide the icon from the system tray.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1609,12 +1624,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+30"/>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+33"/>
         <source>Map port using &amp;UPnP</source>
         <translation>Map port using &amp;UPnP</translation>
     </message>
@@ -1629,12 +1639,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+10"/>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1727,12 +1732,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+250"/>
-        <source>Connect to the Bitcoin network through a separate SOCKS5 proxy for Tor onion services.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+253"/>
         <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor onion services:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1821,13 +1821,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation>Form</translation>
     </message>
     <message>
-        <location line="+62"/>
-        <location line="+394"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</translation>
-    </message>
-    <message>
-        <location line="-141"/>
+        <location line="+315"/>
         <source>Watch-only:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1867,7 +1861,13 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+164"/>
+        <location line="+16"/>
+        <location line="+394"/>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-246"/>
         <source>Total:</source>
         <translation>Total:</translation>
     </message>
@@ -2073,12 +2073,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Cannot start bitcoin: click-to-pay handler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+50"/>
+        <location line="+51"/>
         <location line="+13"/>
         <location line="+6"/>
         <location line="+7"/>
@@ -2086,8 +2081,13 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-26"/>
-        <source>&apos;bitcoin://&apos; is not a valid URI. Use &apos;bitcoin:&apos; instead.</source>
+        <location line="-76"/>
+        <source>Cannot start feathercoin: click-to-pay handler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+50"/>
+        <source>&apos;feathercoin://&apos; is not a valid URI. Use &apos;feathercoin:&apos; instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2115,7 +2115,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+8"/>
-        <source>URI cannot be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
+        <source>URI cannot be parsed! This can be caused by an invalid Feathercoin address or malformed URI parameters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2166,7 +2166,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location filename="../guiutil.cpp" line="+108"/>
-        <source>Enter a Bitcoin address (e.g. %1)</source>
+        <source>Enter a Feathercoin address (e.g. %1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2800,12 +2800,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3"/>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+30"/>
+        <location line="+27"/>
         <source>An optional label to associate with the new receiving address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2821,7 +2816,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-127"/>
+        <location line="-143"/>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
         <source>An optional label to associate with the new receiving address (used by you to identify an invoice).  It is also attached to the payment request.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3243,12 +3243,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Creates a Partially Signed Bitcoin Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+90"/>
+        <location line="+91"/>
         <source> from wallet &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3273,7 +3268,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+5"/>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Feathercoin Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+66"/>
         <source>Create Unsigned</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3298,17 +3298,17 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-19"/>
+        <location line="-163"/>
+        <source>Creates a Partially Signed Feathercoin Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+144"/>
         <source>You can increase the fee later (signals Replace-By-Fee, BIP-125).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-24"/>
-        <source>Please, review your transaction proposal. This will produce a Partially Signed Bitcoin Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="-22"/>
         <source>Please, review your transaction.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3402,7 +3402,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     </message>
     <message>
         <location line="+100"/>
-        <source>Warning: Invalid Bitcoin address</source>
+        <source>Warning: Invalid Feathercoin address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3441,7 +3441,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation>Pay &amp;To:</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+18"/>
+        <source>The Feathercoin address to send the payment to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+75"/>
         <source>&amp;Label:</source>
         <translation>&amp;Label:</translation>
     </message>
@@ -3451,12 +3456,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-7"/>
-        <source>The Bitcoin address to send the payment to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+23"/>
+        <location line="+16"/>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
@@ -3484,7 +3484,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     </message>
     <message>
         <location line="+7"/>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less feathercoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3503,7 +3503,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+443"/>
+        <location line="+10"/>
+        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+433"/>
         <source>This is an unauthenticated payment request.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3519,12 +3524,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+58"/>
-        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+448"/>
+        <location line="+506"/>
         <location line="+529"/>
         <source>Pay To:</source>
         <translation type="unfinished"></translation>
@@ -3563,12 +3563,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     </message>
     <message>
         <location line="+6"/>
-        <source>You can sign messages/agreements with your addresses to prove you can receive bitcoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <source>You can sign messages/agreements with your addresses to prove you can receive feathercoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The Bitcoin address to sign the message with</source>
+        <source>The Feathercoin address to sign the message with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3611,11 +3611,21 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this Bitcoin address</source>
-        <translation>Sign the message to prove you own this Bitcoin address</translation>
+        <source>Sign the message to prove you own this Feathercoin address</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+106"/>
+        <source>The Feathercoin address the message was signed with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-154"/>
         <source>Sign &amp;Message</source>
         <translation>Sign &amp;Message</translation>
     </message>
@@ -3641,12 +3651,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
-        <source>The Bitcoin address the message was signed with</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
+        <location line="+50"/>
         <location line="+3"/>
         <source>The signed message to verify</source>
         <translation type="unfinished"></translation>
@@ -3658,12 +3663,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
-        <translation>Verify the message to ensure it was signed with the specified Bitcoin address</translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+12"/>
         <source>Verify &amp;Message</source>
         <translation>Verify &amp;Message</translation>
     </message>
@@ -4578,7 +4578,12 @@ Go to File &gt; Open Wallet to load a wallet.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+1"/>
+        <source>%s corrupt. Try using the wallet tool feathercoin-wallet to salvage or restoring a backup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Cannot obtain a lock on data directory %s. %s is probably already running.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4933,12 +4938,7 @@ Go to File &gt; Open Wallet to load a wallet.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-20"/>
-        <source>%s corrupt. Try using the wallet tool bitcoin-wallet to salvage or restoring a backup.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="-9"/>
         <source>Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use version 169900 or no version specified.</source>
         <translation type="unfinished"></translation>
     </message>
