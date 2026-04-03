@@ -1,15 +1,16 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <fs.h>
+#include <util/check.h>
 #include <util/system.h>
 
 #include <wallet/test/init_test_fixture.h>
 
-InitWalletDirTestingSetup::InitWalletDirTestingSetup(const std::string& chainName): BasicTestingSetup(chainName)
+InitWalletDirTestingSetup::InitWalletDirTestingSetup(const std::string& chainName) : BasicTestingSetup(chainName)
 {
-    m_chain_client = MakeWalletClient(*m_chain, {});
+    m_wallet_client = MakeWalletClient(*m_chain, *Assert(m_node.args));
 
     std::string sep;
     sep += fs::path::preferred_separator;
@@ -30,11 +31,7 @@ InitWalletDirTestingSetup::InitWalletDirTestingSetup(const std::string& chainNam
     fs::create_directories(m_walletdir_path_cases["default"]);
     fs::create_directories(m_walletdir_path_cases["custom"]);
     fs::create_directories(m_walletdir_path_cases["relative"]);
-#if BOOST_VERSION >= 107700
-    std::ofstream f(BOOST_FILESYSTEM_C_STR(m_walletdir_path_cases["file"]));
-#else
     std::ofstream f(m_walletdir_path_cases["file"].BOOST_FILESYSTEM_C_STR);
-#endif // BOOST_VERSION >= 107700
     f.close();
 }
 

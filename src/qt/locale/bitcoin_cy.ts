@@ -66,8 +66,8 @@
         <translation>Derbyn cyfeiriadau</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Rhain ydi eich cyfeiriadau Feathercoin ar gyfer gyrru taliadau. Gwnewch yn sicr o'r swm a'r cyfeiriad derbyn cyn gyrru arian.</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Rhain ydi eich cyfeiriadau Bitcoin ar gyfer gyrru taliadau. Gwnewch yn sicr o'r swm a'r cyfeiriad derbyn cyn gyrru arian.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -318,8 +318,8 @@
         <translation>Ailfynegi y blociau ar ddisg...</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Anfon arian i gyfeiriad Feathercoin</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Anfon arian i gyfeiriad Bitcoin</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -328,10 +328,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Newid y cyfrinair ddefnyddiwyd ar gyfer amgryptio'r waled</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Di fygio'r ffenest</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -358,12 +354,12 @@
         <translation>Amgryptio'r allweddi preifat sy'n perthyn i'ch waled</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Arwyddo negeseuon gyda eich cyfeiriadau Feathercoin i brofi mae chi sy'n berchen arnynt</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Arwyddo negeseuon gyda eich cyfeiriadau Bitcoin i brofi mae chi sy'n berchen arnynt</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Gwirio negeseuon i sicrhau eu bod wedi eu harwyddo gyda cyfeiriadau Feathercoin penodol</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Gwirio negeseuon i sicrhau eu bod wedi eu harwyddo gyda cyfeiriadau Bitcoin penodol</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -382,8 +378,8 @@
         <translation>Bar offer tabiau</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Gofyn taliadau (creu côd QR a feathercoin: URIs)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Gofyn taliadau (creu côd QR a bitcoin: URIs)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -392,10 +388,6 @@
     <message>
         <source>Show the list of used receiving addresses and labels</source>
         <translation>Dangos rhestr o gyfeiriadau derbyn a labelau wedi eu defnyddio</translation>
-    </message>
-    <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Agor Feathercoin: URI neu ofyn taliad</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
@@ -533,11 +525,7 @@
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Mae'r waled &lt;b&gt;wedi'i amgryptio&lt;/b&gt; ac &lt;b&gt;ar glo&lt;/b&gt; ar hyn o bryd</translation>
     </message>
-    <message>
-        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
-        <translation>Mae gwall angheuol wedi digwydd. Ni all Feathercoin barhau'n ddiogel ac mae'n cau lawr.</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>CoinControlDialog</name>
     <message>
@@ -612,7 +600,11 @@
         <source>(no label)</source>
         <translation>(dim label)</translation>
     </message>
-    </context>
+    <message>
+        <source>(change)</source>
+        <translation>(newid)</translation>
+    </message>
+</context>
 <context>
     <name>CreateWalletActivity</name>
     </context>
@@ -633,7 +625,27 @@
         <source>&amp;Address</source>
         <translation>&amp;Cyfeiriad</translation>
     </message>
-    </context>
+    <message>
+        <source>New sending address</source>
+        <translation>Cyfeiriad anfon newydd</translation>
+    </message>
+    <message>
+        <source>Edit receiving address</source>
+        <translation>Golygu'r cyfeiriad derbyn</translation>
+    </message>
+    <message>
+        <source>Edit sending address</source>
+        <translation>Golygu'r cyfeiriad anfon</translation>
+    </message>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Methodd ddatgloi'r waled.</translation>
+    </message>
+    <message>
+        <source>New key generation failed.</source>
+        <translation>Methodd gynhyrchu allwedd newydd.</translation>
+    </message>
+</context>
 <context>
     <name>FreespaceChecker</name>
     <message>
@@ -651,8 +663,8 @@
         <translation>Croeso</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Error</source>
@@ -669,14 +681,10 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>Agor URI</translation>
-    </message>
-    <message>
         <source>URI:</source>
         <translation>URI:</translation>
     </message>
-    </context>
+</context>
 <context>
     <name>OpenWalletActivity</name>
     </context>
@@ -725,6 +733,9 @@
         <source>Form</source>
         <translation>Ffurflen</translation>
     </message>
+    </context>
+<context>
+    <name>PSBTOperationsDialog</name>
     </context>
 <context>
     <name>PaymentServer</name>
@@ -779,30 +790,30 @@
         <source>Copy amount</source>
         <translation>Copïo Cyfanswm</translation>
     </message>
-</context>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Methodd ddatgloi'r waled.</translation>
+    </message>
+    </context>
 <context>
     <name>ReceiveRequestDialog</name>
+    <message>
+        <source>Amount:</source>
+        <translation>Maint</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>Neges:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Waled:</translation>
+    </message>
     <message>
         <source>Copy &amp;Address</source>
         <translation>&amp;Cyfeiriad Copi</translation>
     </message>
-    <message>
-        <source>Address</source>
-        <translation>Cyfeiriad</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Cyfanswm</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Label</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Waled</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -812,6 +823,10 @@
     <message>
         <source>Label</source>
         <translation>Label</translation>
+    </message>
+    <message>
+        <source>Message</source>
+        <translation>Neges</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -869,6 +884,10 @@
         <translation>Copïo Cyfanswm</translation>
     </message>
     <message>
+        <source>%1 to %2</source>
+        <translation>%1 i %2</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(dim label)</translation>
     </message>
@@ -901,9 +920,6 @@
     </message>
     </context>
 <context>
-    <name>SendConfirmationDialog</name>
-    </context>
-<context>
     <name>ShutdownWindow</name>
     </context>
 <context>
@@ -927,8 +943,16 @@
 <context>
     <name>TransactionDesc</name>
     <message>
+        <source>Open until %1</source>
+        <translation>Agor tan %1</translation>
+    </message>
+    <message>
         <source>Date</source>
         <translation>Dyddiad</translation>
+    </message>
+    <message>
+        <source>Message</source>
+        <translation>Neges</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -951,6 +975,10 @@
     <message>
         <source>Label</source>
         <translation>Label</translation>
+    </message>
+    <message>
+        <source>Open until %1</source>
+        <translation>Agor tan %1</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -1061,6 +1089,10 @@
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>Allforio'r data yn y tab presennol i ffeil</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Gwall</translation>
     </message>
     </context>
 <context>

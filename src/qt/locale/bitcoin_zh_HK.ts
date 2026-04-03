@@ -30,6 +30,10 @@
         <translation>把目前選擇的位址從列表中刪除</translation>
     </message>
     <message>
+        <source>Enter address or label to search</source>
+        <translation>輸入位址或標記以作搜尋</translation>
+    </message>
+    <message>
         <source>Export the data in the current tab to a file</source>
         <translation>把目前分頁的資料匯出至檔案</translation>
     </message>
@@ -62,8 +66,8 @@
         <translation>收款地址</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>這些是你要付款過去的 Feathercoin 位址。在付款之前，務必要檢查金額和收款位址是否正確。</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>這些是你要付款過去的 Bitcoin 位址。在付款之前，務必要檢查金額和收款位址是否正確。</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -157,7 +161,7 @@
     </message>
     <message>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
-        <translation>警告: 如果你將錢包加密後又忘記密碼，你就會&lt;b&gt;失去所有 Feathercoin 了&lt;/b&gt;！</translation>
+        <translation>警告: 如果你將錢包加密後又忘記密碼，你就會&lt;b&gt;失去所有 Bitcoin 了&lt;/b&gt;！</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -294,8 +298,8 @@
         <translation>正在為磁碟區塊重建索引...</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>付款至一個 Feathercoin 位址</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>付款至一個 Bitcoin 位址</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -304,14 +308,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>改變錢包加密用的密碼</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>除錯視窗 &amp;D</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>開啓除錯和診斷主控台</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -346,8 +342,8 @@
         <translation>說明 &amp;H</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>要求付款 (產生QR碼 feathercoin: URIs)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>要求付款 (產生QR碼 bitcoin: URIs)</translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -397,8 +393,8 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Error</source>
@@ -425,6 +421,9 @@
     <name>OverviewPage</name>
     </context>
 <context>
+    <name>PSBTOperationsDialog</name>
+    </context>
+<context>
     <name>PaymentServer</name>
     </context>
 <context>
@@ -441,8 +440,8 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Enter a Feathercoin address (e.g. %1)</source>
-        <translation>輸入一個 Feathercoin 位址 (例如 %1)</translation>
+        <source>Enter a Bitcoin address (e.g. %1)</source>
+        <translation>輸入一個 Bitcoin 位址 (例如 %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -523,10 +522,6 @@
         <translation>資訊 &amp;I</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation>除錯視窗</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>一般</translation>
     </message>
@@ -548,19 +543,7 @@
     </context>
 <context>
     <name>ReceiveRequestDialog</name>
-    <message>
-        <source>Address</source>
-        <translation>地址</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>標記</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>錢包</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -581,9 +564,6 @@
 </context>
 <context>
     <name>SendCoinsEntry</name>
-    </context>
-<context>
-    <name>SendConfirmationDialog</name>
     </context>
 <context>
     <name>ShutdownWindow</name>
@@ -659,6 +639,10 @@
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>把目前分頁的資料匯出至檔案</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>錯誤</translation>
     </message>
     </context>
 <context>

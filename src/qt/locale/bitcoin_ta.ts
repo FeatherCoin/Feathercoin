@@ -66,12 +66,8 @@
         <translation>முகவரிகள் பெறப்படுகின்றன</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation>இவை பணம் அனுப்புவதற்கு உங்களின் பிட்காயின் முகவரிகள். பிட்காயின்களை அனுப்புவதற்கு முன் எப்பொழுதும் தொகையும் பெறுதலையும் சரிபார்க்கவும்.</translation>
-    </message>
-    <message>
-        <source>These are your Feathercoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.</source>
-        <translation>பிட்காயின் பெறுவதற்காக உங்கள் முகவரி இவை. புதிய முகவரிகளை உருவாக்க 'புதிய முகவரியை உருவாக்கு' என்ற பட்டனை கிளிக் செய்யவும்.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -87,7 +83,7 @@
     </message>
     <message>
         <source>Export Address List</source>
-        <translation>முகவரி பட்டியல் ஏக்ஸ்போர்ட் செய்க </translation>
+        <translation>முகவரி பட்டியல் ஏக்ஸ்போர்ட் செய்க </translation>
     </message>
     <message>
         <source>Comma separated file (*.csv)</source>
@@ -121,7 +117,7 @@
     <name>AskPassphraseDialog</name>
     <message>
         <source>Passphrase Dialog</source>
-        <translation>கடவுச்சொல் உரையாடல் </translation>
+        <translation>கடவுச்சொல் உரையாடல் </translation>
     </message>
     <message>
         <source>Enter passphrase</source>
@@ -188,7 +184,7 @@
         <translation>பழைய கடவுச்சொல் மற்றும் புதிய கடுவுசொல்லை உள்ளிடுக.</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your feathercoins from being stolen by malware infecting your computer.</source>
+        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
         <translation>வாலட்டை குறியாக்கம் செய்தால் மட்டும் உங்கள் பிட்காயினை வைரஸிடம் இருந்து பாதுகாக்க இயலாது.</translation>
     </message>
     <message>
@@ -362,7 +358,7 @@
         <translation>ப்ராக்ஸி இயக்கப்பட்டது: %1</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
+        <source>Send coins to a Bitcoin address</source>
         <translation>ஒரு விக்கிபீடியா முகவரிக்கு நாணயங்களை அனுப்பவும்</translation>
     </message>
     <message>
@@ -372,14 +368,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>பணப்பை குறியாக்கத்திற்காக பயன்படுத்தப்படும் கடவுச்சொற்றொடரை மாற்றவும்</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>&amp; பிழைத்திருத்த சாளரம்</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>பிழைத்திருத்த மற்றும் கண்டறிதல் பணியகம் திறக்க</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -406,11 +394,11 @@
         <translation>உங்கள் பணப்பைச் சேர்ந்த தனிப்பட்ட விசைகளை குறியாக்குக</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
         <translation>உங்கள் பிட்டினின் முகவரியுடன் செய்திகளை உங்களிடம் வைத்திருப்பதை நிரூபிக்க</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
         <translation>குறிப்பிடப்பட்ட விக்கிபீடியா முகவர்களுடன் கையொப்பமிடப்பட்டதை உறுதிப்படுத்த, செய்திகளை சரிபார்க்கவும்</translation>
     </message>
     <message>
@@ -430,8 +418,8 @@
         <translation>தாவல்கள் கருவிப்பட்டி</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>கொடுப்பனவுகளை கோருதல் (QR குறியீடுகள் மற்றும் feathercoin உருவாக்குகிறது: URI கள்)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>கொடுப்பனவுகளை கோருதல் (QR குறியீடுகள் மற்றும் bitcoin உருவாக்குகிறது: URI கள்)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -442,15 +430,11 @@
         <translation>பயன்படுத்திய முகவரிகள் மற்றும் லேபிள்களின் பட்டியலைக் காட்டு</translation>
     </message>
     <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>ஒரு Feathercoin திறக்க: URI அல்லது பணம் கோரிக்கை</translation>
-    </message>
-    <message>
         <source>&amp;Command-line options</source>
         <translation>&amp; கட்டளை வரி விருப்பங்கள்</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Feathercoin network</source>
+        <source>%n active connection(s) to Bitcoin network</source>
         <translation><numerusform>பிட்காயின் வலையமைப்புடன் %n செயலில் உள்ள இணைப்புகள்</numerusform><numerusform>பிட்காயின் வலையமைப்புடன் %n செயலில் உள்ள இணைப்புகள்</numerusform></translation>
     </message>
     <message>
@@ -494,12 +478,33 @@
         <translation>தேதி வரை</translation>
     </message>
     <message>
+        <source>&amp;Load PSBT from file...</source>
+        <translation>118&amp; கோப்பிலிருந்து PSBT ஐ ஏற்றவும் ..</translation>
+    </message>
+    <message>
+        <source>Load Partially Signed Bitcoin Transaction</source>
+        <translation> ஓரளவு கையொப்பமிடப்பட்ட பிட்காயின் பரிவர்த்தனையை ஏற்றவும்
+</translation>
+    </message>
+    <message>
+        <source>Node window</source>
+        <translation>நோட் விண்டோ</translation>
+    </message>
+    <message>
+        <source>Open node debugging and diagnostic console</source>
+        <translation>திற நோட் பிழைத்திருத்தம் மற்றும் கண்டறியும் பணியகம்</translation>
+    </message>
+    <message>
         <source>&amp;Sending addresses</source>
         <translation>முகவரிகள் அனுப்புகிறது</translation>
     </message>
     <message>
         <source>&amp;Receiving addresses</source>
         <translation>முகவரிகள் பெறுதல்</translation>
+    </message>
+    <message>
+        <source>Open a bitcoin: URI</source>
+        <translation>திற பிட்காயின்: URI</translation>
     </message>
     <message>
         <source>Open Wallet</source>
@@ -518,8 +523,8 @@
         <translation>வாலட்டை மூடு</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
-        <translation>சாத்தியமான Feathercoin கட்டளை-வரி விருப்பங்களைக் கொண்ட பட்டியலைப் பெற %1 உதவிச் செய்தியைக் காட்டு</translation>
+        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
+        <translation>சாத்தியமான Bitcoin கட்டளை-வரி விருப்பங்களைக் கொண்ட பட்டியலைப் பெற %1 உதவிச் செய்தியைக் காட்டு</translation>
     </message>
     <message>
         <source>default wallet</source>
@@ -629,11 +634,7 @@
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Wallet குறியாக்கப்பட்டு தற்போது பூட்டப்பட்டுள்ளது</translation>
     </message>
-    <message>
-        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
-        <translation>Wallet குறியாக்கப்பட்டு தற்போது பூட்டப்பட்டுள்ளது</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>CoinControlDialog</name>
     <message>
@@ -650,7 +651,7 @@
     </message>
     <message>
         <source>Amount:</source>
-        <translation>விலை:</translation>
+        <translation>தொகை:</translation>
     </message>
     <message>
         <source>Fee:</source>
@@ -682,7 +683,7 @@
     </message>
     <message>
         <source>Amount</source>
-        <translation>விலை</translation>
+        <translation>தொகை</translation>
     </message>
     <message>
         <source>Received with label</source>
@@ -838,7 +839,7 @@
         <source>Create</source>
         <translation>உருவாக்கு</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>EditAddressDialog</name>
     <message>
@@ -874,7 +875,7 @@
         <translation>முகவரியை அனுப்புவதைத் திருத்து</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Feathercoin address.</source>
+        <source>The entered address "%1" is not a valid Bitcoin address.</source>
         <translation>உள்ளிட்ட முகவரி "%1" என்பது செல்லுபடியாகும் விக்கிபீடியா முகவரி அல்ல.</translation>
     </message>
     <message>
@@ -924,10 +925,6 @@
         <translation>பதிப்பு</translation>
     </message>
     <message>
-        <source>(%1-bit)</source>
-        <translation>(%1-பிட்)</translation>
-    </message>
-    <message>
         <source>About %1</source>
         <translation>%1 பற்றி</translation>
     </message>
@@ -975,8 +972,8 @@
         <translation>தனிப்பயன் தரவு கோப்பகத்தைப் பயன்படுத்தவும்:</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
@@ -991,8 +988,8 @@
         <translation>இந்த அடைவில் %1 ஜிபி தரவு சேமிக்கப்படும்.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Feathercoin block chain.</source>
-        <translation>Feathercoin தொகுதி சங்கிலியின் நகலை %1 பதிவிறக்கம் செய்து சேமித்து வைக்கும்.</translation>
+        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
+        <translation>Bitcoin தொகுதி சங்கிலியின் நகலை %1 பதிவிறக்கம் செய்து சேமித்து வைக்கும்.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1022,11 +1019,11 @@
         <translation>படிவம்</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the feathercoin network, as detailed below.</source>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
         <translation>சமீபத்திய பரிவர்த்தனைகள் இன்னும் காணப்படாமல் இருக்கலாம், எனவே உங்கள் பணப்பையின் சமநிலை தவறாக இருக்கலாம். கீழே விவரிக்கப்பட்டுள்ளபடி, உங்கள் பணப்பை பிட்ஃபோனை நெட்வொர்க்குடன் ஒத்திசைக்க முடிந்ததும் இந்த தகவல் சரியாக இருக்கும்.</translation>
     </message>
     <message>
-        <source>Attempting to spend feathercoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
         <translation>இதுவரை காட்டப்படாத பரிவர்த்தனைகளால் பாதிக்கப்படும் பிட்னிக்களை செலவிடுவதற்கு முயற்சி பிணையத்தால் ஏற்கப்படாது.</translation>
     </message>
     <message>
@@ -1069,24 +1066,8 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>URI-ஐ திற</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation>URI அல்லது கோப்பிலிருந்து பணம் செலுத்துவதற்கான கோரிக்கையைத் திறக்கவும்</translation>
-    </message>
-    <message>
         <source>URI:</source>
         <translation>URI:</translation>
-    </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation>பணம் கோரிக்கை கோப்பைத் தேர்ந்தெடுக்கவும்</translation>
-    </message>
-    <message>
-        <source>Select payment request file to open</source>
-        <translation>திறக்க கட்டணம் கோரிக்கை கோப்பைத் தேர்ந்தெடுக்கவும்</translation>
     </message>
 </context>
 <context>
@@ -1141,10 +1122,6 @@
     <message>
         <source>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</source>
         <translation>வழங்கப்பட்ட முன்னிருப்பு SOCKS5 ப்ராக்ஸி இந்த நெட்வொர்க் வகையின் மூலம் சகலருக்கும் சென்றால் பயன்படுத்தப்படுகிறது.</translation>
-    </message>
-    <message>
-        <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor hidden services:</source>
-        <translation>Tor மறைக்கப்பட்ட சேவைகளை வழியாக சகலரையும் அணுக தனித்த SOCKS &amp; 5 ப்ராக்ஸி பயன்படுத்தவும்</translation>
     </message>
     <message>
         <source>Hide the icon from the system tray.</source>
@@ -1227,8 +1204,8 @@
         <translation>&amp; உறுதிப்படுத்தப்படாத மாற்றத்தை செலவழிக்கவும்</translation>
     </message>
     <message>
-        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>ரூட்டரில் Feathercoin கிளையன்ட் போர்ட் தானாக திறக்க. இது உங்கள் திசைவி UPnP ஐ ஆதரிக்கும் போது மட்டுமே இயங்குகிறது.</translation>
+        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>ரூட்டரில் Bitcoin கிளையன்ட் போர்ட் தானாக திறக்க. இது உங்கள் திசைவி UPnP ஐ ஆதரிக்கும் போது மட்டுமே இயங்குகிறது.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1243,8 +1220,8 @@
         <translation>Incomin &amp; g இணைப்புகளை அனுமதிக்கவும்</translation>
     </message>
     <message>
-        <source>Connect to the Feathercoin network through a SOCKS5 proxy.</source>
-        <translation>Feathercoin பிணையத்துடன் SOCKS5 ப்ராக்ஸி மூலம் இணைக்கவும்.</translation>
+        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
+        <translation>Bitcoin பிணையத்துடன் SOCKS5 ப்ராக்ஸி மூலம் இணைக்கவும்.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1277,10 +1254,6 @@
     <message>
         <source>Tor</source>
         <translation>Tor</translation>
-    </message>
-    <message>
-        <source>Connect to the Feathercoin network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>டார் மறைக்கப்பட்ட சேவைகளை தனித்த SOCKS5 ப்ராக்ஸி மூலம் பிட்கோடு நெட்வொர்க்குடன் இணைக்கவும்.</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1390,7 +1363,7 @@
         <translation>படிவம்</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
         <translation>காட்டப்படும் தகவல் காலாவதியானதாக இருக்கலாம். ஒரு இணைப்பு நிறுவப்பட்ட பிறகு, உங்கள் பணப்பை தானாக பிட்கோடு நெட்வொர்க்குடன் ஒத்திசைக்கிறது, ஆனால் இந்த செயல்முறை இன்னும் முடிவடையவில்லை.</translation>
     </message>
     <message>
@@ -1457,7 +1430,22 @@
         <source>Current total balance in watch-only addresses</source>
         <translation>தற்போதைய மொத்த சமநிலை வாட்ச் மட்டும் முகவரிகள்</translation>
     </message>
-</context>
+    </context>
+<context>
+    <name>PSBTOperationsDialog</name>
+    <message>
+        <source>Close</source>
+        <translation>நெருக்கமான</translation>
+    </message>
+    <message>
+        <source>Total Amount</source>
+        <translation>முழு தொகை</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>அல்லது</translation>
+    </message>
+    </context>
 <context>
     <name>PaymentServer</name>
     <message>
@@ -1465,28 +1453,20 @@
         <translation>கட்டணம் கோரிக்கை பிழை</translation>
     </message>
     <message>
-        <source>Cannot start feathercoin: click-to-pay handler</source>
-        <translation>Feathercoin தொடங்க முடியாது: கிளிக் க்கு ஊதியம் கையாளுதல்</translation>
+        <source>Cannot start bitcoin: click-to-pay handler</source>
+        <translation>Bitcoin தொடங்க முடியாது: கிளிக் க்கு ஊதியம் கையாளுதல்</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>URI கையாளுதல்</translation>
     </message>
     <message>
-        <source>'feathercoin://' is not a valid URI. Use 'feathercoin:' instead.</source>
-        <translation>'feathercoin: //' சரியான URI அல்ல. அதற்கு பதிலாக 'பிட்கின்:' பயன்படுத்தவும்.</translation>
+        <source>'bitcoin://' is not a valid URI. Use 'bitcoin:' instead.</source>
+        <translation>'bitcoin: //' சரியான URI அல்ல. அதற்கு பதிலாக 'பிட்கின்:' பயன்படுத்தவும்.</translation>
     </message>
     <message>
-        <source>You are using a BIP70 URL which will be unsupported in the future.</source>
-        <translation>நீங்கள் எதிர்காலத்தில் ஆதரிக்கப்படாத BIP70 URL ஐப் பயன்படுத்துகிறீர்கள்.</translation>
-    </message>
-    <message>
-        <source>Payment request fetch URL is invalid: %1</source>
-        <translation>பணம் செலுத்தும் கோரிக்கை URL ஐ பெறுகிறது: %1</translation>
-    </message>
-    <message>
-        <source>Cannot process payment request because BIP70 support was not compiled in.</source>
-        <translation>கட்டண கோரிக்கையை செயல்படுத்த முடியவில்லை, ஏனெனில் BIP70 ஆதரவு தொகுக்கப்படவில்லை.</translation>
+        <source>Cannot process payment request because BIP70 is not supported.</source>
+        <translation>பரிவர்த்தனை வேண்டுதலை ஏற்க இயலாது ஏனென்றால் BIP70  ஆதரவு தரவில்லை</translation>
     </message>
     <message>
         <source>Due to widespread security flaws in BIP70 it's strongly recommended that any merchant instructions to switch wallets be ignored.</source>
@@ -1501,72 +1481,12 @@
         <translation>தவறான கட்டண முகவரி %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Feathercoin address or malformed URI parameters.</source>
+        <source>URI cannot be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
         <translation>URI அலச முடியாது! தவறான பிட்கின் முகவரி அல்லது தவறான URI அளவுருக்கள் காரணமாக இது ஏற்படலாம்.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
         <translation>பணம் கோரிக்கை கோப்பு கையாளுதல்</translation>
-    </message>
-    <message>
-        <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
-        <translation>கட்டண கோரிக்கை கோப்பு படிக்க முடியாது! இது தவறான கட்டண கோரிக்கை கோப்பால் ஏற்படலாம்.</translation>
-    </message>
-    <message>
-        <source>Payment request rejected</source>
-        <translation>கட்டணம் கோரிக்கை நிராகரிக்கப்பட்டது</translation>
-    </message>
-    <message>
-        <source>Payment request network doesn't match client network.</source>
-        <translation>வாடிக்கையாளர் நெட்வொர்க்குடன் கட்டண கோரிக்கை பிணையம் பொருந்தவில்லை.</translation>
-    </message>
-    <message>
-        <source>Payment request expired.</source>
-        <translation>கட்டணம் கோரிக்கை காலாவதியானது.</translation>
-    </message>
-    <message>
-        <source>Payment request is not initialized.</source>
-        <translation>கட்டணம் கோரிக்கை ஆரம்பிக்கப்படவில்லை.</translation>
-    </message>
-    <message>
-        <source>Unverified payment requests to custom payment scripts are unsupported.</source>
-        <translation>தனிப்பயன் கட்டண ஸ்கிரிப்டுகளுக்கான சரிபார்க்கப்படாத கட்டண கோரிக்கைகள் ஆதரிக்கப்படவில்லை.</translation>
-    </message>
-    <message>
-        <source>Invalid payment request.</source>
-        <translation>தவறான கட்டண கோரிக்கை.</translation>
-    </message>
-    <message>
-        <source>Requested payment amount of %1 is too small (considered dust).</source>
-        <translation>%1 இன் கோரப்பட்ட கட்டணம் அளவு மிகவும் குறைவாக உள்ளது (தூசி கருதப்படுகிறது).</translation>
-    </message>
-    <message>
-        <source>Refund from %1</source>
-        <translation>%1 இலிருந்து திரும்பப்பெறவும்</translation>
-    </message>
-    <message>
-        <source>Payment request %1 is too large (%2 bytes, allowed %3 bytes).</source>
-        <translation>கட்டணம் கோரிக்கை %1 மிக அதிகமாக உள்ளது (%2 பைட்டுகள், அனுமதிக்கப்பட்ட %3 பைட்டுகள்).</translation>
-    </message>
-    <message>
-        <source>Error communicating with %1: %2</source>
-        <translation>%1: %2 உடன் தொடர்புகொள்வதில் பிழை</translation>
-    </message>
-    <message>
-        <source>Payment request cannot be parsed!</source>
-        <translation>கட்டண கோரிக்கையை பாகுபடுத்த முடியாது!</translation>
-    </message>
-    <message>
-        <source>Bad response from server %1</source>
-        <translation>%1 சேவையகத்திலிருந்து தவறான பதில்</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation>நெட்வொர்க் கோரிக்கை பிழை</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation>கட்டணம் ஒப்புக் கொண்டது</translation>
     </message>
 </context>
 <context>
@@ -1603,7 +1523,7 @@
         <translation>விலை</translation>
     </message>
     <message>
-        <source>Enter a Feathercoin address (e.g. %1)</source>
+        <source>Enter a Bitcoin address (e.g. %1)</source>
         <translation>ஒரு விக்கிபீடியா முகவரியை உள்ளிடவும் (எ.கா. %1)</translation>
     </message>
     <message>
@@ -1721,10 +1641,6 @@
         <translation>&amp;தகவல்</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation>பிழைத்திருத்த சாளரம்</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>பொது</translation>
     </message>
@@ -1767,10 +1683,6 @@
     <message>
         <source>Block chain</source>
         <translation>தடுப்பு சங்கிலி</translation>
-    </message>
-    <message>
-        <source>Current number of blocks</source>
-        <translation>தொகுதிகள் தற்போதைய எண்</translation>
     </message>
     <message>
         <source>Memory Pool</source>
@@ -1817,10 +1729,6 @@
         <translation>விரிவான தகவலைப் பார்வையிட ஒரு சகவரைத் தேர்ந்தெடுக்கவும்.</translation>
     </message>
     <message>
-        <source>Whitelisted</source>
-        <translation>அனுமதிக்கப்பட்டவை</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>திசை</translation>
     </message>
@@ -1845,6 +1753,10 @@
         <translation>பயனர் முகவர்</translation>
     </message>
     <message>
+        <source>Node window</source>
+        <translation>நோட் விண்டோ</translation>
+    </message>
+    <message>
         <source>Open the %1 debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>தற்போதைய தரவு அடைவில் இருந்து %1 பிழைத்திருத்த பதிவு கோப்பைத் திறக்கவும். இது பெரிய பதிவு கோப்புகளை சில விநாடிகள் எடுக்கலாம்.</translation>
     </message>
@@ -1859,10 +1771,6 @@
     <message>
         <source>Services</source>
         <translation>சேவைகள்</translation>
-    </message>
-    <message>
-        <source>Ban Score</source>
-        <translation>பான் ஸ்கோர்</translation>
     </message>
     <message>
         <source>Connection Time</source>
@@ -2013,14 +1921,6 @@
         <translation>வெளி செல்லும்</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation>ஆம்</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>மறு</translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation>அறியப்படாத</translation>
     </message>
@@ -2040,8 +1940,8 @@
         <translation>&amp;செய்தி:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
-        <translation>கோரிக்கையை திறக்கும் போது காட்டப்படும் இது பணம் கோரிக்கை இணைக்க ஒரு விருப்ப செய்தி. குறிப்பு: Feathercoin நெட்வொர்க்கில் பணம் செலுத்தியவுடன் செய்தி அனுப்பப்படாது.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
+        <translation>கோரிக்கையை திறக்கும் போது காட்டப்படும் இது பணம் கோரிக்கை இணைக்க ஒரு விருப்ப செய்தி. குறிப்பு: Bitcoin நெட்வொர்க்கில் பணம் செலுத்தியவுடன் செய்தி அனுப்பப்படாது.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2111,12 +2011,24 @@
         <source>Copy amount</source>
         <translation>நகல் நகல்</translation>
     </message>
-</context>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>பணப்பை திறக்க முடியவில்லை.</translation>
+    </message>
+    </context>
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>QR Code</source>
-        <translation>QR குறியீடு</translation>
+        <source>Amount:</source>
+        <translation>விலை</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>செய்தி:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>கைப்பை:</translation>
     </message>
     <message>
         <source>Copy &amp;URI</source>
@@ -2137,30 +2049,6 @@
     <message>
         <source>Payment information</source>
         <translation>கொடுப்பனவு தகவல்</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation>URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>முகவரி</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>தொகை</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>லேபிள்</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>செய்தி</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>பணப்பை</translation>
     </message>
 </context>
 <context>
@@ -2265,10 +2153,6 @@
         <translation>எச்சரிக்கை: கட்டணம் மதிப்பீடு தற்போது சாத்தியமில்லை.</translation>
     </message>
     <message>
-        <source>collapse fee-settings</source>
-        <translation>கட்டண சரிவுகளை சரி செய்ய வேண்டும்</translation>
-    </message>
-    <message>
         <source>Specify a custom fee per kB (1,000 bytes) of the transaction's virtual size.
 
 Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis per kB" for a transaction size of 500 bytes (half of 1 kB) would ultimately yield a fee of only 50 satoshis.</source>
@@ -2313,8 +2197,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>டஸ்ட்</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for feathercoin transactions than the network can process.</source>
-        <translation>தொகுதிகள் உள்ள இடத்தை விட குறைவான பரிவர்த்தனை அளவு இருக்கும் போது, ​​சுரங்க தொழிலாளர்கள் மற்றும் ரிலேடிங் முனைகள் குறைந்தபட்ச கட்டணத்தைச் செயல்படுத்தலாம். இந்த குறைந்தபட்ச கட்டணத்தை மட்டும் செலுத்துவது நன்றாக உள்ளது, ஆனால் நெட்வொர்க்கில் செயல்படுவதை விட feathercoin பரிவர்த்தனைகளுக்கு இன்னும் கோரிக்கை தேவைப்பட்டால் இது ஒருபோதும் உறுதிப்படுத்தாத பரிவர்த்தனைக்கு காரணமாக இருக்கலாம்.</translation>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for bitcoin transactions than the network can process.</source>
+        <translation>தொகுதிகள் உள்ள இடத்தை விட குறைவான பரிவர்த்தனை அளவு இருக்கும் போது, ​​சுரங்க தொழிலாளர்கள் மற்றும் ரிலேடிங் முனைகள் குறைந்தபட்ச கட்டணத்தைச் செயல்படுத்தலாம். இந்த குறைந்தபட்ச கட்டணத்தை மட்டும் செலுத்துவது நன்றாக உள்ளது, ஆனால் நெட்வொர்க்கில் செயல்படுவதை விட bitcoin பரிவர்த்தனைகளுக்கு இன்னும் கோரிக்கை தேவைப்பட்டால் இது ஒருபோதும் உறுதிப்படுத்தாத பரிவர்த்தனைக்கு காரணமாக இருக்கலாம்.</translation>
     </message>
     <message>
         <source>A too low fee might result in a never confirming transaction (read the tooltip)</source>
@@ -2429,6 +2313,14 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>அனுப்பும் பிட்காயின்களை உறுதிப்படுத்தவும்</translation>
     </message>
     <message>
+        <source>Confirm transaction proposal</source>
+        <translation>பரிவர்த்தனை வரைவு உறுதி செய்</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>அனுப்புவும்</translation>
+    </message>
+    <message>
         <source>The recipient address is not valid. Please recheck.</source>
         <translation>பெறுநரின் முகவரி தவறானது. மீண்டும் சரிபார்க்கவும்.</translation>
     </message>
@@ -2449,10 +2341,6 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>பரிவர்த்தனை உருவாக்கம் தோல்வியடைந்தது!</translation>
     </message>
     <message>
-        <source>The transaction was rejected with the following reason: %1</source>
-        <translation>பரிவர்த்தனை பின்வரும் காரணத்தால் நிராகரிக்கப்பட்டது: %1</translation>
-    </message>
-    <message>
         <source>Payment request expired.</source>
         <translation>கட்டணம் கோரிக்கை காலாவதியானது.</translation>
     </message>
@@ -2461,7 +2349,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation><numerusform>%n பிளாக் உறுதிப்படுத்தலைத் தொடங்க மதிப்பிடப்பட்டுள்ளது.</numerusform><numerusform>%n பிளாக்குள் உறுதிப்படுத்தலைத் தொடங்க மதிப்பிடப்பட்டுள்ளது.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid Feathercoin address</source>
+        <source>Warning: Invalid Bitcoin address</source>
         <translation>எச்சரிக்கை: தவறான பிட்காயின் முகவரி</translation>
     </message>
     <message>
@@ -2500,11 +2388,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>முன்பு பயன்படுத்திய முகவரியைத் தேர்வுசெய்</translation>
     </message>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>இது சாதாரண கட்டணம்.</translation>
-    </message>
-    <message>
-        <source>The Feathercoin address to send the payment to</source>
+        <source>The Bitcoin address to send the payment to</source>
         <translation>கட்டணத்தை அனுப்ப பிட்காயின் முகவரி</translation>
     </message>
     <message>
@@ -2524,7 +2408,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>இந்த உள்ளீட்டை அகற்று</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less feathercoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
         <translation>அனுப்பப்படும் தொகையிலிருந்து கட்டணம் கழிக்கப்படும். நீங்கள் உள்ளிடும் தொகையை விட பெறுநர் குறைவான பிட்காயின்களைப் பெறுவார். பல பெறுநர்கள் தேர்ந்தெடுக்கப்பட்டால், கட்டணம் சமமாக பிரிக்கப்படும்.</translation>
     </message>
     <message>
@@ -2552,7 +2436,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>இந்த முகவரியை பயன்படுத்தப்பட்ட முகவரிகளின் பட்டியலில் சேர்க்க ஒரு லேபிளை உள்ளிடவும்.</translation>
     </message>
     <message>
-        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
+        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
         <translation>பிட்காயினுடன் இணைக்கப்பட்ட செய்தி: உங்கள் எதிர்கால குறிப்புக்காக பரிவர்த்தனையுடன் யூஆர்ஐ சேமிக்கப்படும். குறிப்பு: இந்த செய்தி பிட்காயின் வலையமைப்பிற்கு அனுப்பப்படாது.</translation>
     </message>
     <message>
@@ -2562,17 +2446,6 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
     <message>
         <source>Memo:</source>
         <translation>குறிப்பாணை:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>இந்த முகவரியை உங்கள் முகவரி புத்தகத்தில் சேர்க்க ஒரு லேபிளை உள்ளிடவும்</translation>
-    </message>
-</context>
-<context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>ஆம்</translation>
     </message>
 </context>
 <context>
@@ -2597,11 +2470,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>&amp;செய்தியை கையொப்பமிடுங்கள்</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive feathercoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <source>You can sign messages/agreements with your addresses to prove you can receive bitcoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation>மற்றவர்களுக்கு அனுப்பப்பட்ட பிட்காயின்களைப் நீங்கள் பெறலாம் என்பதை நிரூபிக்க உங்கள் முகவரிகளுடன் செய்திகள் / ஒப்பந்தங்களில் கையொப்பமிடலாம். தெளிவற்ற அல்லது சீரற்ற எதையும் கையொப்பமிடாமல் கவனமாக இருங்கள், ஏனெனில் ஃபிஷிங் தாக்குதல்கள் உங்கள் அடையாளத்தை அவர்களிடம் கையொப்பமிட்டு ஏமாற்ற முயற்சிக்கும். நீங்கள் ஒப்புக்கொள்ளும் முழுமையான மற்றும் விரிவான அறிக்கைகளில் மட்டுமே கையொப்பமிடுங்கள்.</translation>
     </message>
     <message>
-        <source>The Feathercoin address to sign the message with</source>
+        <source>The Bitcoin address to sign the message with</source>
         <translation>செய்தியை கையொப்பமிட பிட்காயின் முகவரி</translation>
     </message>
     <message>
@@ -2633,7 +2506,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>தற்போதைய கையொப்பத்தை கிளிப்போர்டுக்கு காபி செய்</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Feathercoin address</source>
+        <source>Sign the message to prove you own this Bitcoin address</source>
         <translation>இந்த பிட்காயின் முகவரி உங்களுக்கு சொந்தமானது என்பதை நிரூபிக்க செய்தியை கையொப்பமிடுங்கள்</translation>
     </message>
     <message>
@@ -2653,11 +2526,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>&amp;செய்தியைச் சரிபார்க்கவும்</translation>
     </message>
     <message>
-        <source>The Feathercoin address the message was signed with</source>
+        <source>The Bitcoin address the message was signed with</source>
         <translation>செய்தி கையொப்பமிடப்பட்ட பிட்காயின் முகவரி</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
+        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
         <translation>குறிப்பிட்ட பிட்காயின் முகவரியுடன் கையொப்பமிடப்பட்டதா என்பதை உறுதிப்படுத்த இந்த செய்தியைச் சரிபார்க்கவும்</translation>
     </message>
     <message>
@@ -2687,6 +2560,10 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
     <message>
         <source>Wallet unlock was cancelled.</source>
         <translation>வாலட் திறத்தல் ரத்து செய்யப்பட்டது.</translation>
+    </message>
+    <message>
+        <source>No error</source>
+        <translation>தவறு எதுவுமில்லை</translation>
     </message>
     <message>
         <source>Private key for the entered address is not available.</source>
@@ -3173,12 +3050,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <source>Closing the wallet for too long can result in having to resync the entire chain if pruning is enabled.</source>
         <translation>வாலட்டை அதிக நேரம் மூடுவதாலும் ப்ரூனிங் இயக்கப்பட்டாலோ முழு செயினை ரீசிங்க் செய்வதற்கு இது வழிவகுக்கும்.</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>WalletFrame</name>
     <message>
-        <source>No wallet has been loaded.</source>
-        <translation>எந்த வாலட்டும் லோட் செய்யப்படவில்லை.</translation>
+        <source>Create a new wallet</source>
+        <translation>புதிய வாலட்டை உருவாக்கு</translation>
     </message>
 </context>
 <context>
@@ -3216,6 +3093,10 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>கட்டண ஏற்றத்தை உறுதிப்படுத்தவும்</translation>
     </message>
     <message>
+        <source>Can't draft transaction.</source>
+        <translation>பரிவர்த்தனை செய்ய இயலாது</translation>
+    </message>
+    <message>
         <source>Can't sign transaction.</source>
         <translation>பரிவர்த்தனையில் கையொப்பமிட முடியவில்லை.</translation>
     </message>
@@ -3237,6 +3118,10 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>தற்போதைய தாவலில் தரவை ஒரு கோப்பிற்கு ஏற்றுமதி செய்க</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>பிழை</translation>
     </message>
     <message>
         <source>Backup Wallet</source>
@@ -3282,14 +3167,6 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>ப்ரூன்: கடைசி வாலட் ஒத்திசைவு ப்ரூன் தரவுக்கு அப்பாற்பட்டது. நீங்கள் -reindex செய்ய வேண்டும் (ப்ரூன் நோட் உபயோகித்தால் முழு பிளாக்செயினையும் மீண்டும் டவுன்லோட் செய்யவும்)</translation>
     </message>
     <message>
-        <source>Rescans are not possible in pruned mode. You will need to use -reindex which will download the whole blockchain again.</source>
-        <translation>ப்ரூனிங் பயன்முறையில் ரீஸ்கேன்கள் சாத்தியமில்லை. நீங்கள் -reindex ஐப் பயன்படுத்த வேண்டும், இது முழு பிளாக்செயினையும் மீண்டும் டவுன்லோட் செய்யும்.</translation>
-    </message>
-    <message>
-        <source>Error: A fatal internal error occurred, see debug.log for details</source>
-        <translation>பிழை: ஆபத்தான உள் பிழை ஏற்பட்டது, விவரங்களுக்கு debug.log ஐ பார்க்கவும்</translation>
-    </message>
-    <message>
         <source>Pruning blockstore...</source>
         <translation>பிளாக்ஸ்டோர் ப்ரூன் செய்யபடுகிறது...</translation>
     </message>
@@ -3302,16 +3179,28 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>%s டெவலப்பர்கள்</translation>
     </message>
     <message>
-        <source>Can't generate a change-address key. No keys in the internal keypool and can't generate any keys.</source>
-        <translation>மாற்று-முகவரி கீயை உருவாக்க முடியாது. கீ தகவல்தளத்தில் கீகள் இல்லை மற்றும் எந்த கீயையும் உருவாக்க முடியாது.</translation>
-    </message>
-    <message>
         <source>Cannot obtain a lock on data directory %s. %s is probably already running.</source>
         <translation>தரவு கோப்பகத்தை %s லாக் செய்ய முடியாது. %s ஏற்கனவே இயங்குகிறது.</translation>
     </message>
     <message>
+        <source>Cannot provide specific connections and have addrman find outgoing connections at the same.</source>
+        <translation>குறிப்பிட்ட இணைப்புகளை வழங்க முடியாது மற்றும் வெளிச்செல்லும் இணைப்புகளை addrman வைத்து கண்டுபிடிக்க வேண்டும்.</translation>
+    </message>
+    <message>
+        <source>Error reading %s! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
+        <translation>%s படிப்பதில் பிழை! எல்லா விசைகளும் சரியாகப் படிக்கப்படுகின்றன, ஆனால் பரிவர்த்தனை டேட்டா அல்லது முகவரி புத்தக உள்ளீடுகள் காணவில்லை அல்லது தவறாக இருக்கலாம்.</translation>
+    </message>
+    <message>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong, %s will not work properly.</source>
+        <translation>உங்கள் கணினியின் தேதி மற்றும் நேரம் சரியாக உள்ளதா என்பதனை சரிபார்க்கவும்! உங்கள் கடிகாரம் தவறாக இருந்தால், %s சரியாக இயங்காது.</translation>
+    </message>
+    <message>
         <source>Please contribute if you find %s useful. Visit %s for further information about the software.</source>
         <translation>%s பயனுள்ளதாக இருந்தால் தயவுசெய்து பங்களியுங்கள். இந்த சாஃட்வேர் பற்றிய கூடுதல் தகவலுக்கு %s ஐப் பார்வையிடவும்.</translation>
+    </message>
+    <message>
+        <source>The block database contains a block which appears to be from the future. This may be due to your computer's date and time being set incorrectly. Only rebuild the block database if you are sure that your computer's date and time are correct</source>
+        <translation>பிளாக் டேட்டாபேசில் எதிர்காலத்தில் இருந்து தோன்றும் ஒரு பிளாக் உள்ளது. இது உங்கள் கணினியின் தேதி மற்றும் நேரம் தவறாக அமைக்கப்பட்டதன் காரணமாக இருக்கலாம். உங்கள் கணினியின் தேதி மற்றும் நேரம் சரியானதாக இருந்தால் மட்டுமே பிளாக் டேட்டாபேசை மீண்டும் உருவாக்கவும்</translation>
     </message>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
@@ -3322,12 +3211,20 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>இது பரிவர்த்தனைக் கட்டணம் ஆகும் அதன் வேறுபாடு தூசியை விட சிறியதாக இருந்தால் நீங்கள் அதை நிராகரிக்கலாம்.</translation>
     </message>
     <message>
-        <source>%d of last 100 blocks have unexpected version</source>
-        <translation>கடைசி 100 தொகுதிகளில் %d எதிர்பாராத பதிப்பைக் கொண்டுள்ளன</translation>
+        <source>Unable to replay blocks. You will need to rebuild the database using -reindex-chainstate.</source>
+        <translation>பிளாக்களை இயக்க முடியவில்லை. -reindex-chainstate ஐப் பயன்படுத்தி டேட்டாபேசை மீண்டும் உருவாக்க வேண்டும்.</translation>
     </message>
     <message>
-        <source>%s corrupt, salvage failed</source>
-        <translation>%s சிதைந்தது, மீட்பு தோல்வியுற்றது</translation>
+        <source>Unable to rewind the database to a pre-fork state. You will need to redownload the blockchain</source>
+        <translation>ப்ரீ-போர்க் நிலைக்கு டேட்டாபேசை ரீவைண்ட் செய்ய முடியவில்லை. நீங்கள் பிளாக்செயினை மீண்டும் டவுன்லோட் செய்ய வேண்டும்</translation>
+    </message>
+    <message>
+        <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
+        <translation>எச்சரிக்கை: பிட்காயின் நெட்ஒர்க் முழுமையாக ஒப்புக்கொள்ளவில்லை! சில மைனர்கள் சிக்கல்களை சந்திப்பதாகத் தெரிகிறது.</translation>
+    </message>
+    <message>
+        <source>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</source>
+        <translation>எச்சரிக்கை: நாங்கள் எங்கள் பீர்களுடன் முழுமையாக உடன்படுவதாகத் தெரியவில்லை! நீங்கள் அப்க்ரேட் செய்ய வேண்டியிருக்கலாம், அல்லது மற்ற நோடுகள் அப்க்ரேட் செய்ய வேண்டியிருக்கலாம்.</translation>
     </message>
     <message>
         <source>-maxmempool must be at least %d MB</source>
@@ -3432,10 +3329,6 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
     <message>
         <source>Loading P2P addresses...</source>
         <translation>பி2பி முகவரிகள் லோட் செய்யப்படுகிறது...</translation>
-    </message>
-    <message>
-        <source>Error: Disk space is too low!</source>
-        <translation>பிழை: டிஸ்க் ஸ்பேஸ் மிகக் குறைவாக உள்ளது!</translation>
     </message>
     <message>
         <source>Loading banlist...</source>
@@ -3554,8 +3447,40 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>பரிவர்த்தனை மிகப் பெரிது</translation>
     </message>
     <message>
+        <source>Unable to create the PID file '%s': %s</source>
+        <translation>PID பைலை உருவாக்க முடியவில்லை '%s': %s</translation>
+    </message>
+    <message>
+        <source>Unable to generate initial keys</source>
+        <translation>ஆரம்ப கீகளை உருவாக்க முடியவில்லை</translation>
+    </message>
+    <message>
+        <source>Verifying wallet(s)...</source>
+        <translation>வாலட்(களை) சரிபார்க்கிறது...</translation>
+    </message>
+    <message>
+        <source>Warning: unknown new rules activated (versionbit %i)</source>
+        <translation>எச்சரிக்கை: அறியப்படாத புதிய விதிகள் செயல்படுத்தப்பட்டன (வெர்ஷன்பிட் %i)</translation>
+    </message>
+    <message>
+        <source>-maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
+        <translation>-maxtxfee மிக அதிகமாக அமைக்கப்பட்டுள்ளது! இவ்வாறு அதிகமுள்ள கட்டணம் ஒரே பரிவர்த்தனையில் செலுத்தப்படலாம்.</translation>
+    </message>
+    <message>
+        <source>This is the transaction fee you may pay when fee estimates are not available.</source>
+        <translation>கட்டண மதிப்பீடுகள் இல்லாதபோது நீங்கள் செலுத்த வேண்டிய பரிவர்த்தனைக் கட்டணம் இதுவாகும்.</translation>
+    </message>
+    <message>
         <source>%s is set very high!</source>
         <translation>%s மிக அதிகமாக அமைக்கப்பட்டுள்ளது!</translation>
+    </message>
+    <message>
+        <source>Starting network threads...</source>
+        <translation>நெட்ஒர்க் த்ரெட் ஆரம்பமாகிறது...</translation>
+    </message>
+    <message>
+        <source>This is the minimum transaction fee you pay on every transaction.</source>
+        <translation>ஒவ்வொரு பரிவர்த்தனைக்கும் நீங்கள் செலுத்த வேண்டிய குறைந்தபட்ச பரிவர்த்தனைக் கட்டணம் இதுவாகும்.</translation>
     </message>
     <message>
         <source>This is the transaction fee you will pay if you send a transaction.</source>
@@ -3572,6 +3497,10 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
     <message>
         <source>Insufficient funds</source>
         <translation>போதுமான பணம் இல்லை</translation>
+    </message>
+    <message>
+        <source>Loading block index...</source>
+        <translation>பிளாக் குறியீடு லோட் செய்யபடுகிறது...</translation>
     </message>
     <message>
         <source>Loading wallet...</source>

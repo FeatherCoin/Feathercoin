@@ -1,22 +1,27 @@
-// Copyright (c) 2011-2019 The Bitcoin Core developers
+// Copyright (c) 2011-2020 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <bench/bench.h>
 #include <chainparams.h>
-#include <coins.h>
 #include <consensus/merkle.h>
 #include <consensus/validation.h>
 #include <pow.h>
+#include <test/util/setup_common.h>
 #include <txmempool.h>
 #include <validation.h>
 
-#include <list>
-#include <vector>
 
-
-static void DuplicateInputs(benchmark::State& state)
+static void DuplicateInputs(benchmark::Bench& bench)
 {
+    TestingSetup test_setup{
+        CBaseChainParams::REGTEST,
+        /* extra_args */ {
+            "-nodebuglogfile",
+            "-nodebug",
+        },
+    };
+
     const CScript SCRIPT_PUB{CScript(OP_TRUE)};
 
     const CChainParams& chainparams = Params();
@@ -56,11 +61,11 @@ static void DuplicateInputs(benchmark::State& state)
 
     block.hashMerkleRoot = BlockMerkleRoot(block);
 
-    while (state.KeepRunning()) {
-        CValidationState cvstate{};
+    bench.run([&] {
+        BlockValidationState cvstate{};
         assert(!CheckBlock(block, cvstate, chainparams.GetConsensus(), false, false));
         assert(cvstate.GetRejectReason() == "bad-txns-inputs-duplicate");
-    }
+    });
 }
 
-BENCHMARK(DuplicateInputs, 10);
+BENCHMARK(DuplicateInputs);

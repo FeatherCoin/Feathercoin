@@ -32,6 +32,7 @@ from test_framework.wallet_util import (
     test_address,
 )
 
+
 class ImportMultiTest(BitcoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
@@ -51,7 +52,7 @@ class ImportMultiTest(BitcoinTestFramework):
         result = self.nodes[1].importmulti([req])
         observed_warnings = []
         if 'warnings' in result[0]:
-           observed_warnings = result[0]['warnings']
+            observed_warnings = result[0]['warnings']
         assert_equal("\n".join(sorted(warnings)), "\n".join(sorted(observed_warnings)))
         assert_equal(result[0]['success'], success)
         if error_code is not None:
@@ -63,6 +64,7 @@ class ImportMultiTest(BitcoinTestFramework):
         self.nodes[0].generate(1)
         self.nodes[1].generate(1)
         timestamp = self.nodes[1].getblock(self.nodes[1].getbestblockhash())['mediantime']
+        self.nodes[1].syncwithvalidationinterfacequeue()
 
         node0_address1 = self.nodes[0].getaddressinfo(self.nodes[0].getnewaddress())
 
@@ -121,7 +123,7 @@ class ImportMultiTest(BitcoinTestFramework):
         self.test_importmulti({"scriptPubKey": key.p2pkh_script,
                                "timestamp": "now",
                                "internal": True,
-                               "label": "Example label"},
+                               "label": "Unsuccessful labelling for internal addresses"},
                               success=False,
                               error_code=-8,
                               error_message='Internal addresses should not have a label')
@@ -257,6 +259,7 @@ class ImportMultiTest(BitcoinTestFramework):
         self.nodes[1].sendtoaddress(multisig.p2sh_addr, 10.00)
         self.nodes[1].generate(1)
         timestamp = self.nodes[1].getblock(self.nodes[1].getbestblockhash())['mediantime']
+        self.nodes[1].syncwithvalidationinterfacequeue()
 
         self.log.info("Should import a p2sh")
         self.test_importmulti({"scriptPubKey": {"address": multisig.p2sh_addr},
@@ -277,6 +280,7 @@ class ImportMultiTest(BitcoinTestFramework):
         self.nodes[1].sendtoaddress(multisig.p2sh_addr, 10.00)
         self.nodes[1].generate(1)
         timestamp = self.nodes[1].getblock(self.nodes[1].getbestblockhash())['mediantime']
+        self.nodes[1].syncwithvalidationinterfacequeue()
 
         self.log.info("Should import a p2sh with respective redeem script")
         self.test_importmulti({"scriptPubKey": {"address": multisig.p2sh_addr},
@@ -297,6 +301,7 @@ class ImportMultiTest(BitcoinTestFramework):
         self.nodes[1].sendtoaddress(multisig.p2sh_addr, 10.00)
         self.nodes[1].generate(1)
         timestamp = self.nodes[1].getblock(self.nodes[1].getbestblockhash())['mediantime']
+        self.nodes[1].syncwithvalidationinterfacequeue()
 
         self.log.info("Should import a p2sh with respective redeem script and private keys")
         self.test_importmulti({"scriptPubKey": {"address": multisig.p2sh_addr},
@@ -322,6 +327,7 @@ class ImportMultiTest(BitcoinTestFramework):
         self.nodes[1].sendtoaddress(multisig.p2sh_addr, 10.00)
         self.nodes[1].generate(1)
         timestamp = self.nodes[1].getblock(self.nodes[1].getbestblockhash())['mediantime']
+        self.nodes[1].syncwithvalidationinterfacequeue()
 
         self.log.info("Should import a p2sh with respective redeem script and private keys")
         self.test_importmulti({"scriptPubKey": {"address": multisig.p2sh_addr},
@@ -550,7 +556,7 @@ class ImportMultiTest(BitcoinTestFramework):
         self.log.info("Should not import a p2sh-p2wpkh address from descriptor without checksum and private key")
         self.test_importmulti({"desc": "sh(wpkh(" + key.pubkey + "))",
                                "timestamp": "now",
-                               "label": "Descriptor import test",
+                               "label": "Unsuccessful P2SH-P2WPKH descriptor import",
                                "keys": [key.privkey]},
                               success=False,
                               error_code=-5,
@@ -558,22 +564,23 @@ class ImportMultiTest(BitcoinTestFramework):
 
         # Test importing of a P2SH-P2WPKH address via descriptor + private key
         key = get_key(self.nodes[0])
+        p2sh_p2wpkh_label = "Successful P2SH-P2WPKH descriptor import"
         self.log.info("Should import a p2sh-p2wpkh address from descriptor and private key")
         self.test_importmulti({"desc": descsum_create("sh(wpkh(" + key.pubkey + "))"),
                                "timestamp": "now",
-                               "label": "Descriptor import test",
+                               "label": p2sh_p2wpkh_label,
                                "keys": [key.privkey]},
                               success=True)
         test_address(self.nodes[1],
                      key.p2sh_p2wpkh_addr,
                      solvable=True,
                      ismine=True,
-                     label="Descriptor import test")
+                     labels=[p2sh_p2wpkh_label])
 
         # Test ranged descriptor fails if range is not specified
         xpriv = "tprv8ZgxMBicQKsPeuVhWwi6wuMQGfPKi9Li5GtX35jVNknACgqe3CY4g5xgkfDDJcmtF7o1QnxWDRYw4H5P26PXq7sbcUkEqeR4fg3Kxp2tigg"
         addresses = ["2N7yv4p8G8yEaPddJxY41kPihnWvs39qCMf", "2MsHxyb2JS3pAySeNUsJ7mNnurtpeenDzLA"] # hdkeypath=m/0'/0'/0' and 1'
-        addresses += ["fcrt1qrd3n235cj2czsfmsuvqqpr3lu6lg0ju7ksxv08", "fcrt1qfqeppuvj0ww98r6qghmdkj70tv8qpche333g0n"] # wpkh subscripts corresponding to the above addresses
+        addresses += ["bcrt1qrd3n235cj2czsfmsuvqqpr3lu6lg0ju7scl8gn", "bcrt1qfqeppuvj0ww98r6qghmdkj70tv8qpchehegrg8"] # wpkh subscripts corresponding to the above addresses
         desc = "sh(wpkh(" + xpriv + "/0'/0'/*'" + "))"
         self.log.info("Ranged descriptor import should fail without a specified range")
         self.test_importmulti({"desc": descsum_create(desc),
@@ -628,17 +635,18 @@ class ImportMultiTest(BitcoinTestFramework):
 
         # Test importing of a P2PKH address via descriptor
         key = get_key(self.nodes[0])
+        p2pkh_label = "P2PKH descriptor import"
         self.log.info("Should import a p2pkh address from descriptor")
         self.test_importmulti({"desc": descsum_create("pkh(" + key.pubkey + ")"),
                                "timestamp": "now",
-                               "label": "Descriptor import test"},
+                               "label": p2pkh_label},
                               True,
                               warnings=["Some private keys are missing, outputs will be considered watchonly. If this is intentional, specify the watchonly flag."])
         test_address(self.nodes[1],
                      key.p2pkh_addr,
                      solvable=True,
                      ismine=False,
-                     label="Descriptor import test")
+                     labels=[p2pkh_label])
 
         # Test import fails if both desc and scriptPubKey are provided
         key = get_key(self.nodes[0])
@@ -675,7 +683,7 @@ class ImportMultiTest(BitcoinTestFramework):
         # Import pubkeys with key origin info
         self.log.info("Addresses should have hd keypath and master key id after import with key origin")
         pub_addr = self.nodes[1].getnewaddress()
-        pub_addr = self.nodes[1].getnewaddress()
+        pub_addr = self.nodes[1].getnewaddress(address_type="bech32")
         info = self.nodes[1].getaddressinfo(pub_addr)
         pub = info['pubkey']
         pub_keypath = info['hdkeypath']
@@ -693,7 +701,7 @@ class ImportMultiTest(BitcoinTestFramework):
         assert_equal(pub_import_info['hdkeypath'], pub_keypath)
 
         # Import privkeys with key origin info
-        priv_addr = self.nodes[1].getnewaddress()
+        priv_addr = self.nodes[1].getnewaddress(address_type="bech32")
         info = self.nodes[1].getaddressinfo(priv_addr)
         priv = self.nodes[1].dumpprivkey(priv_addr)
         priv_keypath = info['hdkeypath']
@@ -742,8 +750,8 @@ class ImportMultiTest(BitcoinTestFramework):
         self.nodes[1].createwallet(wallet_name="noprivkeys", disable_private_keys=True)
         wrpc = self.nodes[1].get_wallet_rpc("noprivkeys")
 
-        addr1 = self.nodes[0].getnewaddress()
-        addr2 = self.nodes[0].getnewaddress()
+        addr1 = self.nodes[0].getnewaddress(address_type="bech32")
+        addr2 = self.nodes[0].getnewaddress(address_type="bech32")
         pub1 = self.nodes[0].getaddressinfo(addr1)['pubkey']
         pub2 = self.nodes[0].getaddressinfo(addr2)['pubkey']
         result = wrpc.importmulti(
@@ -761,15 +769,15 @@ class ImportMultiTest(BitcoinTestFramework):
         assert result[0]['success']
         assert result[1]['success']
         assert_equal(wrpc.getwalletinfo()["keypoolsize"], 2)
-        newaddr1 = wrpc.getnewaddress()
+        newaddr1 = wrpc.getnewaddress(address_type="bech32")
         assert_equal(addr1, newaddr1)
-        newaddr2 = wrpc.getnewaddress()
+        newaddr2 = wrpc.getnewaddress(address_type="bech32")
         assert_equal(addr2, newaddr2)
 
         # Import some public keys to the internal keypool of a no privkey wallet
         self.log.info("Adding pubkey to internal keypool of disableprivkey wallet")
-        addr1 = self.nodes[0].getnewaddress()
-        addr2 = self.nodes[0].getnewaddress()
+        addr1 = self.nodes[0].getnewaddress(address_type="bech32")
+        addr2 = self.nodes[0].getnewaddress(address_type="bech32")
         pub1 = self.nodes[0].getaddressinfo(addr1)['pubkey']
         pub2 = self.nodes[0].getaddressinfo(addr2)['pubkey']
         result = wrpc.importmulti(
@@ -789,15 +797,15 @@ class ImportMultiTest(BitcoinTestFramework):
         assert result[0]['success']
         assert result[1]['success']
         assert_equal(wrpc.getwalletinfo()["keypoolsize_hd_internal"], 2)
-        newaddr1 = wrpc.getrawchangeaddress()
+        newaddr1 = wrpc.getrawchangeaddress(address_type="bech32")
         assert_equal(addr1, newaddr1)
-        newaddr2 = wrpc.getrawchangeaddress()
+        newaddr2 = wrpc.getrawchangeaddress(address_type="bech32")
         assert_equal(addr2, newaddr2)
 
         # Import a multisig and make sure the keys don't go into the keypool
         self.log.info('Imported scripts with pubkeys should not have their pubkeys go into the keypool')
-        addr1 = self.nodes[0].getnewaddress()
-        addr2 = self.nodes[0].getnewaddress()
+        addr1 = self.nodes[0].getnewaddress(address_type="bech32")
+        addr2 = self.nodes[0].getnewaddress(address_type="bech32")
         pub1 = self.nodes[0].getaddressinfo(addr1)['pubkey']
         pub2 = self.nodes[0].getaddressinfo(addr2)['pubkey']
         result = wrpc.importmulti(
@@ -812,7 +820,7 @@ class ImportMultiTest(BitcoinTestFramework):
 
         # Cannot import those pubkeys to keypool of wallet with privkeys
         self.log.info("Pubkeys cannot be added to the keypool of a wallet with private keys")
-        wrpc = self.nodes[1].get_wallet_rpc("")
+        wrpc = self.nodes[1].get_wallet_rpc(self.default_wallet_name)
         assert wrpc.getwalletinfo()['private_keys_enabled']
         result = wrpc.importmulti(
             [{
@@ -831,11 +839,11 @@ class ImportMultiTest(BitcoinTestFramework):
         assert_equal(wrpc.getwalletinfo()["private_keys_enabled"], False)
         xpub = "tpubDAXcJ7s7ZwicqjprRaEWdPoHKrCS215qxGYxpusRLLmJuT69ZSicuGdSfyvyKpvUNYBW1s2U3NSrT6vrCYB9e6nZUEvrqnwXPF8ArTCRXMY"
         addresses = [
-            'fcrt1qtmp74ayg7p24uslctssvjm06q5phz4yrq5pr5c', # m/0'/0'/0
-            'fcrt1q8vprchan07gzagd5e6v9wd7azyucksq2qs833n', # m/0'/0'/1
-            'fcrt1qtuqdtha7zmqgcrr26n2rqxztv5y8rafj8dxhcg', # m/0'/0'/2
-            'fcrt1qau64272ymawq26t90md6an0ps99qkrsej0z3jm', # m/0'/0'/3
-            'fcrt1qsg97266hrh6cpmutqen8s4s962aryy775fkz0m', # m/0'/0'/4
+            'bcrt1qtmp74ayg7p24uslctssvjm06q5phz4yrxucgnv', # m/0'/0'/0
+            'bcrt1q8vprchan07gzagd5e6v9wd7azyucksq2xc76k8', # m/0'/0'/1
+            'bcrt1qtuqdtha7zmqgcrr26n2rqxztv5y8rafjp9lulu', # m/0'/0'/2
+            'bcrt1qau64272ymawq26t90md6an0ps99qkrse58m640', # m/0'/0'/3
+            'bcrt1qsg97266hrh6cpmutqen8s4s962aryy77jp0fg0', # m/0'/0'/4
         ]
         result = wrpc.importmulti(
             [{
@@ -848,6 +856,7 @@ class ImportMultiTest(BitcoinTestFramework):
         for i in range(0, 5):
             addr = wrpc.getnewaddress('', 'bech32')
             assert_equal(addr, addresses[i])
+
 
 if __name__ == '__main__':
     ImportMultiTest().main()

@@ -11,7 +11,7 @@ Running
 For benchmarks purposes you only need to compile `bitcoin_bench`. Beware of configuring without `--enable-debug` as this would impact
 benchmarking by unlatching log printers and lock analysis.
 
-    make -C src bench_bitcoin
+    make -C src bitcoin_bench
 
 After compiling bitcoin-core, the benchmarks can be run with:
 
@@ -19,8 +19,10 @@ After compiling bitcoin-core, the benchmarks can be run with:
 
 The output will look similar to:
 ```
-# Benchmark, evals, iterations, total, min, max, median
-AssembleBlock, 5, 700, 1.79954, 0.000510913, 0.000517018, 0.000514497
+|             ns/byte |              byte/s | error % | benchmark
+|--------------------:|--------------------:|--------:|:----------------------------------------------
+|               64.13 |       15,592,356.01 |    0.1% | `Base58CheckEncode`
+|               24.56 |       40,722,672.68 |    0.2% | `Base58Decode`
 ...
 ```
 

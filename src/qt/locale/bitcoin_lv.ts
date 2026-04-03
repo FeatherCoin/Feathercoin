@@ -2,6 +2,10 @@
 <context>
     <name>AddressBookPage</name>
     <message>
+        <source>Right-click to edit address or label</source>
+        <translation>Spiediet labo peles klikšķi, lai labotu adresi vai birku</translation>
+    </message>
+    <message>
         <source>Create a new address</source>
         <translation>Izveidot jaunu adresi</translation>
     </message>
@@ -43,11 +47,27 @@
     </message>
     <message>
         <source>Choose the address to send coins to</source>
-        <translation>Izvēlies adresi uz kuru sūtīt feathercoins</translation>
+        <translation>Izvēlies adresi uz kuru sūtīt bitcoins</translation>
     </message>
     <message>
         <source>Choose the address to receive coins with</source>
-        <translation>Izvēlies adresi ar kuru saņemt feathercoins</translation>
+        <translation>Izvēlies adresi ar kuru saņemt bitcoins</translation>
+    </message>
+    <message>
+        <source>C&amp;hoose</source>
+        <translation>Izvēlēties</translation>
+    </message>
+    <message>
+        <source>Sending addresses</source>
+        <translation>Adrešu nosūtīšana</translation>
+    </message>
+    <message>
+        <source>Receiving addresses</source>
+        <translation>Adrešu saņemšana</translation>
+    </message>
+    <message>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Šīs ir jūsu Bitcoin adreses, kuras izmantojamas maksājumu veikšanai. Vienmēr pārbaudiet summu un saņēmēja adresi pirms monētu nosūtīšanas.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -66,10 +86,18 @@
         <translation>Eksportēt Adrešu Sarakstu</translation>
     </message>
     <message>
+        <source>Comma separated file (*.csv)</source>
+        <translation>Ar komatiem atdalīts fails (*.csv)</translation>
+    </message>
+    <message>
         <source>Exporting Failed</source>
         <translation>Eksportēšana Neizdevās</translation>
     </message>
-    </context>
+    <message>
+        <source>There was an error trying to save the address list to %1. Please try again.</source>
+        <translation>Mēģinot saglabāt adrešu sarakstu %1 radās kļūda. Mēģiniet vēlreiz.</translation>
+    </message>
+</context>
 <context>
     <name>AddressTableModel</name>
     <message>
@@ -104,28 +132,76 @@
         <translation>Jaunā parole vēlreiz</translation>
     </message>
     <message>
+        <source>Show passphrase</source>
+        <translation>Rādīt paroli</translation>
+    </message>
+    <message>
         <source>Encrypt wallet</source>
         <translation>Šifrēt maciņu</translation>
+    </message>
+    <message>
+        <source>This operation needs your wallet passphrase to unlock the wallet.</source>
+        <translation>Lai veiktu šo darbību, nepieciešama jūsu maciņa slepenā frāze maciņa atvēršanai.</translation>
     </message>
     <message>
         <source>Unlock wallet</source>
         <translation>Atslēgt maciņu</translation>
     </message>
     <message>
+        <source>This operation needs your wallet passphrase to decrypt the wallet.</source>
+        <translation>Lai veiktu šo darbību, nepieciešama jūsu maciņa slepenā frāze maciņa dekriptēšanai.</translation>
+    </message>
+    <message>
         <source>Decrypt wallet</source>
         <translation>Atšifrēt maciņu</translation>
+    </message>
+    <message>
+        <source>Change passphrase</source>
+        <translation>Mainīt paroli</translation>
     </message>
     <message>
         <source>Confirm wallet encryption</source>
         <translation>Apstiprināt maciņa šifrēšanu</translation>
     </message>
     <message>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
+        <translation>Brīdinājums: Šifrējot Jūsu maciņu, gadījumā ja aizmirsīsiet savu paroli, Jūs NEATGRIEZENISKI ZAUDĒSIET VISUS SAVUS "BITKOINUS"!</translation>
+    </message>
+    <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Vai tu tiešām vēlies šifrēt savu maciņu?</translation>
     </message>
     <message>
+        <source>Wallet encrypted</source>
+        <translation>Maciņš šifrēts</translation>
+    </message>
+    <message>
+        <source>Enter the new passphrase for the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
+        <translation>Ievadiet savu paroli Jūsu maciņam, lūdzu lietojiet vismaz desmit simbolus, astoņus vai vairāk vārdus.</translation>
+    </message>
+    <message>
+        <source>Enter the old passphrase and new passphrase for the wallet.</source>
+        <translation>Ievadiet veco un jauno paroli Jūsu maciņam</translation>
+    </message>
+    <message>
+        <source>Wallet to be encrypted</source>
+        <translation>Maciņu nepieciešams šifrēt.</translation>
+    </message>
+    <message>
+        <source>Your wallet is now encrypted. </source>
+        <translation>Maciņš tagad šifrēts</translation>
+    </message>
+    <message>
         <source>Wallet encryption failed</source>
         <translation>Maciņa šifrēšana neizdevās</translation>
+    </message>
+    <message>
+        <source>Wallet unlock failed</source>
+        <translation>Maciņa atslēgšana neizdevās</translation>
+    </message>
+    <message>
+        <source>Wallet decryption failed</source>
+        <translation>Maciņa atšifrēšana neizdevās</translation>
     </message>
     </context>
 <context>
@@ -166,6 +242,10 @@
         <translation>Aizvērt programmu</translation>
     </message>
     <message>
+        <source>&amp;About %1</source>
+        <translation>&amp;Par %1</translation>
+    </message>
+    <message>
         <source>About &amp;Qt</source>
         <translation>Par &amp;Qt</translation>
     </message>
@@ -194,12 +274,16 @@
         <translation>Atvērt &amp;URI...</translation>
     </message>
     <message>
+        <source>Wallet:</source>
+        <translation>Maciņš:</translation>
+    </message>
+    <message>
         <source>Reindexing blocks on disk...</source>
         <translation>Bloku reindeksēšana no diska...</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Nosūtīt bitkoinus uz Feathercoin adresi</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Nosūtīt bitkoinus uz Bitcoin adresi</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -208,14 +292,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Mainīt maciņa šifrēšanas paroli</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Atkļūdošanas logs</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Atvērt atkļūdošanas un diagnostikas konsoli</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -242,12 +318,12 @@
         <translation>Šifrēt privātās atslēgas kuras pieder tavam maciņam</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Parakstīt ziņojumus ar savām Feathercoin adresēm lai pierādītu ka tās pieder tev</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Parakstīt ziņojumus ar savām Bitcoin adresēm lai pierādītu ka tās pieder tev</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Pārbaudīt ziņojumus lai pārliecinātos, ka tie tika parakstīti ar norādītajām Feathercoin adresēm</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Pārbaudīt ziņojumus lai pārliecinātos, ka tie tika parakstīti ar norādītajām Bitcoin adresēm</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -266,12 +342,8 @@
         <translation>Ciļņu rīkjosla</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Pieprasīt maksājumus (izveido QR kodu un feathercoin: URIs)</translation>
-    </message>
-    <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Atvērt feathercoin URI vai maksājuma pieprasījumu</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Pieprasīt maksājumus (izveido QR kodu un bitcoin: URIs)</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
@@ -432,10 +504,6 @@
         <translation>versija</translation>
     </message>
     <message>
-        <source>(%1-bit)</source>
-        <translation>(%1-biti)</translation>
-    </message>
-    <message>
         <source>Command-line options</source>
         <translation>Komandrindas iespējas</translation>
     </message>
@@ -455,8 +523,8 @@
         <translation>Izmantot pielāgotu datu mapi:</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Error</source>
@@ -477,22 +545,10 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>Atvērt URI</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation>Atvērt maksājuma pieprasījumu no URI vai datnes</translation>
-    </message>
-    <message>
         <source>URI:</source>
         <translation>URI:</translation>
     </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation>Izvēlies maksājuma pieprasījuma datni</translation>
-    </message>
-    </context>
+</context>
 <context>
     <name>OpenWalletActivity</name>
     </context>
@@ -544,15 +600,15 @@
     </message>
     <message>
         <source>Enable coin &amp;control features</source>
-        <translation>Ieslēgt feathercoin &amp;kontroles funkcijas</translation>
+        <translation>Ieslēgt bitcoin &amp;kontroles funkcijas</translation>
     </message>
     <message>
         <source>&amp;Spend unconfirmed change</source>
         <translation>&amp;Tērēt neapstiprinātu atlikumu</translation>
     </message>
     <message>
-        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Uz rūtera automātiski atvērt Feathercoin klienta portu. Tas strādā tikai tad, ja rūteris atbalsta UPnP un tas ir ieslēgts.</translation>
+        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Uz rūtera automātiski atvērt Bitcoin klienta portu. Tas strādā tikai tad, ja rūteris atbalsta UPnP un tas ir ieslēgts.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -604,7 +660,7 @@
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
-        <translation>Vai rādīt Feathercoin kontroles funkcijas vai nē.</translation>
+        <translation>Vai rādīt Bitcoin kontroles funkcijas vai nē.</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -642,8 +698,8 @@
         <translation>Forma</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Attēlotā informācija var būt novecojusi. Jūsu maciņš pēc savienojuma izveides automātiski sinhronizējas ar Feathercoin tīklu, taču šis process vēl nav beidzies.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Attēlotā informācija var būt novecojusi. Jūsu maciņš pēc savienojuma izveides automātiski sinhronizējas ar Bitcoin tīklu, taču šis process vēl nav beidzies.</translation>
     </message>
     <message>
         <source>Available:</source>
@@ -673,6 +729,9 @@
         <source>Your current total balance</source>
         <translation>Jūsu kopējā tekošā bilance</translation>
     </message>
+    </context>
+<context>
+    <name>PSBTOperationsDialog</name>
     </context>
 <context>
     <name>PaymentServer</name>
@@ -745,10 +804,6 @@
         <translation>&amp;Informācija</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation>Atkļūdošanas logs</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>Vispārējs</translation>
     </message>
@@ -771,10 +826,6 @@
     <message>
         <source>Block chain</source>
         <translation>Bloku virkne</translation>
-    </message>
-    <message>
-        <source>Current number of blocks</source>
-        <translation>Pašreizējais bloku skaits</translation>
     </message>
     <message>
         <source>Last block time</source>
@@ -859,8 +910,16 @@
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>QR Code</source>
-        <translation>QR Kods</translation>
+        <source>Amount:</source>
+        <translation>Daudzums:</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>Ziņojums:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Maciņš:</translation>
     </message>
     <message>
         <source>Copy &amp;URI</source>
@@ -874,23 +933,7 @@
         <source>&amp;Save Image...</source>
         <translation>&amp;Saglabāt Attēlu...</translation>
     </message>
-    <message>
-        <source>Address</source>
-        <translation>Adrese</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Daudzums</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Nosaukums</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Maciņš</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -914,7 +957,7 @@
     </message>
     <message>
         <source>Coin Control Features</source>
-        <translation>Feathercoin Kontroles Funkcijas</translation>
+        <translation>Bitcoin Kontroles Funkcijas</translation>
     </message>
     <message>
         <source>Inputs...</source>
@@ -1016,10 +1059,6 @@
         <translation>Izvēlies iepriekš izmantoto adresi</translation>
     </message>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>Šis ir parasts maksājums.</translation>
-    </message>
-    <message>
         <source>Alt+A</source>
         <translation>Alt+A</translation>
     </message>
@@ -1047,10 +1086,7 @@
         <source>Memo:</source>
         <translation>Memo:</translation>
     </message>
-    </context>
-<context>
-    <name>SendConfirmationDialog</name>
-    </context>
+</context>
 <context>
     <name>ShutdownWindow</name>
     <message>
@@ -1097,8 +1133,8 @@
         <translation>Kopēt parakstu uz sistēmas starpliktuvi</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Feathercoin address</source>
-        <translation>Parakstīt ziņojumu lai pierādītu, ka esi šīs Feathercoin adreses īpašnieks.</translation>
+        <source>Sign the message to prove you own this Bitcoin address</source>
+        <translation>Parakstīt ziņojumu lai pierādītu, ka esi šīs Bitcoin adreses īpašnieks.</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -1176,6 +1212,10 @@
 <context>
     <name>TransactionView</name>
     <message>
+        <source>Comma separated file (*.csv)</source>
+        <translation>Ar komatiem atdalīts fails (*.csv)</translation>
+    </message>
+    <message>
         <source>Confirmed</source>
         <translation>Apstiprināts</translation>
     </message>
@@ -1221,6 +1261,10 @@
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>Datus no tekošā ieliktņa eksportēt uz failu</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Kļūda</translation>
     </message>
     </context>
 <context>

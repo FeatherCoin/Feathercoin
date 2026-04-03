@@ -33,7 +33,6 @@ These dependencies are required:
 
  Library     | Purpose          | Description
  ------------|------------------|----------------------
- libssl      | Crypto           | Random Number Generation, Elliptic Curve Cryptography
  libboost    | Utility          | Library for threading, data structures, etc
  libevent    | Networking       | OS independent asynchronous networking
 
@@ -44,10 +43,10 @@ Optional dependencies:
  miniupnpc   | UPnP Support     | Firewall-jumping support
  libdb4.8    | Berkeley DB      | Wallet storage (only needed when wallet enabled)
  qt          | GUI              | GUI toolkit (only needed when GUI enabled)
- protobuf    | Payments in GUI  | Data interchange format used for payment protocol (only needed when BIP70 enabled)
  libqrencode | QR codes in GUI  | Optional for generating QR codes (only needed when GUI enabled)
  univalue    | Utility          | JSON parsing and encoding (bundled version will be used unless --with-system-univalue passed to configure)
  libzmq3     | ZMQ notification | Optional, allows generating ZMQ notifications (requires ZMQ version >= 4.0.0)
+ sqlite3     | SQLite DB        | Optional, wallet storage (only needed when wallet enabled)
 
 For the versions used, see [dependencies.md](dependencies.md)
 
@@ -82,7 +81,7 @@ Build requirements:
 
 Now, you can either build from self-compiled [depends](/depends/README.md) or install the required dependencies:
 
-    sudo apt-get install libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
+    sudo apt-get install libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev
 
 BerkeleyDB is required for the wallet.
 
@@ -92,6 +91,10 @@ are based on BerkeleyDB 4.8. If you do not care about wallet compatibility,
 pass `--with-incompatible-bdb` to configure.
 
 Otherwise, you can build from self-compiled `depends` (see above).
+
+SQLite is required for the wallet:
+
+    sudo apt install libsqlite3-dev
 
 To build Bitcoin Core without wallet, see [*Disable-wallet mode*](/doc/build-unix.md#disable-wallet-mode)
 
@@ -118,10 +121,6 @@ libqrencode (optional) can be installed with:
 
     sudo apt-get install libqrencode-dev
 
-protobuf (optional) can be installed with:
-
-    sudo apt-get install libprotobuf-dev protobuf-compiler
-
 Once these are installed, they will be found by configure and a bitcoin-qt executable will be
 built by default.
 
@@ -132,7 +131,7 @@ built by default.
 
 Build requirements:
 
-    sudo dnf install gcc-c++ libtool make autoconf automake openssl-devel libevent-devel boost-devel libdb4-devel libdb4-cxx-devel python3
+    sudo dnf install gcc-c++ libtool make autoconf automake libevent-devel boost-devel libdb4-devel libdb4-cxx-devel python3
 
 Optional (see `--with-miniupnpc` and `--enable-upnp-default`):
 
@@ -150,9 +149,9 @@ libqrencode (optional) can be installed with:
 
     sudo dnf install qrencode-devel
 
-protobuf (optional) can be installed with:
+SQLite can be installed with:
 
-    sudo dnf install protobuf-devel
+    sudo dnf install sqlite-devel
 
 Notes
 -----
@@ -163,8 +162,8 @@ symbols, which reduces the executable size by about 90%.
 miniupnpc
 ---------
 
-[miniupnpc](http://miniupnp.free.fr/) may be used for UPnP port mapping.  It can be downloaded from [here](
-http://miniupnp.tuxfamily.org/files/).  UPnP support is compiled in and
+[miniupnpc](https://miniupnp.tuxfamily.org) may be used for UPnP port mapping.  It can be downloaded from [here](
+https://miniupnp.tuxfamily.org/files/).  UPnP support is compiled in and
 turned off by default.  See the configure options for upnp behavior desired:
 
 	--without-miniupnpc      No UPnP support miniupnp not required
@@ -248,7 +247,7 @@ disable-wallet mode with:
 
     ./configure --disable-wallet
 
-In this case there is no dependency on Berkeley DB 4.8.
+In this case there is no dependency on Berkeley DB 4.8 and SQLite.
 
 Mining is also possible in disable-wallet mode using the `getblocktemplate` RPC call.
 

@@ -167,7 +167,7 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>Feathercoin</source>
+        <source>Bitcoin</source>
         <translation>Биткоин</translation>
     </message>
     <message>
@@ -197,6 +197,9 @@
     </context>
 <context>
     <name>OverviewPage</name>
+    </context>
+<context>
+    <name>PSBTOperationsDialog</name>
     </context>
 <context>
     <name>PaymentServer</name>
@@ -235,14 +238,10 @@
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>Amount</source>
+        <source>Amount:</source>
         <translation>Саны</translation>
     </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Әмиян</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -275,9 +274,6 @@
         <source>A&amp;mount:</source>
         <translation>Саны</translation>
     </message>
-    </context>
-<context>
-    <name>SendConfirmationDialog</name>
     </context>
 <context>
     <name>ShutdownWindow</name>
@@ -337,6 +333,10 @@
     <message>
         <source>&amp;Export</source>
         <translation>Экспорт</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>қате</translation>
     </message>
     </context>
 <context>

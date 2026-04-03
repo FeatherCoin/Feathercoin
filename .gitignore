@@ -2,14 +2,17 @@
 
 *.exe
 *.pdb
-src/feathercoin
-src/feathercoind
-src/feathercoin-cli
-src/feathercoin-tx
-src/feathercoin-wallet
-src/test/test_feathercoin
-src/test/test_feathercoin_fuzzy
-src/qt/test/test_feathercoin-qt
+src/bitcoin
+src/bitcoind
+src/bitcoin-cli
+src/bitcoin-gui
+src/bitcoin-node
+src/bitcoin-tx
+src/bitcoin-wallet
+src/test/fuzz/*
+!src/test/fuzz/*.*
+src/test/test_bitcoin
+src/qt/test/test_bitcoin-qt
 
 # autoreconf
 Makefile.in
@@ -28,6 +31,7 @@ build-aux/m4/ltversion.m4
 build-aux/missing
 build-aux/compile
 build-aux/test-driver
+config.cache
 config.log
 config.status
 configure
@@ -88,8 +92,8 @@ src/qt/bitcoin-qt.includes
 *.qm
 Makefile
 !depends/Makefile
-feathercoin-qt
-Feathercoin-Qt.app
+src/qt/bitcoin-qt
+Bitcoin-Qt.app
 background.tiff*
 
 # Qt Creator
@@ -97,7 +101,7 @@ Makefile.am.user
 
 # Unit-tests
 Makefile.test
-feathercoin-qt_test
+bitcoin-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -106,13 +110,19 @@ qrc_*.cpp
 .DS_Store
 build
 
+# Previous releases
+releases
+
 #lcov
 *.gcno
 *.gcda
 /*.info
-test_feathercoin.coverage/
+test_bitcoin.coverage/
 total.coverage/
+fuzz.coverage/
 coverage_percent.txt
+/cov_tool_wrapper.sh
+qa-assets/
 
 #build tests
 linux-coverage-build
@@ -120,6 +130,7 @@ linux-build
 win32-build
 test/config.ini
 test/cache/*
+test/.mypy_cache/
 
 !src/leveldb*/Makefile
 

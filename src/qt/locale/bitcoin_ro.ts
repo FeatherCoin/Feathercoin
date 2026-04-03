@@ -15,7 +15,7 @@
     </message>
     <message>
         <source>Copy the currently selected address to the system clipboard</source>
-        <translation>Copiază adresa selectată în clipboard</translation>
+        <translation>Copiază adresa selectată curent în clipboard</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>Delete the currently selected address from the list</source>
-        <translation>Şterge adresa selectată din listă</translation>
+        <translation>Şterge adresa selectată curent din listă</translation>
     </message>
     <message>
         <source>Enter address or label to search</source>
@@ -47,11 +47,11 @@
     </message>
     <message>
         <source>Choose the address to send coins to</source>
-        <translation>Alege $adresa unde să trimiteţi monede</translation>
+        <translation>Alege adresa unde să trimiteţi monede</translation>
     </message>
     <message>
         <source>Choose the address to receive coins with</source>
-        <translation>Alege adresa la care sa primesti monedele cu</translation>
+        <translation>Alege adresa la care să primești monedele</translation>
     </message>
     <message>
         <source>C&amp;hoose</source>
@@ -66,8 +66,8 @@
         <translation>Adresa de primire</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Acestea sunt adresele tale Feathercoin pentru efectuarea platilor. Intotdeauna verifica atent suma de plata si adresa beneficiarului inainte de a trimite monede.</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Acestea sunt adresele tale Bitcoin pentru efectuarea platilor. Intotdeauna verifica atent suma de plata si adresa beneficiarului inainte de a trimite monede.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -132,6 +132,10 @@
         <translation>Repetaţi noua frază de acces</translation>
     </message>
     <message>
+        <source>Show passphrase</source>
+        <translation>Arată fraza de acces</translation>
+    </message>
+    <message>
         <source>Encrypt wallet</source>
         <translation>Criptare portofel</translation>
     </message>
@@ -170,6 +174,31 @@
     <message>
         <source>Wallet encrypted</source>
         <translation>Portofel criptat</translation>
+    </message>
+    <message>
+        <source>Enter the new passphrase for the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
+        <translation>Introduceti o parola noua pentru portofel. &lt;br/&gt;Va rugam sa folositi o parola de &lt;b&gt; zece sau mai multe caractere&lt;/b&gt;, sau &lt;b&gt;mai mult de opt cuvinte&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>Enter the old passphrase and new passphrase for the wallet.</source>
+        <translation>Introduceţi vechea şi noua parolă pentru portofel.
+ </translation>
+    </message>
+    <message>
+        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <translation>Reţineti: criptarea portofelului dvs. nu vă poate proteja în totalitate bitcoin-urile împotriva furtului de malware care vă infectează computerul.</translation>
+    </message>
+    <message>
+        <source>Wallet to be encrypted</source>
+        <translation>Portofel de criptat</translation>
+    </message>
+    <message>
+        <source>Your wallet is about to be encrypted. </source>
+        <translation>Portofelul tău urmează să fie criptat.</translation>
+    </message>
+    <message>
+        <source>Your wallet is now encrypted. </source>
+        <translation>Protofelul tău este criptat.</translation>
     </message>
     <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
@@ -294,6 +323,14 @@
         <translation>Deschide &amp;URI...</translation>
     </message>
     <message>
+        <source>Create Wallet...</source>
+        <translation>Crează portofel...</translation>
+    </message>
+    <message>
+        <source>Create a new wallet</source>
+        <translation>Crează un portofel nou</translation>
+    </message>
+    <message>
         <source>Wallet:</source>
         <translation>Portofel:</translation>
     </message>
@@ -322,8 +359,8 @@
         <translation>Proxy este&lt;b&gt;activat&lt;/b&gt;:%1</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Trimite monede către o adresă Feathercoin</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Trimite monede către o adresă Bitcoin</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -332,14 +369,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Schimbă fraza de acces folosită pentru criptarea portofelului</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>Fereastra de &amp;depanare</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Deschide consola de depanare şi diagnosticare</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -366,12 +395,12 @@
         <translation>Criptează cheile private ale portofelului dvs.</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Semnaţi mesaje cu adresa dvs. Feathercoin pentru a dovedi că vă aparţin</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Semnaţi mesaje cu adresa dvs. Bitcoin pentru a dovedi că vă aparţin</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Verificaţi mesaje pentru a vă asigura că au fost semnate cu adresa Feathercoin specificată</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Verificaţi mesaje pentru a vă asigura că au fost semnate cu adresa Bitcoin specificată</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -390,8 +419,8 @@
         <translation>Bara de unelte</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Cereţi plăţi (generează coduri QR şi feathercoin-uri: URls)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Cereţi plăţi (generează coduri QR şi bitcoin-uri: URls)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -402,16 +431,12 @@
         <translation>Arată lista de adrese pentru primire şi etichetele</translation>
     </message>
     <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Deschidere feathercoin: o adresa URI sau o cerere de plată</translation>
-    </message>
-    <message>
         <source>&amp;Command-line options</source>
         <translation>Opţiuni linie de &amp;comandă</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Feathercoin network</source>
-        <translation><numerusform>%n conexiune activă către reţeaua Feathercoin</numerusform><numerusform>%n conexiuni active către reţeaua Feathercoin</numerusform><numerusform>%n de conexiuni active către reţeaua Feathercoin</numerusform></translation>
+        <source>%n active connection(s) to Bitcoin network</source>
+        <translation><numerusform>%n conexiune activă către reţeaua Bitcoin</numerusform><numerusform>%n conexiuni active către reţeaua Bitcoin</numerusform><numerusform>%n de conexiuni active către reţeaua Bitcoin</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -454,12 +479,52 @@
         <translation>Actualizat</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
-        <translation>Arată mesajul de ajutor %1 pentru a obţine o listă cu opţiunile posibile de linii de comandă Feathercoin</translation>
+        <source>Node window</source>
+        <translation>Fereastra nodului</translation>
+    </message>
+    <message>
+        <source>Open node debugging and diagnostic console</source>
+        <translation>Deschide consola pentru depanare şi diagnosticare a nodului</translation>
+    </message>
+    <message>
+        <source>&amp;Sending addresses</source>
+        <translation>&amp;Adresele de destinatie</translation>
+    </message>
+    <message>
+        <source>&amp;Receiving addresses</source>
+        <translation>&amp;Adresele de primire</translation>
+    </message>
+    <message>
+        <source>Open a bitcoin: URI</source>
+        <translation>Deschidere bitcoin: o adresa URI sau o cerere de plată</translation>
+    </message>
+    <message>
+        <source>Open Wallet</source>
+        <translation>Deschide portofel</translation>
+    </message>
+    <message>
+        <source>Open a wallet</source>
+        <translation>Deschide un portofel</translation>
+    </message>
+    <message>
+        <source>Close Wallet...</source>
+        <translation>Inchide portofel...</translation>
+    </message>
+    <message>
+        <source>Close wallet</source>
+        <translation>Inchide portofel</translation>
+    </message>
+    <message>
+        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
+        <translation>Arată mesajul de ajutor %1 pentru a obţine o listă cu opţiunile posibile de linii de comandă Bitcoin</translation>
     </message>
     <message>
         <source>default wallet</source>
         <translation>portofel implicit</translation>
+    </message>
+    <message>
+        <source>No wallets available</source>
+        <translation>Niciun portofel disponibil</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -468,6 +533,14 @@
     <message>
         <source>Minimize</source>
         <translation>Minimizare</translation>
+    </message>
+    <message>
+        <source>Zoom</source>
+        <translation>Zoom</translation>
+    </message>
+    <message>
+        <source>Main Window</source>
+        <translation>Fereastra principală</translation>
     </message>
     <message>
         <source>%1 client</source>
@@ -484,6 +557,10 @@
     <message>
         <source>Error: %1</source>
         <translation>Eroare: %1</translation>
+    </message>
+    <message>
+        <source>Warning: %1</source>
+        <translation> Atenționare: %1</translation>
     </message>
     <message>
         <source>Date: %1
@@ -538,6 +615,10 @@
         <translation>Generarea de chei HD este &lt;b&gt;dezactivata&lt;/b&gt;</translation>
     </message>
     <message>
+        <source>Private key &lt;b&gt;disabled&lt;/b&gt;</source>
+        <translation>Cheia privată &lt;b&gt;dezactivată&lt;/b&gt;</translation>
+    </message>
+    <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
         <translation>Portofelul este &lt;b&gt;criptat&lt;/b&gt; iar în momentul de faţă este &lt;b&gt;deblocat&lt;/b&gt;</translation>
     </message>
@@ -545,11 +626,7 @@
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Portofelul este &lt;b&gt;criptat&lt;/b&gt; iar în momentul de faţă este &lt;b&gt;blocat&lt;/b&gt;</translation>
     </message>
-    <message>
-        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
-        <translation>A survenit o eroare fatală. Feathercoin nu mai poate continua în siguranţă şi se va opri.</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>CoinControlDialog</name>
     <message>
@@ -703,9 +780,57 @@
 </context>
 <context>
     <name>CreateWalletActivity</name>
-    </context>
+    <message>
+        <source>Creating Wallet &lt;b&gt;%1&lt;/b&gt;...</source>
+        <translation>Creare Portofel &lt;b&gt;%1&lt;/b&gt;...</translation>
+    </message>
+    <message>
+        <source>Create wallet failed</source>
+        <translation>Crearea portofelului a eşuat</translation>
+    </message>
+    <message>
+        <source>Create wallet warning</source>
+        <translation>Atentionare la crearea portofelului</translation>
+    </message>
+</context>
 <context>
     <name>CreateWalletDialog</name>
+    <message>
+        <source>Create Wallet</source>
+        <translation>Crează portofel</translation>
+    </message>
+    <message>
+        <source>Wallet Name</source>
+        <translation>Numele portofelului</translation>
+    </message>
+    <message>
+        <source>Encrypt the wallet. The wallet will be encrypted with a passphrase of your choice.</source>
+        <translation>Criptează portofelul. Portofelul va fi criptat cu fraza de acces aleasă.</translation>
+    </message>
+    <message>
+        <source>Encrypt Wallet</source>
+        <translation>Criptează portofelul.</translation>
+    </message>
+    <message>
+        <source>Disable private keys for this wallet. Wallets with private keys disabled will have no private keys and cannot have an HD seed or imported private keys. This is ideal for watch-only wallets.</source>
+        <translation>Dezactivează cheile private pentru acest portofel. Portofelele cu cheile private dezactivate nu vor avea chei private şi nu vor putea avea samanţă HD sau chei private importate. Ideal pentru portofele marcate doar pentru citire.</translation>
+    </message>
+    <message>
+        <source>Disable Private Keys</source>
+        <translation>Dezactivează cheile private</translation>
+    </message>
+    <message>
+        <source>Make a blank wallet. Blank wallets do not initially have private keys or scripts. Private keys and addresses can be imported, or an HD seed can be set, at a later time.</source>
+        <translation>Make a blank wallet. Blank wallets do not initially have private keys or scripts. Private keys and addresses can be imported, or an HD seed can be set, at a later time.</translation>
+    </message>
+    <message>
+        <source>Make Blank Wallet</source>
+        <translation>Faceți Portofel gol</translation>
+    </message>
+    <message>
+        <source>Create</source>
+        <translation>Creează</translation>
+    </message>
     </context>
 <context>
     <name>EditAddressDialog</name>
@@ -742,8 +867,8 @@
         <translation>Editează adresa de trimitere</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Feathercoin address.</source>
-        <translation>Adresa introdusă "%1" nu este o adresă Feathercoin validă.</translation>
+        <source>The entered address "%1" is not a valid Bitcoin address.</source>
+        <translation>Adresa introdusă "%1" nu este o adresă Bitcoin validă.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -792,10 +917,6 @@
         <translation>versiunea</translation>
     </message>
     <message>
-        <source>(%1-bit)</source>
-        <translation>(%1-bit)</translation>
-    </message>
-    <message>
         <source>About %1</source>
         <translation>Despre %1</translation>
     </message>
@@ -839,8 +960,8 @@
         <translation>Foloseşte un dosar de date personalizat:</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>At least %1 GB of data will be stored in this directory, and it will grow over time.</source>
@@ -851,8 +972,8 @@
         <translation>Aproximativ %1 GB de date vor fi stocate in acest director.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Feathercoin block chain.</source>
-        <translation>%1 va descarca si stoca o copie a blockchainului Feathercoin</translation>
+        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
+        <translation>%1 va descarca si stoca o copie a blockchainului Bitcoin</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -882,12 +1003,12 @@
         <translation>Form</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the feathercoin network, as detailed below.</source>
-        <translation>Tranzactiile recente pot sa nu fie inca vizibile, de aceea balanta portofelului poate fi incorecta. Aceasta informatie va fi corecta de indata ce portofelul va fi complet sincronizat cu reteaua Feathercoin, asa cum este detaliat mai jos.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
+        <translation>Tranzactiile recente pot sa nu fie inca vizibile, de aceea balanta portofelului poate fi incorecta. Aceasta informatie va fi corecta de indata ce portofelul va fi complet sincronizat cu reteaua Bitcoin, asa cum este detaliat mai jos.</translation>
     </message>
     <message>
-        <source>Attempting to spend feathercoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Incercarea de a cheltui feathercoini care sunt afectati de tranzactii ce inca nu sunt afisate nu va fi acceptata de retea.</translation>
+        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Incercarea de a cheltui bitcoini care sunt afectati de tranzactii ce inca nu sunt afisate nu va fi acceptata de retea.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -925,28 +1046,20 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>Deschide URI</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation>Deschideţi cerere de plată prin intermediul adresei URI sau a fişierului</translation>
-    </message>
-    <message>
         <source>URI:</source>
         <translation>URI:</translation>
-    </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation>Selectaţi fişierul cerere de plată</translation>
-    </message>
-    <message>
-        <source>Select payment request file to open</source>
-        <translation>Selectati care fisier de cerere de plata va fi deschis</translation>
     </message>
 </context>
 <context>
     <name>OpenWalletActivity</name>
+    <message>
+        <source>Open wallet failed</source>
+        <translation>Deschiderea portofelului a eșuat</translation>
+    </message>
+    <message>
+        <source>Open wallet warning</source>
+        <translation>Atenționare la deschiderea portofelului</translation>
+    </message>
     <message>
         <source>default wallet</source>
         <translation>portofel implicit</translation>
@@ -985,10 +1098,6 @@
     <message>
         <source>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</source>
         <translation>Arata daca proxy-ul SOCKS5 furnizat implicit este folosit pentru a gasi parteneri via acest tip de retea.</translation>
-    </message>
-    <message>
-        <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor hidden services:</source>
-        <translation>Foloseste un proxy SOCKS&amp;5 separat pentru a gasi parteneri via servicii TOR ascunse</translation>
     </message>
     <message>
         <source>Hide the icon from the system tray.</source>
@@ -1067,8 +1176,8 @@
         <translation>Cheltuire rest neconfirmat</translation>
     </message>
     <message>
-        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Deschide automat în router portul aferent clientului Feathercoin. Funcţionează doar dacă routerul duportă UPnP şi e activat.</translation>
+        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Deschide automat în router portul aferent clientului Bitcoin. Funcţionează doar dacă routerul duportă UPnP şi e activat.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1083,8 +1192,8 @@
         <translation>Permite conexiuni de intrar&amp;e</translation>
     </message>
     <message>
-        <source>Connect to the Feathercoin network through a SOCKS5 proxy.</source>
-        <translation>Conectare la reţeaua Feathercoin printr-un proxy SOCKS.</translation>
+        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
+        <translation>Conectare la reţeaua Bitcoin printr-un proxy SOCKS.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1117,10 +1226,6 @@
     <message>
         <source>Tor</source>
         <translation>Tor</translation>
-    </message>
-    <message>
-        <source>Connect to the Feathercoin network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Conectare la reteaua Feathercoin printr-un proxy SOCKS5 separat pentru serviciile TOR ascunse.</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1156,7 +1261,7 @@
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation>Alegeţi subdiviziunea folosită la afişarea interfeţei şi la trimiterea de feathercoin.</translation>
+        <translation>Alegeţi subdiviziunea folosită la afişarea interfeţei şi la trimiterea de bitcoin.</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -1216,7 +1321,7 @@
     </message>
     <message>
         <source>The supplied proxy address is invalid.</source>
-        <translation>Adresa feathercoin pe care aţi specificat-o nu este validă.</translation>
+        <translation>Adresa bitcoin pe care aţi specificat-o nu este validă.</translation>
     </message>
 </context>
 <context>
@@ -1226,8 +1331,8 @@
         <translation>Form</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Informaţiile afişate pot fi neactualizate. Portofelul dvs. se sincronizează automat cu reţeaua Feathercoin după ce o conexiune este stabilită, dar acest proces nu a fost finalizat încă.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Informaţiile afişate pot fi neactualizate. Portofelul dvs. se sincronizează automat cu reţeaua Bitcoin după ce o conexiune este stabilită, dar acest proces nu a fost finalizat încă.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1293,7 +1398,18 @@
         <source>Current total balance in watch-only addresses</source>
         <translation>Soldul dvs. total în adresele doar-supraveghere</translation>
     </message>
-</context>
+    </context>
+<context>
+    <name>PSBTOperationsDialog</name>
+    <message>
+        <source>Total Amount</source>
+        <translation>Suma totală</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>sau</translation>
+    </message>
+    </context>
 <context>
     <name>PaymentServer</name>
     <message>
@@ -1301,92 +1417,28 @@
         <translation>Eroare la cererea de plată</translation>
     </message>
     <message>
-        <source>Cannot start feathercoin: click-to-pay handler</source>
-        <translation>Feathercoin nu poate porni: click-to-pay handler</translation>
+        <source>Cannot start bitcoin: click-to-pay handler</source>
+        <translation>Bitcoin nu poate porni: click-to-pay handler</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>Gestionare URI</translation>
     </message>
     <message>
-        <source>'feathercoin://' is not a valid URI. Use 'feathercoin:' instead.</source>
-        <translation>'feathercoin://' nu este un URI valid. Folositi 'feathercoin:' in loc.</translation>
-    </message>
-    <message>
-        <source>Payment request fetch URL is invalid: %1</source>
-        <translation>URL-ul cererii de plată preluat nu este valid: %1</translation>
+        <source>'bitcoin://' is not a valid URI. Use 'bitcoin:' instead.</source>
+        <translation>'bitcoin://' nu este un URI valid. Folositi 'bitcoin:' in loc.</translation>
     </message>
     <message>
         <source>Invalid payment address %1</source>
         <translation>Adresă pentru plată invalidă %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Feathercoin address or malformed URI parameters.</source>
-        <translation>URI nu poate fi analizat! Acest lucru poate fi cauzat de o adresă Feathercoin invalidă sau parametri URI deformaţi.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
+        <translation>URI nu poate fi analizat! Acest lucru poate fi cauzat de o adresă Bitcoin invalidă sau parametri URI deformaţi.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
         <translation>Manipulare fişier cerere de plată</translation>
-    </message>
-    <message>
-        <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
-        <translation>Fişierul cerere de plată nu poate fi citit! Cauza poate fi un fişier cerere de plată nevalid.</translation>
-    </message>
-    <message>
-        <source>Payment request rejected</source>
-        <translation>Cerere de plată refuzată</translation>
-    </message>
-    <message>
-        <source>Payment request network doesn't match client network.</source>
-        <translation>Cererea de plată din reţea nu se potriveşte cu clientul din reţea</translation>
-    </message>
-    <message>
-        <source>Payment request expired.</source>
-        <translation>Cerere de plată expirata</translation>
-    </message>
-    <message>
-        <source>Payment request is not initialized.</source>
-        <translation>Cererea de plată nu este iniţializată.</translation>
-    </message>
-    <message>
-        <source>Unverified payment requests to custom payment scripts are unsupported.</source>
-        <translation>Cererile nesecurizate către scripturi personalizate de plăți nu sunt suportate</translation>
-    </message>
-    <message>
-        <source>Invalid payment request.</source>
-        <translation>Cerere de plată invalidă.</translation>
-    </message>
-    <message>
-        <source>Requested payment amount of %1 is too small (considered dust).</source>
-        <translation>Suma cerută de plată de %1 este prea mică (considerată praf).</translation>
-    </message>
-    <message>
-        <source>Refund from %1</source>
-        <translation>Rambursare de la %1</translation>
-    </message>
-    <message>
-        <source>Payment request %1 is too large (%2 bytes, allowed %3 bytes).</source>
-        <translation>Cererea de plată %1 este prea mare (%2 octeţi, permis %3 octeţi).</translation>
-    </message>
-    <message>
-        <source>Error communicating with %1: %2</source>
-        <translation>Eroare la comunicarea cu %1: %2</translation>
-    </message>
-    <message>
-        <source>Payment request cannot be parsed!</source>
-        <translation>Cererea de plată nu poate fi analizată!</translation>
-    </message>
-    <message>
-        <source>Bad response from server %1</source>
-        <translation>Răspuns greşit de la server %1</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation>Eroare în cererea de reţea</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation>Plată acceptată</translation>
     </message>
 </context>
 <context>
@@ -1423,8 +1475,8 @@
         <translation>Cantitate</translation>
     </message>
     <message>
-        <source>Enter a Feathercoin address (e.g. %1)</source>
-        <translation>Introduceţi o adresă Feathercoin (de exemplu %1)</translation>
+        <source>Enter a Bitcoin address (e.g. %1)</source>
+        <translation>Introduceţi o adresă Bitcoin (de exemplu %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1561,10 +1613,6 @@
         <translation>&amp;Informaţii</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation>Fereastra de depanare</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>General</translation>
     </message>
@@ -1595,10 +1643,6 @@
     <message>
         <source>Block chain</source>
         <translation>Lanţ de blocuri</translation>
-    </message>
-    <message>
-        <source>Current number of blocks</source>
-        <translation>Numărul curent de blocuri</translation>
     </message>
     <message>
         <source>Memory Pool</source>
@@ -1645,10 +1689,6 @@
         <translation>Selectaţi un partener pentru a vedea informaţiile detaliate.</translation>
     </message>
     <message>
-        <source>Whitelisted</source>
-        <translation>Whitelisted</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>Direcţie</translation>
     </message>
@@ -1673,6 +1713,10 @@
         <translation>Agent utilizator</translation>
     </message>
     <message>
+        <source>Node window</source>
+        <translation>Fereastra nodului</translation>
+    </message>
+    <message>
         <source>Open the %1 debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>Deschide fişierul jurnal depanare %1 din directorul curent. Aceasta poate dura cateva secunde pentru fişierele mai mari.</translation>
     </message>
@@ -1687,10 +1731,6 @@
     <message>
         <source>Services</source>
         <translation>Servicii</translation>
-    </message>
-    <message>
-        <source>Ban Score</source>
-        <translation>Scor Ban</translation>
     </message>
     <message>
         <source>Connection Time</source>
@@ -1841,14 +1881,6 @@
         <translation>Ieşire</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation>Da</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Nu</translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation>Necunoscut</translation>
     </message>
@@ -1868,8 +1900,8 @@
         <translation>&amp;Mesaj:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
-        <translation>Un mesaj opţional de ataşat la cererea de plată, care va fi afişat cînd cererea este deschisă. Notă: Acest mesaj nu va fi trimis cu plata către reţeaua Feathercoin.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
+        <translation>Un mesaj opţional de ataşat la cererea de plată, care va fi afişat cînd cererea este deschisă. Notă: Acest mesaj nu va fi trimis cu plata către reţeaua Bitcoin.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -1935,12 +1967,24 @@
         <source>Copy amount</source>
         <translation>Copiază suma</translation>
     </message>
-</context>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Portofelul nu a putut fi deblocat.</translation>
+    </message>
+    </context>
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>QR Code</source>
-        <translation>Cod QR</translation>
+        <source>Amount:</source>
+        <translation>Sumă:</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>Mesaj:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Portofel:</translation>
     </message>
     <message>
         <source>Copy &amp;URI</source>
@@ -1961,30 +2005,6 @@
     <message>
         <source>Payment information</source>
         <translation>Informaţiile plată</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation>URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Adresă</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Cantitate</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Etichetă</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Mesaj</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Portofel</translation>
     </message>
 </context>
 <context>
@@ -2087,10 +2107,6 @@
     <message>
         <source>Warning: Fee estimation is currently not possible.</source>
         <translation>Avertisment: Estimarea comisionului nu s-a putut efectua.</translation>
-    </message>
-    <message>
-        <source>collapse fee-settings</source>
-        <translation>inchide setarile de taxare</translation>
     </message>
     <message>
         <source>Specify a custom fee per kB (1,000 bytes) of the transaction's virtual size.
@@ -2197,6 +2213,10 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>%1(%2 blocuri)</translation>
     </message>
     <message>
+        <source> from wallet '%1'</source>
+        <translation>din portofelul '%1'</translation>
+    </message>
+    <message>
         <source>%1 to %2</source>
         <translation>%1 la %2</translation>
     </message>
@@ -2257,10 +2277,6 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Creare tranzacţie nereuşită!</translation>
     </message>
     <message>
-        <source>The transaction was rejected with the following reason: %1</source>
-        <translation>Tranzactia a fost refuzata pentru urmatorul motiv: %1</translation>
-    </message>
-    <message>
         <source>A fee higher than %1 is considered an absurdly high fee.</source>
         <translation>O taxă mai mare de %1 este considerată o taxă absurd de mare</translation>
     </message>
@@ -2273,8 +2289,8 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation><numerusform>Se estimeaza inceperea confirmarii in %n bloc.</numerusform><numerusform>Se estimeaza inceperea confirmarii in %n blocuri.</numerusform><numerusform>Se estimeaza inceperea confirmarii in %n blocuri.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid Feathercoin address</source>
-        <translation>Atenţie: Adresa feathercoin nevalidă!</translation>
+        <source>Warning: Invalid Bitcoin address</source>
+        <translation>Atenţie: Adresa bitcoin nevalidă!</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2312,12 +2328,8 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Alegeţi adrese folosite anterior</translation>
     </message>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>Aceasta este o tranzacţie normală.</translation>
-    </message>
-    <message>
-        <source>The Feathercoin address to send the payment to</source>
-        <translation>Adresa feathercoin către care se face plata</translation>
+        <source>The Bitcoin address to send the payment to</source>
+        <translation>Adresa bitcoin către care se face plata</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2336,8 +2348,8 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Înlătură această intrare</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less feathercoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>Taxa va fi scazuta in suma trimisa. Destinatarul va primi mai putini feathercoin decat ati specificat in campul sumei trimise. Daca au fost selectati mai multi destinatari, taxa se va imparti in mod egal.</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>Taxa va fi scazuta in suma trimisa. Destinatarul va primi mai putini bitcoin decat ati specificat in campul sumei trimise. Daca au fost selectati mai multi destinatari, taxa se va imparti in mod egal.</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2364,8 +2376,8 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Introduceţi eticheta pentru ca această adresa să fie introdusă în lista de adrese folosite</translation>
     </message>
     <message>
-        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
-        <translation>un mesaj a fost ataşat la feathercoin: URI care va fi stocat cu tranzacţia pentru referinţa dvs. Notă: Acest mesaj nu va fi trimis către reţeaua feathercoin.</translation>
+        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
+        <translation>un mesaj a fost ataşat la bitcoin: URI care va fi stocat cu tranzacţia pentru referinţa dvs. Notă: Acest mesaj nu va fi trimis către reţeaua bitcoin.</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2374,17 +2386,6 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
     <message>
         <source>Memo:</source>
         <translation>Memo:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>Introduceţi o etichetă pentru această adresă pentru a fi adăugată în lista dvs. de adrese</translation>
-    </message>
-</context>
-<context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>Da</translation>
     </message>
 </context>
 <context>
@@ -2409,11 +2410,11 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>&amp;Semnează mesaj</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive feathercoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Puteţi semna mesaje/contracte cu adresele dvs. pentru a demostra ca puteti primi feathercoini trimisi la ele. Aveţi grijă să nu semnaţi nimic vag sau aleator, deoarece atacurile de tip phishing vă pot păcăli să le transferaţi identitatea. Semnaţi numai declaraţiile detaliate cu care sînteti de acord.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive bitcoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Puteţi semna mesaje/contracte cu adresele dvs. pentru a demostra ca puteti primi bitcoini trimisi la ele. Aveţi grijă să nu semnaţi nimic vag sau aleator, deoarece atacurile de tip phishing vă pot păcăli să le transferaţi identitatea. Semnaţi numai declaraţiile detaliate cu care sînteti de acord.</translation>
     </message>
     <message>
-        <source>The Feathercoin address to sign the message with</source>
+        <source>The Bitcoin address to sign the message with</source>
         <translation>Adresa cu care semnaţi mesajul</translation>
     </message>
     <message>
@@ -2445,8 +2446,8 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Copiază semnatura curentă în clipboard-ul sistemului</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Feathercoin address</source>
-        <translation>Semnează mesajul pentru a dovedi ca deţineţi acestă adresă Feathercoin</translation>
+        <source>Sign the message to prove you own this Bitcoin address</source>
+        <translation>Semnează mesajul pentru a dovedi ca deţineţi acestă adresă Bitcoin</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2469,12 +2470,12 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Introduceţi adresa de semnatură, mesajul (asiguraţi-vă că aţi copiat spaţiile, taburile etc. exact) şi semnatura dedesubt pentru a verifica mesajul. Aveţi grijă să nu citiţi mai mult în semnatură decît mesajul în sine, pentru a evita să fiţi păcăliţi de un atac de tip man-in-the-middle. De notat ca aceasta dovedeste doar ca semnatarul primeste odata cu adresa, nu dovedesta insa trimiterea vreunei tranzactii.</translation>
     </message>
     <message>
-        <source>The Feathercoin address the message was signed with</source>
-        <translation>Introduceţi o adresă Feathercoin</translation>
+        <source>The Bitcoin address the message was signed with</source>
+        <translation>Introduceţi o adresă Bitcoin</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
-        <translation>Verificaţi mesajul pentru a vă asigura că a fost semnat cu adresa Feathercoin specificată</translation>
+        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <translation>Verificaţi mesajul pentru a vă asigura că a fost semnat cu adresa Bitcoin specificată</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -2677,6 +2678,10 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
     <message>
         <source>Output index</source>
         <translation>Index debit</translation>
+    </message>
+    <message>
+        <source> (Certificate was not verified)</source>
+        <translation>(Certificatul nu a fost verificat)</translation>
     </message>
     <message>
         <source>Merchant</source>
@@ -2997,12 +3002,16 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
 </context>
 <context>
     <name>WalletController</name>
+    <message>
+        <source>Close wallet</source>
+        <translation>Inchide portofel</translation>
+    </message>
     </context>
 <context>
     <name>WalletFrame</name>
     <message>
-        <source>No wallet has been loaded.</source>
-        <translation>Nu a fost încărcat nici un portofel.</translation>
+        <source>Create a new wallet</source>
+        <translation>Crează un portofel nou</translation>
     </message>
 </context>
 <context>
@@ -3063,6 +3072,10 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Exportă datele din tab-ul curent într-un fişier</translation>
     </message>
     <message>
+        <source>Error</source>
+        <translation>Eroare</translation>
+    </message>
+    <message>
         <source>Backup Wallet</source>
         <translation>Backup portofelul electronic</translation>
     </message>
@@ -3104,14 +3117,6 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
     <message>
         <source>Prune: last wallet synchronisation goes beyond pruned data. You need to -reindex (download the whole blockchain again in case of pruned node)</source>
         <translation>Reductie: ultima sincronizare merge dincolo de datele reductiei. Trebuie sa faceti -reindex (sa descarcati din nou intregul blockchain in cazul unui nod redus)</translation>
-    </message>
-    <message>
-        <source>Rescans are not possible in pruned mode. You will need to use -reindex which will download the whole blockchain again.</source>
-        <translation>Rescanarile nu sunt posibile in modul redus. Va trebui sa folositi -reindex, ceea ce va descarca din nou intregul blockchain.</translation>
-    </message>
-    <message>
-        <source>Error: A fatal internal error occurred, see debug.log for details</source>
-        <translation>Eroare: S-a produs o eroare interna fatala, vedeti debug.log pentru detalii</translation>
     </message>
     <message>
         <source>Pruning blockstore...</source>
@@ -3172,14 +3177,6 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
     <message>
         <source>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</source>
         <translation>Atenţie: Aparent, nu sîntem de acord cu toţi partenerii noştri! Va trebui să faceţi o actualizare, sau alte noduri necesită actualizare.</translation>
-    </message>
-    <message>
-        <source>%d of last 100 blocks have unexpected version</source>
-        <translation>%d din ultimele 100 blocuri a o versiune neasteptata</translation>
-    </message>
-    <message>
-        <source>%s corrupt, salvage failed</source>
-        <translation>%s corupt, salvare nereuşită</translation>
     </message>
     <message>
         <source>-maxmempool must be at least %d MB</source>
@@ -3366,6 +3363,10 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Eroare la actualizarea bazei de date chainstate</translation>
     </message>
     <message>
+        <source>Error: Disk space is low for %s</source>
+        <translation>Eroare: Spațiul pe disc este redus pentru %s</translation>
+    </message>
+    <message>
         <source>Invalid -onion address or hostname: '%s'</source>
         <translation>Adresa sau hostname -onion invalide: '%s'</translation>
     </message>
@@ -3406,6 +3407,12 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>-walletdir "%s" specificat nu este un director</translation>
     </message>
     <message>
+        <source>The specified config file %s does not exist
+</source>
+        <translation>Fișierul de configurare specificat %s nu există
+</translation>
+    </message>
+    <message>
         <source>The transaction amount is too small to pay the fee</source>
         <translation>Suma tranzactiei este prea mica pentru plata taxei</translation>
     </message>
@@ -3438,10 +3445,6 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Atentie: se activeaza reguli noi necunoscute (versionbit %i)</translation>
     </message>
     <message>
-        <source>Zapping all transactions from wallet...</source>
-        <translation>Şterge toate tranzacţiile din portofel...</translation>
-    </message>
-    <message>
         <source>-maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
         <translation>-maxtxfee este setata foarte sus! Se pot plati taxe de aceasta marime pe o singura tranzactie.</translation>
     </message>
@@ -3450,24 +3453,12 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
         <translation>Aceasta este taxa de tranzactie pe care este posibil sa o platiti daca estimarile de taxe nu sunt disponibile.</translation>
     </message>
     <message>
-        <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit %s and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
-        <translation>Acest produs include software dezvoltat de OpenSSL Project pentru a fi folosit in Toolkitul OpenSSL %s, software criptografic scris de Eric Young si software UPnP scris de Thomas Bernard.</translation>
-    </message>
-    <message>
         <source>Total length of network version string (%i) exceeds maximum length (%i). Reduce the number or size of uacomments.</source>
         <translation>Lungimea totala a sirului versiunii retelei (%i) depaseste lungimea maxima (%i). Reduceti numarul sa dimensiunea uacomments.</translation>
     </message>
     <message>
-        <source>Warning: Wallet file corrupt, data salvaged! Original %s saved as %s in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Atenţie: fişierul portofelului este corupt, date salvate! Fişierul %s a fost salvat ca %s in %s; dacă balanta sau tranzactiile sunt incorecte ar trebui să restauraţi dintr-o copie de siguranţă.</translation>
-    </message>
-    <message>
         <source>%s is set very high!</source>
         <translation>%s este setata foarte sus!</translation>
-    </message>
-    <message>
-        <source>Error loading wallet %s. Duplicate -wallet filename specified.</source>
-        <translation>Eroare la incarcarea portofelului %s. Este specificat un fisier -wallet duplicat.</translation>
     </message>
     <message>
         <source>Starting network threads...</source>
@@ -3504,10 +3495,6 @@ Nota: Cum taxa este calculata per byte, o taxa de "100 satoshi per kB" pentru o 
     <message>
         <source>Insufficient funds</source>
         <translation>Fonduri insuficiente</translation>
-    </message>
-    <message>
-        <source>Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use -upgradewallet=169900 or -upgradewallet with no version specified.</source>
-        <translation>Nu se poate actualiza un portofel split HD fără a fi actualizat pentru a sprijini keypool-ul pre divizat. Vă rugăm să folosiți -upgradewallet=169900 sau -upgradewallet fără nicio versiune specificată.</translation>
     </message>
     <message>
         <source>Fee estimation failed. Fallbackfee is disabled. Wait a few blocks or enable -fallbackfee.</source>

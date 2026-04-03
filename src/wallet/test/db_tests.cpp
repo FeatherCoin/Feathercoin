@@ -7,8 +7,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <fs.h>
-#include <test/setup_common.h>
-#include <wallet/db.h>
+#include <test/util/setup_common.h>
+#include <wallet/bdb.h>
 
 
 BOOST_FIXTURE_TEST_SUITE(db_tests, BasicTestingSetup)
@@ -18,11 +18,7 @@ BOOST_AUTO_TEST_CASE(getwalletenv_file)
     std::string test_name = "test_name.dat";
     const fs::path datadir = GetDataDir();
     fs::path file_path = datadir / test_name;
-#if BOOST_VERSION >= 107700
-    std::ofstream f(BOOST_FILESYSTEM_C_STR(file_path));
-#else
     std::ofstream f(file_path.BOOST_FILESYSTEM_C_STR);
-#endif // BOOST_VERSION >= 107700
     f.close();
 
     std::string filename;

@@ -62,8 +62,8 @@
         <translation>Færslugildi sem þiggja til sín</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Þetta eru Feathercoin færslugildin sem senda greiðslur. Skoðið ævinlega vel upphæðina og færslugildin sem þiggja greiðslur áður en mynt er send.</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Þetta eru Bitcoin færslugildin sem senda greiðslur. Skoðið ævinlega vel upphæðina og færslugildin sem þiggja greiðslur áður en mynt er send.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -166,6 +166,10 @@
     <message>
         <source>Wallet encrypted</source>
         <translation>Veski dulkóðað</translation>
+    </message>
+    <message>
+        <source>Wallet to be encrypted</source>
+        <translation>Veski sem á að dulkóða</translation>
     </message>
     <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
@@ -310,8 +314,8 @@
         <translation>Endurraða blokkum á drifi...</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Senda mynt í Feathercoin færslugildi</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Senda mynt í Bitcoin færslugildi</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -320,14 +324,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Breyta lykilsetningunni sem gildir um dulkóðun veskis</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Kembunargluggi</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Opna kembunar- og greiningarstjórnborð</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -354,12 +350,12 @@
         <translation>Dulkóða einkalyklana sem tilheyra veskinu þínu</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Kvitta undir skilaboð með Feathercoin færslugildunum þínum til að sanna að þú eigir þau</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Kvitta undir skilaboð með Bitcoin færslugildunum þínum til að sanna að þú eigir þau</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Yfirfara skilaboð til að tryggja að kvittað hafi verið fyrir þau með tilteknum Feathercoin færslugildum</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Yfirfara skilaboð til að tryggja að kvittað hafi verið fyrir þau með tilteknum Bitcoin færslugildum</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -378,8 +374,8 @@
         <translation>Tólaborð flipa</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Óska eftir greiðslum (býr til QR kóða og feathercoin: URI)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Óska eftir greiðslum (býr til QR kóða og bitcoin: URI)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -388,10 +384,6 @@
     <message>
         <source>Show the list of used receiving addresses and labels</source>
         <translation>Sýna færslugildi sem notuð hafa verið til að taka við mynt og merkingar þeirra</translation>
-    </message>
-    <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Opna feathercoin: URI eða greiðslubeiðni</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
@@ -434,8 +426,8 @@
         <translation>Uppfært</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
-        <translation>Sýna %1 hjálparskilaboðin til að fá lista yfir valkosti Feathercoin aðgerðir í skipanalínu</translation>
+        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
+        <translation>Sýna %1 hjálparskilaboðin til að fá lista yfir valkosti Bitcoin aðgerðir í skipanalínu</translation>
     </message>
     <message>
         <source>%1 client</source>
@@ -503,11 +495,7 @@
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Veskið er &lt;b&gt;dulkóðað&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</translation>
     </message>
-    <message>
-        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
-        <translation>Alvarleg villa átti sér stað. Feathercoin getur ekki haldið áfram með öruggum hætti og stoppar hér.</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>CoinControlDialog</name>
     <message>
@@ -624,8 +612,8 @@
         <translation>Breyta sendingarfærslugildi</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Feathercoin address.</source>
-        <translation>Færslugildið sem slegið var inn "%1" er ekki leyfilegt Feathercoin færslugildi.</translation>
+        <source>The entered address "%1" is not a valid Bitcoin address.</source>
+        <translation>Færslugildið sem slegið var inn "%1" er ekki leyfilegt Bitcoin færslugildi.</translation>
     </message>
     </context>
 <context>
@@ -637,8 +625,8 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Error</source>
@@ -703,7 +691,10 @@
         <source>Current total balance in watch-only addresses</source>
         <translation>Innistæða á færslugildum sem eru einungis til skoðunar</translation>
     </message>
-</context>
+    </context>
+<context>
+    <name>PSBTOperationsDialog</name>
+    </context>
 <context>
     <name>PaymentServer</name>
     <message>
@@ -733,10 +724,6 @@
     <message>
         <source>Block chain</source>
         <translation>Blokkarkeðja</translation>
-    </message>
-    <message>
-        <source>Current number of blocks</source>
-        <translation>Núverandi fjöldi blokka</translation>
     </message>
     <message>
         <source>Starting Block</source>
@@ -769,22 +756,10 @@
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>Address</source>
-        <translation>Vistfang</translation>
+        <source>Amount:</source>
+        <translation>Upphæð:</translation>
     </message>
-    <message>
-        <source>Amount</source>
-        <translation>Upphæð</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Merki</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Veski</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -841,9 +816,6 @@
         <source>&amp;Label:</source>
         <translation>&amp;Merki:</translation>
     </message>
-    </context>
-<context>
-    <name>SendConfirmationDialog</name>
     </context>
 <context>
     <name>ShutdownWindow</name>
@@ -935,6 +907,10 @@
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>Flytja gögn í flipanum í skrá</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Villa</translation>
     </message>
     </context>
 <context>

@@ -66,12 +66,14 @@
         <translation>Endereços de receção</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Estes são os seus endereços Feathercoin para enviar pagamentos. Verifique sempre o valor e o endereço de receção antes de enviar moedas.</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Estes são os seus endereços Bitcoin para enviar pagamentos. Verifique sempre o valor e o endereço de receção antes de enviar moedas.</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.</source>
-        <translation>Estes são os endereços Feathercoin para receiver pagamentos. Use o botão "Criar novo endereço para receiver" para crier novo endereço.</translation>
+        <source>These are your Bitcoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
+Signing is only possible with addresses of the type 'legacy'.</source>
+        <translation>Estes são seus novos endereços Bitcoin para o recebimento de pagamentos. Use o botão "Criar novo endereço de recebimento" na aba "Receber"  para criar novos endereços.
+Assinar só é possível com endereços do tipo "legado".</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -188,8 +190,8 @@
         <translation>Insira a password antiga e a nova para a carteira.</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your feathercoins from being stolen by malware infecting your computer.</source>
-        <translation>Lembra se que encrostar a sua carteira não o pode defender na totalidade os seus feathercoins de serem roubados por um malware que possa infectar o seu computador.</translation>
+        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <translation>Lembra se que encrostar a sua carteira não o pode defender na totalidade os seus bitcoins de serem roubados por um malware que possa infectar o seu computador.</translation>
     </message>
     <message>
         <source>Wallet to be encrypted</source>
@@ -362,8 +364,8 @@
         <translation>Proxy está &lt;b&gt;ativado&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Enviar moedas para um endereço Feathercoin</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Enviar moedas para um endereço Bitcoin</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -372,14 +374,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Alterar a frase de segurança utilizada na encriptação da carteira</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>Janela de &amp;Depuração</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Abrir consola de diagnóstico e depuração</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -406,12 +400,12 @@
         <translation>Encriptar as chaves privadas que pertencem à sua carteira</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Assine as mensagens com os seus endereços Feathercoin para provar que é o proprietário dos mesmos</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Assine as mensagens com os seus endereços Bitcoin para provar que é o proprietário dos mesmos</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Verifique mensagens para assegurar que foram assinadas com o endereço Feathercoin especificado</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Verifique mensagens para assegurar que foram assinadas com o endereço Bitcoin especificado</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -430,8 +424,8 @@
         <translation>Barra de ferramentas dos separadores</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Solicitar pagamentos (gera códigos QR e feathercoin: URIs)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Solicitar pagamentos (gera códigos QR e bitcoin: URIs)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -442,16 +436,12 @@
         <translation>Mostrar a lista de etiquetas e endereços de receção usados</translation>
     </message>
     <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Abrir URI feathercoin: ou pedido de pagamento</translation>
-    </message>
-    <message>
         <source>&amp;Command-line options</source>
         <translation>&amp;Opções da linha de &amp;comando</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Feathercoin network</source>
-        <translation><numerusform>%n ligação ativa à rede Feathercoin</numerusform><numerusform>%n ligações ativas à rede Feathercoin</numerusform></translation>
+        <source>%n active connection(s) to Bitcoin network</source>
+        <translation><numerusform>%n ligação ativa à rede Bitcoin</numerusform><numerusform>%n ligações ativas à rede Bitcoin</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -494,12 +484,40 @@
         <translation>Atualizado</translation>
     </message>
     <message>
+        <source>&amp;Load PSBT from file...</source>
+        <translation>&amp;Carregar Transação Bitcoin Parcialmente Assinada (TBPA/PSBT) do arquivo...</translation>
+    </message>
+    <message>
+        <source>Load Partially Signed Bitcoin Transaction</source>
+        <translation>Carregar transação de Bitcoin parcialmente assinada</translation>
+    </message>
+    <message>
+        <source>Load PSBT from clipboard...</source>
+        <translation>Carregar PSBT da área de transferência...</translation>
+    </message>
+    <message>
+        <source>Load Partially Signed Bitcoin Transaction from clipboard</source>
+        <translation>Carregar transação de Bitcoin parcialmente assinada da área de transferência.</translation>
+    </message>
+    <message>
+        <source>Node window</source>
+        <translation>Janela do nó</translation>
+    </message>
+    <message>
+        <source>Open node debugging and diagnostic console</source>
+        <translation>Abrir o depurador de nó e o console de diagnóstico</translation>
+    </message>
+    <message>
         <source>&amp;Sending addresses</source>
         <translation>&amp;Endereço de envio</translation>
     </message>
     <message>
         <source>&amp;Receiving addresses</source>
         <translation>&amp;Endereços de receção</translation>
+    </message>
+    <message>
+        <source>Open a bitcoin: URI</source>
+        <translation>Abrir um bitcoin URI</translation>
     </message>
     <message>
         <source>Open Wallet</source>
@@ -518,8 +536,24 @@
         <translation>Fechar a carteira</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
+        <source>Close All Wallets...</source>
+        <translation>Fechar todas carteiras...</translation>
+    </message>
+    <message>
+        <source>Close all wallets</source>
+        <translation>Fechar todas carteiras.</translation>
+    </message>
+    <message>
+        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
         <translation>Mostrar a mensagem de ajuda %1 para obter uma lista com possíveis opções a usar na linha de comandos.</translation>
+    </message>
+    <message>
+        <source>&amp;Mask values</source>
+        <translation>&amp;Valores de Máscara</translation>
+    </message>
+    <message>
+        <source>Mask the values in the Overview tab</source>
+        <translation>Mascare os valores na aba de visão geral</translation>
     </message>
     <message>
         <source>default wallet</source>
@@ -630,8 +664,12 @@
         <translation>A carteira está &lt;b&gt;encriptada&lt;/b&gt; e atualmente &lt;b&gt;bloqueada&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
-        <translation>Ocorreu um erro fatal. O Feathercoin não pode continuar com segurança e irá fechar.</translation>
+        <source>Original message:</source>
+        <translation>Mensagem original:</translation>
+    </message>
+    <message>
+        <source>A fatal error occurred. %1 can no longer continue safely and will quit.</source>
+        <translation>Um erro fatal ocorreu. %1 não pode mais continuar de maneira segura e será terminada.</translation>
     </message>
 </context>
 <context>
@@ -835,8 +873,20 @@
         <translation>Fazer Carteira em Branco</translation>
     </message>
     <message>
+        <source>Use descriptors for scriptPubKey management</source>
+        <translation>Use descritores para o gerenciamento de chaves públicas de script</translation>
+    </message>
+    <message>
+        <source>Descriptor Wallet</source>
+        <translation>Carteira de descritor</translation>
+    </message>
+    <message>
         <source>Create</source>
         <translation>Criar</translation>
+    </message>
+    <message>
+        <source>Compiled without sqlite support (required for descriptor wallets)</source>
+        <translation>Compilado sem suporte para sqlite (requerido para carteiras de descritor)</translation>
     </message>
 </context>
 <context>
@@ -874,8 +924,8 @@
         <translation>Editar o endereço de envio</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Feathercoin address.</source>
-        <translation>O endereço introduzido "%1" não é um endereço feathercoin válido.</translation>
+        <source>The entered address "%1" is not a valid Bitcoin address.</source>
+        <translation>O endereço introduzido "%1" não é um endereço bitcoin válido.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -922,10 +972,6 @@
     <message>
         <source>version</source>
         <translation>versão</translation>
-    </message>
-    <message>
-        <source>(%1-bit)</source>
-        <translation>(%1-bit)</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -975,8 +1021,8 @@
         <translation>Utilizar uma pasta de dados personalizada:</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
@@ -991,8 +1037,8 @@
         <translation>Aproximadamente %1 GB de dados irão ser guardados nesta pasta.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Feathercoin block chain.</source>
-        <translation>%1 irá descarregar e armazenar uma cópia da cadeia de blocos da Feathercoin.</translation>
+        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
+        <translation>%1 irá descarregar e armazenar uma cópia da cadeia de blocos da Bitcoin.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1026,12 +1072,12 @@
         <translation>Formulário</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the feathercoin network, as detailed below.</source>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
         <translation>Transações recentes podem não ser visíveis por agora, portanto o saldo da sua carteira pode estar incorreto. Esta informação será corrigida quando a sua carteira acabar de sincronizar com a rede, como está explicado em baixo.</translation>
     </message>
     <message>
-        <source>Attempting to spend feathercoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Tentar enviar feathercoins que estão afetadas por transações ainda não exibidas não será aceite pela rede.</translation>
+        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Tentar enviar bitcoins que estão afetadas por transações ainda não exibidas não será aceite pela rede.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1066,6 +1112,14 @@
         <translation>Ocultar</translation>
     </message>
     <message>
+        <source>Esc</source>
+        <translation>Sair</translation>
+    </message>
+    <message>
+        <source>%1 is currently syncing.  It will download headers and blocks from peers and validate them until reaching the tip of the block chain.</source>
+        <translation>%1 está no momento sincronizando. Ela irá baixar os cabecários e blocos dos pares e validá-los até atingir a ponta da cadeia de blocos.</translation>
+    </message>
+    <message>
         <source>Unknown. Syncing Headers (%1, %2%)...</source>
         <translation>Desconhecido. A sincronizar cabeçalhos (%1, %2%)...</translation>
     </message>
@@ -1073,24 +1127,12 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>Abir URI</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation>Abrir pedido de pagamento de um URI ou ficheiro</translation>
+        <source>Open bitcoin URI</source>
+        <translation>Abrir um Bitcoin URI</translation>
     </message>
     <message>
         <source>URI:</source>
         <translation>URI:</translation>
-    </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation>Selecione o ficheiro de pedido de pagamento</translation>
-    </message>
-    <message>
-        <source>Select payment request file to open</source>
-        <translation>Selecione o ficheiro de pedido de pagamento para abrir</translation>
     </message>
 </context>
 <context>
@@ -1145,10 +1187,6 @@
     <message>
         <source>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</source>
         <translation>Mostra se o padrão fornecido SOCKS5 proxy, está a ser utilizado para alcançar utilizadores participantes através deste tipo de rede.</translation>
-    </message>
-    <message>
-        <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor hidden services:</source>
-        <translation>Utilize um proxy SOCKS&amp;5 separado para alcançar utilizadores participantes através dos serviços ocultos do Tor.</translation>
     </message>
     <message>
         <source>Hide the icon from the system tray.</source>
@@ -1232,8 +1270,8 @@
         <translation>&amp;Gastar troco não confirmado</translation>
     </message>
     <message>
-        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Abrir a porta do cliente feathercoin automaticamente no seu router. Isto apenas funciona se o seu router suportar UPnP e este se encontrar ligado.</translation>
+        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Abrir a porta do cliente bitcoin automaticamente no seu router. Isto apenas funciona se o seu router suportar UPnP e este se encontrar ligado.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1248,8 +1286,8 @@
         <translation>Permitir ligações de "a receber"</translation>
     </message>
     <message>
-        <source>Connect to the Feathercoin network through a SOCKS5 proxy.</source>
-        <translation>Conectar à rede da Feathercoin através dum proxy SOCLS5.</translation>
+        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
+        <translation>Conectar à rede da Bitcoin através dum proxy SOCLS5.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1282,10 +1320,6 @@
     <message>
         <source>Tor</source>
         <translation>Tor</translation>
-    </message>
-    <message>
-        <source>Connect to the Feathercoin network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Ligar à rede Feathercoin através de um proxy SOCKS5 separado para utilizar os serviços ocultos do Tor.</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1326,6 +1360,14 @@
     <message>
         <source>Whether to show coin control features or not.</source>
         <translation>Escolha se deve mostrar as funcionalidades de controlo de moedas ou não.</translation>
+    </message>
+    <message>
+        <source>Connect to the Bitcoin network through a separate SOCKS5 proxy for Tor onion services.</source>
+        <translation>Conecte-se a rede Bitcoin através de um proxy SOCKS5 separado para serviços Tor Onion</translation>
+    </message>
+    <message>
+        <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor onion services:</source>
+        <translation>Use um proxy SOCKS5 separado para alcançar colegas por meio dos serviços Tor onion:</translation>
     </message>
     <message>
         <source>&amp;Third party transaction URLs</source>
@@ -1395,8 +1437,8 @@
         <translation>Formulário</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>A informação mostrada poderá estar desatualizada. A sua carteira sincroniza automaticamente com a rede Feathercoin depois de estabelecer ligação, mas este processo ainda não está completo.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>A informação mostrada poderá estar desatualizada. A sua carteira sincroniza automaticamente com a rede Bitcoin depois de estabelecer ligação, mas este processo ainda não está completo.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1462,6 +1504,134 @@
         <source>Current total balance in watch-only addresses</source>
         <translation>Saldo disponível em endereços de apenas vigiar</translation>
     </message>
+    <message>
+        <source>Privacy mode activated for the Overview tab. To unmask the values, uncheck Settings-&gt;Mask values.</source>
+        <translation>Modo de privacidade ativado para a aba de visão geral. para desmascarar os valores, desmarque nas Configurações -&gt; Valores de máscara</translation>
+    </message>
+</context>
+<context>
+    <name>PSBTOperationsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Diálogo</translation>
+    </message>
+    <message>
+        <source>Sign Tx</source>
+        <translation>Assinar transação</translation>
+    </message>
+    <message>
+        <source>Broadcast Tx</source>
+        <translation>Transmitir transação</translation>
+    </message>
+    <message>
+        <source>Copy to Clipboard</source>
+        <translation>Copiar para área de transferência</translation>
+    </message>
+    <message>
+        <source>Save...</source>
+        <translation>Salvar...</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Fechar</translation>
+    </message>
+    <message>
+        <source>Failed to load transaction: %1</source>
+        <translation>Falha ao carregar transação: %1</translation>
+    </message>
+    <message>
+        <source>Failed to sign transaction: %1</source>
+        <translation>Falha ao assinar transação: %1</translation>
+    </message>
+    <message>
+        <source>Could not sign any more inputs.</source>
+        <translation>Não pode assinar mais nenhuma entrada.</translation>
+    </message>
+    <message>
+        <source>Signed %1 inputs, but more signatures are still required.</source>
+        <translation>Assinadas entradas %1, mas mais assinaturas ainda são necessárias.</translation>
+    </message>
+    <message>
+        <source>Signed transaction successfully. Transaction is ready to broadcast.</source>
+        <translation>Transação assinada com sucesso. Transação está pronta para ser transmitida.</translation>
+    </message>
+    <message>
+        <source>Unknown error processing transaction.</source>
+        <translation>Erro desconhecido ao processar a transação.</translation>
+    </message>
+    <message>
+        <source>Transaction broadcast successfully! Transaction ID: %1</source>
+        <translation>Transação transmitida com sucesso.
+ID transação: %1</translation>
+    </message>
+    <message>
+        <source>Transaction broadcast failed: %1</source>
+        <translation>Falha ao transmitir a transação: %1</translation>
+    </message>
+    <message>
+        <source>PSBT copied to clipboard.</source>
+        <translation>PSBT copiada para a área de transferência.</translation>
+    </message>
+    <message>
+        <source>Save Transaction Data</source>
+        <translation>Salvar informação de transação</translation>
+    </message>
+    <message>
+        <source>Partially Signed Transaction (Binary) (*.psbt)</source>
+        <translation>Transação assinada parcialmente (binária) (*.psbt)</translation>
+    </message>
+    <message>
+        <source>PSBT saved to disk.</source>
+        <translation>PSBT salva no disco.</translation>
+    </message>
+    <message>
+        <source> * Sends %1 to %2</source>
+        <translation>Envia %1 para %2</translation>
+    </message>
+    <message>
+        <source>Unable to calculate transaction fee or total transaction amount.</source>
+        <translation>Incapaz de calcular a taxa de transação ou o valor total da transação.</translation>
+    </message>
+    <message>
+        <source>Pays transaction fee: </source>
+        <translation>Paga taxa de transação:</translation>
+    </message>
+    <message>
+        <source>Total Amount</source>
+        <translation>Valor Total</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>ou</translation>
+    </message>
+    <message>
+        <source>Transaction has %1 unsigned inputs.</source>
+        <translation>Transação tem %1 entradas não assinadas.</translation>
+    </message>
+    <message>
+        <source>Transaction is missing some information about inputs.</source>
+        <translation>Transação está com alguma informação faltando sobre as entradas.</translation>
+    </message>
+    <message>
+        <source>Transaction still needs signature(s).</source>
+        <translation>Transação continua precisando de assinatura(s).</translation>
+    </message>
+    <message>
+        <source>(But this wallet cannot sign transactions.)</source>
+        <translation>(Porém esta carteira não pode assinar transações.)</translation>
+    </message>
+    <message>
+        <source>(But this wallet does not have the right keys.)</source>
+        <translation>(Porém esta carteira não tem as chaves corretas.)</translation>
+    </message>
+    <message>
+        <source>Transaction is fully signed and ready for broadcast.</source>
+        <translation>Transação está completamente assinada e pronta para ser transmitida.</translation>
+    </message>
+    <message>
+        <source>Transaction status is unknown.</source>
+        <translation>Status da transação é desconhecido.</translation>
+    </message>
 </context>
 <context>
     <name>PaymentServer</name>
@@ -1470,28 +1640,20 @@
         <translation>Erro do pedido de pagamento</translation>
     </message>
     <message>
-        <source>Cannot start feathercoin: click-to-pay handler</source>
-        <translation>Impossível iniciar o controlador de feathercoin: click-to-pay</translation>
+        <source>Cannot start bitcoin: click-to-pay handler</source>
+        <translation>Impossível iniciar o controlador de bitcoin: click-to-pay</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>Manuseamento de URI</translation>
     </message>
     <message>
-        <source>'feathercoin://' is not a valid URI. Use 'feathercoin:' instead.</source>
-        <translation>'feathercoin://' não é um URI válido. Utilize 'feathercoin:'.</translation>
+        <source>'bitcoin://' is not a valid URI. Use 'bitcoin:' instead.</source>
+        <translation>'bitcoin://' não é um URI válido. Utilize 'bitcoin:'.</translation>
     </message>
     <message>
-        <source>You are using a BIP70 URL which will be unsupported in the future.</source>
-        <translation>Está a usar uma URL do BIP70 que será desativado no futuro.</translation>
-    </message>
-    <message>
-        <source>Payment request fetch URL is invalid: %1</source>
-        <translation>O URL do pedido de pagamento é inválido: %1</translation>
-    </message>
-    <message>
-        <source>Cannot process payment request because BIP70 support was not compiled in.</source>
-        <translation>O pagamento não pode ser processado porque o suporte ao BIP70 foi desativado.</translation>
+        <source>Cannot process payment request because BIP70 is not supported.</source>
+        <translation>O pagamento requerido não pode ser processado porque BIP70 não é suportado.</translation>
     </message>
     <message>
         <source>Due to widespread security flaws in BIP70 it's strongly recommended that any merchant instructions to switch wallets be ignored.</source>
@@ -1506,72 +1668,12 @@
         <translation>Endereço de pagamento inválido %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Feathercoin address or malformed URI parameters.</source>
-        <translation>URI não foi lido corretamente! Isto pode ser causado por um endereço Feathercoin inválido ou por parâmetros URI malformados.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
+        <translation>URI não foi lido corretamente! Isto pode ser causado por um endereço Bitcoin inválido ou por parâmetros URI malformados.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
         <translation>Controlo de pedidos de pagamento.</translation>
-    </message>
-    <message>
-        <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
-        <translation>O ficheiro de pedido de pagamento não pôde ser lido! Isto pode ter sido causado por um ficheiro de pedido de pagamento inválido.</translation>
-    </message>
-    <message>
-        <source>Payment request rejected</source>
-        <translation>Pedido de pagamento rejeitado</translation>
-    </message>
-    <message>
-        <source>Payment request network doesn't match client network.</source>
-        <translation>Rede de requisição de pagamento não corresponde com a rede do cliente.</translation>
-    </message>
-    <message>
-        <source>Payment request expired.</source>
-        <translation>Pedido de pagamento expirado.</translation>
-    </message>
-    <message>
-        <source>Payment request is not initialized.</source>
-        <translation>O pedido de pagamento não foi inicializado.</translation>
-    </message>
-    <message>
-        <source>Unverified payment requests to custom payment scripts are unsupported.</source>
-        <translation>Pedidos de pagamento não-verificados para scripts de pagamento personalizados não são suportados.</translation>
-    </message>
-    <message>
-        <source>Invalid payment request.</source>
-        <translation>Pedido de pagamento inválido.</translation>
-    </message>
-    <message>
-        <source>Requested payment amount of %1 is too small (considered dust).</source>
-        <translation>Quantia solicitada para pagamento de %1 é muito pequena (considerada "pó").</translation>
-    </message>
-    <message>
-        <source>Refund from %1</source>
-        <translation>Reembolso de %1</translation>
-    </message>
-    <message>
-        <source>Payment request %1 is too large (%2 bytes, allowed %3 bytes).</source>
-        <translation>Pedido de pagamento %1 é demasiado grande (%2 bytes, permitido %3 bytes).</translation>
-    </message>
-    <message>
-        <source>Error communicating with %1: %2</source>
-        <translation>Erro ao comunicar com %1: %2</translation>
-    </message>
-    <message>
-        <source>Payment request cannot be parsed!</source>
-        <translation>O pedido de pagamento não pode ser lido ou processado!</translation>
-    </message>
-    <message>
-        <source>Bad response from server %1</source>
-        <translation>Má resposta do servidor %1</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation>Erro de pedido de rede</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation>Pagamento confirmado</translation>
     </message>
 </context>
 <context>
@@ -1608,8 +1710,8 @@
         <translation>Quantia</translation>
     </message>
     <message>
-        <source>Enter a Feathercoin address (e.g. %1)</source>
-        <translation>Introduza um endereço Feathercoin (ex. %1)</translation>
+        <source>Enter a Bitcoin address (e.g. %1)</source>
+        <translation>Introduza um endereço Bitcoin (ex. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1696,6 +1798,10 @@
         <translation>Erro: %1</translation>
     </message>
     <message>
+        <source>Error initializing settings: %1</source>
+        <translation>Erro ao inicializar configurações: %1</translation>
+    </message>
+    <message>
         <source>%1 didn't yet exit safely...</source>
         <translation>%1 ainda não foi fechado em segurança...</translation>
     </message>
@@ -1750,10 +1856,6 @@
         <translation>&amp;Informação</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation>Janela de depuração</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>Geral</translation>
     </message>
@@ -1796,10 +1898,6 @@
     <message>
         <source>Block chain</source>
         <translation>Cadeia de blocos</translation>
-    </message>
-    <message>
-        <source>Current number of blocks</source>
-        <translation>Número atual de blocos</translation>
     </message>
     <message>
         <source>Memory Pool</source>
@@ -1846,10 +1944,6 @@
         <translation>Selecione um ponto para ver informação detalhada.</translation>
     </message>
     <message>
-        <source>Whitelisted</source>
-        <translation>Permitido por si</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>Direção</translation>
     </message>
@@ -1870,8 +1964,24 @@
         <translation>Blocos Sincronizados</translation>
     </message>
     <message>
+        <source>The mapped Autonomous System used for diversifying peer selection.</source>
+        <translation>O sistema autonômo mapeado usado para diversificar a seleção de pares.</translation>
+    </message>
+    <message>
+        <source>Mapped AS</source>
+        <translation>Mapeado como</translation>
+    </message>
+    <message>
         <source>User Agent</source>
         <translation>User Agent</translation>
+    </message>
+    <message>
+        <source>Node window</source>
+        <translation>Janela do nó</translation>
+    </message>
+    <message>
+        <source>Current block height</source>
+        <translation>Altura atual do bloco</translation>
     </message>
     <message>
         <source>Open the %1 debug log file from the current data directory. This can take a few seconds for large log files.</source>
@@ -1886,12 +1996,12 @@
         <translation>Aumentar tamanho da letra</translation>
     </message>
     <message>
-        <source>Services</source>
-        <translation>Serviços</translation>
+        <source>Permissions</source>
+        <translation>Permissões</translation>
     </message>
     <message>
-        <source>Ban Score</source>
-        <translation>Pontuação de Banimento</translation>
+        <source>Services</source>
+        <translation>Serviços</translation>
     </message>
     <message>
         <source>Connection Time</source>
@@ -2042,14 +2152,6 @@
         <translation>Saída</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation>Sim</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Não</translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation>Desconhecido</translation>
     </message>
@@ -2069,8 +2171,8 @@
         <translation>&amp;Mensagem:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
-        <translation>Uma mensagem opcional para anexar ao pedido de pagamento, que será exibida quando o pedido for aberto. Nota: A mensagem não será enviada com o pagamento através da rede Feathercoin.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
+        <translation>Uma mensagem opcional para anexar ao pedido de pagamento, que será exibida quando o pedido for aberto. Nota: A mensagem não será enviada com o pagamento através da rede Bitcoin.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2083,6 +2185,14 @@
     <message>
         <source>An optional amount to request. Leave this empty or zero to not request a specific amount.</source>
         <translation>Uma quantia opcional a solicitar. Deixe em branco ou zero para não solicitar uma quantidade específica.</translation>
+    </message>
+    <message>
+        <source>An optional label to associate with the new receiving address (used by you to identify an invoice).  It is also attached to the payment request.</source>
+        <translation>Um legenda opcional para associar com o novo endereço de recebimento (usado por você para identificar uma fatura).  Ela é também anexada ao pedido de pagamento.</translation>
+    </message>
+    <message>
+        <source>An optional message that is attached to the payment request and may be displayed to the sender.</source>
+        <translation>Uma mensagem opicional que é anexada ao pedido de pagamento e pode ser mostrada para o remetente.</translation>
     </message>
     <message>
         <source>&amp;Create new receiving address</source>
@@ -2140,12 +2250,40 @@
         <source>Copy amount</source>
         <translation>Copiar valor</translation>
     </message>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Não foi possível desbloquear a carteira.</translation>
+    </message>
+    <message>
+        <source>Could not generate new %1 address</source>
+        <translation>Não foi possível gerar um novo endereço %1</translation>
+    </message>
 </context>
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>QR Code</source>
-        <translation>Código QR</translation>
+        <source>Request payment to ...</source>
+        <translation>Requisitar pagamento para ...</translation>
+    </message>
+    <message>
+        <source>Address:</source>
+        <translation>Endereço:</translation>
+    </message>
+    <message>
+        <source>Amount:</source>
+        <translation>Valor:</translation>
+    </message>
+    <message>
+        <source>Label:</source>
+        <translation>Legenda:</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>Mensagem:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Carteira:</translation>
     </message>
     <message>
         <source>Copy &amp;URI</source>
@@ -2166,30 +2304,6 @@
     <message>
         <source>Payment information</source>
         <translation>Informação de Pagamento</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation>URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Endereço</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Valor</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Etiqueta</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Mensagem</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Carteira</translation>
     </message>
 </context>
 <context>
@@ -2294,10 +2408,6 @@
         <translation>Aviso: atualmente, não é possível a estimativa da taxa.</translation>
     </message>
     <message>
-        <source>collapse fee-settings</source>
-        <translation>ocultar configurações de taxa</translation>
-    </message>
-    <message>
         <source>Specify a custom fee per kB (1,000 bytes) of the transaction's virtual size.
 
 Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis per kB" for a transaction size of 500 bytes (half of 1 kB) would ultimately yield a fee of only 50 satoshis.</source>
@@ -2342,7 +2452,11 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Lixo:</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for feathercoin transactions than the network can process.</source>
+        <source>Hide transaction fee settings</source>
+        <translation>Esconder configurações de taxas de transação</translation>
+    </message>
+    <message>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for bitcoin transactions than the network can process.</source>
         <translation>Quando o volume de transações é maior que o espaço nos blocos, os mineradores, bem como os nós de retransmissão, podem impor uma taxa mínima. Pagar apenas esta taxa mínima é muito bom, mas esteja ciente que isso pode resultar numa transação nunca confirmada, uma vez que há mais pedidos para transações do que a rede pode processar.</translation>
     </message>
     <message>
@@ -2410,6 +2524,14 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>%1 (%2 blocos)</translation>
     </message>
     <message>
+        <source>Cr&amp;eate Unsigned</source>
+        <translation>Criar não assinado</translation>
+    </message>
+    <message>
+        <source>Creates a Partially Signed Bitcoin Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Cria uma transação de Bitcoin parcialmente assinada (PSBT)(sigla em inglês) para ser usada por exemplo com uma carteira %1 offline ou uma carteira de hardware compatível com PSBT.</translation>
+    </message>
+    <message>
         <source> from wallet '%1'</source>
         <translation>da carteira '%1'</translation>
     </message>
@@ -2422,8 +2544,28 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>%1 para %2</translation>
     </message>
     <message>
+        <source>Do you want to draft this transaction?</source>
+        <translation>Você quer simular esta transação?</translation>
+    </message>
+    <message>
         <source>Are you sure you want to send?</source>
         <translation>Tem a certeza que deseja enviar?</translation>
+    </message>
+    <message>
+        <source>Create Unsigned</source>
+        <translation>Criar sem assinatura</translation>
+    </message>
+    <message>
+        <source>Save Transaction Data</source>
+        <translation>Salvar informação de transação</translation>
+    </message>
+    <message>
+        <source>Partially Signed Transaction (Binary) (*.psbt)</source>
+        <translation>Transação assinada parcialmente (binária) (*.psbt)</translation>
+    </message>
+    <message>
+        <source>PSBT saved</source>
+        <translation>PSBT salva</translation>
     </message>
     <message>
         <source>or</source>
@@ -2432,6 +2574,10 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
     <message>
         <source>You can increase the fee later (signals Replace-By-Fee, BIP-125).</source>
         <translation>Pode aumentar a taxa depois (sinaliza substituir-por-taxa, BIP-125).</translation>
+    </message>
+    <message>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Bitcoin Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Por favor, reveja sua proposta de transação. Isto irá produzir uma Transação de Bitcoin parcialmente assinada (PSBT, sigla em inglês) a qual você pode salvar ou copiar e então assinar com por exemplo uma carteira %1 offiline ou uma PSBT compatível com carteira de hardware.</translation>
     </message>
     <message>
         <source>Please, review your transaction.</source>
@@ -2458,6 +2604,18 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Confirme envio de moedas</translation>
     </message>
     <message>
+        <source>Confirm transaction proposal</source>
+        <translation>Confirmar a proposta de transação</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Enviar</translation>
+    </message>
+    <message>
+        <source>Watch-only balance:</source>
+        <translation>Saldo apenas para visualização:</translation>
+    </message>
+    <message>
         <source>The recipient address is not valid. Please recheck.</source>
         <translation>O endereço do destinatário é inválido. Por favor, reverifique.</translation>
     </message>
@@ -2482,11 +2640,6 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>A criação da transação falhou!</translation>
     </message>
     <message>
-        <source>The transaction was rejected with the following reason: %1</source>
-        <translation>A transação foi rejeitada pelo seguinte motivo: %1
-</translation>
-    </message>
-    <message>
         <source>A fee higher than %1 is considered an absurdly high fee.</source>
         <translation>Uma taxa superior a %1 é considerada uma taxa altamente absurda.</translation>
     </message>
@@ -2499,8 +2652,8 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation><numerusform>Estimado para iniciar a confirmação dentro de %n bloco.</numerusform><numerusform>Estimado para iniciar a confirmação dentro de %n blocos.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid Feathercoin address</source>
-        <translation>Aviso: endereço Feathercoin inválido</translation>
+        <source>Warning: Invalid Bitcoin address</source>
+        <translation>Aviso: endereço Bitcoin inválido</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2538,12 +2691,8 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Escolha o endereço utilizado anteriormente</translation>
     </message>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>Este é um pagamento normal.</translation>
-    </message>
-    <message>
-        <source>The Feathercoin address to send the payment to</source>
-        <translation>O endereço Feathercoin para enviar o pagamento</translation>
+        <source>The Bitcoin address to send the payment to</source>
+        <translation>O endereço Bitcoin para enviar o pagamento</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2562,8 +2711,12 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Remover esta entrada</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less feathercoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>A taxa será deduzida ao valor que está a ser enviado. O destinatário irá receber menos feathercoins do que as que inseridas no campo do valor. Se estiverem selecionados múltiplos destinatários, a taxa será repartida equitativamente.</translation>
+        <source>The amount to send in the selected unit</source>
+        <translation>A quantidade para enviar na unidade selecionada</translation>
+    </message>
+    <message>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>A taxa será deduzida ao valor que está a ser enviado. O destinatário irá receber menos bitcoins do que as que inseridas no campo do valor. Se estiverem selecionados múltiplos destinatários, a taxa será repartida equitativamente.</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2590,8 +2743,8 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Introduza uma etiqueta para este endereço para o adicionar à sua lista de endereços usados</translation>
     </message>
     <message>
-        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
-        <translation>Uma mensagem que estava anexada ao URI feathercoin: que será armazenada com a transação para sua referência. Nota: Esta mensagem não será enviada através da rede Feathercoin.</translation>
+        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
+        <translation>Uma mensagem que estava anexada ao URI bitcoin: que será armazenada com a transação para sua referência. Nota: Esta mensagem não será enviada através da rede Bitcoin.</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2600,17 +2753,6 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
     <message>
         <source>Memo:</source>
         <translation>Memorando:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>Digite uma etiqueta para este endereço para adicioná-lo ao seu livro de endereços.</translation>
-    </message>
-</context>
-<context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>Sim</translation>
     </message>
 </context>
 <context>
@@ -2635,12 +2777,12 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>&amp;Assinar Mensagem</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive feathercoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <source>You can sign messages/agreements with your addresses to prove you can receive bitcoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation>Pode assinar mensagens com os seus endereços para provar que são seus. Tenha atenção ao assinar mensagens ambíguas, pois ataques de phishing podem tentar enganá-lo de modo a assinar a sua identidade para os atacantes. Apenas assine declarações detalhadas com as quais concorde.</translation>
     </message>
     <message>
-        <source>The Feathercoin address to sign the message with</source>
-        <translation>O endereço Feathercoin para designar a mensagem</translation>
+        <source>The Bitcoin address to sign the message with</source>
+        <translation>O endereço Bitcoin para designar a mensagem</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2671,8 +2813,8 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Copiar a assinatura atual para a área de transferência</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Feathercoin address</source>
-        <translation>Assine uma mensagem para provar que é dono deste endereço Feathercoin</translation>
+        <source>Sign the message to prove you own this Bitcoin address</source>
+        <translation>Assine uma mensagem para provar que é dono deste endereço Bitcoin</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2695,12 +2837,20 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Introduza o endereço de assinatura, mensagem (assegure-se que copia quebras de linha, espaços, tabulações, etc. exatamente) e assinatura abaixo para verificar a mensagem. Tenha atenção para não ler mais na assinatura do que o que estiver na mensagem assinada, para evitar ser enganado por um atacante que se encontre entre si e quem assinou a mensagem.</translation>
     </message>
     <message>
-        <source>The Feathercoin address the message was signed with</source>
-        <translation>O endereço Feathercoin com que a mensagem foi designada</translation>
+        <source>The Bitcoin address the message was signed with</source>
+        <translation>O endereço Bitcoin com que a mensagem foi designada</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
-        <translation>Verifique a mensagem para assegurar que foi assinada com o endereço Feathercoin especificado</translation>
+        <source>The signed message to verify</source>
+        <translation>A mensagem assinada para verificar</translation>
+    </message>
+    <message>
+        <source>The signature given when the message was signed</source>
+        <translation>A assinatura dada quando a mensagem foi assinada</translation>
+    </message>
+    <message>
+        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <translation>Verifique a mensagem para assegurar que foi assinada com o endereço Bitcoin especificado</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -2729,6 +2879,10 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
     <message>
         <source>Wallet unlock was cancelled.</source>
         <translation>O desbloqueio da carteira foi cancelado.</translation>
+    </message>
+    <message>
+        <source>No error</source>
+        <translation>Sem erro</translation>
     </message>
     <message>
         <source>Private key for the entered address is not available.</source>
@@ -3239,12 +3393,28 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <source>Closing the wallet for too long can result in having to resync the entire chain if pruning is enabled.</source>
         <translation>Fechar a carteira durante demasiado tempo pode resultar em ter de resincronizar a cadeia inteira se pruning estiver ativado.</translation>
     </message>
+    <message>
+        <source>Close all wallets</source>
+        <translation>Fechar todas carteiras.</translation>
+    </message>
+    <message>
+        <source>Are you sure you wish to close all wallets?</source>
+        <translation>Você tem certeza que deseja fechar todas as carteira?</translation>
+    </message>
 </context>
 <context>
     <name>WalletFrame</name>
     <message>
-        <source>No wallet has been loaded.</source>
-        <translation>Nenhuma carteira foi carregada</translation>
+        <source>No wallet has been loaded.
+Go to File &gt; Open Wallet to load a wallet.
+- OR -</source>
+        <translation>Nenhuma carteira foi carregada
+Ir para o arquivo &gt; Abrir carteira para carregar a carteira
+- OU -</translation>
+    </message>
+    <message>
+        <source>Create a new wallet</source>
+        <translation>Criar novo carteira</translation>
     </message>
 </context>
 <context>
@@ -3266,6 +3436,10 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Quer aumentar a taxa?</translation>
     </message>
     <message>
+        <source>Do you want to draft a transaction with fee increase?</source>
+        <translation>Você quer simular uma transação com aumento da taxa?</translation>
+    </message>
+    <message>
         <source>Current fee:</source>
         <translation>Taxa atual:</translation>
     </message>
@@ -3280,6 +3454,14 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
     <message>
         <source>Confirm fee bump</source>
         <translation>Confirme aumento de taxa</translation>
+    </message>
+    <message>
+        <source>Can't draft transaction.</source>
+        <translation>Não foi possível simular a transação.</translation>
+    </message>
+    <message>
+        <source>PSBT copied</source>
+        <translation>PSBT copiado</translation>
     </message>
     <message>
         <source>Can't sign transaction.</source>
@@ -3303,6 +3485,30 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>Exportar os dados no separador atual para um ficheiro</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Erro</translation>
+    </message>
+    <message>
+        <source>Unable to decode PSBT from clipboard (invalid base64)</source>
+        <translation>Incapaz de decifrar a PSBT da área de transferência (base64 inválida)</translation>
+    </message>
+    <message>
+        <source>Load Transaction Data</source>
+        <translation>Carregar dados de transação</translation>
+    </message>
+    <message>
+        <source>Partially Signed Transaction (*.psbt)</source>
+        <translation>Transação parcialmente assinada (*.psbt)</translation>
+    </message>
+    <message>
+        <source>PSBT file must be smaller than 100 MiB</source>
+        <translation>Arquivo PSBT deve ser menor que 100 MiB</translation>
+    </message>
+    <message>
+        <source>Unable to decode PSBT</source>
+        <translation>Incapaz de decifrar a PSBT</translation>
     </message>
     <message>
         <source>Backup Wallet</source>
@@ -3348,14 +3554,6 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Poda: a última sincronização da carteira vai além dos dados podados.  Precisa de -reindex (descarregar novamente a cadeia de blocos completa em caso de nó podado)</translation>
     </message>
     <message>
-        <source>Rescans are not possible in pruned mode. You will need to use -reindex which will download the whole blockchain again.</source>
-        <translation>Reanálises não são possíveis em modo poda. Terá de utilizar -reindex que irá descarregar novamente a cadeia de blocos completa</translation>
-    </message>
-    <message>
-        <source>Error: A fatal internal error occurred, see debug.log for details</source>
-        <translation>Erro: surgiu um erro fatal interno. Veja o ficheiro debug.log para mais informação</translation>
-    </message>
-    <message>
         <source>Pruning blockstore...</source>
         <translation>A reduzir a blockstore...</translation>
     </message>
@@ -3366,10 +3564,6 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
     <message>
         <source>The %s developers</source>
         <translation>Os programadores de %s</translation>
-    </message>
-    <message>
-        <source>Can't generate a change-address key. No keys in the internal keypool and can't generate any keys.</source>
-        <translation>Não é possível gerar uma chave de alterar endereço. Não há chaves na keypool interna e não podem ser geradas nenhumas chaves.</translation>
     </message>
     <message>
         <source>Cannot obtain a lock on data directory %s. %s is probably already running.</source>
@@ -3384,12 +3578,28 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Erro ao ler %s! Todas as chaves foram lidas corretamente, mas os dados de transação ou as entradas no livro de endereços podem não existir ou estarem incorretos.</translation>
     </message>
     <message>
+        <source>More than one onion bind address is provided. Using %s for the automatically created Tor onion service.</source>
+        <translation>Mais de um endereço de ligação onion é fornecido. Usando %s para o serviço Tor onion criado automaticamente.</translation>
+    </message>
+    <message>
         <source>Please check that your computer's date and time are correct! If your clock is wrong, %s will not work properly.</source>
         <translation>Por favor verifique que a data e hora do seu computador estão certos! Se o relógio não estiver certo, o %s não funcionará corretamente.</translation>
     </message>
     <message>
         <source>Please contribute if you find %s useful. Visit %s for further information about the software.</source>
         <translation>Por favor, contribua se achar que %s é útil. Visite %s para mais informação sobre o software.</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to prepare the statement to fetch sqlite wallet schema version: %s</source>
+        <translation>SQLiteDatabase: Falha ao preparar a instrução para buscar a versão do esquema da carteira sqlite: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to prepare the statement to fetch the application id: %s</source>
+        <translation>SQLiteDatabase: Falha ao preparar a instrução para buscar o ID do aplicativo: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Unknown sqlite wallet schema version %d. Only version %d is supported</source>
+        <translation>SQLiteDatabase: Versão %d do esquema de carteira sqlite desconhecido. Apenas a versão %d é suportada</translation>
     </message>
     <message>
         <source>The block database contains a block which appears to be from the future. This may be due to your computer's date and time being set incorrectly. Only rebuild the block database if you are sure that your computer's date and time are correct</source>
@@ -3420,14 +3630,6 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Aviso: parece que nós não estamos de acordo com os nossos pontos! Poderá ter que atualizar, ou outros pontos podem ter que ser atualizados.</translation>
     </message>
     <message>
-        <source>%d of last 100 blocks have unexpected version</source>
-        <translation>%d dos últimos 100 blocos têm uma versão inesperada</translation>
-    </message>
-    <message>
-        <source>%s corrupt, salvage failed</source>
-        <translation>%s corrompido, a recuperação falhou</translation>
-    </message>
-    <message>
         <source>-maxmempool must be at least %d MB</source>
         <translation>- máximo do banco de memória deverá ser pelo menos %d MB</translation>
     </message>
@@ -3450,6 +3652,14 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
     <message>
         <source>Corrupted block database detected</source>
         <translation>Detetada cadeia de blocos corrompida</translation>
+    </message>
+    <message>
+        <source>Could not find asmap file %s</source>
+        <translation>Não foi possível achar o arquivo asmap %s</translation>
+    </message>
+    <message>
+        <source>Could not parse asmap file %s</source>
+        <translation>Não foi possível analisar o arquivo asmap %s.</translation>
     </message>
     <message>
         <source>Do you want to rebuild the block database now?</source>
@@ -3496,6 +3706,14 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Reexaminação da carteira falhou durante a inicialização</translation>
     </message>
     <message>
+        <source>Failed to verify database</source>
+        <translation>Falha ao verificar base de dados</translation>
+    </message>
+    <message>
+        <source>Ignoring duplicate -wallet %s.</source>
+        <translation>Ignorando -carteira %s duplicada.</translation>
+    </message>
+    <message>
         <source>Importing...</source>
         <translation>A importar...</translation>
     </message>
@@ -3524,6 +3742,30 @@ Nota: como a taxa é calculada por byte, uma taxa de "100 satoshis por kB" por u
         <translation>Valor inválido para -fallbackfee=&lt;amount&gt;: '%s'</translation>
     </message>
     <message>
+        <source>SQLiteDatabase: Failed to execute statement to verify database: %s</source>
+        <translation>SQLiteDatabase: Falha ao executar a instrução para verificar o banco de dados: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to fetch sqlite wallet schema version: %s</source>
+        <translation>SQLiteDatabase: Falha ao buscar a versão do esquema da carteira sqlite: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to fetch the application id: %s</source>
+        <translation>SQLiteDatabase: Falha ao buscar o id do aplicativo: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to prepare statement to verify database: %s</source>
+        <translation>SQLiteDatabase: Falha ao preparar a instrução para verificar o banco de dados: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to read database verification error: %s</source>
+        <translation>SQLiteDatabase: Falha ao ler base de dados erro de verificação %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Unexpected application id. Expected %u, got %u</source>
+        <translation>SQLiteDatabase: ID de aplicativo inesperado. Esperado %u, obteve %u</translation>
+    </message>
+    <message>
         <source>Specified blocks directory "%s" does not exist.</source>
         <translation>
 A pasta de blocos especificados "%s" não existe.</translation>
@@ -3543,10 +3785,6 @@ A pasta de blocos especificados "%s" não existe.</translation>
     <message>
         <source>Loading P2P addresses...</source>
         <translation>A carregar endereços de P2P...</translation>
-    </message>
-    <message>
-        <source>Error: Disk space is too low!</source>
-        <translation>Erro: O espaço disponível no disco é demasiado pequeno!</translation>
     </message>
     <message>
         <source>Loading banlist...</source>
@@ -3613,6 +3851,14 @@ A pasta de blocos especificados "%s" não existe.</translation>
         <translation>Erro: a escuta de ligações de entrada falhou (escuta devolveu o erro %s)</translation>
     </message>
     <message>
+        <source>%s corrupt. Try using the wallet tool bitcoin-wallet to salvage or restoring a backup.</source>
+        <translation>%s corrompido. Tente usar a ferramenta de carteira bitcoin-wallet para salvar ou restaurar um backup.</translation>
+    </message>
+    <message>
+        <source>Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use version 169900 or no version specified.</source>
+        <translation>Não é possível atualizar uma carteira divida do tipo não-HD sem atualizar para ser compatível com divisão prévia da keypool. Por favor use a versão 169900 ou sem especificar nenhuma versão.</translation>
+    </message>
+    <message>
         <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)</source>
         <translation>Montante inválido para -maxtxfee=&lt;amount&gt;: '%s' (deverá ser, no mínimo, a taxa mínima de propagação de %s, de modo a evitar transações bloqueadas)</translation>
     </message>
@@ -3621,8 +3867,32 @@ A pasta de blocos especificados "%s" não existe.</translation>
         <translation>O montante da transação é demasiado baixo após a dedução da taxa</translation>
     </message>
     <message>
+        <source>This error could occur if this wallet was not shutdown cleanly and was last loaded using a build with a newer version of Berkeley DB. If so, please use the software that last loaded this wallet</source>
+        <translation>Este erro pode ocorrer se a carteira não foi desligada corretamente e foi carregada da ultima vez usando uma compilação com uma versão mais recente da Berkeley DB. Se sim, por favor use o programa que carregou esta carteira da ultima vez.</translation>
+    </message>
+    <message>
+        <source>This is the maximum transaction fee you pay (in addition to the normal fee) to prioritize partial spend avoidance over regular coin selection.</source>
+        <translation>Este é a taxa de transação máxima que você paga (em adição à taxa normal) para priorizar evitar gastos parciais sobre seleção de moeda normal.</translation>
+    </message>
+    <message>
+        <source>Transaction needs a change address, but we can't generate it. Please call keypoolrefill first.</source>
+        <translation>Transação precisa uma mudança de endereço, mas nós não podemos gerar isto. Por favor chame keypoolrefill primeiro.</translation>
+    </message>
+    <message>
         <source>You need to rebuild the database using -reindex to go back to unpruned mode.  This will redownload the entire blockchain</source>
         <translation>Necessita reconstruir a base de dados, utilizando -reindex para voltar ao modo sem poda. Isto irá descarregar novamente a cadeia de blocos completa</translation>
+    </message>
+    <message>
+        <source>A fatal internal error occurred, see debug.log for details</source>
+        <translation>Um erro fatal interno occoreu, veja o debug.log para detalhes</translation>
+    </message>
+    <message>
+        <source>Cannot set -peerblockfilters without -blockfilterindex.</source>
+        <translation>Não é possível ajustar -peerblockfilters sem -blockfilterindex.</translation>
+    </message>
+    <message>
+        <source>Disk space is too low!</source>
+        <translation>Espaço de disco é muito pouco!</translation>
     </message>
     <message>
         <source>Error reading from database, shutting down.</source>
@@ -3635,6 +3905,14 @@ A pasta de blocos especificados "%s" não existe.</translation>
     <message>
         <source>Error: Disk space is low for %s</source>
         <translation>Erro: espaço em disco demasiado baixo para %s</translation>
+    </message>
+    <message>
+        <source>Error: Keypool ran out, please call keypoolrefill first</source>
+        <translation>A keypool esgotou-se, por favor execute primeiro keypoolrefill1</translation>
+    </message>
+    <message>
+        <source>Fee rate (%s) is lower than the minimum fee rate setting (%s)</source>
+        <translation>A variação da taxa (%s) é menor que a mínima variação de taxa (%s) configurada.</translation>
     </message>
     <message>
         <source>Invalid -onion address or hostname: '%s'</source>
@@ -3655,6 +3933,10 @@ A pasta de blocos especificados "%s" não existe.</translation>
     <message>
         <source>Need to specify a port with -whitebind: '%s'</source>
         <translation>Necessário especificar uma porta com -whitebind: '%s'</translation>
+    </message>
+    <message>
+        <source>No proxy server specified. Use -proxy=&lt;ip&gt; or -proxy=&lt;ip:port&gt;.</source>
+        <translation>Sem servidor de proxy especificado. Use -proxy=&lt;ip&gt; ou -proxy=&lt;ip:port&gt;.</translation>
     </message>
     <message>
         <source>Prune mode is incompatible with -blockfilterindex.</source>
@@ -3731,10 +4013,6 @@ A pasta de blocos especificados "%s" não existe.</translation>
         <translation>Aviso: ativadas novas regras desconhecidas (versionbit %i)</translation>
     </message>
     <message>
-        <source>Zapping all transactions from wallet...</source>
-        <translation>A limpar todas as transações da carteira...</translation>
-    </message>
-    <message>
         <source>-maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
         <translation>-maxtxfee está definido com um valor muito alto! Taxas desta magnitude podem ser pagas numa única transação.</translation>
     </message>
@@ -3743,24 +4021,12 @@ A pasta de blocos especificados "%s" não existe.</translation>
         <translation>Esta é a taxa de transação que poderá pagar quando as estimativas da taxa não estão disponíveis.</translation>
     </message>
     <message>
-        <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit %s and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
-        <translation>Este produto inclui software desenvolvido pelo Projeto de OpenSSL para utilização no OpenSSL Toolkit %s e software criptográfico escrito por Eric Young e software UPnP escrito por Thomas Bernard.</translation>
-    </message>
-    <message>
         <source>Total length of network version string (%i) exceeds maximum length (%i). Reduce the number or size of uacomments.</source>
         <translation>Comprimento total da entrada da versão de rede (%i) excede o comprimento máximo (%i). Reduzir o número ou o tamanho de uacomments.</translation>
     </message>
     <message>
-        <source>Warning: Wallet file corrupt, data salvaged! Original %s saved as %s in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Atenção: o ficheiro da carteira está corrompido, foram recuperados dados! Original %s guardado como %s em %s; se o seu saldo ou as transações estiverem incorretos, deve fazer o restauro de uma cópia de segurança.</translation>
-    </message>
-    <message>
         <source>%s is set very high!</source>
         <translation>%s está demasiado elevado!</translation>
-    </message>
-    <message>
-        <source>Error loading wallet %s. Duplicate -wallet filename specified.</source>
-        <translation>Erro ao carregar a carteira %s. Especificado nome de fichero -wallet em duplicado.</translation>
     </message>
     <message>
         <source>Starting network threads...</source>
@@ -3797,10 +4063,6 @@ A pasta de blocos especificados "%s" não existe.</translation>
     <message>
         <source>Insufficient funds</source>
         <translation>Fundos insuficientes</translation>
-    </message>
-    <message>
-        <source>Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use -upgradewallet=169900 or -upgradewallet with no version specified.</source>
-        <translation>Não é possível atualizar uma carteira dividida não-HD sem atualizar para ser compatível com a keypool antes da divisão. Use -upgradewallet=169900 ou -upgradewallet sem especificar nenhuma versão.</translation>
     </message>
     <message>
         <source>Fee estimation failed. Fallbackfee is disabled. Wait a few blocks or enable -fallbackfee.</source>

@@ -66,8 +66,8 @@
         <translation>Vastuvõtvad aadressid</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Need on sinu Feathercoin aadressid maksete saatmiseks. Ennem müntide saatmist kontrolli alati summat ja makse saaja aadressi.</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Need on sinu Bitcoin aadressid maksete saatmiseks. Ennem müntide saatmist kontrolli alati summat ja makse saaja aadressi.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -132,6 +132,10 @@
         <translation>Korda uut parooli</translation>
     </message>
     <message>
+        <source>Show passphrase</source>
+        <translation>Näita salafraasi</translation>
+    </message>
+    <message>
         <source>Encrypt wallet</source>
         <translation>Krüpteeri rahakott</translation>
     </message>
@@ -172,6 +176,34 @@
         <translation>Rahakott krüpteeritud</translation>
     </message>
     <message>
+        <source>Enter the new passphrase for the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
+        <translation>Sisesta rahakotile uus salafraas.&lt;br/&gt;Kasuta salafraasi millles on&lt;b&gt;kümme või rohkem juhuslikku sümbolit&lt;b&gt;,või&lt;b&gt;kaheksa või rohkem sõna&lt;b/&gt;.</translation>
+    </message>
+    <message>
+        <source>Enter the old passphrase and new passphrase for the wallet.</source>
+        <translation>Sisesta rahakoti vana salafraas ja uus salafraas.</translation>
+    </message>
+    <message>
+        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <translation>Pea meeles, et rahakoti krüpteerimine ei välista bitcoinide vargust, kui sinu arvuti on nakatunud pahavaraga.</translation>
+    </message>
+    <message>
+        <source>Wallet to be encrypted</source>
+        <translation>Krüpteeritav rahakott</translation>
+    </message>
+    <message>
+        <source>Your wallet is about to be encrypted. </source>
+        <translation>Rahakott krüpteeritakse.</translation>
+    </message>
+    <message>
+        <source>Your wallet is now encrypted. </source>
+        <translation>Rahakott krüpteeritud.</translation>
+    </message>
+    <message>
+        <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
+        <translation>TÄHTIS: Kõik varasemad rahakoti varundfailid tuleks üle kirjutada äsja loodud krüpteeritud rahakoti failiga. Turvakaalutlustel tühistatakse krüpteerimata rahakoti failid alates uue, krüpteeritud rahakoti, kasutusele võtust.</translation>
+    </message>
+    <message>
         <source>Wallet encryption failed</source>
         <translation>Rahakoti krüpteerimine ebaõnnestus</translation>
     </message>
@@ -210,7 +242,11 @@
         <source>IP/Netmask</source>
         <translation>IP/Võrgumask</translation>
     </message>
-    </context>
+    <message>
+        <source>Banned Until</source>
+        <translation>Blokeeritud kuni</translation>
+    </message>
+</context>
 <context>
     <name>BitcoinGUI</name>
     <message>
@@ -250,6 +286,10 @@
         <translation>&amp;Teave %1</translation>
     </message>
     <message>
+        <source>Show information about %1</source>
+        <translation>Näita informatsiooni %1 kohta</translation>
+    </message>
+    <message>
         <source>About &amp;Qt</source>
         <translation>Teave &amp;Qt kohta</translation>
     </message>
@@ -260,6 +300,10 @@
     <message>
         <source>&amp;Options...</source>
         <translation>&amp;Valikud...</translation>
+    </message>
+    <message>
+        <source>Modify configuration options for %1</source>
+        <translation>Muuda %1 seadeid</translation>
     </message>
     <message>
         <source>&amp;Encrypt Wallet...</source>
@@ -278,12 +322,24 @@
         <translation>Ava &amp;URI...</translation>
     </message>
     <message>
+        <source>Create Wallet...</source>
+        <translation>Loo rahakott</translation>
+    </message>
+    <message>
+        <source>Create a new wallet</source>
+        <translation>Loo uus rahakott</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Rahakott:</translation>
+    </message>
+    <message>
         <source>Reindexing blocks on disk...</source>
         <translation>Kõvakettal olevate plokkide reindekseerimine...</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Saada münte Feathercoini aadressile</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Saada münte Bitcoini aadressile</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -292,14 +348,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Rahakoti krüpteerimise salafraasi muutmine</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Silumise aken</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Ava debugimise ja diagnostika konsool</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -326,12 +374,12 @@
         <translation>Krüpteeri oma rahakoti privaatvõtmed</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Omandi tõestamiseks allkirjasta sõnumid oma Feathercoini aadressiga</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Omandi tõestamiseks allkirjasta sõnumid oma Bitcoini aadressiga</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Kinnita sõnumid kindlustamaks et need allkirjastati määratud Feathercoini aadressiga</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Kinnita sõnumid kindlustamaks et need allkirjastati määratud Bitcoini aadressiga</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -350,20 +398,16 @@
         <translation>Vahelehe tööriistariba</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Loo maksepäring (genereerib QR koodid ja feathercoini: URId)</translation>
-    </message>
-    <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Ava feathercoini: URI või maksepäring</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Loo maksepäring (genereerib QR koodid ja bitcoini: URId)</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>&amp;Käsurea valikud</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Feathercoin network</source>
-        <translation><numerusform>%n aktiivne ühendus Feathercoini võrku</numerusform><numerusform>%n aktiivset ühendust Feathercoini võrku</numerusform></translation>
+        <source>%n active connection(s) to Bitcoin network</source>
+        <translation><numerusform>%n aktiivne ühendus Bitcoini võrku</numerusform><numerusform>%n aktiivset ühendust Bitcoini võrku</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -616,8 +660,8 @@
         <translation>Muuda saatvat aadressi</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Feathercoin address.</source>
-        <translation>Sisestatud aadress "%1" ei ole korrektne Feathercoin aadress.</translation>
+        <source>The entered address "%1" is not a valid Bitcoin address.</source>
+        <translation>Sisestatud aadress "%1" ei ole korrektne Bitcoin aadress.</translation>
     </message>
     <message>
         <source>Could not unlock wallet.</source>
@@ -653,8 +697,8 @@
         <translation>Tere tulemast</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Error</source>
@@ -679,20 +723,8 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>Ava URI</translation>
-    </message>
-    <message>
         <source>URI:</source>
         <translation>URI:</translation>
-    </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation>Vali maksepäringu fail</translation>
-    </message>
-    <message>
-        <source>Select payment request file to open</source>
-        <translation>Vali maksepäringu fail mida avada</translation>
     </message>
 </context>
 <context>
@@ -729,8 +761,8 @@
         <translation>Ekspert</translation>
     </message>
     <message>
-        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Feathercoin kliendi pordi automaatne avamine ruuteris. Toimib, kui sinu ruuter aktsepteerib UPnP ühendust.</translation>
+        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Bitcoini kliendi pordi automaatne avamine ruuteris. Toimib, kui sinu ruuter aktsepteerib UPnP ühendust.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -828,7 +860,7 @@
         <translation>Vorm</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
         <translation>Kuvatav info ei pruugi olla ajakohane. Ühenduse loomisel süngitakse sinu rahakott automaatselt Bitconi võrgustikuga, kuid see toiming on hetkel lõpetamata.</translation>
     </message>
     <message>
@@ -853,22 +885,29 @@
     </message>
     </context>
 <context>
+    <name>PSBTOperationsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Dialoog</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>või</translation>
+    </message>
+    </context>
+<context>
     <name>PaymentServer</name>
     <message>
         <source>Payment request error</source>
         <translation>Maksepäringu tõrge</translation>
     </message>
     <message>
-        <source>Payment request rejected</source>
-        <translation>Maksepäring tagasi lükatud</translation>
+        <source>Cannot start bitcoin: click-to-pay handler</source>
+        <translation>Bitcoin ei käivitu: vajuta-maksa toiming</translation>
     </message>
     <message>
-        <source>Payment request expired.</source>
-        <translation>Maksepäring aegunud.</translation>
-    </message>
-    <message>
-        <source>Unverified payment requests to custom payment scripts are unsupported.</source>
-        <translation>Kinnitamata maksepäringud kohandatud makse scriptidele ei ole toetatud.</translation>
+        <source>URI handling</source>
+        <translation>URI käsitsemine</translation>
     </message>
     </context>
 <context>
@@ -975,10 +1014,6 @@
         <translation>&amp;Informatsioon</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation>Debugimise aken</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>Üldine</translation>
     </message>
@@ -1005,10 +1040,6 @@
     <message>
         <source>Block chain</source>
         <translation>Blokiahel</translation>
-    </message>
-    <message>
-        <source>Current number of blocks</source>
-        <translation>Plokkide hetkearv</translation>
     </message>
     <message>
         <source>Memory usage</source>
@@ -1087,14 +1118,6 @@
         <translation>Väljuv</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation>Jah</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Ei</translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation>Teadmata</translation>
     </message>
@@ -1137,12 +1160,28 @@
         <source>Copy amount</source>
         <translation>Kopeeri kogus</translation>
     </message>
-</context>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Rahakoti lahtilukustamine ebaõnnestus.</translation>
+    </message>
+    </context>
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>QR Code</source>
-        <translation>QR Kood</translation>
+        <source>Amount:</source>
+        <translation>Kogus</translation>
+    </message>
+    <message>
+        <source>Label:</source>
+        <translation>Märgis:</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>Sõnum:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Rahakott:</translation>
     </message>
     <message>
         <source>Copy &amp;Address</source>
@@ -1155,26 +1194,6 @@
     <message>
         <source>Payment information</source>
         <translation>Makse Informatsioon</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Aadress</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Kogus</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Silt</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Sõnum</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Rahakott</translation>
     </message>
 </context>
 <context>
@@ -1355,8 +1374,8 @@
         <translation>Maksepäring aegunud.</translation>
     </message>
     <message>
-        <source>Warning: Invalid Feathercoin address</source>
-        <translation>Hoiatus: Ebakorrektne Feathercoin aadress</translation>
+        <source>Warning: Invalid Bitcoin address</source>
+        <translation>Hoiatus: Ebakorrektne Bitcoin aadress</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -1405,18 +1424,7 @@
         <source>Pay To:</source>
         <translation>Maksa :</translation>
     </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>Aadressiraamatusse sisestamiseks märgista aadress</translation>
-    </message>
-</context>
-<context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>Jah</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>ShutdownWindow</name>
     <message>
@@ -1439,8 +1447,8 @@
         <translation>&amp;Allkirjastamise teade</translation>
     </message>
     <message>
-        <source>The Feathercoin address to sign the message with</source>
-        <translation>Feathercoin aadress millega sõnum allkirjastada</translation>
+        <source>The Bitcoin address to sign the message with</source>
+        <translation>Bitcoin aadress millega sõnum allkirjastada</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -1471,8 +1479,8 @@
         <translation>Kopeeri praegune signatuur vahemällu</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Feathercoin address</source>
-        <translation>Allkirjasta sõnum Feathercoini aadressi sulle kuulumise tõestamiseks</translation>
+        <source>Sign the message to prove you own this Bitcoin address</source>
+        <translation>Allkirjasta sõnum Bitcoini aadressi sulle kuulumise tõestamiseks</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -1491,12 +1499,12 @@
         <translation>&amp;Kinnita Sõnum</translation>
     </message>
     <message>
-        <source>The Feathercoin address the message was signed with</source>
-        <translation>Feathercoin aadress millega sõnum on allkirjastatud</translation>
+        <source>The Bitcoin address the message was signed with</source>
+        <translation>Bitcoin aadress millega sõnum on allkirjastatud</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
-        <translation>Kinnita sõnum tõestamaks selle allkirjastatust määratud Feathercoini aadressiga.</translation>
+        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <translation>Kinnita sõnum tõestamaks selle allkirjastatust määratud Bitcoini aadressiga.</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -1886,7 +1894,11 @@
     </context>
 <context>
     <name>WalletFrame</name>
-    </context>
+    <message>
+        <source>Create a new wallet</source>
+        <translation>Loo uus rahakott</translation>
+    </message>
+</context>
 <context>
     <name>WalletModel</name>
     <message>
@@ -1903,6 +1915,10 @@
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>Ekspordi kuvatava vahelehe sisu faili</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Viga</translation>
     </message>
     <message>
         <source>Backup Wallet</source>

@@ -3,7 +3,7 @@
     <name>AddressBookPage</name>
     <message>
         <source>Right-click to edit address or label</source>
-        <translation>Desni klik za urejanje naslovov ali oznak</translation>
+        <translation>Desni klik za urejanje naslova ali oznake</translation>
     </message>
     <message>
         <source>Create a new address</source>
@@ -47,11 +47,11 @@
     </message>
     <message>
         <source>Choose the address to send coins to</source>
-        <translation>Izberi naslov prejemnika kovancev</translation>
+        <translation>Izberi naslov prejemnika</translation>
     </message>
     <message>
         <source>Choose the address to receive coins with</source>
-        <translation>Izberi naslov, na katerega želiš prejeti kovance</translation>
+        <translation>Izberi naslov, na katerega želiš prejeti sredstva</translation>
     </message>
     <message>
         <source>C&amp;hoose</source>
@@ -63,15 +63,17 @@
     </message>
     <message>
         <source>Receiving addresses</source>
-        <translation>Imenik naslovov za prejemanje</translation>
+        <translation>Imenik prejemnih naslovov</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>To so vaši Feathercoin naslovi za pošiljanje. Pred pošiljanjem vedno preverite količino in prejemnikov naslov.</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>To so vaši bitcoin-naslovi za pošiljanje. Pred pošiljanjem vedno preverite količino in prejemnikov naslov.</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.</source>
-        <translation>To so vaši naslovi za prejemanje Feathercoinov. Če želite ustvariti nov naslov za prejemanje, uporabite gumb za ustvarjanje novih naslovov v zavihku "prejemanje".</translation>
+        <source>These are your Bitcoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
+Signing is only possible with addresses of the type 'legacy'.</source>
+        <translation>To so vaši bitcoin-naslovi, ki jih uporabljate za prejemanje plačil. Za tvorbo novega naslova uporabite gumb "Ustvari nov prejemni naslov" v zavihku Prejmi.
+Podpisovanje je možno le s podedovanimi ("legacy") naslovi.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -91,7 +93,7 @@
     </message>
     <message>
         <source>Comma separated file (*.csv)</source>
-        <translation>Podatki ločenimi z vejico (*.csv)</translation>
+        <translation>Podatki, ločeni z vejico (*.csv)</translation>
     </message>
     <message>
         <source>Exporting Failed</source>
@@ -188,8 +190,8 @@
         <translation>Vnesite staro geslo in novo geslo za denarnico.</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your feathercoins from being stolen by malware infecting your computer.</source>
-        <translation>Pomnite, da šifriranje denarnice ne more preprečiti kraje feathercoinov preko morebitnih virusov na vašem računalniku.</translation>
+        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <translation>Pomnite, da šifriranje denarnice ne more preprečiti kraje bitcoinov preko morebitnih virusov na vašem računalniku.</translation>
     </message>
     <message>
         <source>Wallet to be encrypted</source>
@@ -267,7 +269,7 @@
     </message>
     <message>
         <source>Show general overview of wallet</source>
-        <translation>Oglejte si splošne informacije o vaši denarnici</translation>
+        <translation>Oglejte si splošne informacije o svoji denarnici</translation>
     </message>
     <message>
         <source>&amp;Transactions</source>
@@ -283,7 +285,7 @@
     </message>
     <message>
         <source>Quit application</source>
-        <translation>Ustavite program</translation>
+        <translation>Izhod iz programa</translation>
     </message>
     <message>
         <source>&amp;About %1</source>
@@ -339,7 +341,7 @@
     </message>
     <message>
         <source>Click to disable network activity.</source>
-        <translation>Kliknite, da onemogočite omrežno aktivnosti.</translation>
+        <translation>S klikom onemogočite omrežno aktivnost.</translation>
     </message>
     <message>
         <source>Network activity disabled.</source>
@@ -347,7 +349,7 @@
     </message>
     <message>
         <source>Click to enable network activity again.</source>
-        <translation>Kliknite, da ponovno vključite omrežno aktivnost.</translation>
+        <translation>S klikom ponovno vključite omrežno aktivnost.</translation>
     </message>
     <message>
         <source>Syncing Headers (%1%)...</source>
@@ -359,11 +361,11 @@
     </message>
     <message>
         <source>Proxy is &lt;b&gt;enabled&lt;/b&gt;: %1</source>
-        <translation>Namestniški strežnik je &lt;b&gt;omogočen&lt;/b&gt;: %1</translation>
+        <translation>Posredniški strežnik je &lt;b&gt;omogočen&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Izvedite plačilo na naslov Feathercoin</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Izvedite plačilo na bitcoin-naslov</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -372,14 +374,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Spremenite geslo za šifriranje denarnice</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Razhroščevalno okno</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Odprite razhroščevalno in diagnostično konzolo</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -406,12 +400,12 @@
         <translation>Šifrirajte zasebne ključe, ki se nahajajo v denarnici</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Podpišite poljubno sporočilo z enim svojih naslovov Feathercoin, da prejemniku sporočila dokažete, da je ta naslov v vaši lasti.</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Podpišite poljubno sporočilo z enim svojih bitcoin-naslovov, da prejemniku sporočila dokažete, da je ta naslov v vaši lasti.</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Preverite, če je bilo prejeto sporočilo podpisano z določenim naslovom Feathercoin</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Preverite, če je bilo prejeto sporočilo podpisano z določenim bitcoin-naslovom.</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -430,8 +424,8 @@
         <translation>Orodna vrstica zavihkov</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Zahtevajte plačilo (ustvarite zahtevek s kodo QR in URI tipa feathercoin)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Zahtevajte plačilo (ustvarite zahtevek s kodo QR in URI tipa bitcoin)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -442,20 +436,16 @@
         <translation>Preglejte in uredite seznam naslovov, na katere ste kdaj prejeli plačila</translation>
     </message>
     <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Izvedite plačilo iz zahtevka v datoteki ali iz URI tipa feathercoin</translation>
-    </message>
-    <message>
         <source>&amp;Command-line options</source>
         <translation>Možnosti &amp;ukazne vrstice</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Feathercoin network</source>
-        <translation><numerusform>%n aktivna povezava v omrežje Feathercoin</numerusform><numerusform>%n aktivni povezavi v omrežje Feathercoin</numerusform><numerusform>%n aktivne povezave v omrežje Feathercoin</numerusform><numerusform>%n aktivnih povezav v omrežje Feathercoin</numerusform></translation>
+        <source>%n active connection(s) to Bitcoin network</source>
+        <translation><numerusform>%n aktivna povezava v omrežje Bitcoin</numerusform><numerusform>%n aktivni povezavi v omrežje Bitcoin</numerusform><numerusform>%n aktivne povezave v omrežje Bitcoin</numerusform><numerusform>%n aktivnih povezav v omrežje Bitcoin</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
-        <translation>Indeksirani bloki na disku ...</translation>
+        <translation>Ustvarjam kazalo blokov na disku ...</translation>
     </message>
     <message>
         <source>Processing blocks on disk...</source>
@@ -491,7 +481,31 @@
     </message>
     <message>
         <source>Up to date</source>
-        <translation>Posodobljeno</translation>
+        <translation>Ažurno</translation>
+    </message>
+    <message>
+        <source>&amp;Load PSBT from file...</source>
+        <translation>Na&amp;loži DPBT iz datoteke...</translation>
+    </message>
+    <message>
+        <source>Load Partially Signed Bitcoin Transaction</source>
+        <translation>Naloži delno podpisano bitcoin-transakcijo</translation>
+    </message>
+    <message>
+        <source>Load PSBT from clipboard...</source>
+        <translation>Naloži DPBT z odložišča...</translation>
+    </message>
+    <message>
+        <source>Load Partially Signed Bitcoin Transaction from clipboard</source>
+        <translation>Naloži delno podpisano bitcoin-transakcijo z odložišča</translation>
+    </message>
+    <message>
+        <source>Node window</source>
+        <translation>Okno vozlišča</translation>
+    </message>
+    <message>
+        <source>Open node debugging and diagnostic console</source>
+        <translation>Odpri konzolo za razhroščevanje in diagnostiko</translation>
     </message>
     <message>
         <source>&amp;Sending addresses</source>
@@ -499,7 +513,11 @@
     </message>
     <message>
         <source>&amp;Receiving addresses</source>
-        <translation>&amp;Naslovi za prejemanje ...</translation>
+        <translation>&amp;Naslovi za prejemanje</translation>
+    </message>
+    <message>
+        <source>Open a bitcoin: URI</source>
+        <translation>Odpri URI tipa bitcoin:</translation>
     </message>
     <message>
         <source>Open Wallet</source>
@@ -518,8 +536,24 @@
         <translation>Zapri denarnico</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
+        <source>Close All Wallets...</source>
+        <translation>Zapri vse denarnice...</translation>
+    </message>
+    <message>
+        <source>Close all wallets</source>
+        <translation>Zapri vse denarnice</translation>
+    </message>
+    <message>
+        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
         <translation>Pokaži %1 sporočilo za pomoč s seznamom vseh možnosti v ukazni vrstici</translation>
+    </message>
+    <message>
+        <source>&amp;Mask values</source>
+        <translation>Za&amp;maskiraj vrednosti</translation>
+    </message>
+    <message>
+        <source>Mask the values in the Overview tab</source>
+        <translation>Zamaskiraj vrednosti v zavihku Pregled</translation>
     </message>
     <message>
         <source>default wallet</source>
@@ -611,11 +645,11 @@
     </message>
     <message>
         <source>HD key generation is &lt;b&gt;enabled&lt;/b&gt;</source>
-        <translation>Generiranje HD ključa je &lt;b&gt;omogočeno&lt;/b&gt;</translation>
+        <translation>HD-tvorba ključev je &lt;b&gt;omogočena&lt;/b&gt;</translation>
     </message>
     <message>
         <source>HD key generation is &lt;b&gt;disabled&lt;/b&gt;</source>
-        <translation>Generiranje HD ključa je &lt;b&gt;onemogočeno&lt;/b&gt;</translation>
+        <translation>HD-tvorba ključev je &lt;b&gt;onemogočena&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Private key &lt;b&gt;disabled&lt;/b&gt;</source>
@@ -630,8 +664,12 @@
         <translation>Denarnica je &lt;b&gt;šifrirana&lt;/b&gt; in trenutno &lt;b&gt;zaklenjena&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
-        <translation>Napaka. Feathercoin ne more več varno nadaljevati in se bo zaprl.</translation>
+        <source>Original message:</source>
+        <translation>Izvorno sporočilo:</translation>
+    </message>
+    <message>
+        <source>A fatal error occurred. %1 can no longer continue safely and will quit.</source>
+        <translation>Prišlo je do usodne napake. %1 ne more več varno nadaljevati s tekom in se bo ustavil.</translation>
     </message>
 </context>
 <context>
@@ -770,7 +808,7 @@
     </message>
     <message>
         <source>Can vary +/- %1 satoshi(s) per input.</source>
-        <translation>Se lahko razlikuje +/- %1 satošijev na vnos.</translation>
+        <translation>Se lahko razlikuje +/- %1 satoši(jev) na vhod.</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -812,7 +850,7 @@
     </message>
     <message>
         <source>Encrypt the wallet. The wallet will be encrypted with a passphrase of your choice.</source>
-        <translation>Šifriraj denarnico. Denarnica bo bila šifrirana z geslom po vaši izbiri.</translation>
+        <translation>Šifriraj denarnico. Denarnica bo šifrirana z geslom, ki ga izberete.</translation>
     </message>
     <message>
         <source>Encrypt Wallet</source>
@@ -820,7 +858,7 @@
     </message>
     <message>
         <source>Disable private keys for this wallet. Wallets with private keys disabled will have no private keys and cannot have an HD seed or imported private keys. This is ideal for watch-only wallets.</source>
-        <translation>Onemogoči zasebne ključe za to denarnico. Denarnice z onemogočenimi zasebnimi ključi ne bodo imele zasebnih ključev in ne morejo imeti semen HD ali uvoženih zasebnih ključev. To je idealno za "watch-only" denarnice.</translation>
+        <translation>Onemogoči zasebne ključe za to denarnico. Denarnice z onemogočenimi zasebnimi ključi ne bodo imele zasebnih ključev in ne morejo imeti HD-semena ali uvoženih zasebnih ključev. To je primerno za opazovane denarnice.</translation>
     </message>
     <message>
         <source>Disable Private Keys</source>
@@ -828,15 +866,27 @@
     </message>
     <message>
         <source>Make a blank wallet. Blank wallets do not initially have private keys or scripts. Private keys and addresses can be imported, or an HD seed can be set, at a later time.</source>
-        <translation>Ustvari prazno denarnico. Prazne denarnice ne vključujejo zasebnih ključev ali skript. Pozneje lahko uvozite zasebne ključe ali vnesete HD seed.</translation>
+        <translation>Ustvari prazno denarnico. Prazne denarnice ne vključujejo zasebnih ključev ali skript. Pozneje lahko uvozite zasebne ključe ali vnesete HD-seme.</translation>
     </message>
     <message>
         <source>Make Blank Wallet</source>
         <translation>Ustvari prazno denarnico</translation>
     </message>
     <message>
+        <source>Use descriptors for scriptPubKey management</source>
+        <translation>Uporabi deskriptorje za upravljanje s scriptPubKey</translation>
+    </message>
+    <message>
+        <source>Descriptor Wallet</source>
+        <translation>Datoteka z deskriptorji</translation>
+    </message>
+    <message>
         <source>Create</source>
         <translation>Ustvari</translation>
+    </message>
+    <message>
+        <source>Compiled without sqlite support (required for descriptor wallets)</source>
+        <translation>Prevedeno brez podpore za SQLite (potrebna za deskriptorske denarnice)</translation>
     </message>
 </context>
 <context>
@@ -867,15 +917,15 @@
     </message>
     <message>
         <source>Edit receiving address</source>
-        <translation>Nov naslov za prejemanje</translation>
+        <translation>Uredi prejemni naslov</translation>
     </message>
     <message>
         <source>Edit sending address</source>
         <translation>Uredi naslov za pošiljanje</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Feathercoin address.</source>
-        <translation>Vnešeni naslov "%1" ni veljaven Feathercoin naslov.</translation>
+        <source>The entered address "%1" is not a valid Bitcoin address.</source>
+        <translation>Vnešeni naslov "%1" ni veljaven bitcoin-naslov.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -924,10 +974,6 @@
         <translation>različica</translation>
     </message>
     <message>
-        <source>(%1-bit)</source>
-        <translation>(%1-bit)</translation>
-    </message>
-    <message>
         <source>About %1</source>
         <translation>O %1</translation>
     </message>
@@ -952,19 +998,19 @@
     </message>
     <message>
         <source>When you click OK, %1 will begin to download and process the full %4 block chain (%2GB) starting with the earliest transactions in %3 when %4 initially launched.</source>
-        <translation>Ko kliknete OK, bo %1 začel prenašati podatke in procesirati celotno %4 bazo podatkovnih blokov (%2 GB), začenši z najstarejšo transakcijo in z %3 ob prvotnem začetku %4.</translation>
+        <translation>Ko kliknete OK, bo %1 začel prenašati podatke in procesirati celotno %4 verigo blokov (%2 GB), začenši z najstarejšo transakcijo iz %3 ob prvotnem začetku %4.</translation>
     </message>
     <message>
         <source>Reverting this setting requires re-downloading the entire blockchain. It is faster to download the full chain first and prune it later. Disables some advanced features.</source>
-        <translation>Če spremenite to nastavitev, morate ponovno naložiti celotno verigo blokov. Hitreje je najprej prenesti celotno verigo in jo obrezati pozneje. Onemogoči nekatere napredne funkcije.</translation>
+        <translation>Če spremenite to nastavitev, morate ponovno naložiti celotno verigo blokov. Hitreje je najprej prenesti celotno verigo in jo obrezati pozneje. Ta nastavitev onemogoči nekatere napredne funkcije.</translation>
     </message>
     <message>
         <source>This initial synchronisation is very demanding, and may expose hardware problems with your computer that had previously gone unnoticed. Each time you run %1, it will continue downloading where it left off.</source>
-        <translation>Začetna sinhronizacija je zelo zahtevna in lahko odkrije probleme s strojno opremo v vašem računalniku, ki so prej bili neopaženi. Vsakič, ko zaženete %1, bo le-ta nadaljeval s prenosom kjer je ostal.</translation>
+        <translation>Začetna sinhronizacija je zelo zahtevna in lahko odkrije probleme s strojno opremo v vašem računalniku, ki so prej bili neopaženi. Vsakič, ko zaženete %1, bo le-ta nadaljeval s prenosom, kjer je prejšnjič ostal.</translation>
     </message>
     <message>
         <source>If you have chosen to limit block chain storage (pruning), the historical data must still be downloaded and processed, but will be deleted afterward to keep your disk usage low.</source>
-        <translation>Če ste se odločili omejiti shranjevanje blokovnih verig (obrezovanje), je treba zgodovinske podatke še vedno prenesti in obdelati, vendar jih boste pozneje izbrisali, da bo uporaba diska nizka.</translation>
+        <translation>Če ste se odločili omejiti shranjevanje blokovnih verig (obrezovanje), je treba zgodovinske podatke še vedno prenesti in obdelati, vendar bodo kasneje izbrisani, da bo uporaba diska nizka.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -975,8 +1021,8 @@
         <translation>Uporabi to podatkovno mapo:</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
     </message>
     <message>
         <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
@@ -991,8 +1037,8 @@
         <translation>Približno %1 GB podatkov bo shranjenih v tem direktoriju.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Feathercoin block chain.</source>
-        <translation>%1 bo prenesel in shranil kopijo Feathercoin baze podatkovnih blokov.</translation>
+        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
+        <translation>%1 bo prenesel in shranil kopijo verige blokov.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1026,12 +1072,12 @@
         <translation>Oblika</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the feathercoin network, as detailed below.</source>
-        <translation>Zadnje transakcije morda še niso vidne, zato je stanje v denarnici morda napačno. Ti podatki bodo pravilni, ko se bo vaša denarnica končala s sinhronizacijo z feathercoin omrežjem, kot je podrobneje opisano spodaj.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
+        <translation>Zadnje transakcije morda še niso vidne, zato je prikazano stanje v denarnici lahko napačno. Pravilni podatki bodo prikazani, ko bo vaša denarnica končala s sinhronizacijo z bitcoin omrežjem; glejte podrobnosti spodaj.</translation>
     </message>
     <message>
-        <source>Attempting to spend feathercoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Poskus porabe feathercoinov, na katere vplivajo še ne prikazane transakcije, omrežje ne bo sprejelo.</translation>
+        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Poskusa pošiljanja bitcoinov, na katere vplivajo še ne prikazane transakcije, omrežje ne bo sprejelo.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1066,6 +1112,14 @@
         <translation>Skrij</translation>
     </message>
     <message>
+        <source>Esc</source>
+        <translation>Esc</translation>
+    </message>
+    <message>
+        <source>%1 is currently syncing.  It will download headers and blocks from peers and validate them until reaching the tip of the block chain.</source>
+        <translation>%1 se trenutno sinhronizira. Od soležnikov bodo preneseni in preverjeni zaglavja in bloki do vrha verige.</translation>
+    </message>
+    <message>
         <source>Unknown. Syncing Headers (%1, %2%)...</source>
         <translation>Neznano. Sinhroniziram glave (%1, %2%) ...</translation>
     </message>
@@ -1073,24 +1127,12 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>Odpri URl</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation>Vnesite zahtevek za plačilo iz URI ali pa ga naložite iz datoteke</translation>
+        <source>Open bitcoin URI</source>
+        <translation>Odpri bitcoin-URI</translation>
     </message>
     <message>
         <source>URI:</source>
         <translation>URI:</translation>
-    </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation>Izbiranje datoteke z zahtevkom za plačilo</translation>
-    </message>
-    <message>
-        <source>Select payment request file to open</source>
-        <translation>Izberi datoteko za zahtevek plačila</translation>
     </message>
 </context>
 <context>
@@ -1132,11 +1174,11 @@
     </message>
     <message>
         <source>Size of &amp;database cache</source>
-        <translation>Velikost &amp;predpomnilnika podatkovne baze</translation>
+        <translation>Velikost &amp;predpomnilnika podatkovne baze:</translation>
     </message>
     <message>
         <source>Number of script &amp;verification threads</source>
-        <translation>Število programskih &amp;niti za preverjanje</translation>
+        <translation>Število programskih &amp;niti za preverjanje:</translation>
     </message>
     <message>
         <source>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</source>
@@ -1145,10 +1187,6 @@
     <message>
         <source>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</source>
         <translation>Prikaže, če je priloženi privzeti proxy SOCKS5 uporabljen za doseganje soležnikov prek te vrste omrežja.</translation>
-    </message>
-    <message>
-        <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor hidden services:</source>
-        <translation>Za dostop do soležnikov preko skritih storitev Tor uporabi drug posredniški strežnik SOCKS&amp;5:</translation>
     </message>
     <message>
         <source>Hide the icon from the system tray.</source>
@@ -1164,7 +1202,7 @@
     </message>
     <message>
         <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
-        <translation>Naslovi URL tretjih oseb (npr. raziskovalec blokov), ki bodo navedeni v kontekstnem meniju seznama transakcij. Niz %s iz naslova URL je nadomeščen s hash vrednostjo transakcije. Več zaporednih naslovov URL je med seboj ločenih z znakom |.</translation>
+        <translation>Naslovi URL-jev tretjih oseb (npr. raziskovalec blokov), ki bodo navedeni v kontekstnem meniju seznama transakcij. Niz %s v nastavljenem URL-naslovu bo zamenjan z identifikatorjem transakcije. Več zaporednih naslovov URL lahko med seboj ločite z navpičnico |.</translation>
     </message>
     <message>
         <source>Open the %1 configuration file from the working directory.</source>
@@ -1188,7 +1226,7 @@
     </message>
     <message>
         <source>Disables some advanced features but all blocks will still be fully validated. Reverting this setting requires re-downloading the entire blockchain. Actual disk usage may be somewhat higher.</source>
-        <translation>Onemogoči nekatere napredne funkcije, vendar bodo vsi bloki še vedno v celoti potrjeni. Če spremenite to nastavitev, morate ponovno naložiti celoten blok. Dejanska poraba diskov je morda nekoliko večja.</translation>
+        <translation>Ta nastavitev onemogoči nekatere napredne funkcije, vendar bodo vsi bloki še vedno v celoti preverjeni. Če spremenite to nastavitev, morate ponovno naložiti celotno verigo blokov. Dejanska poraba na disku je lahko nekoliko večja od nastavitve.</translation>
     </message>
     <message>
         <source>Prune &amp;block storage to</source>
@@ -1220,18 +1258,18 @@
     </message>
     <message>
         <source>Enable coin &amp;control features</source>
-        <translation>Omogoči upravljanje s kovanci</translation>
+        <translation>Omogoči &amp;upravljanje s kovanci</translation>
     </message>
     <message>
         <source>If you disable the spending of unconfirmed change, the change from a transaction cannot be used until that transaction has at least one confirmation. This also affects how your balance is computed.</source>
-        <translation>Če onemogočite trošenje drobiža iz še nepotrjenih transakcij, potem vrnjenega drobiža ne morete uporabiti, dokler plačilo ni vsaj enkrat potrjeno. Ta opcija vpliva tudi na izračun stanja sredstev.</translation>
+        <translation>Če onemogočite trošenje vračila iz še nepotrjenih transakcij, potem vračila ne morete uporabiti, dokler plačilo ni vsaj enkrat potrjeno. Ta opcija vpliva tudi na izračun stanja sredstev.</translation>
     </message>
     <message>
         <source>&amp;Spend unconfirmed change</source>
-        <translation>Omogoči &amp;trošenje drobiža iz še nepotrjenih plačil</translation>
+        <translation>Omogoči &amp;trošenje vračila iz še nepotrjenih plačil</translation>
     </message>
     <message>
-        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
         <translation>Program samodejno odpre ustrezna vrata na usmerjevalniku. To deluje samo, če vaš usmerjevalnik podpira in ima omogočen UPnP.</translation>
     </message>
     <message>
@@ -1247,8 +1285,8 @@
         <translation>Dovoli &amp;dohodne povezave</translation>
     </message>
     <message>
-        <source>Connect to the Feathercoin network through a SOCKS5 proxy.</source>
-        <translation>Poveži se v omrežje Feathercoin preko posredniškega strežnika SOCKS5.</translation>
+        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
+        <translation>Poveži se v omrežje Bitcoin preko posredniškega strežnika SOCKS5.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1281,10 +1319,6 @@
     <message>
         <source>Tor</source>
         <translation>Tor</translation>
-    </message>
-    <message>
-        <source>Connect to the Feathercoin network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Poveži se v omrežje Feathercoin preko posredniškega strežnika SOCKS5 za skrite storitve Tor.</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1320,19 +1354,27 @@
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation>Izberite privzeto mersko enoto za prikaz v uporabniškem vmesniku in pri pošiljanju kovancev.</translation>
+        <translation>Izberite privzeto mersko enoto za prikaz v uporabniškem vmesniku in pri pošiljanju.</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
         <translation>Omogoči dodatno možnost podrobnega nadzora nad posameznimi kovanci v transakcijah.</translation>
     </message>
     <message>
+        <source>Connect to the Bitcoin network through a separate SOCKS5 proxy for Tor onion services.</source>
+        <translation>Poveži se v omrežje Bitcoin prek ločenega posredniškega strežnika SOCKS5 za storitve onion (Tor).</translation>
+    </message>
+    <message>
+        <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor onion services:</source>
+        <translation>Uporabi ločen posredniški strežik SOCKS5 za povezavo s soležniki prek storitev onion (Tor):</translation>
+    </message>
+    <message>
         <source>&amp;Third party transaction URLs</source>
-        <translation>URL nakazila &amp;tretjih oseb</translation>
+        <translation>URL za nakazila &amp;tretjih oseb:</translation>
     </message>
     <message>
         <source>Options set in this dialog are overridden by the command line or in the configuration file:</source>
-        <translation>Možnosti, nastavljene v tem pogovornem oknu so preglašene v ukazni vrstici ali konfiguracijski datoteki:</translation>
+        <translation>Možnosti, nastavljene v tem pogovornem oknu, ki so bile preglašene v ukazni vrstici ali konfiguracijski datoteki:</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -1348,7 +1390,7 @@
     </message>
     <message>
         <source>none</source>
-        <translation>nič</translation>
+        <translation>(jih ni)</translation>
     </message>
     <message>
         <source>Confirm options reset</source>
@@ -1394,8 +1436,8 @@
         <translation>Oblika</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Prikazani podatki so morda zastareli. Program ob vzpostavitvi povezave samodejno sinhronizira denarnico z omrežjem Feathercoin, a trenutno ta proces še ni zaključen.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Prikazani podatki so morda zastareli. Program ob vzpostavitvi povezave samodejno sinhronizira denarnico z omrežjem Bitcoin, a trenutno ta proces še ni zaključen.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1407,7 +1449,7 @@
     </message>
     <message>
         <source>Your current spendable balance</source>
-        <translation>Skupni znesek vaših sredstev, s katerimi lahko prosto razpolagate</translation>
+        <translation>Skupno dobroimetje na razpolago</translation>
     </message>
     <message>
         <source>Pending:</source>
@@ -1415,7 +1457,7 @@
     </message>
     <message>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</source>
-        <translation>Skupni znesek sredstev s katerimi še ne razpolagate prosto, ker so del še nepotrjenih transakcij.</translation>
+        <translation>Skupni znesek sredstev, s katerimi še ne razpolagate prosto, ker so del še nepotrjenih transakcij.</translation>
     </message>
     <message>
         <source>Immature:</source>
@@ -1435,7 +1477,7 @@
     </message>
     <message>
         <source>Your current total balance</source>
-        <translation>Trenutna vsota vseh vaših sredstev</translation>
+        <translation>Trenutno skupno dobroimetje</translation>
     </message>
     <message>
         <source>Your current balance in watch-only addresses</source>
@@ -1443,11 +1485,11 @@
     </message>
     <message>
         <source>Spendable:</source>
-        <translation>Na voljo:</translation>
+        <translation>Na voljo za pošiljanje:</translation>
     </message>
     <message>
         <source>Recent transactions</source>
-        <translation>Nedavne transakcije</translation>
+        <translation>Zadnje transakcije</translation>
     </message>
     <message>
         <source>Unconfirmed transactions to watch-only addresses</source>
@@ -1461,6 +1503,133 @@
         <source>Current total balance in watch-only addresses</source>
         <translation>Trenutno skupno stanje sredstev na opazovanih naslovih</translation>
     </message>
+    <message>
+        <source>Privacy mode activated for the Overview tab. To unmask the values, uncheck Settings-&gt;Mask values.</source>
+        <translation>V zavihku Pregled je vklopljen zasebni način. Za prikaz vrednosti odstranite kljukico na mestu Nastavitve &gt; Zamaskiraj vrednosti.</translation>
+    </message>
+</context>
+<context>
+    <name>PSBTOperationsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Pogovorno okno</translation>
+    </message>
+    <message>
+        <source>Sign Tx</source>
+        <translation>Podpiši transakcijo</translation>
+    </message>
+    <message>
+        <source>Broadcast Tx</source>
+        <translation>Oddaj transakcijo v omrežje</translation>
+    </message>
+    <message>
+        <source>Copy to Clipboard</source>
+        <translation>Skopiraj v odložišče</translation>
+    </message>
+    <message>
+        <source>Save...</source>
+        <translation>Shrani...</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Zapri</translation>
+    </message>
+    <message>
+        <source>Failed to load transaction: %1</source>
+        <translation>Nalaganje transakcije je spodletelo: %1</translation>
+    </message>
+    <message>
+        <source>Failed to sign transaction: %1</source>
+        <translation>Podpisovanje transakcije je spodletelo: %1</translation>
+    </message>
+    <message>
+        <source>Could not sign any more inputs.</source>
+        <translation>Ne morem podpisati več vhodov.</translation>
+    </message>
+    <message>
+        <source>Signed %1 inputs, but more signatures are still required.</source>
+        <translation>%1 vhodov podpisanih, a potrebnih je več podpisov.</translation>
+    </message>
+    <message>
+        <source>Signed transaction successfully. Transaction is ready to broadcast.</source>
+        <translation>Transakcija je uspešno podpisana in pripravljena na oddajo v omrežje.</translation>
+    </message>
+    <message>
+        <source>Unknown error processing transaction.</source>
+        <translation>Neznana napaka pri obdelavi transakcije.</translation>
+    </message>
+    <message>
+        <source>Transaction broadcast successfully! Transaction ID: %1</source>
+        <translation>Transakcija uspešno oddana v omrežje. ID transakcije: %1</translation>
+    </message>
+    <message>
+        <source>Transaction broadcast failed: %1</source>
+        <translation>Oddaja transakcije v omrežje je spodletela: %1</translation>
+    </message>
+    <message>
+        <source>PSBT copied to clipboard.</source>
+        <translation>DPBT kopirana v odložišče.</translation>
+    </message>
+    <message>
+        <source>Save Transaction Data</source>
+        <translation>Shrani podatke transakcije</translation>
+    </message>
+    <message>
+        <source>Partially Signed Transaction (Binary) (*.psbt)</source>
+        <translation>Delno podpisana bitcoin-transakcija (binarno) (*.psbt)</translation>
+    </message>
+    <message>
+        <source>PSBT saved to disk.</source>
+        <translation>DPBT shranjena na disk.</translation>
+    </message>
+    <message>
+        <source> * Sends %1 to %2</source>
+        <translation>* Pošlje %1 na %2</translation>
+    </message>
+    <message>
+        <source>Unable to calculate transaction fee or total transaction amount.</source>
+        <translation>Ne morem izračunati transakcijske provizije ali skupnega zneska transakcije.</translation>
+    </message>
+    <message>
+        <source>Pays transaction fee: </source>
+        <translation>Vsebuje transakcijsko provizijo:</translation>
+    </message>
+    <message>
+        <source>Total Amount</source>
+        <translation>Skupni znesek</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>ali</translation>
+    </message>
+    <message>
+        <source>Transaction has %1 unsigned inputs.</source>
+        <translation>Transakcija ima toliko nepodpisanih vhodov: %1.</translation>
+    </message>
+    <message>
+        <source>Transaction is missing some information about inputs.</source>
+        <translation>Transakciji manjkajo nekateri podatki o vhodih.</translation>
+    </message>
+    <message>
+        <source>Transaction still needs signature(s).</source>
+        <translation>Transakcija potrebuje nadaljnje podpise.</translation>
+    </message>
+    <message>
+        <source>(But this wallet cannot sign transactions.)</source>
+        <translation>(Ta denarnica pa ne more podpisovati transakcij.)</translation>
+    </message>
+    <message>
+        <source>(But this wallet does not have the right keys.)</source>
+        <translation>(Ta denarnica pa nima pravih ključev.)</translation>
+    </message>
+    <message>
+        <source>Transaction is fully signed and ready for broadcast.</source>
+        <translation>Transakcija je v celoti podpisana in pripravljena za oddajo v omrežje.</translation>
+    </message>
+    <message>
+        <source>Transaction status is unknown.</source>
+        <translation>Status transakcije ni znan.</translation>
+    </message>
 </context>
 <context>
     <name>PaymentServer</name>
@@ -1469,28 +1638,20 @@
         <translation>Napaka pri zahtevi plačila</translation>
     </message>
     <message>
-        <source>Cannot start feathercoin: click-to-pay handler</source>
-        <translation>Ni mogoče zagnati rokovalca plačilnih povezav tipa feathercoin:.</translation>
+        <source>Cannot start bitcoin: click-to-pay handler</source>
+        <translation>Ni mogoče zagnati rokovalca plačilnih povezav tipa bitcoin:.</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>Rokovanje z URI</translation>
     </message>
     <message>
-        <source>'feathercoin://' is not a valid URI. Use 'feathercoin:' instead.</source>
-        <translation>'feathercoin://' ni veljaven URI. Uporabite raje 'feathercoin:' .</translation>
+        <source>'bitcoin://' is not a valid URI. Use 'bitcoin:' instead.</source>
+        <translation>'bitcoin://' ni veljaven URI. Uporabite raje 'bitcoin:' .</translation>
     </message>
     <message>
-        <source>You are using a BIP70 URL which will be unsupported in the future.</source>
-        <translation>Uporabljate BIP70 URL, ki v prihodnosti ne bo podprt.</translation>
-    </message>
-    <message>
-        <source>Payment request fetch URL is invalid: %1</source>
-        <translation>Naslov URL za pridobitev zahtevka za plačilo ni veljaven: %1</translation>
-    </message>
-    <message>
-        <source>Cannot process payment request because BIP70 support was not compiled in.</source>
-        <translation>Zahteve za plačilo ni mogoče obdelati, ker podpora za BIP70 ni bila sestavljena v Feathercoin Core.</translation>
+        <source>Cannot process payment request because BIP70 is not supported.</source>
+        <translation>Ne morem obdelati plačila, ker BIP70 ni podprt.</translation>
     </message>
     <message>
         <source>Due to widespread security flaws in BIP70 it's strongly recommended that any merchant instructions to switch wallets be ignored.</source>
@@ -1498,79 +1659,19 @@
     </message>
     <message>
         <source>If you are receiving this error you should request the merchant provide a BIP21 compatible URI.</source>
-        <translation>Če ste prejeli to napako, zaprosite za URI, ki je združljiv z BIP21.</translation>
+        <translation>Če ste prejeli to napako, zaprosite prejemnika za URI, ki je združljiv z BIP21.</translation>
     </message>
     <message>
         <source>Invalid payment address %1</source>
         <translation>Neveljaven naslov za plačilo %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Feathercoin address or malformed URI parameters.</source>
-        <translation>URI je neprepoznaven! Možno je, da je naslov Feathercoin neveljaven, ali da so parametri v URI napačno oblikovani.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
+        <translation>URI je neprepoznaven! Možno je, da je bitcoin-naslov neveljaven ali pa so parametri URI-ja napačno oblikovani.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
         <translation>Rokovanje z datoteko z zahtevkom za plačilo</translation>
-    </message>
-    <message>
-        <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
-        <translation>Datoteke z zahtevkom za plačilo ni mogoče prebrati! Možno je, da datoteka ni veljavna.</translation>
-    </message>
-    <message>
-        <source>Payment request rejected</source>
-        <translation>Zahtevek za plačilo zavrnjen</translation>
-    </message>
-    <message>
-        <source>Payment request network doesn't match client network.</source>
-        <translation>Zahtevek za plačilo in vaš odjemalec se nahajata na dveh različnih omrežjih.</translation>
-    </message>
-    <message>
-        <source>Payment request expired.</source>
-        <translation>Zahtevek za plačilo je potekel.</translation>
-    </message>
-    <message>
-        <source>Payment request is not initialized.</source>
-        <translation>Zahtevek za plačilo ni inicializiran.</translation>
-    </message>
-    <message>
-        <source>Unverified payment requests to custom payment scripts are unsupported.</source>
-        <translation>Nepreverjeni zahtevki za plačilo, namenjeni plačilni skripti po meri, niso podprti.</translation>
-    </message>
-    <message>
-        <source>Invalid payment request.</source>
-        <translation>Neveljaven zahtevek za plačilo.</translation>
-    </message>
-    <message>
-        <source>Requested payment amount of %1 is too small (considered dust).</source>
-        <translation>Znesek %1 v zahtevku za plačilo je prenizek (smatran za prah).</translation>
-    </message>
-    <message>
-        <source>Refund from %1</source>
-        <translation>Povračilo od %1</translation>
-    </message>
-    <message>
-        <source>Payment request %1 is too large (%2 bytes, allowed %3 bytes).</source>
-        <translation>Zahtevek za plačilo %1 je prevelik (%2 bajtov, dovoljenih je %3 bajtov.)</translation>
-    </message>
-    <message>
-        <source>Error communicating with %1: %2</source>
-        <translation>Napaka pri povezavi z  %1: %2</translation>
-    </message>
-    <message>
-        <source>Payment request cannot be parsed!</source>
-        <translation>Zahtevek za plačilo je neprepoznaven!</translation>
-    </message>
-    <message>
-        <source>Bad response from server %1</source>
-        <translation>Napačen odziv strežnika %1</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation>Napaka pri zahtevku za plačilo</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation>Plačilo potrjeno</translation>
     </message>
 </context>
 <context>
@@ -1607,8 +1708,8 @@
         <translation>Znesek</translation>
     </message>
     <message>
-        <source>Enter a Feathercoin address (e.g. %1)</source>
-        <translation>Vnesite naslov Feathercoin (npr. %1)</translation>
+        <source>Enter a Bitcoin address (e.g. %1)</source>
+        <translation>Vnesite bitcoin-naslov (npr. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1695,6 +1796,10 @@
         <translation>Napaka: %1</translation>
     </message>
     <message>
+        <source>Error initializing settings: %1</source>
+        <translation>Napaka pri inicializaciji nastavitev: %1</translation>
+    </message>
+    <message>
         <source>%1 didn't yet exit safely...</source>
         <translation>%1 se še ni varno zaprl ...</translation>
     </message>
@@ -1749,16 +1854,12 @@
         <translation>&amp;Informacije</translation>
     </message>
     <message>
-        <source>Debug window</source>
-        <translation>Razhroščevalno okno</translation>
-    </message>
-    <message>
         <source>General</source>
         <translation>Splošno</translation>
     </message>
     <message>
         <source>Using BerkeleyDB version</source>
-        <translation>BerkeleyDB različica v rabi</translation>
+        <translation>Uporabljena različica BerkeleyDB</translation>
     </message>
     <message>
         <source>Datadir</source>
@@ -1797,12 +1898,8 @@
         <translation>Veriga blokov</translation>
     </message>
     <message>
-        <source>Current number of blocks</source>
-        <translation>Trenutno število blokov</translation>
-    </message>
-    <message>
         <source>Memory Pool</source>
-        <translation>Memory Pool</translation>
+        <translation>Čakalna vrsta transakcij</translation>
     </message>
     <message>
         <source>Current number of transactions</source>
@@ -1810,7 +1907,7 @@
     </message>
     <message>
         <source>Memory usage</source>
-        <translation>Raba spomina</translation>
+        <translation>Raba pomnilnika</translation>
     </message>
     <message>
         <source>Wallet: </source>
@@ -1845,10 +1942,6 @@
         <translation>Izberite soležnika, o katerem si želite ogledati podrobnejše informacije.</translation>
     </message>
     <message>
-        <source>Whitelisted</source>
-        <translation>Dovoljeni</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>Smer povezave</translation>
     </message>
@@ -1869,8 +1962,24 @@
         <translation>Sinhronizirani bloki</translation>
     </message>
     <message>
+        <source>The mapped Autonomous System used for diversifying peer selection.</source>
+        <translation>Mapirani Avtonomski Sistem, uporabljan za diverzificiranje izbire soležnikov.</translation>
+    </message>
+    <message>
+        <source>Mapped AS</source>
+        <translation>Mapirani AS</translation>
+    </message>
+    <message>
         <source>User Agent</source>
         <translation>Ime agenta</translation>
+    </message>
+    <message>
+        <source>Node window</source>
+        <translation>Okno vozlišča</translation>
+    </message>
+    <message>
+        <source>Current block height</source>
+        <translation>Višina trenutnega bloka</translation>
     </message>
     <message>
         <source>Open the %1 debug log file from the current data directory. This can take a few seconds for large log files.</source>
@@ -1885,12 +1994,12 @@
         <translation>Povečaj velikost pisave</translation>
     </message>
     <message>
-        <source>Services</source>
-        <translation>Storitve</translation>
+        <source>Permissions</source>
+        <translation>Dovoljenja</translation>
     </message>
     <message>
-        <source>Ban Score</source>
-        <translation>Kazenske točke</translation>
+        <source>Services</source>
+        <translation>Storitve</translation>
     </message>
     <message>
         <source>Connection Time</source>
@@ -1994,7 +2103,7 @@
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
-        <translation>Uporabite tipki gor in dol za navigacijo po zgodovini ukazov, in %1 za čiščenje zaslona.</translation>
+        <translation>Uporabite tipki gor in dol za navigacijo po zgodovini ukazov in %1 za čiščenje zaslona.</translation>
     </message>
     <message>
         <source>Type %1 for an overview of available commands.</source>
@@ -2006,7 +2115,7 @@
     </message>
     <message>
         <source>WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramifications of a command.</source>
-        <translation>OPOZORILO: Goljufi so aktivni! Uporabnikom svetujejo, naj tukaj vnašajo ukaze in jim tako ukradejo vsebino denarnice. Te konzole ne uporabljajte, če ne popolnoma razumete posledic ukazov.</translation>
+        <translation>OPOZORILO: Goljufi so aktivni! Uporabnikom svetujejo, naj tukaj vnašajo ukaze, s čimer jim ukradejo vsebino denarnice. To konzolo uporabljajte le, če popolnoma razumete posledice ukazov.</translation>
     </message>
     <message>
         <source>Network activity disabled</source>
@@ -2041,14 +2150,6 @@
         <translation>Odhodna</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation>Da</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Ne</translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation>Neznano</translation>
     </message>
@@ -2068,8 +2169,8 @@
         <translation>&amp;Sporočilo:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
-        <translation>Neobvezno sporočilo kot priponka zahtevku za plačilo, ki bo prikazano, ko bo zahtevek odprt. Opomba: Opravljeno plačilo.prek omrežja Feathercoin tega sporočila ne bo vsebovalo.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
+        <translation>Neobvezno sporočilo kot priponka zahtevku za plačilo, ki bo prikazano, ko bo zahtevek odprt. Opomba: Opravljeno plačilo.prek omrežja Bitcoin tega sporočila ne bo vsebovalo.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2084,8 +2185,16 @@
         <translation>Zahtevani znesek. Če ne zahtevate določenega zneska, pustite prazno ali nastavite vrednost na 0.</translation>
     </message>
     <message>
+        <source>An optional label to associate with the new receiving address (used by you to identify an invoice).  It is also attached to the payment request.</source>
+        <translation>Neobvezna oznaka, povezana z novim prejemnim naslovom. Uporabite jo lahko za prepoznavo plačila. Zapisana bo tudi v zahtevek za plačilo.</translation>
+    </message>
+    <message>
+        <source>An optional message that is attached to the payment request and may be displayed to the sender.</source>
+        <translation>Neobvezna oznaka, ki se shrani v zahtevek za plačilo in se lahko prikaže plačniku.</translation>
+    </message>
+    <message>
         <source>&amp;Create new receiving address</source>
-        <translation>&amp;Ustvari nov naslov za prejemanje</translation>
+        <translation>&amp;Ustvari nov prejemni naslov</translation>
     </message>
     <message>
         <source>Clear all fields of the form.</source>
@@ -2097,11 +2206,11 @@
     </message>
     <message>
         <source>Native segwit addresses (aka Bech32 or BIP-173) reduce your transaction fees later on and offer better protection against typos, but old wallets don't support them. When unchecked, an address compatible with older wallets will be created instead.</source>
-        <translation>Nativni naslovi segwit (aka Bech32 ali BIP-173) kasneje znižajo vaše transakcijske stroške in nudijo boljšo zaščito pred tiskarskimi škrati, vendar jih stare denarnice ne podpirajo. Če ne izberete polja, bo namesto tega ustvarjen naslov združljiv s starejšimi denarnicami.</translation>
+        <translation>Lastni naslovi segwit (Bech32 ali BIP-173) kasneje znižajo vaše transakcijske stroške in nudijo boljšo zaščito pred tiskarskimi škrati, vendar jih stare denarnice ne podpirajo. Če polja ne označite, bo namesto tega ustvarjen naslov, združljiv s starejšimi denarnicami.</translation>
     </message>
     <message>
         <source>Generate native segwit (Bech32) address</source>
-        <translation>Ustvari domači segwit (Bech32) naslov</translation>
+        <translation>Ustvari lastni segwit (Bech32) naslov</translation>
     </message>
     <message>
         <source>Requested payments history</source>
@@ -2139,12 +2248,40 @@
         <source>Copy amount</source>
         <translation>Kopiraj znesek</translation>
     </message>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Denarnice ni bilo mogoče odkleniti.</translation>
+    </message>
+    <message>
+        <source>Could not generate new %1 address</source>
+        <translation>Ne morem ustvariti novega %1 naslova</translation>
+    </message>
 </context>
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>QR Code</source>
-        <translation>QR Koda</translation>
+        <source>Request payment to ...</source>
+        <translation>Zahtevaj plačilo na ...</translation>
+    </message>
+    <message>
+        <source>Address:</source>
+        <translation>Naslov:</translation>
+    </message>
+    <message>
+        <source>Amount:</source>
+        <translation>Znesek:</translation>
+    </message>
+    <message>
+        <source>Label:</source>
+        <translation>Oznaka:</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>Sporočilo:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Denarnica:</translation>
     </message>
     <message>
         <source>Copy &amp;URI</source>
@@ -2165,30 +2302,6 @@
     <message>
         <source>Payment information</source>
         <translation>Informacije o plačilu</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation>URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Naslov</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Znesek</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Oznaka</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Sporočilo</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Denarnica</translation>
     </message>
 </context>
 <context>
@@ -2219,7 +2332,7 @@
     </message>
     <message>
         <source>Requested</source>
-        <translation>Zahtevana plačila</translation>
+        <translation>Zahtevan znesek</translation>
     </message>
 </context>
 <context>
@@ -2270,7 +2383,7 @@
     </message>
     <message>
         <source>If this is activated, but the change address is empty or invalid, change will be sent to a newly generated address.</source>
-        <translation>Če to vključite, nato pa vnesete neveljaven naslov, ali pa pustite polje prazno, bo vrnjen drobiž poslan na novo ustvarjen naslov.</translation>
+        <translation>Če to vključite, nato pa vnesete neveljaven naslov za vračilo ali pa pustite polje prazno, bo vračilo poslano na novoustvarjen naslov.</translation>
     </message>
     <message>
         <source>Custom change address</source>
@@ -2286,22 +2399,19 @@
     </message>
     <message>
         <source>Using the fallbackfee can result in sending a transaction that will take several hours or days (or never) to confirm. Consider choosing your fee manually or wait until you have validated the complete chain.</source>
-        <translation>Uporaba nadomestnega nadomestila lahko pošlje transakcijo, ki bo trajala več ur ali dni (ali nikoli) za potrditev. Razmislite o ročni izbiri ali počakajte, da potrdite celotno verigo.</translation>
+        <translation>Uporaba nadomestne provizije lahko povzroči, da bo transakcija potrjena šele po več urah ali dneh (ali morda sploh nikoli). Razmislite o ročni nastavitvi provizije ali počakajte, da se preveri celotna veriga.</translation>
     </message>
     <message>
         <source>Warning: Fee estimation is currently not possible.</source>
         <translation>Opozorilo: ocena provizije trenutno ni mogoča.</translation>
     </message>
     <message>
-        <source>collapse fee-settings</source>
-        <translation>Skrije nastavitve provizije</translation>
-    </message>
-    <message>
         <source>Specify a custom fee per kB (1,000 bytes) of the transaction's virtual size.
 
 Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis per kB" for a transaction size of 500 bytes (half of 1 kB) would ultimately yield a fee of only 50 satoshis.</source>
         <translation>Določite poljubno provizijo na kB (1000 bajtov) navidezne velikosti transakcije.
-Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" za transakcijo velikosti 500 bajtov (polovica enega kB) znašala 50 satoshijev.</translation>
+
+Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" za transakcijo velikosti 500 bajtov (polovica enega kB) znašala 50 satošijev.</translation>
     </message>
     <message>
         <source>per kilobyte</source>
@@ -2321,7 +2431,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>(Smart fee not initialized yet. This usually takes a few blocks...)</source>
-        <translation>(Samodejni obračun provizije še ni pripravljen. Po navadi izračun traja nekaj blokov ...)</translation>
+        <translation>(Samodejni obračun provizije še ni pripravljen. Izračun običajno traja nekaj blokov ...)</translation>
     </message>
     <message>
         <source>Send to multiple recipients at once</source>
@@ -2340,8 +2450,12 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Prah:</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for feathercoin transactions than the network can process.</source>
-        <translation>Kadar je v blokih manj volumna transakcij kot prostora v blokih, lahko rudarji in preusmeritvena vozlišča (relay nodes) uveljavijo minimalno provizijo. Plačilo le te minimalne provizije je čisto v redu, vendar se zavedajte, da lahko to povzroči nikoli potrjeno transakcijo, ko bo po feathercoin transakcijah večje povpraševanje, kot ga lahko obdela omrežje.</translation>
+        <source>Hide transaction fee settings</source>
+        <translation>Skrij nastavitve transakcijske provizije</translation>
+    </message>
+    <message>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for bitcoin transactions than the network can process.</source>
+        <translation>Kadar je v blokih manj prostora, kot je zahtev po transakcijah, lahko rudarji in posredovalna vozlišča zahtevajo minimalno provizijo. Plačilo le te minimalne provizije je čisto v redu, vendar se zavedajte, da lahko to povzroči, da se transakcija nikoli ne potrdi, če bo povpraševanje po bitcoin transakcijah večje, kot ga omrežje lahko obdela.</translation>
     </message>
     <message>
         <source>A too low fee might result in a never confirming transaction (read the tooltip)</source>
@@ -2357,7 +2471,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>With Replace-By-Fee (BIP-125) you can increase a transaction's fee after it is sent. Without this, a higher fee may be recommended to compensate for increased transaction delay risk.</source>
-        <translation>Z zamenjavo plačila (BIP-125) lahko po pošiljanju povečate pristojbino za transakcijo. Brez tega se lahko priporoči višja pristojbina za nadomestilo povečanega tveganja zamude pri transakciji.</translation>
+        <translation>"Replace-By-Fee" (BIP-125, "Povozi s provizijo") omogoča, da povečate provizijo za transakcijo po tem, ko je bila transakcija že poslana. Brez tega se lahko priporoči višja provizija za nadomestilo povečanega tveganja zamude pri transakciji.</translation>
     </message>
     <message>
         <source>Clear &amp;All</source>
@@ -2408,20 +2522,48 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>%1 (%2 blokov)</translation>
     </message>
     <message>
+        <source>Cr&amp;eate Unsigned</source>
+        <translation>Ustvari n&amp;epodpisano</translation>
+    </message>
+    <message>
+        <source>Creates a Partially Signed Bitcoin Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Ustvari delno podpisano bitcoin-transakcijo (DPBT, angl. PSBT), ki jo lahko skopirate in potem podpišete n.pr. z nepovezano (offline) %1 denarnico ali pa s hardversko denarnico, ki podpira DPBT.</translation>
+    </message>
+    <message>
         <source> from wallet '%1'</source>
-        <translation>iz denarnice '%1'</translation>
+        <translation> iz denarnice '%1'</translation>
     </message>
     <message>
         <source>%1 to '%2'</source>
-        <translation>%1 do '%2'</translation>
+        <translation>%1 v '%2'</translation>
     </message>
     <message>
         <source>%1 to %2</source>
-        <translation>%1 do %2</translation>
+        <translation>%1 v %2</translation>
+    </message>
+    <message>
+        <source>Do you want to draft this transaction?</source>
+        <translation>Želite shraniti to transakcijo kot osnutek?</translation>
     </message>
     <message>
         <source>Are you sure you want to send?</source>
-        <translation>Ali ste prepričani, da želite poslati?</translation>
+        <translation>Ali ste prepričani, da želite poslati sredstva?</translation>
+    </message>
+    <message>
+        <source>Create Unsigned</source>
+        <translation>Ustvari nepodpisano</translation>
+    </message>
+    <message>
+        <source>Save Transaction Data</source>
+        <translation>Shrani podatke transakcije</translation>
+    </message>
+    <message>
+        <source>Partially Signed Transaction (Binary) (*.psbt)</source>
+        <translation>Delno podpisana bitcoin-transakcija (binarno) (*.psbt)</translation>
+    </message>
+    <message>
+        <source>PSBT saved</source>
+        <translation>DPBT shranjena</translation>
     </message>
     <message>
         <source>or</source>
@@ -2432,8 +2574,12 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Provizijo lahko zvišate kasneje (signali Replace-By-Fee, BIP-125).</translation>
     </message>
     <message>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Bitcoin Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Prosimo, preglejte predlog za transakcijo. Ustvarjena bo delno podpisana bitcoin-transakcija (DPBT), ki jo lahko shranite ali skopirate in potem podpišete n.pr. z nepovezano (offline) %1 denarnico ali pa s hardversko denarnico, ki podpira DPBT.</translation>
+    </message>
+    <message>
         <source>Please, review your transaction.</source>
-        <translation>Prosimo, preglejte vaše transakcije.</translation>
+        <translation>Prosimo, preglejte svojo transakcijo.</translation>
     </message>
     <message>
         <source>Transaction fee</source>
@@ -2453,7 +2599,19 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Confirm send coins</source>
-        <translation>Potrdi pošiljanje kovancev</translation>
+        <translation>Potrdi pošiljanje</translation>
+    </message>
+    <message>
+        <source>Confirm transaction proposal</source>
+        <translation>Potrdi predlog transakcije</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Pošlji</translation>
+    </message>
+    <message>
+        <source>Watch-only balance:</source>
+        <translation>Opazovano stanje:</translation>
     </message>
     <message>
         <source>The recipient address is not valid. Please recheck.</source>
@@ -2469,7 +2627,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>Celotni znesek z vključeno provizijo %1 je večji od stanja sredstev, s katerimi razpolagate.</translation>
+        <translation>Celotni znesek z vključeno provizijo %1 je višji od vašega dobroimetja.</translation>
     </message>
     <message>
         <source>Duplicate address found: addresses should only be used once each.</source>
@@ -2478,10 +2636,6 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>Transaction creation failed!</source>
         <translation>Transakcije ni bilo mogoče ustvariti!</translation>
-    </message>
-    <message>
-        <source>The transaction was rejected with the following reason: %1</source>
-        <translation>Transakcija je bila zavrnjena: %1</translation>
     </message>
     <message>
         <source>A fee higher than %1 is considered an absurdly high fee.</source>
@@ -2493,11 +2647,11 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message numerus="yes">
         <source>Estimated to begin confirmation within %n block(s).</source>
-        <translation><numerusform>Predviden začetek potrditev po %n najdenemu bloku.</numerusform><numerusform>Predviden začetek potrditev po %n najdenih blokih.</numerusform><numerusform>Predviden začetek potrditev po %n najdenih blokih.</numerusform><numerusform>Predviden začetek potrditev po %n najdenih blokih.</numerusform></translation>
+        <translation><numerusform>Predviden začetek potrditev po %n najdenemu bloku.</numerusform><numerusform>Predviden začetek potrditev po %n najdenih blokih.</numerusform><numerusform>Predviden začetek potrditev po %n najdenih blokih.</numerusform><numerusform>Prva predvidena potrditev v naslednjih %n blokih.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid Feathercoin address</source>
-        <translation>Opozorilo: Neveljaven Feathercoin naslov</translation>
+        <source>Warning: Invalid Bitcoin address</source>
+        <translation>Opozorilo: Neveljaven bitcoin-naslov</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2509,7 +2663,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>The address you selected for change is not part of this wallet. Any or all funds in your wallet may be sent to this address. Are you sure?</source>
-        <translation>Naslov, ki ste ga izbrali za spremembo, ni del te denarnice. Na ta naslov se lahko pošlje katero koli ali vsa sredstva v vaši denarnici. Ali ste prepričani?</translation>
+        <translation>Naslov, ki ste ga izbrali za vračilo, ne pripada tej denarnici. Na ta naslov bodo lahko poslana katerakoli ali vsa sredstva v vaši denarnici. Ali ste prepričani?</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -2535,12 +2689,8 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Izberite enega od že uporabljenih naslovov</translation>
     </message>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>Plačilo je navadne vrste.</translation>
-    </message>
-    <message>
-        <source>The Feathercoin address to send the payment to</source>
-        <translation>Naslov Feathercoin, na katerega bo plačilo poslano</translation>
+        <source>The Bitcoin address to send the payment to</source>
+        <translation>Bitcoin-naslov, na katerega bo plačilo poslano</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2559,7 +2709,11 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Izpraznite vsebino polja</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less feathercoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <source>The amount to send in the selected unit</source>
+        <translation>Znesek za pošiljanje v izbrani enoti</translation>
+    </message>
+    <message>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
         <translation>Znesek plačila bo zmanjšan za znesek provizije. Prejemnik bo prejel manjše število kovancev, kot je bil vnešeni znesek. Če je prejemnikov več, bo provizija med njih enakomerno porazdeljena.</translation>
     </message>
     <message>
@@ -2568,7 +2722,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Use available balance</source>
-        <translation>Uporabi dobroimetje na voljo</translation>
+        <translation>Uporabi celotno dobroimetje</translation>
     </message>
     <message>
         <source>Message:</source>
@@ -2587,8 +2741,8 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Če vnesete oznako za zgornji naslov, se bo skupaj z naslovom shranila v imenk že uporabljenih naslovov</translation>
     </message>
     <message>
-        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
-        <translation>Sporočilo, ki ste ga pripeli na URI tipa feathercoin:. Shranjeno bo skupaj s podatki o transakciji. Opomba: Sporočilo ne bo poslano preko omrežja Feathercoin.</translation>
+        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
+        <translation>Sporočilo, ki je bilo pripeto na URI tipa bitcoin: in bo shranjeno skupaj s podatki o transakciji. Opomba: Sporočilo ne bo poslano preko omrežja Bitcoin.</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2597,17 +2751,6 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>Memo:</source>
         <translation>Opomba:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>Vnesite oznako, pod katero bo zgornji naslov shranjen v imenik</translation>
-    </message>
-</context>
-<context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>Da</translation>
     </message>
 </context>
 <context>
@@ -2632,12 +2775,12 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>&amp;Podpiši sporočilo</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive feathercoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>S svojimi naslovi lahko podpisujete sporočila ali pogodbe in s tem dokazujete, da na teh naslovih lahko prejemate kovance. Bodite previdni in ne podpisujte ničesar nejasnega ali naključnega, ker vas zlikovci preko ribarjenja (phishing) lahko prelisičijo, da na njih prepišete svojo identiteto. Podpisujte samo podrobno opisane izjave, s katerimi se strinjate.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive bitcoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>S svojimi naslovi lahko podpisujete sporočila ali dogovore in s tem dokazujete, da na teh naslovih lahko prejemate kovance. Bodite previdni in ne podpisujte ničesar nejasnega ali naključnega, ker vas zlikovci preko ribarjenja (phishing) lahko prelisičijo, da na njih prepišete svojo identiteto. Podpisujte samo podrobno opisane izjave, s katerimi se strinjate.</translation>
     </message>
     <message>
-        <source>The Feathercoin address to sign the message with</source>
-        <translation>Naslov Feathercoin, s katerim podpisujete sporočilo</translation>
+        <source>The Bitcoin address to sign the message with</source>
+        <translation>Bitcoin-naslov, s katerim podpisujete sporočilo</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2665,11 +2808,11 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Copy the current signature to the system clipboard</source>
-        <translation>Kopiranje trenutnega podpisa na sistemsko odložišče.</translation>
+        <translation>Kopiranje trenutnega podpisa v sistemsko odložišče.</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Feathercoin address</source>
-        <translation>Podpišite sporočilo, da dokažete lastništvo nad zgornjim naslovom.</translation>
+        <source>Sign the message to prove you own this Bitcoin address</source>
+        <translation>Podpišite sporočilo, da dokažete lastništvo zgornjega naslova.</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2689,15 +2832,23 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Enter the receiver's address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack. Note that this only proves the signing party receives with the address, it cannot prove sendership of any transaction!</source>
-        <translation>Da preverite verodostojnost sporočila, spodaj vnesite: prejemnikov naslov, prejeto sporočilo (pazljivo skopirajte vse prelome vrstic, presledke, tabulatorje ipd.,) in prejeti podpis. Da se izognete napadom tipa man-in-the-middle, vedite, da iz veljavnega podpisa ne sledi nič drugega, kot tisto, kar je navedeno v sporočilu. Podpis samo potrjuje dejstvo, da ima podpisnik v lasti prejemni naslov, ne more pa dokazati vira nobene transakcije!</translation>
+        <translation>Da preverite verodostojnost sporočila, spodaj vnesite: prejemnikov naslov, prejeto sporočilo (pazljivo skopirajte vse prelome vrstic, presledke, tabulatorje itd.) in prejeti podpis. Da se izognete napadom tipa man-in-the-middle, vedite, da iz veljavnega podpisa ne sledi nič drugega, kot tisto, kar je navedeno v sporočilu. Podpis samo potrjuje dejstvo, da ima podpisnik v lasti prejemni naslov, ne more pa dokazati vira nobene transakcije!</translation>
     </message>
     <message>
-        <source>The Feathercoin address the message was signed with</source>
-        <translation>Naslov Feathercoin, s katerim je bilo sporočilo podpisano</translation>
+        <source>The Bitcoin address the message was signed with</source>
+        <translation>Bitcoin-naslov, s katerim je bilo sporočilo podpisano</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
-        <translation>Preverite, ali je bilo sporočilo v resnici podpisano z navedenim naslovom Feathercoin.</translation>
+        <source>The signed message to verify</source>
+        <translation>Podpisano sporočilo za preverbo</translation>
+    </message>
+    <message>
+        <source>The signature given when the message was signed</source>
+        <translation>Podpis, ustvarjen ob podpisovanju sporočila</translation>
+    </message>
+    <message>
+        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <translation>Preverite, ali je bilo sporočilo v resnici podpisano z navedenim bitcoin-naslovom.</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -2726,6 +2877,10 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>Wallet unlock was cancelled.</source>
         <translation>Odklepanje denarnice je bilo preklicano.</translation>
+    </message>
+    <message>
+        <source>No error</source>
+        <translation>Ni napak</translation>
     </message>
     <message>
         <source>Private key for the entered address is not available.</source>
@@ -2787,11 +2942,11 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>in memory pool</source>
-        <translation>v memory pool-u</translation>
+        <translation>v čakalni vrsti</translation>
     </message>
     <message>
         <source>not in memory pool</source>
-        <translation>ni v memory pool-u</translation>
+        <translation>ni v čakalni vrsti</translation>
     </message>
     <message>
         <source>abandoned</source>
@@ -3001,7 +3156,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Received with</source>
-        <translation>Prejeto s</translation>
+        <translation>Prejeto z</translation>
     </message>
     <message>
         <source>Received from</source>
@@ -3009,7 +3164,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Sent to</source>
-        <translation>Poslano</translation>
+        <translation>Poslano na</translation>
     </message>
     <message>
         <source>Payment to yourself</source>
@@ -3053,7 +3208,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Amount removed from or added to balance.</source>
-        <translation>Znesek spremembe stanja sredstev.</translation>
+        <translation>Višina spremembe dobroimetja.</translation>
     </message>
 </context>
 <context>
@@ -3092,7 +3247,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Sent to</source>
-        <translation>Poslano</translation>
+        <translation>Poslano na </translation>
     </message>
     <message>
         <source>To yourself</source>
@@ -3230,18 +3385,34 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Are you sure you wish to close the wallet &lt;i&gt;%1&lt;/i&gt;?</source>
-        <translation>Ali ste prepričani da želite zapreti denarnico &lt;i&gt;%1&lt;/i&gt;?</translation>
+        <translation>Ste prepričani, da želite zapreti denarnico &lt;i&gt;%1&lt;/i&gt;?</translation>
     </message>
     <message>
         <source>Closing the wallet for too long can result in having to resync the entire chain if pruning is enabled.</source>
         <translation>Predolgo zapiranje denarnice lahko povzroči ponovno sinhronizacijo celotne verige, če je obrezovanje omogočeno.</translation>
     </message>
+    <message>
+        <source>Close all wallets</source>
+        <translation>Zapri vse denarnice</translation>
+    </message>
+    <message>
+        <source>Are you sure you wish to close all wallets?</source>
+        <translation>Ste prepričani, da želite zapreti vse denarnice?</translation>
+    </message>
 </context>
 <context>
     <name>WalletFrame</name>
     <message>
-        <source>No wallet has been loaded.</source>
-        <translation>Nobena denarnica ni bila naložena.</translation>
+        <source>No wallet has been loaded.
+Go to File &gt; Open Wallet to load a wallet.
+- OR -</source>
+        <translation>Odprta ni nobena denarnica.
+Za odpiranje denarnice kliknite Datoteka &gt; Odpri denarnico
+- ali pa -</translation>
+    </message>
+    <message>
+        <source>Create a new wallet</source>
+        <translation>Ustvari novo denarnico</translation>
     </message>
 </context>
 <context>
@@ -3252,7 +3423,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Fee bump error</source>
-        <translation>Fee bump error</translation>
+        <translation>Napaka pri poviševanju provizije</translation>
     </message>
     <message>
         <source>Increasing transaction fee failed</source>
@@ -3260,7 +3431,11 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Do you want to increase the fee?</source>
-        <translation>Ali hočete povišati provizijo?</translation>
+        <translation>Ali želite povišati provizijo?</translation>
+    </message>
+    <message>
+        <source>Do you want to draft a transaction with fee increase?</source>
+        <translation>Želite shraniti osnutek transakcije s povečano provizijo?</translation>
     </message>
     <message>
         <source>Current fee:</source>
@@ -3277,6 +3452,14 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>Confirm fee bump</source>
         <translation>Confirm fee bump</translation>
+    </message>
+    <message>
+        <source>Can't draft transaction.</source>
+        <translation>Ne morem shraniti osnutka transakcije</translation>
+    </message>
+    <message>
+        <source>PSBT copied</source>
+        <translation>DPBT skopirana</translation>
     </message>
     <message>
         <source>Can't sign transaction.</source>
@@ -3300,6 +3483,30 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>Export the data in the current tab to a file</source>
         <translation>Izvozi podatke v trenutnem zavihku v datoteko</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Napaka</translation>
+    </message>
+    <message>
+        <source>Unable to decode PSBT from clipboard (invalid base64)</source>
+        <translation>Ne morem dekodirati DPBT z odložišča (neveljaven format base64)</translation>
+    </message>
+    <message>
+        <source>Load Transaction Data</source>
+        <translation>Naloži podatke transakcije</translation>
+    </message>
+    <message>
+        <source>Partially Signed Transaction (*.psbt)</source>
+        <translation>Delno podpisana transakcija (*.psbt)</translation>
+    </message>
+    <message>
+        <source>PSBT file must be smaller than 100 MiB</source>
+        <translation>Velikost DPBT ne sme presegati 100 MiB.</translation>
+    </message>
+    <message>
+        <source>Unable to decode PSBT</source>
+        <translation>Ne morem dekodirati DPBT</translation>
     </message>
     <message>
         <source>Backup Wallet</source>
@@ -3342,15 +3549,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Prune: last wallet synchronisation goes beyond pruned data. You need to -reindex (download the whole blockchain again in case of pruned node)</source>
-        <translation>Obrezovanje: zadnja sinhronizacija denarnice presega obrezane podatke. Izvesti morate -reindex (v primeru obrezave morate znova naložiti celoten blockchain)</translation>
-    </message>
-    <message>
-        <source>Rescans are not possible in pruned mode. You will need to use -reindex which will download the whole blockchain again.</source>
-        <translation>RPonovno skeniranje (rescans) v obrezovalnem načinu niso možni. Uporabiti boste morali -reindex, ki bo znova naložil celoten blockchain.</translation>
-    </message>
-    <message>
-        <source>Error: A fatal internal error occurred, see debug.log for details</source>
-        <translation>Napaka: Med izvajanjem je prišlo do nepopravljive napake. Podrobnosti so v datoteki debug.log</translation>
+        <translation>Obrezovanje: zadnja sinhronizacija denarnice presega obrezane podatke. Izvesti morate -reindex (v primeru obrezanega načina delovanja bo potrebno znova prenesti celotno verigo blokov).</translation>
     </message>
     <message>
         <source>Pruning blockstore...</source>
@@ -3363,10 +3562,6 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>The %s developers</source>
         <translation>%s razvijalci</translation>
-    </message>
-    <message>
-        <source>Can't generate a change-address key. No keys in the internal keypool and can't generate any keys.</source>
-        <translation>Ne morem ustvariti ključa change-address. V keypool-u ni ključev.</translation>
     </message>
     <message>
         <source>Cannot obtain a lock on data directory %s. %s is probably already running.</source>
@@ -3389,8 +3584,20 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Prosimo, prispevajte, če se vam zdi %s uporaben. Za dodatne informacije o programski opremi obiščite %s.</translation>
     </message>
     <message>
+        <source>SQLiteDatabase: Failed to prepare the statement to fetch sqlite wallet schema version: %s</source>
+        <translation>Baza SQLite: priprava stavka za poizvedbo verzije sheme SQLite denarnice je spodletela: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to prepare the statement to fetch the application id: %s</source>
+        <translation>Baza SQLite: priprava stavka za poizvedbo identifikatorja aplikacije je spodletela: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Unknown sqlite wallet schema version %d. Only version %d is supported</source>
+        <translation>Baza SQLite: Neznana verzija sheme SQLite denarnice %d. Podprta je le verzija %d.</translation>
+    </message>
+    <message>
         <source>The block database contains a block which appears to be from the future. This may be due to your computer's date and time being set incorrectly. Only rebuild the block database if you are sure that your computer's date and time are correct</source>
-        <translation>Baza podatkov blokov vsebuje blok, za katerega se zdi, da bo iz prihodnosti. To je lahko posledica napačnega nastavitve datuma in časa vašega računalnika. Znova obnovijte bazo podatkov samo, če ste prepričani, da sta datum in čas računalnika pravilna</translation>
+        <translation>Baza podatkov blokov vsebuje blok, za katerega se zdi, da je iz prihodnosti. To je lahko posledica napačnega nastavitve datuma in časa vašega računalnika. Znova zgradite bazo podatkov samo, če ste prepričani, da sta datum in čas računalnika pravilna.</translation>
     </message>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
@@ -3398,11 +3605,11 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>This is the transaction fee you may discard if change is smaller than dust at this level</source>
-        <translation>To je transakcijska provizija, ki jo lahko zavržete, če je sprememba manjša od prahu na tej ravni</translation>
+        <translation>To je transakcijska provizija, ki jo lahko zavržete, če je znesek vračila manjši od prahu na tej ravni</translation>
     </message>
     <message>
         <source>Unable to replay blocks. You will need to rebuild the database using -reindex-chainstate.</source>
-        <translation>Ne morem ponoviti blokov. Podatkovno bazo bo potrebno ponovno zgraditi z uporabo ukaza -reindex-chainstate.</translation>
+        <translation>Ne morem ponovno obdelati blokov. Podatkovno bazo bo potrebno ponovno zgraditi z uporabo ukaza -reindex-chainstate.</translation>
     </message>
     <message>
         <source>Unable to rewind the database to a pre-fork state. You will need to redownload the blockchain</source>
@@ -3410,19 +3617,11 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
-        <translation>Opozorilo: Trenutno na omrežju ni videti konsenza! Videti je, kot da bi imeli nekateri rudarji težave.</translation>
+        <translation>Opozorilo: Trenutno na omrežju ni videti konsenza! Videti je, da imajo nekateri rudarji težave.</translation>
     </message>
     <message>
         <source>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</source>
         <translation>Opozorilo: Trenutno se s soležniki ne strinjamo v popolnosti! Mogoče bi morali vi ali drugi udeleženci posodobiti odjemalce.</translation>
-    </message>
-    <message>
-        <source>%d of last 100 blocks have unexpected version</source>
-        <translation>%d od zadnjih 100 blokov imajo nepričakovano verzijo</translation>
-    </message>
-    <message>
-        <source>%s corrupt, salvage failed</source>
-        <translation>%s poškodovana, obnova neuspešna</translation>
     </message>
     <message>
         <source>-maxmempool must be at least %d MB</source>
@@ -3434,7 +3633,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Change index out of range</source>
-        <translation>Indeks drobiža izven dovoljenega območja</translation>
+        <translation>Indeks vračila izven dovoljenega območja</translation>
     </message>
     <message>
         <source>Config setting for %s only applied on %s network when in [%s] section.</source>
@@ -3447,6 +3646,14 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>Corrupted block database detected</source>
         <translation>Podatkovna baza blokov je okvarjena</translation>
+    </message>
+    <message>
+        <source>Could not find asmap file %s</source>
+        <translation>Ne najdem asmap-datoteke %s</translation>
+    </message>
+    <message>
+        <source>Could not parse asmap file %s</source>
+        <translation>Razčlenjevanje asmap-datoteke %s je spodletelo</translation>
     </message>
     <message>
         <source>Do you want to rebuild the block database now?</source>
@@ -3493,6 +3700,10 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Med inicializacijo denarnice ni bilo mogoče preveriti zgodovine (rescan failed).</translation>
     </message>
     <message>
+        <source>Failed to verify database</source>
+        <translation>Preverba podatkovne baze je spodletela.</translation>
+    </message>
+    <message>
         <source>Importing...</source>
         <translation>Uvažam ...</translation>
     </message>
@@ -3521,6 +3732,30 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Neveljavna količina za -fallbackfee=&lt;amount&gt;: '%s'</translation>
     </message>
     <message>
+        <source>SQLiteDatabase: Failed to execute statement to verify database: %s</source>
+        <translation>Baza SQLite: Izvršitev stavka za preverbo baze je spodletela: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to fetch sqlite wallet schema version: %s</source>
+        <translation>Baza SQLite: pridobitev verzije sheme SQLite denarnice je spodletela: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to fetch the application id: %s</source>
+        <translation>Baza SQLite: pridobitev identifikatorja aplikacije je spodletela: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to prepare statement to verify database: %s</source>
+        <translation>Baza SQLite: priprava stavka za preverbo baze je spodletela: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Failed to read database verification error: %s</source>
+        <translation>Baza SQLite: branje napake pri preverjanje baze je spodletelo: %s</translation>
+    </message>
+    <message>
+        <source>SQLiteDatabase: Unexpected application id. Expected %u, got %u</source>
+        <translation>Baza SQLite: nepričakovan identifikator aplikacije. Pričakovana vrednost je %u, dobljena vrednost je %u.</translation>
+    </message>
+    <message>
         <source>Specified blocks directory "%s" does not exist.</source>
         <translation>Vnešena podatkovna mapa za bloke "%s" ne obstaja.</translation>
     </message>
@@ -3530,19 +3765,15 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Unknown change type '%s'</source>
-        <translation>Neznan tip drobiža '%s'</translation>
+        <translation>Neznan tip vračila '%s'</translation>
     </message>
     <message>
         <source>Upgrading txindex database</source>
-        <translation>Nadgrajujem txindex podatkovno bazo</translation>
+        <translation>Nadgrajujem podatkovno bazo txindex</translation>
     </message>
     <message>
         <source>Loading P2P addresses...</source>
         <translation>Nalagam P2P naslove ...</translation>
-    </message>
-    <message>
-        <source>Error: Disk space is too low!</source>
-        <translation>Napaka: premalo prostora na disku!</translation>
     </message>
     <message>
         <source>Loading banlist...</source>
@@ -3574,7 +3805,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Transaction fee and change calculation failed</source>
-        <translation>Izračun provizije za transakcijo in droviža ni uspel</translation>
+        <translation>Izračun provizije za transakcijo in vračila ni uspel</translation>
     </message>
     <message>
         <source>Unable to bind to %s on this computer. %s is probably already running.</source>
@@ -3609,6 +3840,10 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Napaka: Ni mogoče sprejemati dohodnih povezav (vrnjena napaka: %s)</translation>
     </message>
     <message>
+        <source>%s corrupt. Try using the wallet tool bitcoin-wallet to salvage or restoring a backup.</source>
+        <translation>%s je okvarjena. Lahko jo poskusite popraviti z orodjem bitcoin-wallet ali pa jo obnovite iz varnostne kopije.</translation>
+    </message>
+    <message>
         <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)</source>
         <translation>Neveljaven znesek za -maxtxfee=&lt;amount&gt;: '%s' (mora biti najmanj provizija za %s, da se prepreči zataknjene transakcije)</translation>
     </message>
@@ -3617,8 +3852,32 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Znesek transakcije je premajhen za pošiljanje po odbitku provizije</translation>
     </message>
     <message>
+        <source>This error could occur if this wallet was not shutdown cleanly and was last loaded using a build with a newer version of Berkeley DB. If so, please use the software that last loaded this wallet</source>
+        <translation>Ta napaka se lahko pojavi, če denarnica ni bila pravilno zaprta in je bila nazadnje naložena s programsko opremo z novejšo verzijo Berkely DB. Če je temu tako, prosimo uporabite programsko opremo, s katero je bila ta denarnica nazadnje naložena.</translation>
+    </message>
+    <message>
+        <source>This is the maximum transaction fee you pay (in addition to the normal fee) to prioritize partial spend avoidance over regular coin selection.</source>
+        <translation>To je najvišja transakcijska provizija, ki jo plačate (poleg običajne provizije) za prednostno izogibanje delni porabi pred rednim izbiranjem kovancev.</translation>
+    </message>
+    <message>
+        <source>Transaction needs a change address, but we can't generate it. Please call keypoolrefill first.</source>
+        <translation>Transakcija potrebuje naslov za vračilo, ki pa ga ni moč ustvariti. Prosimo, najprej pokličite keypoolrefill.</translation>
+    </message>
+    <message>
         <source>You need to rebuild the database using -reindex to go back to unpruned mode.  This will redownload the entire blockchain</source>
-        <translation>Za vrnitev v nepredviden način morate obnoviti bazo z uporabo -reindex. To bo ponovno naložilo celoten blockchain</translation>
+        <translation>Za vrnitev v neobrezan način morate obnoviti bazo z uporabo -reindex. To zahteva ponoven prenos celotne verige blokov.</translation>
+    </message>
+    <message>
+        <source>A fatal internal error occurred, see debug.log for details</source>
+        <translation>Prišlo je do usodne notranje napake. Za podrobnosti glejte datoteko debug.log.</translation>
+    </message>
+    <message>
+        <source>Cannot set -peerblockfilters without -blockfilterindex.</source>
+        <translation>Nastavitev -peerblockfilters ni veljavna brez nastavitve -blockfilterindex.</translation>
+    </message>
+    <message>
+        <source>Disk space is too low!</source>
+        <translation>Prostora na disku je premalo!</translation>
     </message>
     <message>
         <source>Error reading from database, shutting down.</source>
@@ -3626,11 +3885,15 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Error upgrading chainstate database</source>
-        <translation>Napaka pri nadgradnji chainstate baze podatkov</translation>
+        <translation>Napaka pri posodobitvi baze podatkov stanja verige.</translation>
     </message>
     <message>
         <source>Error: Disk space is low for %s</source>
         <translation>Opozorilo: premalo prostora na disku za %s</translation>
+    </message>
+    <message>
+        <source>Error: Keypool ran out, please call keypoolrefill first</source>
+        <translation>Napaka: bazen ključev je prazen, najprej pokličite keypoolrefill</translation>
     </message>
     <message>
         <source>Invalid -onion address or hostname: '%s'</source>
@@ -3651,6 +3914,10 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     <message>
         <source>Need to specify a port with -whitebind: '%s'</source>
         <translation>Pri opciji -whitebind morate navesti vrata: %s</translation>
+    </message>
+    <message>
+        <source>No proxy server specified. Use -proxy=&lt;ip&gt; or -proxy=&lt;ip:port&gt;.</source>
+        <translation>Posredniški strežnik (proxy) ni nastavljen. Uporabite -proxy=&lt;ip&gt; ali -proxy=&lt;ip:port&gt;.</translation>
     </message>
     <message>
         <source>Prune mode is incompatible with -blockfilterindex.</source>
@@ -3724,11 +3991,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Warning: unknown new rules activated (versionbit %i)</source>
-        <translation>Opozorilo: neznana nova pravila aktivirana (verzija %i)</translation>
-    </message>
-    <message>
-        <source>Zapping all transactions from wallet...</source>
-        <translation>Brišem vse transakcije iz denarnice ...</translation>
+        <translation>Opozorilo: neznana nova pravila aktivirana (versionbit %i)</translation>
     </message>
     <message>
         <source>-maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
@@ -3739,24 +4002,12 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>To je transakcijska provizija, ki jo lahko plačate, kadar ocene provizij niso na voljo.</translation>
     </message>
     <message>
-        <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit %s and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
-        <translation>Ta izdelek vključuje programsko opremo, ki jo je razvil OpenSSL Project za uporabo v orodju OpenSSL Toolkit %s in kriptografsko programsko opremo, ki jo je napisal Eric Young, in programsko opremo UPnP, ki jo je napisal Thomas Bernard.</translation>
-    </message>
-    <message>
         <source>Total length of network version string (%i) exceeds maximum length (%i). Reduce the number or size of uacomments.</source>
         <translation>Skupna dolžina niza različice omrežja (%i) presega največjo dolžino (%i). Zmanjšajte število ali velikost ur.</translation>
     </message>
     <message>
-        <source>Warning: Wallet file corrupt, data salvaged! Original %s saved as %s in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Opozorilo: Datoteka denarnice je poškodovana, podatki so shranjeni! Izvirnik %s je bil shranjen kot %s v %s; če je stanje ali transakcije napačno, ga morate obnoviti iz varnostne kopije.</translation>
-    </message>
-    <message>
         <source>%s is set very high!</source>
         <translation>%s je postavljen zelo visoko!</translation>
-    </message>
-    <message>
-        <source>Error loading wallet %s. Duplicate -wallet filename specified.</source>
-        <translation>Napaka pri nalaganju denarnice %s. Ime denarnice je bilo že uporabljeno.</translation>
     </message>
     <message>
         <source>Starting network threads...</source>
@@ -3780,7 +4031,7 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
     </message>
     <message>
         <source>Transaction has too long of a mempool chain</source>
-        <translation>Transakcija ima predolgo verigo spominov</translation>
+        <translation>Transakcija je del predolge verige nepotrjenih transakcij</translation>
     </message>
     <message>
         <source>Transaction must have at least one recipient</source>
@@ -3795,16 +4046,12 @@ Opomba: Ker se provizija izračuna na bajt, bi provizija "100 satoshijev na kB" 
         <translation>Premalo sredstev</translation>
     </message>
     <message>
-        <source>Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use -upgradewallet=169900 or -upgradewallet with no version specified.</source>
-        <translation>Ne morete nadgraditi denarnice, ki ni ločena z HD, brez nadgradnje na podporo pred razdeljenim ključem. Uporabite -upgradewallet=169900 ali -upgradewallet brez določene različice.</translation>
-    </message>
-    <message>
         <source>Fee estimation failed. Fallbackfee is disabled. Wait a few blocks or enable -fallbackfee.</source>
         <translation>Ocena provizije ni uspela. Fallbackfee je onemogočen. Počakajte nekaj blokov ali omogočite -fallbackfee.</translation>
     </message>
     <message>
         <source>Warning: Private keys detected in wallet {%s} with disabled private keys</source>
-        <translation>Opozorilo: zasebni ključi odkriti v denarnici %s z onemogočenimi zasebnimi ključi.</translation>
+        <translation>Opozorilo: zasebni ključi odkriti v denarnici {%s} z onemogočenimi zasebnimi ključi.</translation>
     </message>
     <message>
         <source>Cannot write to data directory '%s'; check permissions.</source>

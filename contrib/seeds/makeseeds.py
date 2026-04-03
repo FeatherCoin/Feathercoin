@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2013-2018 The Bitcoin Core developers
+# Copyright (c) 2013-2020 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
@@ -15,17 +15,27 @@ NSEEDS=512
 
 MAX_SEEDS_PER_ASN=2
 
-MIN_BLOCKS = 2000000
+MIN_BLOCKS = 337600
+
+# These are hosts that have been observed to be behaving strangely (e.g.
+# aggressively connecting to every node).
+with open("suspicious_hosts.txt", mode="r", encoding="utf-8") as f:
+    SUSPICIOUS_HOSTS = {s.strip() for s in f if s.strip()}
+
 
 PATTERN_IPV4 = re.compile(r"^((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})):(\d+)$")
 PATTERN_IPV6 = re.compile(r"^\[([0-9a-z:]+)\]:(\d+)$")
 PATTERN_ONION = re.compile(r"^([abcdefghijklmnopqrstuvwxyz234567]{16}\.onion):(\d+)$")
 PATTERN_AGENT = re.compile(
-    r"^/Feathercoin:("
-    r"0.13.(0|1|2|3|99)|"
-    r"0.16.(0|1|2|3|4|99)|"
-    r"0.17.(0|1|99)|"
-    r"0.18.(0|1|2|3|4|99)|"
+    r"^/Satoshi:("
+    r"0.14.(0|1|2|3|99)|"
+    r"0.15.(0|1|2|99)|"
+    r"0.16.(0|1|2|3|99)|"
+    r"0.17.(0|0.1|1|2|99)|"
+    r"0.18.(0|1|99)|"
+    r"0.19.(0|1|99)|"
+    r"0.20.(0|1|99)|"
+    r"0.21.99"
     r")")
 
 def parseline(line):
@@ -111,7 +121,7 @@ def filtermultiport(ips):
 
 def lookup_asn(net, ip):
     '''
-    Look up the asn for an IP (4 or 6) address by querying cymry.com, or None
+    Look up the asn for an IP (4 or 6) address by querying cymru.com, or None
     if it could not be found.
     '''
     try:
@@ -175,9 +185,12 @@ def main():
     # Skip entries with invalid address.
     ips = [ip for ip in ips if ip is not None]
     print('%s Skip entries with invalid address' % (ip_stats(ips)), file=sys.stderr)
-    # Skip duplicattes (in case multiple seeds files were concatenated)
+    # Skip duplicates (in case multiple seeds files were concatenated)
     ips = dedup(ips)
     print('%s After removing duplicates' % (ip_stats(ips)), file=sys.stderr)
+    # Skip entries from suspicious hosts.
+    ips = [ip for ip in ips if ip['ip'] not in SUSPICIOUS_HOSTS]
+    print('%s Skip entries from suspicious hosts' % (ip_stats(ips)), file=sys.stderr)
     # Enforce minimal number of blocks.
     ips = [ip for ip in ips if ip['blocks'] >= MIN_BLOCKS]
     print('%s Enforce minimal number of blocks' % (ip_stats(ips)), file=sys.stderr)

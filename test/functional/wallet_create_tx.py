@@ -45,34 +45,34 @@ class CreateTxWalletTest(BitcoinTestFramework):
 
     def test_tx_size_too_large(self):
         # More than 10kB of outputs, so that we hit -maxtxfee with a high feerate
-        outputs = {self.nodes[0].getnewaddress(address_type='bech32'): 0.000025 for i in range(400)}
+        outputs = {self.nodes[0].getnewaddress(address_type='bech32'): 0.000025 for _ in range(400)}
         raw_tx = self.nodes[0].createrawtransaction(inputs=[], outputs=outputs)
 
-        for fee_setting in ['-minrelaytxfee=2', '-mintxfee=2', '-paytxfee=2']:
+        for fee_setting in ['-minrelaytxfee=0.01', '-mintxfee=0.01', '-paytxfee=0.01']:
             self.log.info('Check maxtxfee in combination with {}'.format(fee_setting))
             self.restart_node(0, extra_args=[fee_setting])
             assert_raises_rpc_error(
                 -6,
-                "Fee exceeds maximum configured by -maxtxfee",
+                "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
                 lambda: self.nodes[0].sendmany(dummy="", amounts=outputs),
             )
             assert_raises_rpc_error(
                 -4,
-                "Fee exceeds maximum configured by -maxtxfee",
+                "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
                 lambda: self.nodes[0].fundrawtransaction(hexstring=raw_tx),
             )
 
         self.log.info('Check maxtxfee in combination with settxfee')
         self.restart_node(0)
-        self.nodes[0].settxfee(2)
+        self.nodes[0].settxfee(0.01)
         assert_raises_rpc_error(
             -6,
-            "Fee exceeds maximum configured by -maxtxfee",
+            "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
             lambda: self.nodes[0].sendmany(dummy="", amounts=outputs),
         )
         assert_raises_rpc_error(
             -4,
-            "Fee exceeds maximum configured by -maxtxfee",
+            "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
             lambda: self.nodes[0].fundrawtransaction(hexstring=raw_tx),
         )
         self.nodes[0].settxfee(0)

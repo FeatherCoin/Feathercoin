@@ -66,8 +66,8 @@
         <translation>Gavimo adresai</translation>
     </message>
     <message>
-        <source>These are your Feathercoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Tai yra jūsų Feathercoin adresai išeinantiems mokėjimams. Visada pasitikrinkite sumą ir gavėjo adresą prieš siunčiant lėšas.</translation>
+        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Tai yra jūsų Bitcoin adresai išeinantiems mokėjimams. Visada pasitikrinkite sumą ir gavėjo adresą prieš siunčiant lėšas.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -174,6 +174,10 @@
     <message>
         <source>Wallet encrypted</source>
         <translation>Piniginė užšifruota</translation>
+    </message>
+    <message>
+        <source>Enter the old passphrase and new passphrase for the wallet.</source>
+        <translation>Įveskite seną ir naują slaptažodį.</translation>
     </message>
     <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
@@ -298,6 +302,14 @@
         <translation>Atidaryti &amp;URI...</translation>
     </message>
     <message>
+        <source>Create Wallet...</source>
+        <translation>Sukurti piniginę...</translation>
+    </message>
+    <message>
+        <source>Create a new wallet</source>
+        <translation>Sukurti naują piniginę</translation>
+    </message>
+    <message>
         <source>Wallet:</source>
         <translation>Piniginė</translation>
     </message>
@@ -326,8 +338,8 @@
         <translation>Tarpinis serveris yra &lt;b&gt;įgalintas&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a Feathercoin address</source>
-        <translation>Siųsti monetas Feathercoin adresui</translation>
+        <source>Send coins to a Bitcoin address</source>
+        <translation>Siųsti monetas Bitcoin adresui</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -336,14 +348,6 @@
     <message>
         <source>Change the passphrase used for wallet encryption</source>
         <translation>Pakeisti slaptafrazę naudojamą piniginės užšifravimui</translation>
-    </message>
-    <message>
-        <source>&amp;Debug window</source>
-        <translation>&amp;Derinimo langas</translation>
-    </message>
-    <message>
-        <source>Open debugging and diagnostic console</source>
-        <translation>Atverti derinimo ir diagnostikos konsolę</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
@@ -370,12 +374,12 @@
         <translation>Užšifruoti privačius raktus, kurie priklauso jūsų piniginei</translation>
     </message>
     <message>
-        <source>Sign messages with your Feathercoin addresses to prove you own them</source>
-        <translation>Pasirašydami žinutes su savo Feathercoin adresais įrodysite jog esate jų savininkas</translation>
+        <source>Sign messages with your Bitcoin addresses to prove you own them</source>
+        <translation>Pasirašydami žinutes su savo Bitcoin adresais įrodysite jog esate jų savininkas</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified Feathercoin addresses</source>
-        <translation>Patikrinkite žinutę, jog įsitikintumėte, kad ją pasirašė nurodytas Feathercoin adresas</translation>
+        <source>Verify messages to ensure they were signed with specified Bitcoin addresses</source>
+        <translation>Patikrinkite žinutę, jog įsitikintumėte, kad ją pasirašė nurodytas Bitcoin adresas</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -394,8 +398,8 @@
         <translation>Kortelių įrankinė</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and feathercoin: URIs)</source>
-        <translation>Reikalauti mokėjimų (sukuria QR kodus ir feathercoin: URI)</translation>
+        <source>Request payments (generates QR codes and bitcoin: URIs)</source>
+        <translation>Reikalauti mokėjimų (sukuria QR kodus ir bitcoin: URI)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -406,16 +410,12 @@
         <translation>Rodyti sąrašą panaudotų gavimo adresų ir žymių</translation>
     </message>
     <message>
-        <source>Open a feathercoin: URI or payment request</source>
-        <translation>Atidaryti feathercoin: URI ar apmokėjimo reikalavimą</translation>
-    </message>
-    <message>
         <source>&amp;Command-line options</source>
         <translation>Komandinės eilutės parametrai</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Feathercoin network</source>
-        <translation><numerusform>%n Feathercoin tinklo aktyvus ryšys</numerusform><numerusform>%n Feathercoin tinklo aktyvūs ryšiai</numerusform><numerusform>%n Feathercoin tinklo aktyvūs ryšiai</numerusform><numerusform>%n Feathercoin tinklo aktyvūs ryšiai</numerusform></translation>
+        <source>%n active connection(s) to Bitcoin network</source>
+        <translation><numerusform>%n Bitcoin tinklo aktyvus ryšys</numerusform><numerusform>%n Bitcoin tinklo aktyvūs ryšiai</numerusform><numerusform>%n Bitcoin tinklo aktyvūs ryšiai</numerusform><numerusform>%n Bitcoin tinklo aktyvūs ryšiai</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -482,12 +482,16 @@
         <translation>Uždaryti Piniginę</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible Feathercoin command-line options</source>
-        <translation>Rodyti %1 pagalbos žinutę su Feathercoin pasirinkimo komandomis</translation>
+        <source>Show the %1 help message to get a list with possible Bitcoin command-line options</source>
+        <translation>Rodyti %1 pagalbos žinutę su Bitcoin pasirinkimo komandomis</translation>
     </message>
     <message>
         <source>default wallet</source>
         <translation>numatyta piniginė</translation>
+    </message>
+    <message>
+        <source>No wallets available</source>
+        <translation>Piniginių nėra</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -520,6 +524,10 @@
     <message>
         <source>Error: %1</source>
         <translation>Klaida: %1</translation>
+    </message>
+    <message>
+        <source>Warning: %1</source>
+        <translation>Įspėjimas: %1</translation>
     </message>
     <message>
         <source>Date: %1
@@ -585,11 +593,7 @@
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
         <translation>Piniginė &lt;b&gt;užšifruota&lt;/b&gt; ir šiuo metu &lt;b&gt;užrakinta&lt;/b&gt;</translation>
     </message>
-    <message>
-        <source>A fatal error occurred. Feathercoin can no longer continue safely and will quit.</source>
-        <translation>Kritinė klaida. Feathercoin nebegali tęsti saugiai ir bus išjungtas.</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>CoinControlDialog</name>
     <message>
@@ -743,9 +747,49 @@
 </context>
 <context>
     <name>CreateWalletActivity</name>
-    </context>
+    <message>
+        <source>Creating Wallet &lt;b&gt;%1&lt;/b&gt;...</source>
+        <translation>Sukuriama Piniginė &lt;b&gt;%1&lt;/b&gt;...</translation>
+    </message>
+    <message>
+        <source>Create wallet failed</source>
+        <translation>Piniginės sukurimas nepavyko</translation>
+    </message>
+    <message>
+        <source>Create wallet warning</source>
+        <translation>Piniginės sukurimo įspėjimas</translation>
+    </message>
+</context>
 <context>
     <name>CreateWalletDialog</name>
+    <message>
+        <source>Create Wallet</source>
+        <translation>Sukurti Piniginę</translation>
+    </message>
+    <message>
+        <source>Wallet Name</source>
+        <translation>Piniginės Pavadinimas</translation>
+    </message>
+    <message>
+        <source>Encrypt the wallet. The wallet will be encrypted with a passphrase of your choice.</source>
+        <translation>Užkoduoti piniginę. Piniginė bus užkoduota jūsų pasirinkta slapta fraze.</translation>
+    </message>
+    <message>
+        <source>Encrypt Wallet</source>
+        <translation>Užkoduoti Piniginę</translation>
+    </message>
+    <message>
+        <source>Disable Private Keys</source>
+        <translation>Atjungti Privačius Raktus</translation>
+    </message>
+    <message>
+        <source>Make Blank Wallet</source>
+        <translation>Sukurti Tuščia Piniginę</translation>
+    </message>
+    <message>
+        <source>Create</source>
+        <translation>Sukurti</translation>
+    </message>
     </context>
 <context>
     <name>EditAddressDialog</name>
@@ -782,8 +826,8 @@
         <translation>Keisti siuntimo adresą</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid Feathercoin address.</source>
-        <translation>Įvestas adresas „%1“ nėra galiojantis Feathercoin adresas.</translation>
+        <source>The entered address "%1" is not a valid Bitcoin address.</source>
+        <translation>Įvestas adresas „%1“ nėra galiojantis Bitcoin adresas.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -832,10 +876,6 @@
         <translation>versija</translation>
     </message>
     <message>
-        <source>(%1-bit)</source>
-        <translation>(%1-bit)</translation>
-    </message>
-    <message>
         <source>About %1</source>
         <translation>&amp;Apie %1</translation>
     </message>
@@ -879,8 +919,12 @@
         <translation>Naudoti kitą duomenų katalogą:</translation>
     </message>
     <message>
-        <source>Feathercoin</source>
-        <translation>Feathercoin</translation>
+        <source>Bitcoin</source>
+        <translation>Bitcoin</translation>
+    </message>
+    <message>
+        <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
+        <translation>Ištrinti blokus po patikrinimo, išskyrus paskutinius %1 GB (nukarpimas)</translation>
     </message>
     <message>
         <source>At least %1 GB of data will be stored in this directory, and it will grow over time.</source>
@@ -891,8 +935,8 @@
         <translation>Šiame kataloge bus saugoma maždaug apie %1 GB duomenų.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the Feathercoin block chain.</source>
-        <translation>%1 bus atsisiųsta ir išsaugota Feathercoin blokų grandinės kopiją.</translation>
+        <source>%1 will download and store a copy of the Bitcoin block chain.</source>
+        <translation>%1 bus atsisiųsta ir išsaugota Bitcoin blokų grandinės kopiją.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -922,12 +966,12 @@
         <translation>Forma</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the feathercoin network, as detailed below.</source>
-        <translation>Naujausi sandoriai gali būti dar nematomi, todėl jūsų piniginės likutis gali būti neteisingas. Ši informacija bus teisinga, kai jūsų piniginė bus baigta sinchronizuoti su feathercoin tinklu, kaip nurodyta žemiau.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the bitcoin network, as detailed below.</source>
+        <translation>Naujausi sandoriai gali būti dar nematomi, todėl jūsų piniginės likutis gali būti neteisingas. Ši informacija bus teisinga, kai jūsų piniginė bus baigta sinchronizuoti su bitcoin tinklu, kaip nurodyta žemiau.</translation>
     </message>
     <message>
-        <source>Attempting to spend feathercoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Tinklas nepriims bandymų išleisti feathercoinus, kurie yra vis dar nematomi.</translation>
+        <source>Attempting to spend bitcoins that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Tinklas nepriims bandymų išleisti bitcoinus, kurie yra vis dar nematomi.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -969,28 +1013,20 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open URI</source>
-        <translation>Atidaryti URI</translation>
-    </message>
-    <message>
-        <source>Open payment request from URI or file</source>
-        <translation>Atidaryti mokėjimo užklausą iš URI arba failo</translation>
-    </message>
-    <message>
         <source>URI:</source>
         <translation>URI:</translation>
-    </message>
-    <message>
-        <source>Select payment request file</source>
-        <translation>Pasirinkite mokėjimo užklausos failą</translation>
-    </message>
-    <message>
-        <source>Select payment request file to open</source>
-        <translation>Pasirinkite mokėjimo užklausos failą</translation>
     </message>
 </context>
 <context>
     <name>OpenWalletActivity</name>
+    <message>
+        <source>Open wallet failed</source>
+        <translation>Piniginės atidarymas nepavyko</translation>
+    </message>
+    <message>
+        <source>Open wallet warning</source>
+        <translation>Piniginės atidarymo įspėjimas</translation>
+    </message>
     <message>
         <source>default wallet</source>
         <translation>numatyta piniginė</translation>
@@ -1033,10 +1069,6 @@
     <message>
         <source>Shows if the supplied default SOCKS5 proxy is used to reach peers via this network type.</source>
         <translation>Rodo, ar pridedamas numatytasis SOCKS5 proxy naudojamas pasiekti Peers per šį tinklo tipą.</translation>
-    </message>
-    <message>
-        <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor hidden services:</source>
-        <translation>Naudokite atskirą SOCKS&amp;5 tarpinius serverius, kad pasiektumėte Peers per „Tor“ paslėptas paslaugas:</translation>
     </message>
     <message>
         <source>Hide the icon from the system tray.</source>
@@ -1119,8 +1151,8 @@
         <translation>&amp;Išleiskite nepatvirtintus pakeitimus</translation>
     </message>
     <message>
-        <source>Automatically open the Feathercoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automatiškai atidaryti Feathercoin kliento prievadą maršrutizatoriuje. Tai veikia tik tada, kai jūsų maršrutizatorius palaiko UPnP ir ji įjungta.</translation>
+        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Automatiškai atidaryti Bitcoin kliento prievadą maršrutizatoriuje. Tai veikia tik tada, kai jūsų maršrutizatorius palaiko UPnP ir ji įjungta.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1135,8 +1167,8 @@
         <translation>Leisti gaunamu&amp;s ryšius</translation>
     </message>
     <message>
-        <source>Connect to the Feathercoin network through a SOCKS5 proxy.</source>
-        <translation>Prisijunkite prie „Feathercoin“ tinklo per SOCKS5 proxy.</translation>
+        <source>Connect to the Bitcoin network through a SOCKS5 proxy.</source>
+        <translation>Prisijunkite prie „Bitcoin“ tinklo per SOCKS5 proxy.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1169,10 +1201,6 @@
     <message>
         <source>Tor</source>
         <translation>Tor</translation>
-    </message>
-    <message>
-        <source>Connect to the Feathercoin network through a separate SOCKS5 proxy for Tor hidden services.</source>
-        <translation>Prisijunkite prie „Feathercoin“ tinklo per atskirą „SOCKS5“ proxy „Tor“ paslėptas paslaugas.</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1282,8 +1310,8 @@
         <translation>Forma</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Feathercoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Rodoma informacija gali būti pasenusi. Piniginė automatiškai sinchronizuojasi su „Feathercoin“ tinklu po ryšio užmezgimo, tačiau šis procesas dar nebaigtas.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Rodoma informacija gali būti pasenusi. Piniginė automatiškai sinchronizuojasi su „Bitcoin“ tinklu po ryšio užmezgimo, tačiau šis procesas dar nebaigtas.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1349,7 +1377,22 @@
         <source>Current total balance in watch-only addresses</source>
         <translation>Dabartinis visas balansas tik stebimų adresų</translation>
     </message>
-</context>
+    </context>
+<context>
+    <name>PSBTOperationsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Dialogas</translation>
+    </message>
+    <message>
+        <source>Total Amount</source>
+        <translation>Visas kiekis</translation>
+    </message>
+    <message>
+        <source>or</source>
+        <translation>ar</translation>
+    </message>
+    </context>
 <context>
     <name>PaymentServer</name>
     <message>
@@ -1357,100 +1400,28 @@
         <translation>Mokėjimo užklausos klaida</translation>
     </message>
     <message>
-        <source>Cannot start feathercoin: click-to-pay handler</source>
-        <translation>Negalima paleisti feathercoin: paspauskite sumokėti tvarkytojui</translation>
+        <source>Cannot start bitcoin: click-to-pay handler</source>
+        <translation>Negalima paleisti bitcoin: paspauskite sumokėti tvarkytojui</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>URI tvarkymas</translation>
     </message>
     <message>
-        <source>'feathercoin://' is not a valid URI. Use 'feathercoin:' instead.</source>
-        <translation>„feathercoin: //“ nėra galiojantis URI. Vietoj to naudokite „feathercoin:“.</translation>
-    </message>
-    <message>
-        <source>You are using a BIP70 URL which will be unsupported in the future.</source>
-        <translation>Jūs naudojate BIP70 URL, kuris ateityje nebus palaikomas.</translation>
-    </message>
-    <message>
-        <source>Payment request fetch URL is invalid: %1</source>
-        <translation>Mokėjimo užklausos atsiuntimo URL neteisingas: %1</translation>
-    </message>
-    <message>
-        <source>Cannot process payment request because BIP70 support was not compiled in.</source>
-        <translation>Nepavyksta apdoroti mokėjimo užklausos, nes „BIP70“ pagalba nebuvo surinkta.</translation>
+        <source>'bitcoin://' is not a valid URI. Use 'bitcoin:' instead.</source>
+        <translation>„bitcoin: //“ nėra galiojantis URI. Vietoj to naudokite „bitcoin:“.</translation>
     </message>
     <message>
         <source>Invalid payment address %1</source>
         <translation>Neteisingas mokėjimo adresas %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid Feathercoin address or malformed URI parameters.</source>
-        <translation>URI negalima perskaityti! Tai gali sukelti negaliojantys „Feathercoin“ adresas arba netinkami URI parametrai.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
+        <translation>URI negalima perskaityti! Tai gali sukelti negaliojantys „Bitcoin“ adresas arba netinkami URI parametrai.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
         <translation>Mokėjimo užklausos failų tvarkymas</translation>
-    </message>
-    <message>
-        <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
-        <translation>Mokėjimo užklausos failo negalima skaityti! Tai gali sukelti neteisingas mokėjimo užklausos failas.</translation>
-    </message>
-    <message>
-        <source>Payment request rejected</source>
-        <translation>Mokėjimo prašymas atmestas</translation>
-    </message>
-    <message>
-        <source>Payment request network doesn't match client network.</source>
-        <translation>Mokėjimo užklausų tinklas neatitinka klientų tinklo.</translation>
-    </message>
-    <message>
-        <source>Payment request expired.</source>
-        <translation>Mokėjimo prašymas pasibaigė</translation>
-    </message>
-    <message>
-        <source>Payment request is not initialized.</source>
-        <translation>Mokėjimo prašymas nėra inicijuotas.</translation>
-    </message>
-    <message>
-        <source>Unverified payment requests to custom payment scripts are unsupported.</source>
-        <translation>Nepatvirtinti mokėjimo prašymai pagal individualius mokėjimo scenarijus nepalaikomi.</translation>
-    </message>
-    <message>
-        <source>Invalid payment request.</source>
-        <translation>Neteisingas mokėjimo prašymas.</translation>
-    </message>
-    <message>
-        <source>Requested payment amount of %1 is too small (considered dust).</source>
-        <translation>Prašoma %1 mokėjimo suma yra per maža (laikoma kaip dulkės).</translation>
-    </message>
-    <message>
-        <source>Refund from %1</source>
-        <translation>Grąžinimas iš %1</translation>
-    </message>
-    <message>
-        <source>Payment request %1 is too large (%2 bytes, allowed %3 bytes).</source>
-        <translation>Mokėjimo užklausa %1 yra per didelė (%2 baitai, leidžiama %3 baitų).</translation>
-    </message>
-    <message>
-        <source>Error communicating with %1: %2</source>
-        <translation>Ryšio klaida su %1: %2</translation>
-    </message>
-    <message>
-        <source>Payment request cannot be parsed!</source>
-        <translation>Mokėjimo užklausos negalima perskaityti!</translation>
-    </message>
-    <message>
-        <source>Bad response from server %1</source>
-        <translation>Blogas atsakymas iš serverio %1</translation>
-    </message>
-    <message>
-        <source>Network request error</source>
-        <translation>Tinklo užklausos klaida</translation>
-    </message>
-    <message>
-        <source>Payment acknowledged</source>
-        <translation>Mokėjimas patvirtintas</translation>
     </message>
 </context>
 <context>
@@ -1487,8 +1458,8 @@
         <translation>Suma</translation>
     </message>
     <message>
-        <source>Enter a Feathercoin address (e.g. %1)</source>
-        <translation>Įveskite Feathercoin adresą (pvz., %1)</translation>
+        <source>Enter a Bitcoin address (e.g. %1)</source>
+        <translation>Įveskite Bitcoin adresą (pvz., %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1602,6 +1573,10 @@
         <translation>Klaida koduojant URI į QR kodą.</translation>
     </message>
     <message>
+        <source>QR code support not available.</source>
+        <translation>QR kodas nepalaikomas</translation>
+    </message>
+    <message>
         <source>Save QR Code</source>
         <translation>Įrašyti QR kodą</translation>
     </message>
@@ -1623,10 +1598,6 @@
     <message>
         <source>&amp;Information</source>
         <translation>&amp;Informacija</translation>
-    </message>
-    <message>
-        <source>Debug window</source>
-        <translation>Derinimo langas</translation>
     </message>
     <message>
         <source>General</source>
@@ -1673,10 +1644,6 @@
         <translation>Blokų grandinė</translation>
     </message>
     <message>
-        <source>Current number of blocks</source>
-        <translation>Dabartinis blokų skaičius</translation>
-    </message>
-    <message>
         <source>Memory Pool</source>
         <translation>Memory Pool</translation>
     </message>
@@ -1721,10 +1688,6 @@
         <translation>Pasirinkite peer, kad galėtumėte peržiūrėti išsamią informaciją.</translation>
     </message>
     <message>
-        <source>Whitelisted</source>
-        <translation>Baltasis sąrašas</translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation>Kryptis</translation>
     </message>
@@ -1763,10 +1726,6 @@
     <message>
         <source>Services</source>
         <translation>Paslaugos</translation>
-    </message>
-    <message>
-        <source>Ban Score</source>
-        <translation>Uždraudimo balas</translation>
     </message>
     <message>
         <source>Connection Time</source>
@@ -1917,14 +1876,6 @@
         <translation>Išsiunčiamas</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation>Taip</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Ne</translation>
-    </message>
-    <message>
         <source>Unknown</source>
         <translation>Nežinomas</translation>
     </message>
@@ -1944,8 +1895,8 @@
         <translation>Žinutė:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Feathercoin network.</source>
-        <translation>Neprivalomas pranešimas, pridedamas prie mokėjimo prašymo, kuris bus rodomas atidarius užklausą. Pastaba: pranešimas nebus išsiųstas su mokėjimu per „Feathercoin“ tinklą.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
+        <translation>Neprivalomas pranešimas, pridedamas prie mokėjimo prašymo, kuris bus rodomas atidarius užklausą. Pastaba: pranešimas nebus išsiųstas su mokėjimu per „Bitcoin“ tinklą.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2011,12 +1962,28 @@
         <source>Copy amount</source>
         <translation>Kopijuoti sumą</translation>
     </message>
-</context>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Nepavyko atrakinti piniginės.</translation>
+    </message>
+    </context>
 <context>
     <name>ReceiveRequestDialog</name>
     <message>
-        <source>QR Code</source>
-        <translation>QR kodas</translation>
+        <source>Amount:</source>
+        <translation>Suma:</translation>
+    </message>
+    <message>
+        <source>Label:</source>
+        <translation>Žymė:</translation>
+    </message>
+    <message>
+        <source>Message:</source>
+        <translation>Žinutė:</translation>
+    </message>
+    <message>
+        <source>Wallet:</source>
+        <translation>Piniginė</translation>
     </message>
     <message>
         <source>Copy &amp;URI</source>
@@ -2037,30 +2004,6 @@
     <message>
         <source>Payment information</source>
         <translation>Mokėjimo informacija</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation>URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Adresas</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Suma</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Žymė</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Žinutė</translation>
-    </message>
-    <message>
-        <source>Wallet</source>
-        <translation>Piniginė</translation>
     </message>
 </context>
 <context>
@@ -2165,10 +2108,6 @@
         <translation>Įspėjimas: šiuo metu neįmanoma apskaičiuoti mokesčio.</translation>
     </message>
     <message>
-        <source>collapse fee-settings</source>
-        <translation>sumažinti mokesčio nustatymus</translation>
-    </message>
-    <message>
         <source>Specify a custom fee per kB (1,000 bytes) of the transaction's virtual size.
 
 Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis per kB" for a transaction size of 500 bytes (half of 1 kB) would ultimately yield a fee of only 50 satoshis.</source>
@@ -2213,8 +2152,8 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Dulkės:</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for feathercoin transactions than the network can process.</source>
-        <translation>Kai sandorių apimtis yra mažesnė nei erdvės blokuose, kasėjai ir perduodantys mazgai gali užtikrinti minimalų mokestį. Mokėti tik šį minimalų mokestį yra galima, tačiau atkreipkite dėmesį, kad dėl to gali atsirasti niekada nepatvirtinamas sandoris, kai bus daugiau paklausos feathercoin operacijoms, nei tinklas gali apdoroti.</translation>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for bitcoin transactions than the network can process.</source>
+        <translation>Kai sandorių apimtis yra mažesnė nei erdvės blokuose, kasėjai ir perduodantys mazgai gali užtikrinti minimalų mokestį. Mokėti tik šį minimalų mokestį yra galima, tačiau atkreipkite dėmesį, kad dėl to gali atsirasti niekada nepatvirtinamas sandoris, kai bus daugiau paklausos bitcoin operacijoms, nei tinklas gali apdoroti.</translation>
     </message>
     <message>
         <source>A too low fee might result in a never confirming transaction (read the tooltip)</source>
@@ -2281,6 +2220,14 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>%1 (%2 blokai)</translation>
     </message>
     <message>
+        <source> from wallet '%1'</source>
+        <translation>iš piniginės '%1'</translation>
+    </message>
+    <message>
+        <source>%1 to '%2'</source>
+        <translation>'%1' į '%2'</translation>
+    </message>
+    <message>
         <source>%1 to %2</source>
         <translation>%1 iki %2</translation>
     </message>
@@ -2337,10 +2284,6 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Sandorio sudarymas nepavyko!</translation>
     </message>
     <message>
-        <source>The transaction was rejected with the following reason: %1</source>
-        <translation>Sandoris buvo atmestas dėl šios priežasties: %1</translation>
-    </message>
-    <message>
         <source>A fee higher than %1 is considered an absurdly high fee.</source>
         <translation>Mokestis, didesnis nei %1, laikomas absurdiškai aukštu mokesčiu.</translation>
     </message>
@@ -2353,8 +2296,8 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation><numerusform>Apskaičiuota, kad bus pradėtas patvirtinimas per %n bloką.</numerusform><numerusform>Apskaičiuota, kad bus pradėtas patvirtinimas per %n blokus.</numerusform><numerusform>Apskaičiuota, kad bus pradėtas patvirtinimas per %n blokus.</numerusform><numerusform>Apskaičiuota, kad bus pradėtas patvirtinimas per %n blokus.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid Feathercoin address</source>
-        <translation>Įspėjimas: neteisingas Feathercoin adresas</translation>
+        <source>Warning: Invalid Bitcoin address</source>
+        <translation>Įspėjimas: neteisingas Bitcoin adresas</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2392,12 +2335,8 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Pasirinkite anksčiau naudojamą adresą</translation>
     </message>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>Tai įprastas mokėjimas.</translation>
-    </message>
-    <message>
-        <source>The Feathercoin address to send the payment to</source>
-        <translation>Feathercoin adresas, į kurį siunčiamas mokėjimas</translation>
+        <source>The Bitcoin address to send the payment to</source>
+        <translation>Bitcoin adresas, į kurį siunčiamas mokėjimas</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2416,8 +2355,8 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Pašalinti šį įrašą</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less feathercoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>Mokestis bus atimamas iš siunčiamos sumos. Gavėjas gaus mažiau feathercoinų nei įvesite sumos lauke. Jei pasirenkami keli gavėjai, mokestis padalijamas lygiai.</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>Mokestis bus atimamas iš siunčiamos sumos. Gavėjas gaus mažiau bitcoinų nei įvesite sumos lauke. Jei pasirenkami keli gavėjai, mokestis padalijamas lygiai.</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2444,8 +2383,8 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Įveskite šio adreso etiketę, kad ją pridėtumėte prie naudojamų adresų sąrašo</translation>
     </message>
     <message>
-        <source>A message that was attached to the feathercoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Feathercoin network.</source>
-        <translation>Pranešimas, kuris buvo pridėtas prie feathercoin: URI, kuris bus saugomas kartu su sandoriu jūsų nuoroda. Pastaba: šis pranešimas nebus išsiųstas per „Feathercoin“ tinklą.</translation>
+        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
+        <translation>Pranešimas, kuris buvo pridėtas prie bitcoin: URI, kuris bus saugomas kartu su sandoriu jūsų nuoroda. Pastaba: šis pranešimas nebus išsiųstas per „Bitcoin“ tinklą.</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2454,17 +2393,6 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
     <message>
         <source>Memo:</source>
         <translation>Atmintinė:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>Įveskite šio adreso etiketę, kad ją pridėtumėte prie adresų knygos</translation>
-    </message>
-</context>
-<context>
-    <name>SendConfirmationDialog</name>
-    <message>
-        <source>Yes</source>
-        <translation>Taip</translation>
     </message>
 </context>
 <context>
@@ -2489,8 +2417,8 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>&amp;Pasirašyti žinutę</translation>
     </message>
     <message>
-        <source>The Feathercoin address to sign the message with</source>
-        <translation>Feathercoin adresas, kuriuo bus pasirašytas pranešimas su</translation>
+        <source>The Bitcoin address to sign the message with</source>
+        <translation>Bitcoin adresas, kuriuo bus pasirašytas pranešimas su</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2521,7 +2449,7 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Nukopijuokite dabartinį parašą į sistemos iškarpinę</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Feathercoin address</source>
+        <source>Sign the message to prove you own this Bitcoin address</source>
         <translation>Registruotis žinute įrodymuii, kad turite šį adresą</translation>
     </message>
     <message>
@@ -2541,12 +2469,12 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>&amp;Patikrinti žinutę</translation>
     </message>
     <message>
-        <source>The Feathercoin address the message was signed with</source>
-        <translation>Feathercoin adresas, kuriuo buvo pasirašytas pranešimas</translation>
+        <source>The Bitcoin address the message was signed with</source>
+        <translation>Bitcoin adresas, kuriuo buvo pasirašytas pranešimas</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Feathercoin address</source>
-        <translation>Patikrinkite žinutę, jog įsitikintumėte, kad ją pasirašė nurodytas Feathercoin adresas</translation>
+        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <translation>Patikrinkite žinutę, jog įsitikintumėte, kad ją pasirašė nurodytas Bitcoin adresas</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -2719,12 +2647,20 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Sandorio mokestis</translation>
     </message>
     <message>
+        <source>Net amount</source>
+        <translation>Neto suma</translation>
+    </message>
+    <message>
         <source>Message</source>
         <translation>Žinutė</translation>
     </message>
     <message>
         <source>Comment</source>
         <translation>Komentaras</translation>
+    </message>
+    <message>
+        <source>Transaction ID</source>
+        <translation>Sandorio ID</translation>
     </message>
     <message>
         <source>Merchant</source>
@@ -3041,12 +2977,16 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <source>Close wallet</source>
         <translation>Uždaryti Piniginę</translation>
     </message>
+    <message>
+        <source>Are you sure you wish to close the wallet &lt;i&gt;%1&lt;/i&gt;?</source>
+        <translation>Ar tikrai norite uždaryti piniginę &lt;i&gt;%1&lt;/i&gt;?</translation>
+    </message>
     </context>
 <context>
     <name>WalletFrame</name>
     <message>
-        <source>No wallet has been loaded.</source>
-        <translation>Piniginė nebuvo įkelta.</translation>
+        <source>Create a new wallet</source>
+        <translation>Sukurti naują piniginę</translation>
     </message>
 </context>
 <context>
@@ -3107,6 +3047,10 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Eksportuokite duomenis iš dabartinio skirtuko į failą</translation>
     </message>
     <message>
+        <source>Error</source>
+        <translation>Klaida</translation>
+    </message>
+    <message>
         <source>Backup Wallet</source>
         <translation>Sukurti Piniginės atsarginę kopiją</translation>
     </message>
@@ -3140,14 +3084,6 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
     <message>
         <source>The %s developers</source>
         <translation>%s kūrėjai</translation>
-    </message>
-    <message>
-        <source>%d of last 100 blocks have unexpected version</source>
-        <translation>%d iš paskutinių 100 blokų turi nenumatyą versiją</translation>
-    </message>
-    <message>
-        <source>%s corrupt, salvage failed</source>
-        <translation>%s sugadintas, išgelbėjimas nepavyko</translation>
     </message>
     <message>
         <source>-maxmempool must be at least %d MB</source>
@@ -3214,6 +3150,10 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Importuojama...</translation>
     </message>
     <message>
+        <source>Unknown address type '%s'</source>
+        <translation>Nežinomas adreso tipas '%s'</translation>
+    </message>
+    <message>
         <source>Upgrading txindex database</source>
         <translation>Txindex duomenų bazės atnaujinimas</translation>
     </message>
@@ -3274,16 +3214,8 @@ Pastaba: Kadangi mokestis apskaičiuojamas pagal baitą, mokestis už „100 sat
         <translation>Tikrinama piniginė(s)...</translation>
     </message>
     <message>
-        <source>Zapping all transactions from wallet...</source>
-        <translation>Visų operacijų sulaikymas iš piniginės...</translation>
-    </message>
-    <message>
         <source>%s is set very high!</source>
         <translation>%s labai aukštas!</translation>
-    </message>
-    <message>
-        <source>Error loading wallet %s. Duplicate -wallet filename specified.</source>
-        <translation>Įkeliant piniginę %s įvyko klaida. Dvigubo -wallet pavadinimas.</translation>
     </message>
     <message>
         <source>Starting network threads...</source>
