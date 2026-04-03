@@ -5,7 +5,8 @@ $(package)_suffix=opensource-src-$($(package)_version).tar.xz
 $(package)_file_name=qtbase-$($(package)_suffix)
 $(package)_sha256_hash=9b9dec1f67df1f94bce2955c5604de992d529dde72050239154c56352da0907d
 $(package)_dependencies=zlib
-$(package)_linux_dependencies=freetype fontconfig libxcb
+$(package)_linux_dependencies=freetype fontconfig libxcb libxkbcommon
+$(package)_linux_dependencies+= libxcb_util libxcb_util_image libxcb_util_keysyms libxcb_util_render libxcb_util_wm
 $(package)_build_subdir=qtbase
 $(package)_qt_libs=corelib network widgets gui plugins testlib
 $(package)_patches=fix_qt_pkgconfig.patch mac-qmake.conf fix_configure_mac.patch fix_no_printer.patch
@@ -127,8 +128,7 @@ $(package)_config_opts_darwin += -device-option MAC_MIN_VERSION=$(OSX_MIN_VERSIO
 $(package)_config_opts_darwin += -device-option MAC_TARGET=$(host)
 endif
 
-$(package)_config_opts_linux  = -qt-xkbcommon-x11
-$(package)_config_opts_linux += -qt-xcb
+$(package)_config_opts_linux = -qt-xcb
 $(package)_config_opts_linux += -no-xcb-xlib
 $(package)_config_opts_linux += -no-feature-xlib
 $(package)_config_opts_linux += -system-freetype
