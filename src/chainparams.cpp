@@ -53,6 +53,13 @@ static CBlock CreateFeathercoinGenesisBlock(uint32_t nTime, uint32_t nNonce, uin
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
+static CBlock CreateFeathercoinSignetGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
+{
+    const char* pszTimestamp = "The Times 04/Apr/2026 Feathercoin signet launches";
+    const CScript genesisOutputScript = CScript() << ParseHex("040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9") << OP_CHECKSIG;
+    return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
+}
+
 /**
  * Main network
  */
@@ -272,37 +279,13 @@ public:
         vSeeds.clear();
 
         if (!args.IsArgSet("-signetchallenge")) {
-            bin = ParseHex("512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430210359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c452ae");
-            vSeeds.emplace_back("178.128.221.177");
-            vSeeds.emplace_back("2a01:7c8:d005:390::5");
-            vSeeds.emplace_back("v7ajjeirttkbnt32wpy3c6w3emwnfr3fkla7hpxcfokr3ysd3kqtzmqd.onion:38333");
-
-            consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000000019fd16269a");
-            consensus.defaultAssumeValid = uint256S("0x0000002a1de0f46379358c1fd09906f7ac59adf3712323ed90eb59e4c183c020"); // 9434
-            m_assumed_blockchain_size = 1;
-            m_assumed_chain_state_size = 0;
-            chainTxData = ChainTxData{
-                // Data from RPC: getchaintxstats 4096 0000002a1de0f46379358c1fd09906f7ac59adf3712323ed90eb59e4c183c020
-                /* nTime    */ 1603986000,
-                /* nTxCount */ 9582,
-                /* dTxRate  */ 0.00159272030651341,
-            };
+            bin = ParseHex("21029f3eb303f2fcffb78ff46ddcecd7a69f2f92bd326f27722634f10bb962288055ac");
         } else {
             const auto signet_challenge = args.GetArgs("-signetchallenge");
             if (signet_challenge.size() != 1) {
                 throw std::runtime_error(strprintf("%s: -signetchallenge cannot be multiple values.", __func__));
             }
             bin = ParseHex(signet_challenge[0]);
-
-            consensus.nMinimumChainWork = uint256{};
-            consensus.defaultAssumeValid = uint256{};
-            m_assumed_blockchain_size = 0;
-            m_assumed_chain_state_size = 0;
-            chainTxData = ChainTxData{
-                0,
-                0,
-                0,
-            };
             LogPrintf("Signet with challenge %s\n", signet_challenge[0]);
         }
 
@@ -313,7 +296,7 @@ public:
         strNetworkID = CBaseChainParams::SIGNET;
         consensus.signet_blocks = true;
         consensus.signet_challenge.assign(bin.begin(), bin.end());
-        consensus.nSubsidyHalvingInterval = 210000;
+        consensus.nSubsidyHalvingInterval = 2100000;
         consensus.BIP16Exception = uint256{};
         consensus.BIP34Height = 1;
         consensus.BIP34Hash = uint256{};
@@ -325,7 +308,7 @@ public:
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.powNeoScryptLimit = uint256{};
+        consensus.powNeoScryptLimit = uint256S("0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nForkOne = 0;
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
@@ -335,8 +318,17 @@ public:
         consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.MinBIP9WarningHeight = 0;
-        consensus.powLimit = uint256S("00000377ae000000000000000000000000000000000000000000000000000000");
+        consensus.powLimit = uint256S("0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.nMinimumChainWork = uint256{};
+        consensus.defaultAssumeValid = uint256{};
         consensus.checkpointPubKey.clear();
+        m_assumed_blockchain_size = 0;
+        m_assumed_chain_state_size = 0;
+        chainTxData = ChainTxData{
+            0,
+            0,
+            0,
+        };
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
@@ -357,10 +349,10 @@ public:
         nDefaultPort = 38333;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateBitcoinGenesisBlock(1598918400, 52613770, 0x1e0377ae, 1, 50 * COIN);
+        genesis = CreateFeathercoinSignetGenesisBlock(1775260800, 40884, 0x1f00ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00000008819873e925422c1ff0f99f7cc9bbb232af63a077a480a3633bee1ef6"));
-        assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
+        assert(consensus.hashGenesisBlock == uint256S("0x420414aaf29624254d4170d86dc92d47cddc7e09654a728375d439694bfb8fd6"));
+        assert(genesis.hashMerkleRoot == uint256S("0xaa2254b2435ae6b5aa9599eb347fd0a63f83e28bdb8404aa1c2a53ba3e6b07b2"));
 
         vFixedSeeds.clear();
 
@@ -370,7 +362,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        bech32_hrp = "tb";
+        bech32_hrp = "tf";
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
