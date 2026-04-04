@@ -23,9 +23,9 @@ long fork (%s in cmd is replaced by message)
 If this block is in the chain assume that it and its ancestors are valid
 and potentially skip their script verification (0 to verify all,
 default:
-0000000000000000000b9d2ec5a352ecba0592946514a92f14319dc2b367fc72,
+e29c854a0a54ac2c3f6b97e0416a0a7f17df6f80ecf4fa6eb3faa7ec1fceffb6,
 testnet:
-000000000000006433d1efec504c53ca332b64963c425395515b01977bd7b3b0,
+0000000000000000000000000000000000000000000000000000000000000000,
 signet:
 0000002a1de0f46379358c1fd09906f7ac59adf3712323ed90eb59e4c183c020)
 .HP
@@ -190,8 +190,8 @@ Default duration (in seconds) of manually configured bans (default:
 Bind to given address and always listen on it (default: 0.0.0.0). Use
 [host]:port notation for IPv6. Append =onion to tag any incoming
 connections to that address and port as incoming Tor connections
-(default: 127.0.0.1:8334=onion, testnet: 127.0.0.1:18334=onion,
-signet: 127.0.0.1:38334=onion, regtest: 127.0.0.1:18445=onion)
+(default: 127.0.0.1:9338=onion, testnet: 127.0.0.1:19338=onion,
+signet: 127.0.0.1:38334=onion, regtest: 127.0.0.1:18448=onion)
 .HP
 \fB\-connect=\fR<ip>
 .IP
@@ -246,7 +246,7 @@ Maximum per\-connection send buffer, <n>*1000 bytes (default: 1000)
 .IP
 Maximum allowed median peer time offset adjustment. Local perspective of
 time may be influenced by peers forward or backward by this
-amount. (default: 4200 seconds)
+amount. (default: 2100 seconds)
 .HP
 \fB\-maxuploadtarget=\fR<n>
 .IP
@@ -287,7 +287,7 @@ Relay non\-P2SH multisig (default: 1)
 \fB\-port=\fR<port>
 .IP
 Listen for connections on <port>. Nodes not using the default ports
-(default: 8333, testnet: 18333, signet: 38333, regtest: 18444)
+(default: 9336, testnet: 19336, signet: 38333, regtest: 18446)
 are unlikely to get incoming connections.
 .HP
 \fB\-proxy=\fR<ip:port>
@@ -385,7 +385,7 @@ limited by the fee estimate for the longest target
 .IP
 A fee rate (in FTC/kB) that will be used when fee estimation has
 insufficient data. 0 to entirely disable the fallbackfee feature.
-(default: 0.00)
+(default: 0.02)
 .HP
 \fB\-keypool=\fR<n>
 .IP
@@ -402,7 +402,7 @@ allows the use of partial spend avoidance (default: 0.00)
 \fB\-mintxfee=\fR<amt>
 .IP
 Fees (in FTC/kB) smaller than this are considered zero fee for
-transaction creation (default: 0.00001)
+transaction creation (default: 0.001)
 .HP
 \fB\-paytxfee=\fR<amt>
 .IP
@@ -533,7 +533,8 @@ Prepend debug output with timestamp (default: 1)
 \fB\-maxtxfee=\fR<amt>
 .IP
 Maximum total fees (in FTC) to use in a single wallet transaction;
-setting this too low may abort large transactions (default: 0.10)
+setting this too low may abort large transactions (default:
+20.00)
 .HP
 \fB\-printtoconsole\fR
 .IP
@@ -663,8 +664,8 @@ Password for JSON\-RPC connections
 .HP
 \fB\-rpcport=\fR<port>
 .IP
-Listen for JSON\-RPC connections on <port> (default: 8332, testnet:
-18332, signet: 38332, regtest: 18443)
+Listen for JSON\-RPC connections on <port> (default: 9337, testnet:
+19337, signet: 38332, regtest: 18447)
 .HP
 \fB\-rpcserialversion\fR
 .IP
