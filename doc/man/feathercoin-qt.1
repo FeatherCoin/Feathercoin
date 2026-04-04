@@ -57,6 +57,14 @@ and rebroadcast of any transactions from inbound peers is
 disabled, unless the peer has the 'forcerelay' permission. RPC
 transactions are not affected. (default: 0)
 .HP
+\fB\-checkpointdepth=\fR<n>
+.IP
+Set synchronized checkpoint depth lag from the chain tip (default: 5)
+.HP
+\fB\-checkpointkey=\fR<key>
+.IP
+Set private key to sign synchronized checkpoint messages
+.HP
 \fB\-conf=\fR<file>
 .IP
 Specify path to read\-only configuration file. Relative paths will be
