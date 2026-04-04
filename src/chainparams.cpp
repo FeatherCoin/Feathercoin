@@ -81,6 +81,7 @@ public:
         consensus.nForkTwo = 87948;
         consensus.nForkThree = 204639;
         consensus.nForkFour = 432000;
+        consensus.nTimeLimit = 2236032;
         consensus.nNeoScryptFork = 1414346265;
         consensus.nRuleChangeActivationThreshold = 15120;
         consensus.nMinerConfirmationWindow = 20160;
@@ -194,6 +195,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nTimeLimit = 100;
         consensus.nNeoScryptFork = 1581518000;
         consensus.nRuleChangeActivationThreshold = 375;
         consensus.nMinerConfirmationWindow = 500;
@@ -326,6 +328,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nTimeLimit = 0;
         consensus.nNeoScryptFork = 0;
         consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
@@ -401,6 +404,7 @@ public:
         consensus.nForkTwo = 0;
         consensus.nForkThree = 0;
         consensus.nForkFour = 0;
+        consensus.nTimeLimit = std::numeric_limits<int>::max();
         consensus.nNeoScryptFork = 1515840635;
         consensus.nRuleChangeActivationThreshold = 108; // 75% for testchains
         consensus.nMinerConfirmationWindow = 144; // Faster than normal for regtest (144 instead of 2016)

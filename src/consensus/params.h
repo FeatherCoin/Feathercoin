@@ -93,6 +93,7 @@ struct Params {
     int nForkTwo{0};
     int nForkThree{0};
     int nForkFour{0};
+    int nTimeLimit{0};
     unsigned int nNeoScryptFork{0};
     int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; }
     /** The best chain should have at least this much work */
