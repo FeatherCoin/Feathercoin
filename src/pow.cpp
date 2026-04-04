@@ -11,7 +11,17 @@
 #include <uint256.h>
 
 namespace {
+constexpr unsigned int NEOSCRYPT_PROFILE = 0x0;
 constexpr unsigned int LEGACY_SCRYPT_COMPAT_PROFILE = 0x3;
+
+unsigned int GetProofOfWorkProfile(const CBlockHeader& block, const Consensus::Params& params)
+{
+    if (block.GetBlockTime() >= params.nNeoScryptFork) {
+        return NEOSCRYPT_PROFILE;
+    }
+
+    return LEGACY_SCRYPT_COMPAT_PROFILE;
+}
 
 void GetRetargetParameters(int nHeight, const Consensus::Params& params, int& nTargetTimespan, int& nTargetSpacing)
 {
@@ -135,7 +145,7 @@ unsigned int CalculateNextWorkRequiredInternal(const CBlockIndex* pindexLast, in
 
 uint256 GetBlockProofOfWorkHash(const CBlockHeader& block, const Consensus::Params& params)
 {
-    return block.GetPoWHash(LEGACY_SCRYPT_COMPAT_PROFILE);
+    return block.GetPoWHash(GetProofOfWorkProfile(block, params));
 }
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
