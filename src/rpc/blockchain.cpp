@@ -9,6 +9,7 @@
 #include <blockfilter.h>
 #include <chain.h>
 #include <chainparams.h>
+#include <checkpointsync.h>
 #include <coins.h>
 #include <consensus/validation.h>
 #include <core_io.h>
@@ -2460,6 +2461,84 @@ static RPCHelpMan dumptxoutset()
     };
 }
 
+static RPCHelpMan getcheckpoint()
+{
+    return RPCHelpMan{"getcheckpoint",
+                "\nShow the current synchronized ACP checkpoint.\n",
+                {},
+                RPCResult{
+                    RPCResult::Type::OBJ, "", "",
+                    {
+                        {RPCResult::Type::STR_HEX, "synccheckpoint", "Hash of the current synchronized checkpoint block"},
+                        {RPCResult::Type::NUM, "height", /*optional=*/true, "Height of the current synchronized checkpoint block"},
+                        {RPCResult::Type::NUM_TIME, "timestamp", /*optional=*/true, "Timestamp of the current synchronized checkpoint block"},
+                        {RPCResult::Type::BOOL, "checkpointmaster", /*optional=*/true, "Whether this node currently has the checkpoint signing key loaded"},
+                    }},
+                RPCExamples{
+                    HelpExampleCli("getcheckpoint", "")
+            + HelpExampleRpc("getcheckpoint", "")
+                },
+        [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+{
+    UniValue result(UniValue::VOBJ);
+
+    LOCK2(cs_main, cs_hashSyncCheckpoint);
+    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString());
+    if (CBlockIndex* pindexCheckpoint = LookupBlockIndex(hashSyncCheckpoint)) {
+        result.pushKV("height", pindexCheckpoint->nHeight);
+        result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+    }
+    if (!CSyncCheckpoint::strMasterPrivKey.empty()) {
+        result.pushKV("checkpointmaster", true);
+    }
+    return result;
+},
+    };
+}
+
+static RPCHelpMan sendcheckpoint()
+{
+    return RPCHelpMan{"sendcheckpoint",
+                "\nSend a synchronized ACP checkpoint.\n",
+                {
+                    {"blockhash", RPCArg::Type::STR_HEX, RPCArg::Optional::NO, "The block hash to checkpoint"},
+                },
+                RPCResult{
+                    RPCResult::Type::OBJ, "", "",
+                    {
+                        {RPCResult::Type::STR_HEX, "synccheckpoint", "Hash of the current synchronized checkpoint block"},
+                        {RPCResult::Type::NUM, "height", /*optional=*/true, "Height of the current synchronized checkpoint block"},
+                        {RPCResult::Type::NUM_TIME, "timestamp", /*optional=*/true, "Timestamp of the current synchronized checkpoint block"},
+                        {RPCResult::Type::BOOL, "checkpointmaster", /*optional=*/true, "Whether this node currently has the checkpoint signing key loaded"},
+                    }},
+                RPCExamples{
+                    HelpExampleCli("sendcheckpoint", "\"blockhash\"")
+            + HelpExampleRpc("sendcheckpoint", "\"blockhash\"")
+                },
+        [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+{
+    if (CSyncCheckpoint::strMasterPrivKey.empty()) {
+        throw JSONRPCError(RPC_MISC_ERROR, "Not a checkpoint master node. Set checkpointkey and restart.");
+    }
+
+    const uint256 hash = ParseHashV(request.params[0], "blockhash");
+    if (!SendSyncCheckpoint(hash)) {
+        throw JSONRPCError(RPC_MISC_ERROR, "Failed to send checkpoint. Check debug.log.");
+    }
+
+    UniValue result(UniValue::VOBJ);
+    LOCK2(cs_main, cs_hashSyncCheckpoint);
+    result.pushKV("synccheckpoint", hashSyncCheckpoint.ToString());
+    if (CBlockIndex* pindexCheckpoint = LookupBlockIndex(hashSyncCheckpoint)) {
+        result.pushKV("height", pindexCheckpoint->nHeight);
+        result.pushKV("timestamp", pindexCheckpoint->GetBlockTime());
+    }
+    result.pushKV("checkpointmaster", true);
+    return result;
+},
+    };
+}
+
 void RegisterBlockchainRPCCommands(CRPCTable &t)
 {
 // clang-format off
@@ -2475,6 +2554,7 @@ static const CRPCCommand commands[] =
     { "blockchain",         "getblockhash",           &getblockhash,           {"height"} },
     { "blockchain",         "getblockheader",         &getblockheader,         {"blockhash","verbose"} },
     { "blockchain",         "getchaintips",           &getchaintips,           {} },
+    { "blockchain",         "getcheckpoint",          &getcheckpoint,          {} },
     { "blockchain",         "getdifficulty",          &getdifficulty,          {} },
     { "blockchain",         "getmempoolancestors",    &getmempoolancestors,    {"txid","verbose"} },
     { "blockchain",         "getmempooldescendants",  &getmempooldescendants,  {"txid","verbose"} },
@@ -2485,6 +2565,7 @@ static const CRPCCommand commands[] =
     { "blockchain",         "gettxoutsetinfo",        &gettxoutsetinfo,        {"hash_type"} },
     { "blockchain",         "pruneblockchain",        &pruneblockchain,        {"height"} },
     { "blockchain",         "savemempool",            &savemempool,            {} },
+    { "blockchain",         "sendcheckpoint",         &sendcheckpoint,         {"blockhash"} },
     { "blockchain",         "verifychain",            &verifychain,            {"checklevel","nblocks"} },
 
     { "blockchain",         "preciousblock",          &preciousblock,          {"blockhash"} },

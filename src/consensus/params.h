@@ -8,6 +8,8 @@
 
 #include <uint256.h>
 #include <limits>
+#include <string>
+#include <vector>
 
 namespace Consensus {
 
@@ -100,6 +102,8 @@ struct Params {
     uint256 nMinimumChainWork;
     /** By default assume that the signatures in ancestors of this block are valid */
     uint256 defaultAssumeValid;
+    /** Master pubkey used to authenticate ACP synchronized checkpoints. */
+    std::string checkpointPubKey;
 
     /**
      * If true, witness commitments contain a payload equal to a Bitcoin Script solution

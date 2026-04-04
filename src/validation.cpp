@@ -8,6 +8,7 @@
 #include <arith_uint256.h>
 #include <chain.h>
 #include <chainparams.h>
+#include <checkpointsync.h>
 #include <checkqueue.h>
 #include <consensus/consensus.h>
 #include <consensus/merkle.h>
@@ -1989,6 +1990,10 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
         return true;
     }
 
+    if (!CheckSyncCheckpoint(block.GetHash(), pindex->nHeight)) {
+        return state.Invalid(BlockValidationResult::BLOCK_CHECKPOINT, "bad-block-checkpoint-sync");
+    }
+
     bool fScriptChecks = true;
     if (!hashAssumeValid.IsNull()) {
         // We've been configured with the hash of a block which has been externally verified to have a valid history.
@@ -3465,6 +3470,9 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     if (nHeight > consensusParams.nTimeLimit && block.GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60)
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "wrong-time-between-blocks", "block's timestamp is too early compared to last block");
 
+    if (!CheckSyncCheckpoint(block.GetHash(), nHeight, pindexPrev))
+        return state.Invalid(BlockValidationResult::BLOCK_CHECKPOINT, "bad-block-checkpoint-sync");
+
     // Reject outdated version blocks when 95% (75% on testnet) of the network has upgraded:
     // check for version 2, 3 and 4 upgrades
     if((block.nVersion < 2 && nHeight >= consensusParams.BIP34Height) ||
@@ -3779,6 +3787,8 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, Block
 
     CheckBlockIndex(chainparams.GetConsensus());
 
+    AcceptPendingSyncCheckpoint();
+
     return true;
 }
 
@@ -3813,6 +3823,12 @@ bool ChainstateManager::ProcessNewBlock(const CChainParams& chainparams, const s
     BlockValidationState state; // Only used to report errors, not invalidity - ignore it
     if (!::ChainstateActive().ActivateBestChain(state, chainparams, pblock))
         return error("%s: ActivateBestChain failed (%s)", __func__, state.ToString());
+
+    AcceptPendingSyncCheckpoint();
+
+    if (!CSyncCheckpoint::strMasterPrivKey.empty()) {
+        SendSyncCheckpoint(AutoSelectSyncCheckpoint());
+    }
 
     return true;
 }
@@ -4157,6 +4173,11 @@ bool static LoadBlockIndexDB(ChainstateManager& chainman, const CChainParams& ch
     bool fReindexing = false;
     pblocktree->ReadReindexing(fReindexing);
     if(fReindexing) fReindex = true;
+
+    if (!pblocktree->ReadSyncCheckpoint(hashSyncCheckpoint))
+        LogPrintf("LoadBlockIndexDB(): synchronized checkpoint not read\n");
+    else
+        LogPrintf("LoadBlockIndexDB(): synchronized checkpoint %s\n", hashSyncCheckpoint.ToString());
 
     return true;
 }

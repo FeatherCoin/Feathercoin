@@ -44,6 +44,7 @@ const char *GETCFHEADERS="getcfheaders";
 const char *CFHEADERS="cfheaders";
 const char *GETCFCHECKPT="getcfcheckpt";
 const char *CFCHECKPT="cfcheckpt";
+const char *CHECKPOINT="checkpoint";
 const char *WTXIDRELAY="wtxidrelay";
 } // namespace NetMsgType
 
@@ -84,6 +85,7 @@ const static std::string allNetMessageTypes[] = {
     NetMsgType::CFHEADERS,
     NetMsgType::GETCFCHECKPT,
     NetMsgType::CFCHECKPT,
+    NetMsgType::CHECKPOINT,
     NetMsgType::WTXIDRELAY,
 };
 const static std::vector<std::string> allNetMessageTypesVec(allNetMessageTypes, allNetMessageTypes+ARRAYLEN(allNetMessageTypes));
@@ -208,6 +210,7 @@ static std::string serviceFlagToStr(size_t bit)
     case NODE_WITNESS:         return "WITNESS";
     case NODE_COMPACT_FILTERS: return "COMPACT_FILTERS";
     case NODE_NETWORK_LIMITED: return "NETWORK_LIMITED";
+    case NODE_ACP:             return "ACP";
     // Not using default, so we get warned when a case is missing
     }
 

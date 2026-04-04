@@ -10,6 +10,7 @@
 #include <blockencodings.h>
 #include <blockfilter.h>
 #include <chainparams.h>
+#include <checkpointsync.h>
 #include <consensus/validation.h>
 #include <hash.h>
 #include <index/blockfilterindex.h>
@@ -2426,6 +2427,14 @@ void PeerManager::ProcessMessage(CNode& pfrom, const std::string& msg_type, CDat
             State(pfrom.GetId())->fHaveWitness = true;
         }
 
+        if (nServices & NODE_ACP) {
+            pfrom.supportACPMessages = true;
+            LOCK(cs_hashSyncCheckpoint);
+            if (!checkpointMessage.IsNull()) {
+                checkpointMessage.RelayTo(&pfrom);
+            }
+        }
+
         // Potentially mark this peer as a preferred download peer.
         {
         LOCK(cs_main);
@@ -3784,6 +3793,22 @@ void PeerManager::ProcessMessage(CNode& pfrom, const std::string& msg_type, CDat
                     m_txrequest.ReceivedResponse(pfrom.GetId(), inv.hash);
                 }
             }
+        }
+        return;
+    }
+
+    if (msg_type == NetMsgType::CHECKPOINT) {
+        CSyncCheckpoint checkpoint;
+        vRecv >> checkpoint;
+
+        if (checkpoint.ProcessSyncCheckpoint()) {
+            {
+                LOCK(pfrom.cs_inventory);
+                pfrom.hashCheckpointKnown = checkpoint.hashCheckpoint;
+            }
+            m_connman.ForEachNode([&checkpoint](CNode* pnode) {
+                checkpoint.RelayTo(pnode);
+            });
         }
         return;
     }

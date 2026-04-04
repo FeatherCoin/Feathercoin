@@ -984,6 +984,7 @@ protected:
 public:
     uint256 hashContinue;
     std::atomic<int> nStartingHeight{-1};
+    std::atomic_bool supportACPMessages{false};
 
     // flood relay
     std::vector<CAddress> vAddrToSend;
@@ -996,6 +997,7 @@ public:
     // There is no final sorting before sending, as they are always sent immediately
     // and in the order requested.
     std::vector<uint256> vInventoryBlockToSend GUARDED_BY(cs_inventory);
+    uint256 hashCheckpointKnown GUARDED_BY(cs_inventory);
     Mutex cs_inventory;
 
     struct TxRelay {

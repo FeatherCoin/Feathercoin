@@ -15,6 +15,7 @@
 #include <blockfilter.h>
 #include <chain.h>
 #include <chainparams.h>
+#include <checkpointsync.h>
 #include <compat/sanity.h>
 #include <consensus/validation.h>
 #include <fs.h>
@@ -229,6 +230,7 @@ void Shutdown(NodeContext& node)
     // After the threads that potentially access these pointers have been stopped,
     // destruct and reset all to nullptr.
     node.peerman.reset();
+    g_connman = nullptr;
     node.connman.reset();
     node.banman.reset();
 
@@ -518,6 +520,8 @@ void SetupServerArgs(NodeContext& node)
     argsman.AddArg("-checkblockindex", strprintf("Do a consistency check for the block tree, chainstate, and other validation data structures occasionally. (default: %u, regtest: %u)", defaultChainParams->DefaultConsistencyChecks(), regtestChainParams->DefaultConsistencyChecks()), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-checkmempool=<n>", strprintf("Run checks every <n> transactions (default: %u, regtest: %u)", defaultChainParams->DefaultConsistencyChecks(), regtestChainParams->DefaultConsistencyChecks()), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-checkpoints", strprintf("Enable rejection of any forks from the known historical chain until block %s (default: %u)", defaultChainParams->Checkpoints().GetHeight(), DEFAULT_CHECKPOINTS_ENABLED), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
+    argsman.AddArg("-checkpointdepth=<n>", strprintf("Set synchronized checkpoint depth lag from the chain tip (default: %d)", DEFAULT_AUTOCHECKPOINT), ArgsManager::ALLOW_INT | ArgsManager::NETWORK_ONLY, OptionsCategory::OPTIONS);
+    argsman.AddArg("-checkpointkey=<key>", "Set private key to sign synchronized checkpoint messages", ArgsManager::ALLOW_STRING | ArgsManager::NETWORK_ONLY | ArgsManager::SENSITIVE, OptionsCategory::OPTIONS);
     argsman.AddArg("-deprecatedrpc=<method>", "Allows deprecated RPC method(s) to be used", ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-dropmessagestest=<n>", "Randomly drop 1 of every <n> network messages", ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-stopafterblockimport", strprintf("Stop running after importing blocks from disk (default: %u)", DEFAULT_STOPAFTERBLOCKIMPORT), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
@@ -1017,6 +1021,10 @@ bool AppInitParameterInteraction(const ArgsManager& args)
         nLocalServices = ServiceFlags(nLocalServices | NODE_COMPACT_FILTERS);
     }
 
+    if (!chainparams.GetConsensus().checkpointPubKey.empty()) {
+        nLocalServices = ServiceFlags(nLocalServices | NODE_ACP);
+    }
+
     // if using block pruning, then disallow txindex
     if (args.GetArg("-prune", 0)) {
         if (args.GetBoolArg("-txindex", DEFAULT_TXINDEX))
@@ -1227,6 +1235,15 @@ bool AppInitSanityChecks()
     ECC_Start();
     globalVerifyHandle.reset(new ECCVerifyHandle());
 
+    if (gArgs.IsArgSet("-checkpointkey")) {
+        if (Params().GetConsensus().checkpointPubKey.empty()) {
+            return InitError(_("Checkpoint signing is not enabled on this chain."));
+        }
+        if (!SetCheckpointPrivKey(gArgs.GetArg("-checkpointkey", ""))) {
+            return InitError(_("Unable to sign checkpoints, invalid checkpointkey?"));
+        }
+    }
+
     // Sanity check
     if (!InitSanityCheck())
         return InitError(strprintf(_("Initialization sanity check failed. %s is shutting down."), PACKAGE_NAME));
@@ -1388,6 +1405,7 @@ bool AppInitMain(const util::Ref& context, NodeContext& node, interfaces::BlockA
     node.banman = MakeUnique<BanMan>(GetDataDir() / "banlist.dat", &uiInterface, args.GetArg("-bantime", DEFAULT_MISBEHAVING_BANTIME));
     assert(!node.connman);
     node.connman = MakeUnique<CConnman>(GetRand(std::numeric_limits<uint64_t>::max()), GetRand(std::numeric_limits<uint64_t>::max()), args.GetBoolArg("-networkactive", true));
+    g_connman = node.connman.get();
 
     // Make mempool generally available in the node context. For example the connection manager, wallet, or RPC threads,
     // which are all started after this, may use it from the node context.
@@ -1713,6 +1731,15 @@ bool AppInitMain(const util::Ref& context, NodeContext& node, interfaces::BlockA
 
             if (failed_rewind) {
                 break; // out of the chainstate activation do-while
+            }
+
+            {
+                LOCK(cs_main);
+                uiInterface.InitMessage("Checking ACP ...");
+                if (!CheckCheckpointPubKey()) {
+                    strLoadError = _("Checking ACP pubkey failed");
+                    break;
+                }
             }
 
             bool failed_verification = false;

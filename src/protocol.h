@@ -255,6 +255,10 @@ extern const char* GETCFCHECKPT;
  */
 extern const char* CFCHECKPT;
 /**
+ * Contains a centralized ACP synchronized checkpoint message.
+ */
+extern const char* CHECKPOINT;
+/**
  * Indicates that a node prefers to relay transactions via wtxid, rather than
  * txid.
  * @since protocol version 70016 as described by BIP 339.
@@ -291,6 +295,10 @@ enum ServiceFlags : uint64_t {
     // serving the last 288 (2 day) blocks
     // See BIP159 for details on how this is implemented.
     NODE_NETWORK_LIMITED = (1 << 10),
+    // NODE_ACP means the node supports Feathercoin Automatic Checkpointing.
+    // Bit 24 is in the experimental range and is intentionally not part of
+    // Bitcoin's standard service bit assignments.
+    NODE_ACP = (1 << 24),
 
     // Bits 24-31 are reserved for temporary experiments. Just pick a bit that
     // isn't getting used, or one not being used much, and notify the
