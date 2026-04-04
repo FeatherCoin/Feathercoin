@@ -10,6 +10,15 @@
 #include <primitives/block.h>
 #include <uint256.h>
 
+namespace {
+constexpr unsigned int LEGACY_SCRYPT_COMPAT_PROFILE = 0x3;
+}
+
+uint256 GetBlockProofOfWorkHash(const CBlockHeader& block, const Consensus::Params& params)
+{
+    return block.GetPoWHash(LEGACY_SCRYPT_COMPAT_PROFILE);
+}
+
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     assert(pindexLast != nullptr);

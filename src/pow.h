@@ -14,6 +14,7 @@ class CBlockHeader;
 class CBlockIndex;
 class uint256;
 
+uint256 GetBlockProofOfWorkHash(const CBlockHeader& block, const Consensus::Params& consensusParams);
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params&);
 unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params&);
 
