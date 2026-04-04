@@ -129,7 +129,7 @@ public:
 
         bech32_hrp = "fc";
 
-        vFixedSeeds.clear();
+        vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
@@ -213,7 +213,7 @@ public:
         assert(consensus.hashGenesisBlock == uint256S("0x79e4683a94fb0374ac9d52638b594dcf0318975acb8b275e280f93c082c0964c"));
         assert(genesis.hashMerkleRoot == uint256S("0x97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"));
 
-        vFixedSeeds.clear();
+        vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
         vSeeds.clear();
         vSeeds.emplace_back("testnet-explorer2.feathercoin.com");
         vSeeds.emplace_back("testnet-dnsseed.feathercoin.com");
