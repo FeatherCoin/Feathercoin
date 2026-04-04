@@ -3457,6 +3457,14 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     if (block.GetBlockTime() > nAdjustedTime + MAX_FUTURE_BLOCK_TIME)
         return state.Invalid(BlockValidationResult::BLOCK_TIME_FUTURE, "time-too-new", "block timestamp too far in the future");
 
+    // After the time-warp fix activates, only allow a 15 minute forward window.
+    if (nHeight > consensusParams.nTimeLimit && block.GetBlockTime() > nAdjustedTime + 15 * 60)
+        return state.Invalid(BlockValidationResult::BLOCK_TIME_FUTURE, "time-too-new", "block's timestamp too far in the future");
+
+    // After the time-warp fix activates, only allow a 15 minute backward step from the previous block.
+    if (nHeight > consensusParams.nTimeLimit && block.GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60)
+        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "wrong-time-between-blocks", "block's timestamp is too early compared to last block");
+
     // Reject outdated version blocks when 95% (75% on testnet) of the network has upgraded:
     // check for version 2, 3 and 4 upgrades
     if((block.nVersion < 2 && nHeight >= consensusParams.BIP34Height) ||
