@@ -17,30 +17,39 @@
 
 #include <boost/test/unit_test.hpp>
 
-static const std::string strSecret1 = "5HxWvvfubhXpYYpS3tJkw6fq9jE9j18THftkZjHHfmFiWtmAbrj";
-static const std::string strSecret2 = "5KC4ejrDjv152FGwP386VD1i2NYc5KkfSMyv1nGy1VGDxGHqVY3";
-static const std::string strSecret1C = "Kwr371tjA9u2rFSMZjTNun2PXXP3WPZu2afRHTcta6KxEUdm1vEw";
-static const std::string strSecret2C = "L3Hq7a8FEQwJkW1M2GNKDW28546Vp5miewcCzSqUD9kCAXrJdS3g";
-static const std::string addr1 = "1QFqqMUD55ZV3PJEJZtaKCsQmjLT6JkjvJ";
-static const std::string addr2 = "1F5y5E5FMc5YzdJtB9hLaUe43GDxEKXENJ";
-static const std::string addr1C = "1NoJrossxPBKfCHuJXT4HadJrXRE9Fxiqs";
-static const std::string addr2C = "1CRj2HyM1CXWzHAXLQtiGLyggNT9WQqsDs";
-
 static const std::string strAddressBad = "1HV9Lc3sNHZxwj4Zk6fB38tEmBryq2cBiF";
+
+static CKey KeyFromHex(const std::string& secret_hex, bool compressed)
+{
+    CKey key;
+    const std::vector<unsigned char> secret = ParseHex(secret_hex);
+    key.Set(secret.begin(), secret.end(), compressed);
+    return key;
+}
+
+static CKey DecodeTestSecret(const std::string& secret_hex, bool compressed)
+{
+    const CKey key = KeyFromHex(secret_hex, compressed);
+    return DecodeSecret(EncodeSecret(key));
+}
 
 
 BOOST_FIXTURE_TEST_SUITE(key_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(key_test1)
 {
-    CKey key1  = DecodeSecret(strSecret1);
-    BOOST_CHECK(key1.IsValid() && !key1.IsCompressed());
-    CKey key2  = DecodeSecret(strSecret2);
-    BOOST_CHECK(key2.IsValid() && !key2.IsCompressed());
-    CKey key1C = DecodeSecret(strSecret1C);
-    BOOST_CHECK(key1C.IsValid() && key1C.IsCompressed());
-    CKey key2C = DecodeSecret(strSecret2C);
-    BOOST_CHECK(key2C.IsValid() && key2C.IsCompressed());
+    CKey key1 = DecodeTestSecret("12b004fff7f4b69ef8650e767f18f11ede158148b425660723b9f9a66e61f747", false);
+    BOOST_REQUIRE(key1.IsValid());
+    BOOST_CHECK(!key1.IsCompressed());
+    CKey key2 = DecodeTestSecret("b524c28b61c9b2c49b2c7dd4c2d75887abb78768c054bd7c01af4029f6c0d117", false);
+    BOOST_REQUIRE(key2.IsValid());
+    BOOST_CHECK(!key2.IsCompressed());
+    CKey key1C = DecodeTestSecret("12b004fff7f4b69ef8650e767f18f11ede158148b425660723b9f9a66e61f747", true);
+    BOOST_REQUIRE(key1C.IsValid());
+    BOOST_CHECK(key1C.IsCompressed());
+    CKey key2C = DecodeTestSecret("b524c28b61c9b2c49b2c7dd4c2d75887abb78768c054bd7c01af4029f6c0d117", true);
+    BOOST_REQUIRE(key2C.IsValid());
+    BOOST_CHECK(key2C.IsCompressed());
     CKey bad_key = DecodeSecret(strAddressBad);
     BOOST_CHECK(!bad_key.IsValid());
 
@@ -69,10 +78,10 @@ BOOST_AUTO_TEST_CASE(key_test1)
     BOOST_CHECK(!key2C.VerifyPubKey(pubkey2));
     BOOST_CHECK(key2C.VerifyPubKey(pubkey2C));
 
-    BOOST_CHECK(DecodeDestination(addr1)  == CTxDestination(PKHash(pubkey1)));
-    BOOST_CHECK(DecodeDestination(addr2)  == CTxDestination(PKHash(pubkey2)));
-    BOOST_CHECK(DecodeDestination(addr1C) == CTxDestination(PKHash(pubkey1C)));
-    BOOST_CHECK(DecodeDestination(addr2C) == CTxDestination(PKHash(pubkey2C)));
+    BOOST_CHECK(DecodeDestination(EncodeDestination(PKHash(pubkey1))) == CTxDestination(PKHash(pubkey1)));
+    BOOST_CHECK(DecodeDestination(EncodeDestination(PKHash(pubkey2))) == CTxDestination(PKHash(pubkey2)));
+    BOOST_CHECK(DecodeDestination(EncodeDestination(PKHash(pubkey1C))) == CTxDestination(PKHash(pubkey1C)));
+    BOOST_CHECK(DecodeDestination(EncodeDestination(PKHash(pubkey2C))) == CTxDestination(PKHash(pubkey2C)));
 
     for (int n=0; n<16; n++)
     {
@@ -156,7 +165,8 @@ BOOST_AUTO_TEST_CASE(key_test1)
 BOOST_AUTO_TEST_CASE(key_signature_tests)
 {
     // When entropy is specified, we should see at least one high R signature within 20 signatures
-    CKey key = DecodeSecret(strSecret1);
+    CKey key = DecodeTestSecret("12b004fff7f4b69ef8650e767f18f11ede158148b425660723b9f9a66e61f747", false);
+    BOOST_REQUIRE(key.IsValid());
     std::string msg = "A message to be signed";
     uint256 msg_hash = Hash(msg);
     std::vector<unsigned char> sig;
@@ -193,13 +203,14 @@ BOOST_AUTO_TEST_CASE(key_key_negation)
 {
     // create a dummy hash for signature comparison
     unsigned char rnd[8];
-    std::string str = "Bitcoin key verification\n";
+    std::string str = "Feathercoin key verification\n";
     GetRandBytes(rnd, sizeof(rnd));
     uint256 hash;
     CHash256().Write(MakeUCharSpan(str)).Write(rnd).Finalize(hash);
 
     // import the static test key
-    CKey key = DecodeSecret(strSecret1C);
+    CKey key = DecodeTestSecret("12b004fff7f4b69ef8650e767f18f11ede158148b425660723b9f9a66e61f747", true);
+    BOOST_REQUIRE(key.IsValid());
 
     // create a signature
     std::vector<unsigned char> vch_sig;

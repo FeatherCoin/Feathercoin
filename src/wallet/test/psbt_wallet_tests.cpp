@@ -46,7 +46,10 @@ BOOST_AUTO_TEST_CASE(psbt_updater_test)
     spk_man->AddCScript(ws1);
 
     // Add hd seed
-    CKey key = DecodeSecret("5KSSJQ7UNfFGwVgpCZDSHm5rVNhMFcFtvWM3zQ8mW4qNDEN7LFd"); // Mainnet and uncompressed form of cUkG8i1RFfWGWy5ziR11zJ5V4U4W3viSFCfyJmZnvQaUsd1xuF3T
+    CKey key;
+    const auto key_bytes = ParseHex("d5c7a415bc76dcff7cd59299596ab1b569ac6ad84d872cd376c905878eec1384");
+    key.Set(key_bytes.begin(), key_bytes.end(), false);
+    BOOST_REQUIRE(key.IsValid());
     CPubKey master_pub_key = spk_man->DeriveNewSeed(key);
     spk_man->SetHDSeed(master_pub_key);
     spk_man->NewKeyPool();

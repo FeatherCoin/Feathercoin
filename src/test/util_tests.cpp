@@ -7,7 +7,9 @@
 #include <clientversion.h>
 #include <hash.h> // For Hash()
 #include <key.h>  // For CKey
+#include <key_io.h>
 #include <optional.h>
+#include <script/standard.h>
 #include <sync.h>
 #include <test/util/logging.h>
 #include <test/util/setup_common.h>
@@ -2095,7 +2097,7 @@ BOOST_AUTO_TEST_CASE(message_sign)
     const std::string message = "Trust no one";
 
     const std::string expected_signature =
-        "IPojfrX2dfPnH26UegfbGQQLrdK844DlHq5157/P6h57WyuS/Qsl+h/WSVGDF4MUi4rWSswW38oimDYfNNUBUOk=";
+        "ID62BB/Nn0uBF+le3BetZBO2qVKf+M65q7EF8CxN/4qPBfPdm+roz7xHR8sXYakYm4cixRMghDjyN1DHQvqAsZA=";
 
     CKey privkey;
     std::string generated_signature;
@@ -2119,6 +2121,20 @@ BOOST_AUTO_TEST_CASE(message_sign)
 
 BOOST_AUTO_TEST_CASE(message_verify)
 {
+    const std::array<unsigned char, 32> privkey_bytes = {
+        0xD9, 0x7F, 0x51, 0x08, 0xF1, 0x1C, 0xDA, 0x6E,
+        0xEE, 0xBA, 0xAA, 0x42, 0x0F, 0xEF, 0x07, 0x26,
+        0xB1, 0xF8, 0x98, 0x06, 0x0B, 0x98, 0x48, 0x9F,
+        0xA3, 0x09, 0x84, 0x63, 0xC0, 0x03, 0x28, 0x66
+    };
+    CKey privkey;
+    privkey.Set(privkey_bytes.begin(), privkey_bytes.end(), true);
+    BOOST_REQUIRE(privkey.IsValid());
+    const std::string address = EncodeDestination(PKHash(privkey.GetPubKey()));
+    const std::string signature = "ID62BB/Nn0uBF+le3BetZBO2qVKf+M65q7EF8CxN/4qPBfPdm+roz7xHR8sXYakYm4cixRMghDjyN1DHQvqAsZA=";
+    const std::string other_signature = "IIcaIENoYW5jZWxsb3Igb24gYnJpbmsgb2Ygc2Vjb25kIGJhaWxvdXQgZm9yIGJhbmtzIAaHRtbCeDZINyavx14=";
+    const std::string script_address = EncodeDestination(ScriptHash(CScript() << OP_TRUE));
+
     BOOST_CHECK_EQUAL(
         MessageVerify(
             "invalid address",
@@ -2128,45 +2144,45 @@ BOOST_AUTO_TEST_CASE(message_verify)
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "3B5fQsEXEaV8v6U3ejYc8XaKXAkyQj2MjV",
+            script_address,
             "signature should be irrelevant",
             "message too"),
         MessageVerificationResult::ERR_ADDRESS_NO_KEY);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "1KqbBpLy5FARmTPD4VZnDDpYjkUvkr82Pm",
+            address,
             "invalid signature, not in base64 encoding",
             "message should be irrelevant"),
         MessageVerificationResult::ERR_MALFORMED_SIGNATURE);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "1KqbBpLy5FARmTPD4VZnDDpYjkUvkr82Pm",
+            address,
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "message should be irrelevant"),
         MessageVerificationResult::ERR_PUBKEY_NOT_RECOVERED);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "15CRxFdyRpGZLW9w8HnHvVduizdL5jKNbs",
-            "IPojfrX2dfPnH26UegfbGQQLrdK844DlHq5157/P6h57WyuS/Qsl+h/WSVGDF4MUi4rWSswW38oimDYfNNUBUOk=",
+            address,
+            signature,
             "I never signed this"),
         MessageVerificationResult::ERR_NOT_SIGNED);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "15CRxFdyRpGZLW9w8HnHvVduizdL5jKNbs",
-            "IPojfrX2dfPnH26UegfbGQQLrdK844DlHq5157/P6h57WyuS/Qsl+h/WSVGDF4MUi4rWSswW38oimDYfNNUBUOk=",
+            address,
+            signature,
             "Trust no one"),
         MessageVerificationResult::OK);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "11canuhp9X2NocwCq7xNrQYTmUgZAnLK3",
-            "IIcaIENoYW5jZWxsb3Igb24gYnJpbmsgb2Ygc2Vjb25kIGJhaWxvdXQgZm9yIGJhbmtzIAaHRtbCeDZINyavx14=",
+            address,
+            other_signature,
             "Trust me"),
-        MessageVerificationResult::OK);
+        MessageVerificationResult::ERR_NOT_SIGNED);
 }
 
 BOOST_AUTO_TEST_CASE(message_hash)
