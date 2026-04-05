@@ -95,6 +95,7 @@ class TestNode():
         self.args = [
             self.binary,
             "-datadir=" + self.datadir,
+            "-conf=bitcoin.conf",
             "-logtimemicros",
             "-debug",
             "-debugexclude=libevent",
@@ -610,7 +611,7 @@ class TestNodeCLI():
         pos_args = [arg_to_cli(arg) for arg in args]
         named_args = [str(key) + "=" + arg_to_cli(value) for (key, value) in kwargs.items()]
         assert not (pos_args and named_args), "Cannot use positional arguments and named arguments in the same bitcoin-cli call"
-        p_args = [self.binary, "-datadir=" + self.datadir] + self.options
+        p_args = [self.binary, "-datadir=" + self.datadir, "-conf=bitcoin.conf"] + self.options
         if named_args:
             p_args += ["-named"]
         if command is not None:

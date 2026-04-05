@@ -349,22 +349,26 @@ def initialize_datadir(dirname, n, chain):
     else:
         chain_name_conf_arg = chain
         chain_name_conf_section = chain
-    with open(os.path.join(datadir, "bitcoin.conf"), 'w', encoding='utf8') as f:
-        f.write("{}=1\n".format(chain_name_conf_arg))
-        f.write("[{}]\n".format(chain_name_conf_section))
-        f.write("port=" + str(p2p_port(n)) + "\n")
-        f.write("rpcport=" + str(rpc_port(n)) + "\n")
-        f.write("fallbackfee=0.0002\n")
-        f.write("server=1\n")
-        f.write("keypool=1\n")
-        f.write("discover=0\n")
-        f.write("dnsseed=0\n")
-        f.write("listenonion=0\n")
-        f.write("printtoconsole=0\n")
-        f.write("upnp=0\n")
-        f.write("shrinkdebugfile=0\n")
-        os.makedirs(os.path.join(datadir, 'stderr'), exist_ok=True)
-        os.makedirs(os.path.join(datadir, 'stdout'), exist_ok=True)
+    config_contents = [
+        "{}=1\n".format(chain_name_conf_arg),
+        "[{}]\n".format(chain_name_conf_section),
+        "port={}\n".format(p2p_port(n)),
+        "rpcport={}\n".format(rpc_port(n)),
+        "fallbackfee=0.0002\n",
+        "server=1\n",
+        "keypool=1\n",
+        "discover=0\n",
+        "dnsseed=0\n",
+        "listenonion=0\n",
+        "printtoconsole=0\n",
+        "upnp=0\n",
+        "shrinkdebugfile=0\n",
+    ]
+    for conf_name in ("bitcoin.conf", "feathercoin.conf"):
+        with open(os.path.join(datadir, conf_name), 'w', encoding='utf8') as f:
+            f.writelines(config_contents)
+    os.makedirs(os.path.join(datadir, 'stderr'), exist_ok=True)
+    os.makedirs(os.path.join(datadir, 'stdout'), exist_ok=True)
     return datadir
 
 
@@ -373,9 +377,12 @@ def get_datadir_path(dirname, n):
 
 
 def append_config(datadir, options):
-    with open(os.path.join(datadir, "bitcoin.conf"), 'a', encoding='utf8') as f:
-        for option in options:
-            f.write(option + "\n")
+    for conf_name in ("bitcoin.conf", "feathercoin.conf"):
+        conf_path = os.path.join(datadir, conf_name)
+        if os.path.isfile(conf_path):
+            with open(conf_path, 'a', encoding='utf8') as f:
+                for option in options:
+                    f.write(option + "\n")
 
 
 def get_auth_cookie(datadir, chain):

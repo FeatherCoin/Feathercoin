@@ -344,10 +344,14 @@ def main():
     logging_level = logging.INFO if args.quiet else logging.DEBUG
     logging.basicConfig(format='%(message)s', level=logging_level)
 
-    # Create base test directory
-    tmpdir = "%s/test_runner_₿_🏃_%s" % (args.tmpdirprefix, datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
-
-    os.makedirs(tmpdir)
+    # Create a unique base test directory for each runner instance.
+    tmpdir = tempfile.mkdtemp(
+        prefix="test_runner_feathercoin_{}{}_".format(
+            datetime.datetime.now().strftime("%Y%m%d_%H%M%S"),
+            "" if os.name == "nt" else "_pid{}".format(os.getpid()),
+        ),
+        dir=args.tmpdirprefix,
+    )
 
     logging.debug("Temporary test directory at %s" % tmpdir)
 
@@ -434,11 +438,11 @@ def main():
 def run_tests(*, test_list, src_dir, build_dir, tmpdir, jobs=1, enable_coverage=False, args=None, combined_logs_len=0, failfast=False, use_term_control):
     args = args or []
 
-    # Warn if bitcoind is already running
+    # Warn if feathercoind is already running
     try:
         # pgrep exits with code zero when one or more matching processes found
-        if subprocess.run(["pgrep", "-x", "bitcoind"], stdout=subprocess.DEVNULL).returncode == 0:
-            print("%sWARNING!%s There is already a bitcoind process running on this system. Tests may fail unexpectedly due to resource contention!" % (BOLD[1], BOLD[0]))
+        if subprocess.run(["pgrep", "-x", "feathercoind"], stdout=subprocess.DEVNULL).returncode == 0:
+            print("%sWARNING!%s There is already a feathercoind process running on this system. Tests may fail unexpectedly due to resource contention!" % (BOLD[1], BOLD[0]))
     except OSError:
         # pgrep not supported
         pass

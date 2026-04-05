@@ -110,10 +110,11 @@ MESSAGEMAP = {
 }
 
 MAGIC_BYTES = {
-    "mainnet": b"\xf9\xbe\xb4\xd9",   # mainnet
-    "testnet3": b"\x0b\x11\x09\x07",  # testnet3
-    "regtest": b"\xfa\xbf\xb5\xda",   # regtest
-    "signet": b"\x0a\x03\xcf\x40",    # signet
+    "mainnet": b"\x41\x15\x1a\x21",   # mainnet
+    "testnet3": b"\x91\x65\x6a\x71",  # Feathercoin testnet
+    "testnet5": b"\x91\x65\x6a\x71",  # Feathercoin testnet
+    "regtest": b"\xd1\xa5\xaa\xb1",   # regtest
+    "signet": b"\xbd\x82\x66\xbe",    # signet
 }
 
 
