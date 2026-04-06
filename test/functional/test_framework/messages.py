@@ -28,6 +28,7 @@ import socket
 import struct
 import time
 
+from test_framework import litecoin_scrypt, neoscrypt
 from test_framework.siphash import siphash256
 from test_framework.util import hex_str_to_bytes, assert_equal
 
@@ -56,6 +57,7 @@ NODE_BLOOM = (1 << 2)
 NODE_WITNESS = (1 << 3)
 NODE_COMPACT_FILTERS = (1 << 6)
 NODE_NETWORK_LIMITED = (1 << 10)
+NODE_ACP = (1 << 24)
 
 MSG_TX = 1
 MSG_BLOCK = 2
@@ -603,7 +605,7 @@ class CTransaction:
 
 class CBlockHeader:
     __slots__ = ("hash", "hashMerkleRoot", "hashPrevBlock", "nBits", "nNonce",
-                 "nTime", "nVersion", "sha256")
+                 "nTime", "nVersion", "sha256", "neoscrypt")
 
     def __init__(self, header=None):
         if header is None:
@@ -617,6 +619,7 @@ class CBlockHeader:
             self.nNonce = header.nNonce
             self.sha256 = header.sha256
             self.hash = header.hash
+            self.neoscrypt = header.neoscrypt
             self.calc_sha256()
 
     def set_null(self):
@@ -628,6 +631,7 @@ class CBlockHeader:
         self.nNonce = 0
         self.sha256 = None
         self.hash = None
+        self.neoscrypt = None
 
     def deserialize(self, f):
         self.nVersion = struct.unpack("<i", f.read(4))[0]
@@ -638,6 +642,7 @@ class CBlockHeader:
         self.nNonce = struct.unpack("<I", f.read(4))[0]
         self.sha256 = None
         self.hash = None
+        self.neoscrypt = None
 
     def serialize(self):
         r = b""
@@ -660,9 +665,14 @@ class CBlockHeader:
             r += struct.pack("<I", self.nNonce)
             self.sha256 = uint256_from_str(hash256(r))
             self.hash = encode(hash256(r)[::-1], 'hex_codec').decode('ascii')
+            if self.nTime < 1515840634:
+                self.neoscrypt = uint256_from_str(litecoin_scrypt.getPoWHash(r))
+            else:
+                self.neoscrypt = uint256_from_str(neoscrypt.getPoWHash(r))
 
     def rehash(self):
         self.sha256 = None
+        self.neoscrypt = None
         self.calc_sha256()
         return self.sha256
 
@@ -726,7 +736,7 @@ class CBlock(CBlockHeader):
     def is_valid(self):
         self.calc_sha256()
         target = uint256_from_compact(self.nBits)
-        if self.sha256 > target:
+        if self.neoscrypt > target:
             return False
         for tx in self.vtx:
             if not tx.is_valid():
@@ -738,7 +748,7 @@ class CBlock(CBlockHeader):
     def solve(self):
         self.rehash()
         target = uint256_from_compact(self.nBits)
-        while self.sha256 > target:
+        while self.neoscrypt > target:
             self.nNonce += 1
             self.rehash()
 
