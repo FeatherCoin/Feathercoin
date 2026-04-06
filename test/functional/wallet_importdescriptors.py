@@ -328,7 +328,9 @@ class ImportDescriptorsTest(BitcoinTestFramework):
         txid = w0.sendtoaddress(address, 49.99995540)
         w0.generatetoaddress(6, w0.getnewaddress())
         self.sync_blocks()
-        tx = wpriv.createrawtransaction([{"txid": txid, "vout": 0}], {w0.getnewaddress(): 49.999})
+        decoded = w0.decoderawtransaction(w0.gettransaction(txid)['hex'])
+        vout = next(out['n'] for out in decoded['vout'] if address in out['scriptPubKey'].get('addresses', []))
+        tx = wpriv.createrawtransaction([{"txid": txid, "vout": vout}], {w0.getnewaddress(): 49.999})
         signed_tx = wpriv.signrawtransactionwithwallet(tx)
         w1.sendrawtransaction(signed_tx['hex'])
 
