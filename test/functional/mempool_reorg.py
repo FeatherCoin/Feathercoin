@@ -61,32 +61,32 @@ class MempoolCoinbaseTest(BitcoinTestFramework):
         )
         timelock_tx = self.nodes[0].signrawtransactionwithwallet(timelock_tx)["hex"]
         # This will raise an exception because the timelock transaction is too immature to spend
-        assert_raises_rpc_error(-26, "non-final", self.nodes[0].sendrawtransaction, timelock_tx)
+        assert_raises_rpc_error(-26, "non-final", self.nodes[0].sendrawtransaction, hexstring=timelock_tx, maxfeerate=0)
 
         # Broadcast and mine spend_102 and 103:
-        spend_102_id = self.nodes[0].sendrawtransaction(spend_102_raw)
-        spend_103_id = self.nodes[0].sendrawtransaction(spend_103_raw)
+        spend_102_id = self.nodes[0].sendrawtransaction(hexstring=spend_102_raw, maxfeerate=0)
+        spend_103_id = self.nodes[0].sendrawtransaction(hexstring=spend_103_raw, maxfeerate=0)
         self.nodes[0].generate(1)
         # Time-locked transaction is still too immature to spend
-        assert_raises_rpc_error(-26, 'non-final', self.nodes[0].sendrawtransaction, timelock_tx)
+        assert_raises_rpc_error(-26, 'non-final', self.nodes[0].sendrawtransaction, hexstring=timelock_tx, maxfeerate=0)
 
         # Create 102_1 and 103_1:
         spend_102_1_raw = create_raw_transaction(self.nodes[0], spend_102_id, node1_address, amount=49.98)
         spend_103_1_raw = create_raw_transaction(self.nodes[0], spend_103_id, node1_address, amount=49.98)
 
         # Broadcast and mine 103_1:
-        spend_103_1_id = self.nodes[0].sendrawtransaction(spend_103_1_raw)
+        spend_103_1_id = self.nodes[0].sendrawtransaction(hexstring=spend_103_1_raw, maxfeerate=0)
         last_block = self.nodes[0].generate(1)
         # Sync blocks, so that peer 1 gets the block before timelock_tx
         # Otherwise, peer 1 would put the timelock_tx in recentRejects
         self.sync_all()
 
         # Time-locked transaction can now be spent
-        timelock_tx_id = self.nodes[0].sendrawtransaction(timelock_tx)
+        timelock_tx_id = self.nodes[0].sendrawtransaction(hexstring=timelock_tx, maxfeerate=0)
 
         # ... now put spend_101 and spend_102_1 in memory pools:
-        spend_101_id = self.nodes[0].sendrawtransaction(spend_101_raw)
-        spend_102_1_id = self.nodes[0].sendrawtransaction(spend_102_1_raw)
+        spend_101_id = self.nodes[0].sendrawtransaction(hexstring=spend_101_raw, maxfeerate=0)
+        spend_102_1_id = self.nodes[0].sendrawtransaction(hexstring=spend_102_1_raw, maxfeerate=0)
 
         assert_equal(set(self.nodes[0].getrawmempool()), {spend_101_id, spend_102_1_id, timelock_tx_id})
         self.sync_all()

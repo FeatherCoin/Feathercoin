@@ -110,7 +110,7 @@ class TxDownloadTest(BitcoinTestFramework):
             p.send_and_ping(msg)
 
         self.log.info("Put the tx in node 0's mempool")
-        self.nodes[0].sendrawtransaction(tx)
+        self.nodes[0].sendrawtransaction(hexstring=tx, maxfeerate=0)
 
         # Since node 1 is connected outbound to an honest peer (node 0), it
         # should get the tx within a timeout. (Assuming that node 0

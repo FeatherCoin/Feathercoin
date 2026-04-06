@@ -244,7 +244,7 @@ class SegWitTest(BitcoinTestFramework):
         tx.vin.append(CTxIn(COutPoint(int(txid1, 16), 0), b''))
         tx.vout.append(CTxOut(int(49.99 * COIN), CScript([OP_TRUE, OP_DROP] * 15 + [OP_TRUE])))
         tx2_hex = self.nodes[0].signrawtransactionwithwallet(ToHex(tx))['hex']
-        txid2 = self.nodes[0].sendrawtransaction(tx2_hex)
+        txid2 = self.nodes[0].sendrawtransaction(hexstring=tx2_hex, maxfeerate=0)
         tx = FromHex(CTransaction(), tx2_hex)
         assert not tx.wit.is_null()
 
@@ -550,7 +550,7 @@ class SegWitTest(BitcoinTestFramework):
             self.nodes[1].importaddress(scriptPubKey, "", False)
             rawtxfund = self.nodes[1].fundrawtransaction(transaction)['hex']
             rawtxfund = self.nodes[1].signrawtransactionwithwallet(rawtxfund)["hex"]
-            txid = self.nodes[1].sendrawtransaction(rawtxfund)
+            txid = self.nodes[1].sendrawtransaction(hexstring=rawtxfund, maxfeerate=0)
 
             assert_equal(self.nodes[1].gettransaction(txid, True)["txid"], txid)
             assert_equal(self.nodes[1].listtransactions("*", 1, 0, True)[0]["txid"], txid)

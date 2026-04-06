@@ -236,14 +236,14 @@ def send_to_witness(use_p2wsh, node, utxo, pubkey, encode_p2sh, amount, sign=Tru
     if (sign):
         signed = node.signrawtransactionwithwallet(tx_to_witness)
         assert "errors" not in signed or len(["errors"]) == 0
-        return node.sendrawtransaction(signed["hex"])
+        return node.sendrawtransaction(hexstring=signed["hex"], maxfeerate=0)
     else:
         if (insert_redeem_script):
             tx = FromHex(CTransaction(), tx_to_witness)
             tx.vin[0].scriptSig += CScript([hex_str_to_bytes(insert_redeem_script)])
             tx_to_witness = ToHex(tx)
 
-    return node.sendrawtransaction(tx_to_witness)
+    return node.sendrawtransaction(hexstring=tx_to_witness, maxfeerate=0)
 
 class TestFrameworkBlockTools(unittest.TestCase):
     def test_create_coinbase(self):

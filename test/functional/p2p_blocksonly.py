@@ -4,6 +4,8 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test p2p blocksonly"""
 
+from decimal import Decimal
+
 from test_framework.messages import msg_tx, CTransaction, FromHex
 from test_framework.p2p import P2PInterface
 from test_framework.test_framework import BitcoinTestFramework
@@ -21,13 +23,14 @@ class P2PBlocksOnly(BitcoinTestFramework):
 
         self.log.info('Check that txs from p2p are rejected and result in disconnect')
         prevtx = self.nodes[0].getblock(self.nodes[0].getblockhash(1), 2)['tx'][0]
+        prevtx_value = prevtx['vout'][0]['value']
         rawtx = self.nodes[0].createrawtransaction(
             inputs=[{
                 'txid': prevtx['txid'],
                 'vout': 0
             }],
             outputs=[{
-                self.nodes[0].get_deterministic_priv_key().address: 50 - 0.00125
+                self.nodes[0].get_deterministic_priv_key().address: prevtx_value - Decimal("0.00125")
             }],
         )
         sigtx = self.nodes[0].signrawtransactionwithkey(
@@ -53,7 +56,7 @@ class P2PBlocksOnly(BitcoinTestFramework):
         assert_equal(self.nodes[0].getpeerinfo()[0]['relaytxes'], True)
         txid = self.nodes[0].testmempoolaccept([sigtx])[0]['txid']
         with self.nodes[0].assert_debug_log(['received getdata for: wtx {} peer=1'.format(txid)]):
-            self.nodes[0].sendrawtransaction(sigtx)
+            self.nodes[0].sendrawtransaction(hexstring=sigtx, maxfeerate=0)
             tx_relay_peer.wait_for_tx(txid)
             assert_equal(self.nodes[0].getmempoolinfo()['size'], 1)
 

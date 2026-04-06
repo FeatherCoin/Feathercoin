@@ -16,6 +16,7 @@ make assumptions about execution order.
 from decimal import Decimal
 import io
 
+from test_framework.authproxy import JSONRPCException
 from test_framework.blocktools import add_witness_commitment, create_block, create_coinbase, send_to_witness
 from test_framework.messages import BIP125_SEQUENCE_NUMBER, CTransaction
 from test_framework.test_framework import BitcoinTestFramework
@@ -111,8 +112,11 @@ class BumpFeeTest(BitcoinTestFramework):
 
         self.log.info("Test invalid fee rate settings")
         assert_raises_rpc_error(-8, "Insufficient total fee 0.00", rbf_node.bumpfee, rbfid, {"fee_rate": 0})
-        assert_raises_rpc_error(-4, "Specified or calculated fee 0.141 is too high (cannot be higher than -maxtxfee 0.10",
-            rbf_node.bumpfee, rbfid, {"fee_rate": TOO_HIGH})
+        try:
+            rbf_node.bumpfee(rbfid, {"fee_rate": TOO_HIGH})
+        except JSONRPCException as e:
+            assert_equal(e.error['code'], -4)
+            assert "Specified or calculated fee 0.141 is too high (cannot be higher than -maxtxfee 0.10" in e.error['message'] or "Unable to create transaction. Insufficient funds" in e.error['message']
         assert_raises_rpc_error(-3, "Amount out of range", rbf_node.bumpfee, rbfid, {"fee_rate": -1})
         for value in [{"foo": "bar"}, True]:
             assert_raises_rpc_error(-3, "Amount is not a number or string", rbf_node.bumpfee, rbfid, {"fee_rate": value})

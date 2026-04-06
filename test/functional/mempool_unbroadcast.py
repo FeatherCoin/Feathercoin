@@ -7,6 +7,8 @@ to peers until a GETDATA is received."""
 
 import time
 
+from decimal import Decimal
+
 from test_framework.p2p import P2PTxInvStore
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import (
@@ -31,7 +33,7 @@ class MempoolUnbroadcastTest(BitcoinTestFramework):
         self.log.info("Test that mempool reattempts delivery of locally submitted transaction")
         node = self.nodes[0]
 
-        min_relay_fee = node.getnetworkinfo()["relayfee"]
+        min_relay_fee = max(node.getnetworkinfo()["relayfee"], Decimal("0.001"))
         utxos = create_confirmed_utxos(min_relay_fee, node, 10)
 
         self.disconnect_nodes(0, 1)
