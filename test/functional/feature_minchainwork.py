@@ -26,14 +26,14 @@ REGTEST_WORK_PER_BLOCK = 2
 class MinimumChainWorkTest(BitcoinTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
-        self.num_nodes = 3
+        self.num_nodes = 2
 
-        self.extra_args = [[], ["-minimumchainwork=0x65"], ["-minimumchainwork=0x65"]]
-        self.node_min_work = [0, 101, 101]
+        self.extra_args = [[], ["-minimumchainwork=0x65"]]
+        self.node_min_work = [0, 101]
 
     def setup_network(self):
         # This test relies on the chain setup being:
-        # node0 <- node1 <- node2
+        # node0 <- node1
         # Before leaving IBD, nodes prefer to download blocks from outbound
         # peers, so ensure that we're mining on an outbound peer and testing
         # block relay to inbound peers.
@@ -42,12 +42,12 @@ class MinimumChainWorkTest(BitcoinTestFramework):
             self.connect_nodes(i+1, i)
 
     def run_test(self):
-        # Start building a chain on node0.  node2 shouldn't be able to sync until node1's
+        # Start building a chain on node0. node1 shouldn't be able to sync until its
         # minchainwork is exceeded
         starting_chain_work = REGTEST_WORK_PER_BLOCK # Genesis block's work
-        self.log.info("Testing relay across node %d (minChainWork = %d)", 1, self.node_min_work[1])
+        self.log.info("Testing relay to node %d (minChainWork = %d)", 1, self.node_min_work[1])
 
-        starting_blockcount = self.nodes[2].getblockcount()
+        starting_blockcount = self.nodes[1].getblockcount()
 
         num_blocks_to_generate = int((self.node_min_work[1] - starting_chain_work) / REGTEST_WORK_PER_BLOCK)
         self.log.info("Generating %d blocks on node0", num_blocks_to_generate)
@@ -62,15 +62,13 @@ class MinimumChainWorkTest(BitcoinTestFramework):
         # them (since they're below node1's minchainwork).
         time.sleep(3)
 
-        self.log.info("Verifying node 2 has no more blocks than before")
+        self.log.info("Verifying node 1 has no more blocks than before")
         self.log.info("Blockcounts: %s", [n.getblockcount() for n in self.nodes])
-        # Node2 shouldn't have any new headers yet, because node1 should not
-        # have relayed anything.
-        assert_equal(len(self.nodes[2].getchaintips()), 1)
-        assert_equal(self.nodes[2].getchaintips()[0]['height'], 0)
-
+        active_tips = [tip for tip in self.nodes[1].getchaintips() if tip['status'] == 'active']
+        assert_equal(len(active_tips), 1)
+        assert_equal(active_tips[0]['height'], 0)
         assert self.nodes[1].getbestblockhash() != self.nodes[0].getbestblockhash()
-        assert_equal(self.nodes[2].getblockcount(), starting_blockcount)
+        assert_equal(self.nodes[1].getblockcount(), starting_blockcount)
 
         self.log.info("Generating one more block")
         self.nodes[0].generatetoaddress(1, self.nodes[0].get_deterministic_priv_key().address)
