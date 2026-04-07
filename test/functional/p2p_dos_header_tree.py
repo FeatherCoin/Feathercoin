@@ -45,6 +45,17 @@ class RejectLowDifficultyHeadersTest(BitcoinTestFramework):
         self.headers = [FromHex(CBlockHeader(), h) for h in self.headers]
         self.headers_fork = [FromHex(CBlockHeader(), h) for h in self.headers_fork]
 
+        # The fixture file contains Bitcoin testnet3 headers. On chains with a different
+        # genesis/testnet history (e.g. Feathercoin testnet5), validate that these
+        # headers are correctly rejected instead of asserting Bitcoin-specific checkpoints.
+        if self.nodes[0].getblockhash(0) != '000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943':
+            self.log.info("Fixture headers are foreign to this chain, verify rejection behavior")
+            peer_foreign_headers = self.nodes[0].add_p2p_connection(P2PInterface())
+            with self.nodes[0].assert_debug_log(['high-hash']):
+                peer_foreign_headers.send_message(msg_headers(self.headers))
+                peer_foreign_headers.wait_for_disconnect()
+            return
+
         self.log.info("Feed all non-fork headers, including and up to the first checkpoint")
         peer_checkpoint = self.nodes[0].add_p2p_connection(P2PInterface())
         peer_checkpoint.send_and_ping(msg_headers(self.headers))

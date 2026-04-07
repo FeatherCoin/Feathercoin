@@ -26,6 +26,7 @@ from .util import (
     MAX_NODES,
     PortSeed,
     assert_equal,
+    chain_name_to_datadir,
     check_json_precision,
     get_datadir_path,
     initialize_datadir,
@@ -737,7 +738,7 @@ class BitcoinTestFramework(metaclass=BitcoinTestMetaClass):
             self.nodes = []
 
             def cache_path(*paths):
-                return os.path.join(cache_node_dir, self.chain, *paths)
+                return os.path.join(cache_node_dir, chain_name_to_datadir(self.chain), *paths)
 
             os.rmdir(cache_path('wallets'))  # Remove empty wallets dir
             for entry in os.listdir(cache_path()):

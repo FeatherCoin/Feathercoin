@@ -338,17 +338,25 @@ def rpc_url(datadir, i, chain, rpchost):
 ################
 
 
+def chain_name_to_conf(chain):
+    """Translate a chain alias to config arg/section names."""
+    if chain in ('testnet3', 'testnet5'):
+        return 'testnet', 'test'
+    return chain, chain
+
+
+def chain_name_to_datadir(chain):
+    """Translate a chain alias to the on-disk datadir subdirectory."""
+    if chain == 'testnet3':
+        return 'testnet5'
+    return chain
+
+
 def initialize_datadir(dirname, n, chain):
     datadir = get_datadir_path(dirname, n)
     if not os.path.isdir(datadir):
         os.makedirs(datadir)
-    # Translate chain name to config name
-    if chain == 'testnet3':
-        chain_name_conf_arg = 'testnet'
-        chain_name_conf_section = 'test'
-    else:
-        chain_name_conf_arg = chain
-        chain_name_conf_section = chain
+    chain_name_conf_arg, chain_name_conf_section = chain_name_to_conf(chain)
     config_contents = [
         "{}=1\n".format(chain_name_conf_arg),
         "[{}]\n".format(chain_name_conf_section),
@@ -397,8 +405,9 @@ def get_auth_cookie(datadir, chain):
                 if line.startswith("rpcpassword="):
                     assert password is None  # Ensure that there is only one rpcpassword line
                     password = line.split("=")[1].strip("\n")
+    chain_dir = chain_name_to_datadir(chain)
     try:
-        with open(os.path.join(datadir, chain, ".cookie"), 'r', encoding="ascii") as f:
+        with open(os.path.join(datadir, chain_dir, ".cookie"), 'r', encoding="ascii") as f:
             userpass = f.read()
             split_userpass = userpass.split(':')
             user = split_userpass[0]
@@ -412,9 +421,10 @@ def get_auth_cookie(datadir, chain):
 
 # If a cookie file exists in the given datadir, delete it.
 def delete_cookie_file(datadir, chain):
-    if os.path.isfile(os.path.join(datadir, chain, ".cookie")):
+    chain_dir = chain_name_to_datadir(chain)
+    if os.path.isfile(os.path.join(datadir, chain_dir, ".cookie")):
         logger.debug("Deleting leftover cookie file")
-        os.remove(os.path.join(datadir, chain, ".cookie"))
+        os.remove(os.path.join(datadir, chain_dir, ".cookie"))
 
 
 def softfork_active(node, key):
