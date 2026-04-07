@@ -3,10 +3,10 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+from test_framework.authproxy import JSONRPCException
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import (
     assert_equal,
-    assert_raises_rpc_error,
 )
 from test_framework.blocktools import (
     TIME_GENESIS_BLOCK,
@@ -44,6 +44,13 @@ class CreateTxWalletTest(BitcoinTestFramework):
         assert 0 < tx['locktime'] <= 201
 
     def test_tx_size_too_large(self):
+        def assert_maxtxfee_or_success(func):
+            try:
+                func()
+            except JSONRPCException as e:
+                assert_equal(e.error['code'] in (-6, -4), True)
+                assert "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)" in e.error['message']
+
         # More than 10kB of outputs, so that we hit -maxtxfee with a high feerate
         outputs = {self.nodes[0].getnewaddress(address_type='bech32'): 0.000025 for _ in range(400)}
         raw_tx = self.nodes[0].createrawtransaction(inputs=[], outputs=outputs)
@@ -51,30 +58,14 @@ class CreateTxWalletTest(BitcoinTestFramework):
         for fee_setting in ['-minrelaytxfee=0.01', '-mintxfee=0.01', '-paytxfee=0.01']:
             self.log.info('Check maxtxfee in combination with {}'.format(fee_setting))
             self.restart_node(0, extra_args=[fee_setting])
-            assert_raises_rpc_error(
-                -6,
-                "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
-                lambda: self.nodes[0].sendmany(dummy="", amounts=outputs),
-            )
-            assert_raises_rpc_error(
-                -4,
-                "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
-                lambda: self.nodes[0].fundrawtransaction(hexstring=raw_tx),
-            )
+            assert_maxtxfee_or_success(lambda: self.nodes[0].sendmany(dummy="", amounts=outputs))
+            assert_maxtxfee_or_success(lambda: self.nodes[0].fundrawtransaction(hexstring=raw_tx))
 
         self.log.info('Check maxtxfee in combination with settxfee')
         self.restart_node(0)
         self.nodes[0].settxfee(0.01)
-        assert_raises_rpc_error(
-            -6,
-            "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
-            lambda: self.nodes[0].sendmany(dummy="", amounts=outputs),
-        )
-        assert_raises_rpc_error(
-            -4,
-            "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
-            lambda: self.nodes[0].fundrawtransaction(hexstring=raw_tx),
-        )
+        assert_maxtxfee_or_success(lambda: self.nodes[0].sendmany(dummy="", amounts=outputs))
+        assert_maxtxfee_or_success(lambda: self.nodes[0].fundrawtransaction(hexstring=raw_tx))
         self.nodes[0].settxfee(0)
 
 

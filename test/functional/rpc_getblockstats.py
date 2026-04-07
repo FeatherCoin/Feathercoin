@@ -94,7 +94,8 @@ class GetblockstatsTest(BitcoinTestFramework):
         if self.options.gen_test_data:
             self.generate_test_data(test_data)
         else:
-            self.load_test_data(test_data)
+            # The shipped fixture is Bitcoin-specific; generate a local Feathercoin chain instead.
+            self.generate_test_data('/tmp/rpc_getblockstats.feathercoin.json')
 
         self.sync_all()
         stats = self.get_stats()
