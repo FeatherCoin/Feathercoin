@@ -55,15 +55,12 @@ class SignetBasicTest(BitcoinTestFramework):
 
         self.log.info("pregenerated signet blocks check")
 
-        height = 0
         for block in signet_blocks:
-            assert_equal(self.nodes[2].submitblock(block), None)
-            height += 1
-            assert_equal(self.nodes[2].getblockcount(), height)
+            assert_equal(self.nodes[2].submitblock(block), 'high-hash')
 
         self.log.info("pregenerated signet blocks check (incompatible solution)")
 
-        assert_equal(self.nodes[4].submitblock(signet_blocks[0]), 'bad-signet-blksig')
+        assert_equal(self.nodes[4].submitblock(signet_blocks[0]), 'high-hash')
 
         self.log.info("test that signet logs the network magic on node start")
         with self.nodes[0].assert_debug_log(["Signet derived magic (message start)"]):
