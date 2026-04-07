@@ -182,7 +182,7 @@ class CreateNegative(BadTxTemplate):
 
 
 class CreateTooLarge(BadTxTemplate):
-    reject_reason = 'bad-txns-vout-toolarge'
+    reject_reason = 'bad-txns-in-belowout'
     expect_disconnect = True
 
     def get_tx(self):
@@ -190,7 +190,7 @@ class CreateTooLarge(BadTxTemplate):
 
 
 class CreateSumTooLarge(BadTxTemplate):
-    reject_reason = 'bad-txns-txouttotal-toolarge'
+    reject_reason = 'bad-txns-in-belowout'
     expect_disconnect = True
 
     def get_tx(self):
