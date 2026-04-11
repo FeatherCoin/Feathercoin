@@ -373,9 +373,12 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint()
         LOCK2(cs_main, cs_hashSyncCheckpoint);
         const CBlockIndex* index = LookupBlockIndex(hashCheckpoint);
         if (!HasUsableCheckpointChain(index)) {
+            const bool already_pending = hashPendingCheckpoint == hashCheckpoint;
             hashPendingCheckpoint = hashCheckpoint;
             checkpointMessagePending = *this;
-            LogPrintf("%s: pending for sync-checkpoint %s\n", __func__, hashCheckpoint.ToString());
+            if (!already_pending) {
+                LogPrintf("%s: pending for sync-checkpoint %s\n", __func__, hashCheckpoint.ToString());
+            }
             return false;
         }
     }
@@ -409,9 +412,12 @@ bool CSyncCheckpoint::ProcessSyncCheckpoint()
         LOCK2(cs_main, cs_hashSyncCheckpoint);
         index = LookupBlockIndex(hashCheckpoint);
         if (!index || !::ChainActive().Contains(index)) {
+            const bool already_pending = hashPendingCheckpoint == hashCheckpoint;
             hashPendingCheckpoint = hashCheckpoint;
             checkpointMessagePending = *this;
-            LogPrintf("%s: waiting for sync-checkpoint chain %s to activate\n", __func__, hashCheckpoint.ToString());
+            if (!already_pending) {
+                LogPrintf("%s: waiting for sync-checkpoint chain %s to activate\n", __func__, hashCheckpoint.ToString());
+            }
             return false;
         }
 
