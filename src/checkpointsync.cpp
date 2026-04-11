@@ -27,6 +27,7 @@ CSyncCheckpoint checkpointMessage;
 static CSyncCheckpoint checkpointMessagePending;
 RecursiveMutex cs_hashSyncCheckpoint;
 CConnman* g_connman{nullptr};
+bool fSyncCheckpointsEnabled = DEFAULT_CHECKPOINT_SYNC_ENABLED;
 
 static bool HasUsableCheckpointChain(const CBlockIndex* pindex)
 {
@@ -161,6 +162,10 @@ uint256 AutoSelectSyncCheckpoint()
 bool CheckSyncCheckpoint(const uint256& hashBlock, int nHeight, const CBlockIndex* pindexPrev)
 {
     if (nHeight == 0) {
+        return true;
+    }
+
+    if (!fSyncCheckpointsEnabled) {
         return true;
     }
 

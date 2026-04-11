@@ -19,10 +19,12 @@ class CConnman;
 class CNode;
 
 static constexpr int DEFAULT_AUTOCHECKPOINT{5};
+static constexpr bool DEFAULT_CHECKPOINT_SYNC_ENABLED{true};
 
 extern uint256 hashSyncCheckpoint;
 extern RecursiveMutex cs_hashSyncCheckpoint;
 extern CConnman* g_connman;
+extern bool fSyncCheckpointsEnabled;
 
 class CSyncCheckpoint;
 extern CSyncCheckpoint checkpointMessage;

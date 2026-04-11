@@ -520,6 +520,7 @@ void SetupServerArgs(NodeContext& node)
     argsman.AddArg("-checkblockindex", strprintf("Do a consistency check for the block tree, chainstate, and other validation data structures occasionally. (default: %u, regtest: %u)", defaultChainParams->DefaultConsistencyChecks(), regtestChainParams->DefaultConsistencyChecks()), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-checkmempool=<n>", strprintf("Run checks every <n> transactions (default: %u, regtest: %u)", defaultChainParams->DefaultConsistencyChecks(), regtestChainParams->DefaultConsistencyChecks()), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
     argsman.AddArg("-checkpoints", strprintf("Enable rejection of any forks from the known historical chain until block %s (default: %u)", defaultChainParams->Checkpoints().GetHeight(), DEFAULT_CHECKPOINTS_ENABLED), ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
+    argsman.AddArg("-checkpointenabled", strprintf("Enable ACP synchronized checkpoint enforcement during block and header validation (default: %u)", DEFAULT_CHECKPOINT_SYNC_ENABLED), ArgsManager::ALLOW_BOOL | ArgsManager::NETWORK_ONLY, OptionsCategory::OPTIONS);
     argsman.AddArg("-checkpointdepth=<n>", strprintf("Set synchronized checkpoint depth lag from the chain tip (default: %d)", DEFAULT_AUTOCHECKPOINT), ArgsManager::ALLOW_INT | ArgsManager::NETWORK_ONLY, OptionsCategory::OPTIONS);
     argsman.AddArg("-checkpointkey=<key>", "Set private key to sign synchronized checkpoint messages", ArgsManager::ALLOW_STRING | ArgsManager::NETWORK_ONLY | ArgsManager::SENSITIVE, OptionsCategory::OPTIONS);
     argsman.AddArg("-deprecatedrpc=<method>", "Allows deprecated RPC method(s) to be used", ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY, OptionsCategory::DEBUG_TEST);
@@ -1085,6 +1086,10 @@ bool AppInitParameterInteraction(const ArgsManager& args)
 
     fCheckBlockIndex = args.GetBoolArg("-checkblockindex", chainparams.DefaultConsistencyChecks());
     fCheckpointsEnabled = args.GetBoolArg("-checkpoints", DEFAULT_CHECKPOINTS_ENABLED);
+    fSyncCheckpointsEnabled = args.GetBoolArg("-checkpointenabled", DEFAULT_CHECKPOINT_SYNC_ENABLED);
+    if (!fSyncCheckpointsEnabled) {
+        LogPrintf("ACP synchronized checkpoint enforcement disabled.\n");
+    }
 
     hashAssumeValid = uint256S(args.GetArg("-assumevalid", chainparams.GetConsensus().defaultAssumeValid.GetHex()));
     if (!hashAssumeValid.IsNull())
