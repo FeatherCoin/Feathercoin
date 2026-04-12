@@ -220,6 +220,7 @@ BASE_SCRIPTS = [
     'wallet_balance.py --descriptors',
     'feature_nulldummy.py',
     'feature_nulldummy.py --descriptors',
+    'feature_checkpointsync.py',
     'mempool_accept.py',
     'mempool_expiry.py',
     'wallet_import_rescan.py --legacy-wallet',
