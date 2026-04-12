@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-core-win-0.21"
+name: "feathercoin-core-win-0.21"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -23,7 +23,7 @@ packages:
 - "ca-certificates"
 - "python3"
 remotes:
-- "url": "https://github.com/bitcoin/bitcoin.git"
+- "url": "https://github.com/FeatherCoin/Feathercoin.git"
   "dir": "bitcoin"
 files: []
 script: |

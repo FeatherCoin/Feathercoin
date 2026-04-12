@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-core-linux-0.21"
+name: "feathercoin-core-linux-0.21"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -31,7 +31,7 @@ packages:
 - "binutils-riscv64-linux-gnu"
 - "g++-8-riscv64-linux-gnu"
 remotes:
-- "url": "https://github.com/bitcoin/bitcoin.git"
+- "url": "https://github.com/FeatherCoin/Feathercoin.git"
   "dir": "bitcoin"
 files: []
 script: |

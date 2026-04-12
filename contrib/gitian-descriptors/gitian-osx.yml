@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-core-osx-0.21"
+name: "feathercoin-core-osx-0.21"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -29,7 +29,7 @@ packages:
 - "python3-setuptools"
 - "fonts-tuffy"
 remotes:
-- "url": "https://github.com/bitcoin/bitcoin.git"
+- "url": "https://github.com/FeatherCoin/Feathercoin.git"
   "dir": "bitcoin"
 files:
 - "Xcode-11.3.1-11C505-extracted-SDK-with-libcxx-headers.tar.gz"
