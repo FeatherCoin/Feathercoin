@@ -98,10 +98,14 @@ bool WriteSyncCheckpoint(const uint256& hashCheckpoint)
 
 bool AcceptPendingSyncCheckpoint()
 {
+    if (!fSyncCheckpointsEnabled) {
+        return false;
+    }
+
     {
         LOCK2(cs_main, cs_hashSyncCheckpoint);
-        const bool havePendingCheckpoint = !hashPendingCheckpoint.IsNull() && LookupBlockIndex(hashPendingCheckpoint);
-        if (!havePendingCheckpoint) {
+        const CBlockIndex* pending = !hashPendingCheckpoint.IsNull() ? LookupBlockIndex(hashPendingCheckpoint) : nullptr;
+        if (!pending || !::ChainActive().Contains(pending)) {
             return false;
         }
     }
@@ -121,16 +125,13 @@ bool AcceptPendingSyncCheckpoint()
 
     {
         LOCK2(cs_main, cs_hashSyncCheckpoint);
-        const CBlockIndex* pending = LookupBlockIndex(hashPendingCheckpoint);
-        if (!pending || !::ChainActive().Contains(pending)) {
+        const CBlockIndex* pending = LookupBlockIndex(hashPendingCheckpointTmp);
+        if (hashPendingCheckpoint != hashPendingCheckpointTmp || !pending || !::ChainActive().Contains(pending)) {
             return false;
         }
-    }
 
-    {
-        LOCK(cs_hashSyncCheckpoint);
-        if (!WriteSyncCheckpoint(hashPendingCheckpoint)) {
-            return error("%s: failed to write sync checkpoint %s", __func__, hashPendingCheckpoint.ToString());
+        if (!WriteSyncCheckpoint(hashPendingCheckpointTmp)) {
+            return error("%s: failed to write sync checkpoint %s", __func__, hashPendingCheckpointTmp.ToString());
         }
 
         hashPendingCheckpoint.SetNull();
