@@ -36,6 +36,8 @@ bool CheckSyncCheckpoint(const uint256& hashBlock, int nHeight, const CBlockInde
 bool CheckCheckpointPubKey();
 bool SetCheckpointPrivKey(const std::string& strPrivKey);
 bool SendSyncCheckpoint(const uint256& hashCheckpoint);
+void NotifySyncCheckpointIBDExit();
+bool MaybeReconcileSyncCheckpoint();
 
 class CUnsignedSyncCheckpoint
 {

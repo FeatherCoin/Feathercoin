@@ -1990,7 +1990,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
         return true;
     }
 
-    if (!CheckSyncCheckpoint(block.GetHash(), pindex->nHeight)) {
+    if (!IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), pindex->nHeight)) {
         return state.Invalid(BlockValidationResult::BLOCK_CHECKPOINT, "bad-block-checkpoint-sync");
     }
 
@@ -2822,6 +2822,7 @@ bool CChainState::ActivateBestChain(BlockValidationState &state, const CChainPar
     CBlockIndex *pindexMostWork = nullptr;
     CBlockIndex *pindexNewTip = nullptr;
     int nStopAtHeight = gArgs.GetArg("-stopatheight", DEFAULT_STOPATHEIGHT);
+    bool fSyncCheckpointIBDExit = false;
     do {
         // Block until the validation queue drains. This should largely
         // never happen in normal operation, however may happen during
@@ -2835,6 +2836,7 @@ bool CChainState::ActivateBestChain(BlockValidationState &state, const CChainPar
             LOCK(cs_main);
             LOCK(m_mempool.cs); // Lock transaction pool for at least as long as it takes for connectTrace to be consumed
             CBlockIndex* starting_tip = m_chain.Tip();
+            const bool fInitialDownloadOld = IsInitialBlockDownload();
             bool blocks_connected = false;
             do {
                 // We absolutely may not unlock cs_main until we've made forward progress
@@ -2873,6 +2875,7 @@ bool CChainState::ActivateBestChain(BlockValidationState &state, const CChainPar
 
             const CBlockIndex* pindexFork = m_chain.FindFork(starting_tip);
             bool fInitialDownload = IsInitialBlockDownload();
+            fSyncCheckpointIBDExit |= fInitialDownloadOld && !fInitialDownload;
 
             // Notify external listeners about the new tip.
             // Enqueue while holding cs_main to ensure that UpdatedBlockTip is called in the order in which blocks are connected
@@ -2894,6 +2897,9 @@ bool CChainState::ActivateBestChain(BlockValidationState &state, const CChainPar
         // that the best block hash is non-null.
         if (ShutdownRequested()) break;
     } while (pindexNewTip != pindexMostWork);
+    if (fSyncCheckpointIBDExit) {
+        NotifySyncCheckpointIBDExit();
+    }
     CheckBlockIndex(chainparams.GetConsensus());
 
     // Write changes periodically to disk, after relay.
@@ -2905,7 +2911,11 @@ bool CChainState::ActivateBestChain(BlockValidationState &state, const CChainPar
 }
 
 bool ActivateBestChain(BlockValidationState &state, const CChainParams& chainparams, std::shared_ptr<const CBlock> pblock) {
-    return ::ChainstateActive().ActivateBestChain(state, chainparams, std::move(pblock));
+    const bool activated = ::ChainstateActive().ActivateBestChain(state, chainparams, std::move(pblock));
+    if (activated) {
+        MaybeReconcileSyncCheckpoint();
+    }
+    return activated;
 }
 
 bool CChainState::PreciousBlock(BlockValidationState& state, const CChainParams& params, CBlockIndex *pindex)
@@ -3470,7 +3480,7 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     if (nHeight > consensusParams.nTimeLimit && block.GetBlockTime() <= pindexPrev->GetBlockTime() - 15 * 60)
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "wrong-time-between-blocks", "block's timestamp is too early compared to last block");
 
-    if (!CheckSyncCheckpoint(block.GetHash(), nHeight, pindexPrev))
+    if (!::ChainstateActive().IsInitialBlockDownload() && !CheckSyncCheckpoint(block.GetHash(), nHeight, pindexPrev))
         return state.Invalid(BlockValidationResult::BLOCK_CHECKPOINT, "bad-block-checkpoint-sync");
 
     // Reject outdated version blocks when 95% (75% on testnet) of the network has upgraded:
@@ -3821,7 +3831,7 @@ bool ChainstateManager::ProcessNewBlock(const CChainParams& chainparams, const s
     NotifyHeaderTip();
 
     BlockValidationState state; // Only used to report errors, not invalidity - ignore it
-    if (!::ChainstateActive().ActivateBestChain(state, chainparams, pblock))
+    if (!ActivateBestChain(state, chainparams, pblock))
         return error("%s: ActivateBestChain failed (%s)", __func__, state.ToString());
 
     AcceptPendingSyncCheckpoint();

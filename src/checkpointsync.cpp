@@ -20,6 +20,8 @@
 #include <util/system.h>
 #include <validation.h>
 
+#include <atomic>
+
 std::string CSyncCheckpoint::strMasterPrivKey;
 uint256 hashSyncCheckpoint;
 static uint256 hashPendingCheckpoint;
@@ -28,6 +30,7 @@ static CSyncCheckpoint checkpointMessagePending;
 RecursiveMutex cs_hashSyncCheckpoint;
 CConnman* g_connman{nullptr};
 bool fSyncCheckpointsEnabled = DEFAULT_CHECKPOINT_SYNC_ENABLED;
+static std::atomic_bool g_reconcile_sync_checkpoint_after_ibd{false};
 
 static bool HasUsableCheckpointChain(const CBlockIndex* pindex)
 {
@@ -195,6 +198,126 @@ bool CheckSyncCheckpoint(const uint256& hashBlock, int nHeight, const CBlockInde
 
     if (nHeight == pindexSync->nHeight && hashBlock != hashSyncCheckpoint) {
         return error("%s: same height with sync-checkpoint", __func__);
+    }
+
+    return true;
+}
+
+void NotifySyncCheckpointIBDExit()
+{
+    g_reconcile_sync_checkpoint_after_ibd = true;
+}
+
+static bool ReconcileSyncCheckpointHash(const uint256& hashCheckpoint, bool& switched)
+{
+    switched = false;
+
+    CBlockIndex* index = nullptr;
+    CBlockIndex* bad_fork = nullptr;
+    {
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
+        index = LookupBlockIndex(hashCheckpoint);
+        if (!HasUsableCheckpointChain(index)) {
+            return false;
+        }
+        if (!::ChainActive().Contains(index)) {
+            const CBlockIndex* ancestor = LastCommonAncestor(index, ::ChainActive().Tip());
+            if (ancestor) {
+                bad_fork = ::ChainActive().Next(ancestor);
+            }
+        } else {
+            return true;
+        }
+    }
+
+    if (bad_fork && index && index->GetAncestor(bad_fork->nHeight) != bad_fork) {
+        BlockValidationState state;
+        InvalidateBlock(state, Params(), bad_fork);
+        if (state.IsValid() && !::ChainstateActive().ActivateBestChain(state, Params(), nullptr)) {
+            return error("%s: failed to activate best chain for sync-checkpoint %s (%s)", __func__, hashCheckpoint.ToString(), state.ToString());
+        }
+        if (!state.IsValid()) {
+            return error("%s: failed to switch to sync-checkpoint %s (%s)", __func__, hashCheckpoint.ToString(), state.ToString());
+        }
+    }
+
+    {
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
+        index = LookupBlockIndex(hashCheckpoint);
+        if (!index || !::ChainActive().Contains(index)) {
+            return false;
+        }
+    }
+
+    switched = true;
+    return true;
+}
+
+bool MaybeReconcileSyncCheckpoint()
+{
+    if (!g_reconcile_sync_checkpoint_after_ibd.exchange(false)) {
+        return true;
+    }
+
+    if (!fSyncCheckpointsEnabled) {
+        return true;
+    }
+
+    if (::ChainstateActive().IsInitialBlockDownload()) {
+        g_reconcile_sync_checkpoint_after_ibd = true;
+        return true;
+    }
+
+    LogPrintf("ACP synchronized checkpoint enforcement enabled after IBD.\n");
+
+    uint256 pendingHash;
+    CSyncCheckpoint pendingMessage;
+    bool havePending = false;
+    bool pendingWasActive = false;
+    {
+        LOCK2(cs_main, cs_hashSyncCheckpoint);
+        if (!hashPendingCheckpoint.IsNull() && !checkpointMessagePending.IsNull()) {
+            pendingHash = hashPendingCheckpoint;
+            pendingMessage = checkpointMessagePending;
+            havePending = true;
+            const CBlockIndex* pendingIndex = LookupBlockIndex(pendingHash);
+            pendingWasActive = pendingIndex && ::ChainActive().Contains(pendingIndex);
+        }
+    }
+
+    if (havePending && pendingMessage.ProcessSyncCheckpoint()) {
+        bool pendingIsActive = false;
+        {
+            LOCK2(cs_main, cs_hashSyncCheckpoint);
+            const CBlockIndex* pendingIndex = LookupBlockIndex(pendingHash);
+            pendingIsActive = pendingIndex && ::ChainActive().Contains(pendingIndex);
+        }
+        if (!pendingWasActive && pendingIsActive) {
+            LogPrintf("ACP switched to synchronized checkpoint chain %s after IBD.\n", pendingHash.ToString());
+        }
+        return true;
+    }
+
+    uint256 currentSyncCheckpoint;
+    {
+        LOCK(cs_hashSyncCheckpoint);
+        currentSyncCheckpoint = hashSyncCheckpoint;
+    }
+
+    bool switched = false;
+    if (!currentSyncCheckpoint.IsNull() && ReconcileSyncCheckpointHash(currentSyncCheckpoint, switched)) {
+        if (switched) {
+            LogPrintf("ACP switched to synchronized checkpoint chain %s after IBD.\n", currentSyncCheckpoint.ToString());
+        } else if (havePending) {
+            LogPrintf("ACP enforcement active after IBD, but pending sync-checkpoint %s is not on a usable chain yet.\n", pendingHash.ToString());
+        }
+        return true;
+    }
+
+    if (havePending) {
+        LogPrintf("ACP enforcement active after IBD, but pending sync-checkpoint %s is not on a usable chain yet.\n", pendingHash.ToString());
+    } else {
+        LogPrintf("ACP enforcement active after IBD, but no usable synchronized checkpoint branch is available yet.\n");
     }
 
     return true;

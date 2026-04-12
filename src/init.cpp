@@ -758,6 +758,8 @@ static void ThreadImport(ChainstateManager& chainman, std::vector<fs::path> vImp
         }
     }
 
+    MaybeReconcileSyncCheckpoint();
+
     if (args.GetBoolArg("-stopafterblockimport", DEFAULT_STOPAFTERBLOCKIMPORT)) {
         LogPrintf("Stopping after block import\n");
         StartShutdown();
