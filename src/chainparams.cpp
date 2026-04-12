@@ -163,14 +163,15 @@ public:
                 {2124270, uint256S("0x4f6de194bd2f4580e2ac9337289c7cca348d3f35c9079af2760b288315b82feb")},
                 {2745916, uint256S("0x500bc433505075faa45c3dae1eb9d247fef513015573123e41b54abedf30c8d9")},
                 {3275900, uint256S("0xe29c854a0a54ac2c3f6b97e0416a0a7f17df6f80ecf4fa6eb3faa7ec1fceffb6")},
+                {6138580, uint256S("0x25c4cef786886d85ce3c09358b8af805c6638bfdb1c3165e439fb3a33fa9b951")},
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from rpc: getchaintxstats 4096 e29c854a0a54ac2c3f6b97e0416a0a7f17df6f80ecf4fa6eb3faa7ec1fceffb6
-            /* nTime    */ 1596492036,
-            /* nTxCount */ 5601248,
-            /* dTxRate  */ 0.01661463197339783,
+            // Data from live node tip logs around height 6138580
+            /* nTime    */ 1775997023,
+            /* nTxCount */ 8707961,
+            /* dTxRate  */ 0.03208556149732621,
         };
     }
 };
@@ -257,14 +258,15 @@ public:
         checkpointData = {
             {
                 {546, uint256S("c889c0fb27bf7c669cff1cf9407f768cde2a084e1dc527baa6dadbed9b22bf29")},
+                {839060, uint256S("0xe800ebc4cc913a2e7c199b7f35fe2828fab30ca3d9790b4fc03fe3af3fecbed1")},
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from rpc: getchaintxstats 545 c889c0fb27bf7c669cff1cf9407f768cde2a084e1dc527baa6dadbed9b22bf29
-            /* nTime    */ 1581570241,
-            /* nTxCount */ 547,
-            /* dTxRate  */ 0.01200996055444148,
+            // Data from live node tip logs around height 839060
+            /* nTime    */ 1775996387,
+            /* nTxCount */ 839424,
+            /* dTxRate  */ 0.023952095808383235,
         };
     }
 };
