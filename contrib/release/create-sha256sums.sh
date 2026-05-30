@@ -12,6 +12,11 @@ fi
 
 release_dir="${1:-.}"
 gpg_prog="${GPG:-gpg}"
+gpg_args=(--digest-algo sha256)
+
+if [ -n "${SIGNER:-}" ]; then
+    gpg_args+=(--local-user "$SIGNER")
+fi
 
 cd "$release_dir"
 
@@ -34,7 +39,7 @@ if [ ! -s SHA256SUMS ]; then
     exit 1
 fi
 
-"$gpg_prog" --digest-algo sha256 --clearsign SHA256SUMS
+"$gpg_prog" "${gpg_args[@]}" --clearsign SHA256SUMS
 rm SHA256SUMS
 
 echo "Created $(pwd)/SHA256SUMS.asc"
