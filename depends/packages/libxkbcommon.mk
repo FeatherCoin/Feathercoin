@@ -10,6 +10,8 @@ $(package)_dependencies=libxcb
 define $(package)_set_vars
 $(package)_config_opts = --enable-option-checking --disable-dependency-tracking
 $(package)_config_opts += --disable-shared --disable-docs
+$(package)_config_opts += --with-xkb-config-root=/usr/share/X11/xkb
+$(package)_config_opts += --with-x-locale-root=/usr/share/X11/locale
 $(package)_cflags += -Wno-error=array-bounds
 endef
 
