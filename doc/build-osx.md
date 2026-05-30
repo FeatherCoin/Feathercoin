@@ -30,6 +30,14 @@ If you want to build the disk image with `make deploy` (.dmg / optional), you ne
 brew install librsvg
 ```
 
+## Apple Silicon
+
+The Feathercoin Core 0.21.0 macOS release package is x86_64-only and requires
+Rosetta on Apple Silicon Macs.
+
+To run without Rosetta, build current `master` natively on Apple Silicon. Native
+arm64 builds support `feathercoind` and `feathercoin-cli` with asm enabled.
+
 The wallet support requires one or both of the dependencies ([*SQLite*](#sqlite) and [*Berkeley DB*](#berkeley-db)) in the sections below.
 To build Bitcoin Core without wallet, see [*Disable-wallet mode*](#disable-wallet-mode).
 
@@ -132,4 +140,5 @@ tail -f $HOME/Library/Application\ Support/Bitcoin/debug.log
 ## Notes
 * Tested on OS X 10.12 Sierra through macOS 10.15 Catalina on 64-bit Intel
 processors only.
+* Native Apple Silicon builds are supported from current `master` after PR #401.
 * Building with downloaded Qt binaries is not officially supported. See the notes in [#7714](https://github.com/bitcoin/bitcoin/issues/7714).

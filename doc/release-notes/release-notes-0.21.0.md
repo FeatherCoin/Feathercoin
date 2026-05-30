@@ -38,6 +38,11 @@ Compatibility
 This release is built for Linux, Windows, and macOS. The macOS release targets
 macOS 10.12 and newer.
 
+The Feathercoin Core 0.21.0 macOS release package is x86_64-only. Apple Silicon
+users need Rosetta to run the published macOS package. Users who want native
+arm64 command-line binaries can build current `master` on Apple Silicon; that
+path has been tested for `feathercoind` and `feathercoin-cli` with asm enabled.
+
 The Windows and macOS packages are unsigned. Users should expect operating
 system warnings when opening or installing them.
 
@@ -219,14 +224,15 @@ The generated release assets include:
 
 - Linux binary archives for x86_64, aarch64, armhf, and riscv64.
 - Windows 64-bit zip archive and unsigned installer.
-- macOS unsigned DMG and macOS 64-bit tar archive.
+- macOS unsigned x86_64 DMG and macOS x86_64 tar archive.
 - Source archive.
-- Gitian build attestations.
 
 Known Notes
 ===========
 
 - Windows and macOS binaries are not code signed.
+- The macOS 0.21.0 release package is x86_64-only and requires Rosetta on
+  Apple Silicon.
 - Taproot is included but is not active on Feathercoin mainnet at release time.
 - ACP enforcement is deferred during initial block download and enabled after
   the node reaches the chain tip.

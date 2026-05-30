@@ -29,6 +29,11 @@ For more information, as well as an immediately usable, binary version of the
 Feathercoin Core software, see the
 [Feathercoin releases page](https://github.com/FeatherCoin/Feathercoin/releases).
 
+Apple Silicon macOS users should note that the Feathercoin Core 0.21.0 macOS
+release package is x86_64-only and requires Rosetta. To run without Rosetta,
+build current `master` natively on Apple Silicon; see
+[doc/build-osx.md](doc/build-osx.md).
+
 License
 -------
 

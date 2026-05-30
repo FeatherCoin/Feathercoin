@@ -24,7 +24,12 @@ Unpack the files into a directory, and then run bitcoin-qt.exe.
 
 ### macOS
 
-Drag Bitcoin Core to your applications folder, and then run Bitcoin Core.
+Drag Feathercoin Core to your applications folder, and then run Feathercoin
+Core.
+
+The Feathercoin Core 0.21.0 macOS release package is x86_64-only. Apple Silicon
+users need Rosetta to run the release package, or can build current `master`
+natively; see [macOS Build Notes](build-osx.md).
 
 ### Need Help?
 
