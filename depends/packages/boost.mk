@@ -27,7 +27,8 @@ endif
 $(package)_archiver_$(host_os)=$($(package)_ar)
 $(package)_config_libraries=filesystem,system,thread,test
 $(package)_cxxflags=-std=c++11 -fvisibility=hidden
-$(package)_cxxflags_linux=-fPIC
+# Avoid importing getrandom@GLIBC_2.25 from Boost.Filesystem on bionic Gitian builds.
+$(package)_cxxflags_linux=-fPIC -DBOOST_FILESYSTEM_DISABLE_GETRANDOM
 $(package)_cxxflags_android=-fPIC
 endef
 
