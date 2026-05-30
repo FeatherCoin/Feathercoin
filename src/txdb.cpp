@@ -6,7 +6,6 @@
 #include <txdb.h>
 
 #include <node/ui_interface.h>
-#include <pow.h>
 #include <random.h>
 #include <shutdown.h>
 #include <uint256.h>
@@ -263,7 +262,7 @@ bool CBlockTreeDB::WriteCheckpointPubKey(const std::string& strPubKey)
     return Write(std::string("strCheckpointPubKey"), strPubKey);
 }
 
-bool CBlockTreeDB::LoadBlockIndexGuts(const Consensus::Params& consensusParams, std::function<CBlockIndex*(const uint256&)> insertBlockIndex)
+bool CBlockTreeDB::LoadBlockIndexGuts(const Consensus::Params&, std::function<CBlockIndex*(const uint256&)> insertBlockIndex)
 {
     std::unique_ptr<CDBIterator> pcursor(NewIterator());
 
@@ -290,17 +289,6 @@ bool CBlockTreeDB::LoadBlockIndexGuts(const Consensus::Params& consensusParams, 
                 pindexNew->nNonce         = diskindex.nNonce;
                 pindexNew->nStatus        = diskindex.nStatus;
                 pindexNew->nTx            = diskindex.nTx;
-
-                CBlockHeader block;
-                block.nVersion = diskindex.nVersion;
-                block.hashPrevBlock = diskindex.hashPrev;
-                block.hashMerkleRoot = diskindex.hashMerkleRoot;
-                block.nTime = diskindex.nTime;
-                block.nBits = diskindex.nBits;
-                block.nNonce = diskindex.nNonce;
-
-                if (!CheckProofOfWork(GetBlockProofOfWorkHash(block, consensusParams), pindexNew->nBits, consensusParams))
-                    return error("%s: CheckProofOfWork failed: %s", __func__, pindexNew->ToString());
 
                 pcursor->Next();
             } else {
