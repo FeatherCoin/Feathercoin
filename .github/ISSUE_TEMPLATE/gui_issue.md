@@ -1,11 +1,12 @@
 ---
-name: An issue or feature request related to the GUI
-about: Any report, issue or feature request related to the GUI should be reported at https://github.com/bitcoin-core/gui/issues/
-title: Any report, issue or feature request related to the GUI should be reported at https://github.com/bitcoin-core/gui/issues/
+name: GUI issue or feature request
+about: Report an issue or suggest an improvement for the Feathercoin Core GUI
+title: ''
 labels: GUI
 assignees: ''
 
 ---
 
-Any report, issue or feature request related to the GUI should be reported at
-https://github.com/bitcoin-core/gui/issues/
+Please describe the Feathercoin Core GUI issue or feature request here.
+
+Include your operating system, desktop environment, Feathercoin Core version, and screenshots if they help explain the issue.
