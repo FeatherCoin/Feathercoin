@@ -121,32 +121,35 @@ def verify():
     rc = 0
     os.chdir('gitian-builder')
 
-    print('\nVerifying v' + args.version + ' Linux\n')
-    if subprocess.call([
-        'bin/gverify', '-v', '-d', '../' + args.attestations_dir + '/',
-        '-r', args.version + '-linux',
-        '../' + SOURCE_REPO_DIR + '/contrib/gitian-descriptors/gitian-linux.yml',
-    ]):
-        print('Verifying v' + args.version + ' Linux FAILED\n')
-        rc = 1
+    if args.linux:
+        print('\nVerifying v' + args.version + ' Linux\n')
+        if subprocess.call([
+            'bin/gverify', '-v', '-d', '../' + args.attestations_dir + '/',
+            '-r', args.version + '-linux',
+            '../' + SOURCE_REPO_DIR + '/contrib/gitian-descriptors/gitian-linux.yml',
+        ]):
+            print('Verifying v' + args.version + ' Linux FAILED\n')
+            rc = 1
 
-    print('\nVerifying v' + args.version + ' Windows\n')
-    if subprocess.call([
-        'bin/gverify', '-v', '-d', '../' + args.attestations_dir + '/',
-        '-r', args.version + '-win-unsigned',
-        '../' + SOURCE_REPO_DIR + '/contrib/gitian-descriptors/gitian-win.yml',
-    ]):
-        print('Verifying v' + args.version + ' Windows FAILED\n')
-        rc = 1
+    if args.windows:
+        print('\nVerifying v' + args.version + ' Windows\n')
+        if subprocess.call([
+            'bin/gverify', '-v', '-d', '../' + args.attestations_dir + '/',
+            '-r', args.version + '-win-unsigned',
+            '../' + SOURCE_REPO_DIR + '/contrib/gitian-descriptors/gitian-win.yml',
+        ]):
+            print('Verifying v' + args.version + ' Windows FAILED\n')
+            rc = 1
 
-    print('\nVerifying v' + args.version + ' MacOS\n')
-    if subprocess.call([
-        'bin/gverify', '-v', '-d', '../' + args.attestations_dir + '/',
-        '-r', args.version + '-osx-unsigned',
-        '../' + SOURCE_REPO_DIR + '/contrib/gitian-descriptors/gitian-osx.yml',
-    ]):
-        print('Verifying v' + args.version + ' MacOS FAILED\n')
-        rc = 1
+    if args.macos:
+        print('\nVerifying v' + args.version + ' MacOS\n')
+        if subprocess.call([
+            'bin/gverify', '-v', '-d', '../' + args.attestations_dir + '/',
+            '-r', args.version + '-osx-unsigned',
+            '../' + SOURCE_REPO_DIR + '/contrib/gitian-descriptors/gitian-osx.yml',
+        ]):
+            print('Verifying v' + args.version + ' MacOS FAILED\n')
+            rc = 1
 
     os.chdir(workdir)
     return rc
