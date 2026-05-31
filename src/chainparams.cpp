@@ -133,8 +133,6 @@ public:
         // release ASAP to avoid it where possible.
         vSeeds.emplace_back("dnsseed.feathercoin.com");
         vSeeds.emplace_back("dnsseed1.feathercoin.com");
-        vSeeds.emplace_back("dnsseed.alltheco.in");
-        vSeeds.emplace_back("dnsseed.bushstar.co.uk");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,14);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
