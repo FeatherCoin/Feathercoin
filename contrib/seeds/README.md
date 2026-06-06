@@ -8,11 +8,19 @@ and remove old versions as necessary (at a minimum when GetDesirableServiceFlags
 changes its default return value, as those are the services which seeds are added
 to addrman with).
 
-The seeds compiled into the release are created from sipa's DNS seed data, like this:
+The checked-in `nodes_main.txt` and `nodes_test.txt` files are the source for
+the fixed seeds compiled into the release. After updating those files from
+Feathercoin peer data, regenerate `src/chainparamsseeds.h` like this:
 
-    curl -s http://bitcoin.sipa.be/seeds.txt.gz | gzip -dc > seeds_main.txt
-    python3 makeseeds.py < seeds_main.txt > nodes_main.txt
     python3 generate-seeds.py . > ../../src/chainparamsseeds.h
+
+If refreshing `nodes_main.txt` from crawler output, use Feathercoin DNS seed or
+peer data in `makeseeds.py` input format, then filter it first:
+
+    python3 makeseeds.py < seeds_main.txt > nodes_main.txt
+
+Do not use Bitcoin seed data here; fixed seeds are a bootstrap fallback for the
+Feathercoin network and should use Feathercoin peers and ports.
 
 ## Dependencies
 

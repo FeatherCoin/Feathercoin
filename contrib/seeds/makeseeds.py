@@ -3,7 +3,7 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
-# Generate seeds.txt from Pieter's DNS seeder
+# Generate fixed seed candidates from DNS seeder output
 #
 
 import re
@@ -15,7 +15,9 @@ NSEEDS=512
 
 MAX_SEEDS_PER_ASN=2
 
-MIN_BLOCKS = 337600
+# Require candidates to be at least as current as the latest v0.21.0
+# mainnet checkpoint in src/chainparams.cpp.
+MIN_BLOCKS = 6138580
 
 # These are hosts that have been observed to be behaving strangely (e.g.
 # aggressively connecting to every node).
@@ -27,16 +29,14 @@ PATTERN_IPV4 = re.compile(r"^((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})):(\d+)$
 PATTERN_IPV6 = re.compile(r"^\[([0-9a-z:]+)\]:(\d+)$")
 PATTERN_ONION = re.compile(r"^([abcdefghijklmnopqrstuvwxyz234567]{16}\.onion):(\d+)$")
 PATTERN_AGENT = re.compile(
-    r"^/Satoshi:("
-    r"0.14.(0|1|2|3|99)|"
-    r"0.15.(0|1|2|99)|"
-    r"0.16.(0|1|2|3|99)|"
-    r"0.17.(0|0.1|1|2|99)|"
-    r"0.18.(0|1|99)|"
-    r"0.19.(0|1|99)|"
-    r"0.20.(0|1|99)|"
-    r"0.21.99"
-    r")")
+    r"^/Feathercoin:("
+    r"0\.13\.(0|1|2|3|99)|"
+    r"0\.16\.(0|1|2|3|4|99)|"
+    r"0\.17\.(0|1|99)|"
+    r"0\.18\.(0|1|2|3|4|99)|"
+    r"0\.19\.(1\.1|1|2|99)|"
+    r"0\.21\.(0|99)"
+    r")/")
 
 def parseline(line):
     sline = line.split()
@@ -76,7 +76,7 @@ def parseline(line):
         ipstr = m.group(1)
         port = int(m.group(6))
     # Skip bad results.
-    if sline[1] == 0:
+    if sline[1] == "0":
         return None
     # Extract uptime %.
     uptime30 = float(sline[7][:-1])
@@ -210,9 +210,9 @@ def main():
     print('%s Require a known and recent user agent' % (ip_stats(ips)), file=sys.stderr)
     # Sort by availability (and use last success as tie breaker)
     ips.sort(key=lambda x: (x['uptime'], x['lastsuccess'], x['ip']), reverse=True)
-    # Filter out hosts with multiple bitcoin ports, these are likely abusive
+    # Filter out hosts with multiple Feathercoin ports, these are likely abusive
     ips = filtermultiport(ips)
-    print('%s Filter out hosts with multiple bitcoin ports' % (ip_stats(ips)), file=sys.stderr)
+    print('%s Filter out hosts with multiple Feathercoin ports' % (ip_stats(ips)), file=sys.stderr)
     # Look up ASNs and limit results, both per ASN and globally.
     ips = filterbyasn(ips, MAX_SEEDS_PER_ASN, NSEEDS)
     print('%s Look up ASNs and limit results per ASN and per net' % (ip_stats(ips)), file=sys.stderr)
