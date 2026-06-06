@@ -30,7 +30,11 @@ PATTERN_IPV6 = re.compile(r"^\[([0-9a-z:]+)\]:(\d+)$")
 PATTERN_ONION = re.compile(r"^([abcdefghijklmnopqrstuvwxyz234567]{16}\.onion):(\d+)$")
 PATTERN_AGENT = re.compile(
     r"^/Feathercoin:("
-    r"0\.19\.(1|2|99)|"
+    r"0\.13\.(0|1|2|3|99)|"
+    r"0\.16\.(0|1|2|3|4|99)|"
+    r"0\.17\.(0|1|99)|"
+    r"0\.18\.(0|1|2|3|4|99)|"
+    r"0\.19\.(1\.1|1|2|99)|"
     r"0\.21\.(0|99)"
     r")/")
 
